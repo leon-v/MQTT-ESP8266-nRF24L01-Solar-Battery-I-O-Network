@@ -6,9 +6,9 @@
 
 This project will consist of:
 
-An ESP8266 with one or two nRF24L01+ modules which will act as an MQTT router for nRF24L01+.
+1. An ESP8266 with one or two nRF24L01+ modules which will act as an MQTT router for nRF24L01+.
 
-Multiple nRF24L01+ nodes with a PIC16LF1503 to translate the radio to usable signals including PWM, ADC, DAC, I/O and Interrupt for real time detection.
+2. Multiple nRF24L01+ nodes with a PIC16LF1503 to translate the radio to usable signals including PWM, ADC, DAC, I/O and Interrupt for real time detection.
 These will be battery powered from an 18650 and solar panels. The PIC will use responsible for not overcharging the 18650, it letting it trickle charge.
 
 All configuration will be done via MQTT.
@@ -25,20 +25,20 @@ Packet format will be fixed length:
 
 Sensor / Controller names
 
-Outputs:
-ADC0_:	ADC Input			(0- 1023)
-INT__:	Interrupt Input		(0 - 1)
+### Outputs:
+- ADC0_:	ADC Input			(0- 1023)
+- INT__:	Interrupt Input		(0 - 1)
 
-Inputs:
-PWM0D:	PWM 0 Duty Output	(0 - 1023)
-PWMPT:	PWM Period Timer	(0 - 255)
-PWMPP:	PWM Period Prescaler(0 - 3)
+### Inputs:
+- PWM0D:	PWM 0 Duty Output	(0 - 1023)
+- PWMPT:	PWM Period Timer	(0 - 255)
+- PWMPP:	PWM Period Prescaler(0 - 3)
 
-DAC0S:	DAC 0 Set			(0 - 31)
+- DAC0S:	DAC 0 Set			(0 - 31)
 
-RDORT:	Radio RX time		(0 - 65535)
-RDOST:	Radio Sleep time	(0 - 65535)
-RDOSK:	Radio Set Key		(0 - 4294967295)
+- RDORT:	Radio RX time		(0 - 65535)
+- RDOST:	Radio Sleep time	(0 - 65535)
+- RDOSK:	Radio Set Key		(0 - 4294967295)
 
 
 Encryption used is TEA
