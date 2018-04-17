@@ -26,19 +26,22 @@ Packet format will be fixed length:
 Sensor / Controller names
 
 ### Outputs:
-ADC0_:	ADC Input			(0- 1023)
-INT__:	Interrupt Input		(0 - 1)
+|Control Name		| Description			| Limits
+|*******************|***********************|***********:|
+|ADC0_				| ADC Input				| (0- 1023)
+|INT__				|Interrupt Input		| (0 - 1)
 
 ### Inputs:
-PWM0D:	PWM 0 Duty Output	(0 - 1023)
-PWMPT:	PWM Period Timer	(0 - 255)
-PWMPP:	PWM Period Prescaler(0 - 3)
+|Control Name		| Description			| Limits
+|*******************|***********************|******:|
+|PWM0D				| PWM 0 Duty Output		| (0 - 1023)
+|PWMPT				| PWM Period Timer		| (0 - 255)
+|PWMPP				| PWM Period Prescaler	| (0 - 3)
 
-DAC0S:	DAC 0 Set			(0 - 31)
-
-RDORT:	Radio RX time		(0 - 65535)
-RDOST:	Radio Sleep time	(0 - 65535)
-RDOSK:	Radio Set Key		(0 - 4294967295)
+|DAC0S				| DAC 0 Set				| (0 - 31)
+|RDORT				| Radio RX time			| (0 - 65535)
+|RDOST				| Radio Sleep time		| (0 - 65535)
+|RDOSK				| Radio Set Key			| (0 - 4294967295)
 
 
 Encryption used is TEA
