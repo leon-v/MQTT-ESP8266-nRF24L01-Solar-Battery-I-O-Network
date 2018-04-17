@@ -16,22 +16,20 @@ The two main parameters that need to be set before use are the short encryption 
 
 Each node will have a short name which will be part of the 32 bytes payload.
 
-Packet format will be fixed length:
-******************************************************
-|Sensor Name| Sensor / Control Location | Binary Data|
-******************************************************
- 19 bytes           5 bytes               8 bytes
+###Packet format will be fixed length
+|MQTT Topic	| Command	| Value	|
+|:---------:|:---------:|:-----:|
+|19 Bytes	| 5 Bytes	| 8 Bytes|
+|
 
 
-Sensor / Controller names
-
-### Outputs:
+### Output Commands:
 |Control Name		| Description			| Limits			|
 |-------------------|-----------------------|------------------:|
 |ADC0_				| ADC Input				| (0- 1023)			|
 |INT__				|Interrupt Input		| (0 - 1)			|
 
-### Inputs:
+### Inputs Commands:
 |Control Name		| Description			| Limits			|
 |-------------------|-----------------------|------------------:|
 |PWM0D				| PWM 0 Duty Output		| (0 - 1023)		|
