@@ -1,7 +1,7 @@
 # MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network
 
-The primary intention of the network is to be solar powered and real time so i can sense someone walking down my driveway and get a message on my phone
-And secondarily it will be low cost. The parts i select will be cheap.
+#### The primary intention of the network is to be solar powered and real time so i can sense someone walking down my driveway and get a message on my phone
+#### And secondarily it will be low cost. The parts i select will be cheap.
 
 
 This project will consist of:
@@ -17,24 +17,28 @@ The two main parameters that need to be set before use are the short encryption 
 Each node will have a short name which will be part of the 32 bytes payload.
 
 Packet format will be fixed length:
-********************************************************************
-|Sensor Name Goes Here 123| Sensor / Control Location | Binary Data|
-********************************************************************
-     19 bytes                    5 bytes               8 bytes
+******************************************************
+|Sensor Name| Sensor / Control Location | Binary Data|
+******************************************************
+ 19 bytes           5 bytes               8 bytes
 
 
 Sensor / Controller names
 
-PWM0D: PWM 0 Duty Output (0 - 1023)
-PWMP_: PWM Period (0 - 255)
+Outputs:
+ADC0_:	ADC Input			(0- 1023)
+INT__:	Interrupt Input		(0 - 1)
 
-ADC0_: ADC Input (0- 1023)
+Inputs:
+PWM0D:	PWM 0 Duty Output	(0 - 1023)
+PWMPT:	PWM Period Timer	(0 - 255)
+PWMPP:	PWM Period Prescaler(0 - 3)
 
-INT__: Interrupt Input (0 - 1)
+DAC0S:	DAC 0 Set			(0 - 31)
 
-RDO0T: Radio off time (0 - 65535)
-RDO1T: Radio on time (0 - 65535)
-RDOSK : Radio Set Key (0 - 4294967295)
+RDORT:	Radio RX time		(0 - 65535)
+RDOST:	Radio Sleep time	(0 - 65535)
+RDOSK:	Radio Set Key		(0 - 4294967295)
 
 
 Encryption used is TEA
@@ -61,3 +65,4 @@ void decrypt (uint32_t* v, uint32_t* k) {
     }                                              /* end cycle */
     v[0]=v0; v[1]=v1;
 }
+
