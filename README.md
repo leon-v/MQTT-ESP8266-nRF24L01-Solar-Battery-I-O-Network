@@ -42,6 +42,7 @@ Each node will have a short name which will be part of the 32 bytes payload.
 |RDOSK				| Radio Set Key			| (0 - 4294967295)	|
 
 
+Encryption will be used to prevent noise from any other sensors. 
 Encryption used is TEA
 ```
 void encrypt (uint32_t* v, uint32_t* k) {
