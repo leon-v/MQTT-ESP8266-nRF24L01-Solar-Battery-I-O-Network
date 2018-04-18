@@ -93,8 +93,8 @@ I think ill make the MQTT sever handle all the decryption and re-publishing
 |Pin	|Direction	|Secondary Function	|Primary Function		|
 |-------|-----------|-------------------|-----------------------|
 |1.		| 			|					| 3.3V Input			|
-|2.		| Input		|					| Battery Voltage ADC	|
-|3.		| Output	|					| Battery Charge Control|
+|2.		| Output	|					| Battery Charge Control|
+|3.		| Input		|					| Battery Voltage ADC	|
 |4.		| Input		|ICSP MCLR			| IOC					|
 |5.		| Output	|					| PWM					|
 |6.		| Output	|					| Digital Output		|
