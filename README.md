@@ -22,7 +22,7 @@ Each node will have a short name which will be part of the 32 bytes payload.
 |MQTT Topic	| Command	| Value	|
 |:---------:|:---------:|:-----:|
 |19 Bytes	| 5 Bytes	| 8 Bytes|
-|
+
 
 
 ### Output Commands:
@@ -92,7 +92,7 @@ I think ill make the MQTT sever handle all the decryption and re-publishing
 
 PIC16LF1505 Pin Functions
 |Pin	|Direction	|Secondary Function	|Primary Function		|
-|*******|***********|*******************|***********************|
+|-------|-----------|-------------------|-----------------------|
 |1.		| 			|					| 3.3V Input			|
 |2.		| Input		|					| Battery Voltage ADC	|
 |3.		| Output	|					| Battery Charge Control|
