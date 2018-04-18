@@ -17,7 +17,7 @@ The two main parameters that need to be set before use are the short encryption 
 Each node will have a short name which will be part of the 32 bytes payload.
 
 
-###Packet format will be fixed length
+### Packet format will be fixed length
 |MQTT Topic	| Command	| Value	|
 |:---------:|:---------:|:-----:|
 |19 Bytes	| 5 Bytes	| 8 Bytes|
@@ -89,7 +89,7 @@ When the router gets a packet that was successfully decrypted with a key that is
 
 I think ill make the MQTT sever handle all the decryption and re-publishing 
 
-PIC16LF1505 Pin Functions
+### PIC16LF1505 Pin Functions
 |Pin	|Direction	|Secondary Function	|Primary Function		|
 |-------|-----------|-------------------|-----------------------|
 |1.		| 			|					| 3.3V Input			|
