@@ -11,6 +11,8 @@ This project will consist of:
 2. Multiple nRF24L01+ nodes with a PIC16LF1503 to translate the radio to usable signals including PWM, ADC, DAC, I/O and Interrupt for real time detection.
 These will be battery powered from an 18650 and solar panels. The PIC will use responsible for not overcharging the 18650, it letting it trickle charge.
 
+https://easyeda.com/editor#id=ee2b2d3aaf004e3eae402c79e8d31e8c
+
 All configuration will be done via MQTT.
 The two main parameters that need to be set before use are the short encryption key and the node name
 
@@ -69,3 +71,39 @@ void decrypt (uint32_t* v, uint32_t* k) {
     v[0]=v0; v[1]=v1;
 }
 ```
+
+All configuration (apart from the WiFi User / Pass and MQTT details) will be retained in the MQTT broker.
+MQTT topics:
+
+#List of all the radio node names:
+/radio/configuration/nodes
+
+#The encryption keys for the node:
+/radio/encryption/[NODE_TOPIC]/[INDEX]/[ASCII_KEY]
+[NODE_TOPIC] Is the node MQTT topic
+[INDEX] Is the key index, when changing key, the new key will be the next available index (0 to n), and the old / active key is 0.
+When the router gets a packet that was successfully decrypted with a key that is not 0, it will place that key in index 0 and clear all the others.
+
+#The real time log of raw unencrypted packet data
+/radio/stream/encrypted Strings if raw packet data
+
+
+I think ill make the MQTT sever handle all the decryption and re-publishing 
+
+PIC16LF1505 Pin Functions
+|Pin	|Direction	|Secondary Function	|Primary Function		|
+|*******|***********|*******************|***********************|
+|1.		| 			|					| 3.3V Input			|
+|2.		| Input		|					| Battery Voltage ADC	|
+|3.		| Output	|					| Battery Charge Control|
+|4.		| Input		|ICSP MCLR			| IOC					|
+|5.		| Output	|					| PWM					|
+|6.		| Output	|					| Digital Output		|
+|7.		| Input		|					| ADC					|
+|8.		| Output	|					| Radio SPI MOSI		|
+|9.		| Input		|					| Radio SPI MISO		|
+|10.	| Output	|					| Radio SPI CLK			|
+|11.	| Input		|					| Radio SPI Interrupt	|
+|12.	| Both		|ICSP CLK			| Radio Chip Select		|
+|13.	| Both		|ICSP DAT			| Radio Chip Enable		|
+|14.	|			|					| GND					|
