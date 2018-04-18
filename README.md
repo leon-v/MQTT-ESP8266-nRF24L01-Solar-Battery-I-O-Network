@@ -11,12 +11,11 @@ This project will consist of:
 2. Multiple nRF24L01+ nodes with a PIC16LF1503 to translate the radio to usable signals including PWM, ADC, DAC, I/O and Interrupt for real time detection.
 These will be battery powered from an 18650 and solar panels. The PIC will use responsible for not overcharging the 18650, it letting it trickle charge.
 
-https://easyeda.com/editor#id=ee2b2d3aaf004e3eae402c79e8d31e8c
-
 All configuration will be done via MQTT.
 The two main parameters that need to be set before use are the short encryption key and the node name
 
 Each node will have a short name which will be part of the 32 bytes payload.
+
 
 ###Packet format will be fixed length
 |MQTT Topic	| Command	| Value	|
