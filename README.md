@@ -90,19 +90,19 @@ When the router gets a packet that was successfully decrypted with a key that is
 I think ill make the MQTT sever handle all the decryption and re-publishing 
 
 ### PIC16LF1505 Pin Functions
-|Pin	|Direction	|Secondary Function	|Primary Function		|
-|-------|-----------|-------------------|-----------------------|
-|1.		| 			|					| 3.3V Input			|
-|2.		| Output	|					| Battery Charge Control|
-|3.		| Input		|					| Battery Voltage ADC	|
-|4.		| Input		|ICSP MCLR			| IOC					|
-|5.		| Output	|					| PWM					|
-|6.		| Output	|					| Digital Output		|
-|7.		| Input		|					| ADC					|
-|8.		| Output	|					| Radio SPI MOSI		|
-|9.		| Input		|					| Radio SPI MISO		|
-|10.	| Output	|					| Radio SPI CLK			|
-|11.	| Input		|					| Radio SPI Interrupt	|
-|12.	| Both		|ICSP CLK			| Radio Chip Select		|
-|13.	| Both		|ICSP DAT			| Radio Chip Enable		|
-|14.	|			|					| GND					|
+|Pin	|IO	|Direction	|Secondary Function	|Primary Function		|
+|-------|---|-----------|-------------------|-----------------------|
+|1.		|Vdd| 			|					| 3.3V Input			|
+|2.		|RA5| Output	|					| Battery Charge Control|
+|3.		|RA4| Input		|					| Battery Voltage ADC	|
+|4.		|RA3| Input		|ICSP MCLR			| IOC					|
+|5.		|RC5| Output	|					| PWM					|
+|6.		|RC4| Output	|					| Digital Output		|
+|7.		|RC3| Input		|					| ADC					|
+|8.		|RC2| Output	|					| Radio SPI MOSI		|
+|9.		|RC1| Input		|					| Radio SPI MISO		|
+|10.	|RC0| Output	|					| Radio SPI CLK			|
+|11.	|RA2| Input		|					| Radio SPI Interrupt	|
+|12.	|RA1| Both		|ICSP CLK			| Radio Chip Select		|
+|13.	|RA0| Both		|ICSP DAT			| Radio Chip Enable		|
+|14.	|Vss|			|					| GND					|
