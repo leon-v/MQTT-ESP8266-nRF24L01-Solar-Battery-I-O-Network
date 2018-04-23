@@ -1,39 +1,11 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"965 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h
-[s S58 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S58 . TRISA0 TRISA1 TRISA2 TRISA3 TRISA4 TRISA5 ]
-"964
-[u S57 `S58 1 ]
-[n S57 . . ]
-"974
-[v _TRISAbits `VS57 ~T0 @X0 0 e@140 ]
-"433
-[s S29 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S29 . RA0 RA1 RA2 RA3 RA4 RA5 ]
-"432
-[u S28 `S29 1 ]
-[n S28 . . ]
-"442
-[v _PORTAbits `VS28 ~T0 @X0 0 e@12 ]
-"3014
-[s S166 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S166 . SSPM0 SSPM1 SSPM2 SSPM3 CKP SSPEN SSPOV WCOL ]
-"3024
-[s S167 :4 `uc 1 ]
-[n S167 . SSPM ]
-"3013
-[u S165 `S166 1 `S167 1 ]
-[n S165 . . . ]
-"3028
-[v _SSPCON1bits `VS165 ~T0 @X0 0 e@533 ]
-"2763
-[s S156 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S156 . BF UA R_nW S P D_nA CKE SMP ]
-"2762
-[u S155 `S156 1 ]
-[n S155 . . ]
-"2774
-[v _SSP1STATbits `VS155 ~T0 @X0 0 e@532 ]
+"6 nrf24l01spi.h
+[s S334 `uc 1 `uc 1 `ui 1 `ui 1 `uc 1 ]
+[n S334 . command status request result byte ]
+"16
+[v _nrf24l01SPIISR `(v ~T0 @X0 0 ef1`S334 ]
+"14
+[v _nrf24l01SPIInit `(v ~T0 @X0 0 ef1`S334 ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -2811,51 +2783,45 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 193: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 194: extern __bank0 __bit __powerdown;
 [; ;pic.h: 195: extern __bank0 __bit __timeout;
-"4 spi.c
-[v _SPIInit `(v ~T0 @X0 1 ef ]
+[; ;nrf24l01spi.h: 6: typedef struct {
+[; ;nrf24l01spi.h: 7: unsigned char command;
+[; ;nrf24l01spi.h: 8: unsigned char status;
+[; ;nrf24l01spi.h: 9: unsigned int request;
+[; ;nrf24l01spi.h: 10: unsigned int result;
+[; ;nrf24l01spi.h: 11: unsigned char byte;
+[; ;nrf24l01spi.h: 12: } nrf24l01SPIData_t;
+[; ;nrf24l01spi.h: 14: void nrf24l01SPIInit(nrf24l01SPIData_t spiData);
+[; ;nrf24l01spi.h: 15: unsigned char nrf24l01SPIComplete(nrf24l01SPIData_t spiData);
+[; ;nrf24l01spi.h: 16: void nrf24l01SPIISR(nrf24l01SPIData_t spiData);
+[; ;nrf24l01spi.h: 17: void nrf24l01SPISend(nrf24l01SPIData_t spiData);
+[; ;nrf24l01.h: 18: void nrf24l01ISR(void);
+[; ;nrf24l01.h: 19: void nrf24l01Init(void);
+"5 nrf24l01.c
+[v _spiData `S334 ~T0 @X0 1 e ]
+[; ;nrf24l01.c: 5: nrf24l01SPIData_t spiData;
+"7
+[v _nrf24l01ISR `(v ~T0 @X0 1 ef ]
 {
-[; ;spi.c: 4: void SPIInit(void){
-[e :U _SPIInit ]
+[; ;nrf24l01.c: 7: void nrf24l01ISR(void){
+[e :U _nrf24l01ISR ]
 [f ]
-[; ;spi.c: 5: TRISAbits.TRISA1 = 0;
-"5
-[e = . . _TRISAbits 0 1 -> -> 0 `i `uc ]
-[; ;spi.c: 6: PORTAbits.RA1 = 1;
-"6
-[e = . . _PORTAbits 0 1 -> -> 1 `i `uc ]
-[; ;spi.c: 10: SSPCON1bits.SSPEN = 0;
-"10
-[e = . . _SSPCON1bits 0 5 -> -> 0 `i `uc ]
-[; ;spi.c: 11: SSPCON1bits.CKP = 0;
-"11
-[e = . . _SSPCON1bits 0 4 -> -> 0 `i `uc ]
-[; ;spi.c: 12: SSP1STATbits.CKE = 1;
-"12
-[e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;spi.c: 13: SSP1STATbits.CKE = 0;
-"13
-[e = . . _SSP1STATbits 0 6 -> -> 0 `i `uc ]
-[; ;spi.c: 14: SSPCON1bits.SSPM = 0b0000;
-"14
-[e = . . _SSPCON1bits 1 0 -> -> 0 `i `uc ]
-[; ;spi.c: 15: SSPCON1bits.SSPEN = 1;
-"15
-[e = . . _SSPCON1bits 0 5 -> -> 1 `i `uc ]
-[; ;spi.c: 16: }
-"16
-[e :UE 334 ]
-}
-"18
-[v _status `uc ~T0 @X0 1 e ]
-[; ;spi.c: 18: unsigned char status;
-"19
-[v _SPISend `(ui ~T0 @X0 1 ef1`ui ]
-{
-[; ;spi.c: 19: unsigned int SPISend(unsigned int command){
-[e :U _SPISend ]
-[v _command `ui ~T0 @X0 1 r1 ]
-[f ]
-[; ;spi.c: 21: }
-"21
+[; ;nrf24l01.c: 8: nrf24l01SPIISR(spiData);
+"8
+[e ( _nrf24l01SPIISR (1 _spiData ]
+[; ;nrf24l01.c: 9: }
+"9
 [e :UE 335 ]
+}
+"11
+[v _nrf24l01Init `(v ~T0 @X0 1 ef ]
+{
+[; ;nrf24l01.c: 11: void nrf24l01Init(void){
+[e :U _nrf24l01Init ]
+[f ]
+[; ;nrf24l01.c: 12: nrf24l01SPIInit(spiData);
+"12
+[e ( _nrf24l01SPIInit (1 _spiData ]
+[; ;nrf24l01.c: 13: }
+"13
+[e :UE 336 ]
 }

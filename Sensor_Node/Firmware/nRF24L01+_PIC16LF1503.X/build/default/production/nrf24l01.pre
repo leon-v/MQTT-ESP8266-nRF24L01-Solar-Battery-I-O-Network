@@ -1,5 +1,5 @@
 
-# 1 "main.c"
+# 1 "nrf24l01.c"
 
 # 26 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\htc.h"
 extern const char __xc8_OPTIM_SPEED;
@@ -3760,35 +3760,31 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
+# 6 "nrf24l01spi.h"
+typedef struct {
+unsigned char command;
+unsigned char status;
+unsigned int request;
+unsigned int result;
+unsigned char byte;
+} nrf24l01SPIData_t;
+
+void nrf24l01SPIInit(nrf24l01SPIData_t spiData);
+unsigned char nrf24l01SPIComplete(nrf24l01SPIData_t spiData);
+void nrf24l01SPIISR(nrf24l01SPIData_t spiData);
+void nrf24l01SPISend(nrf24l01SPIData_t spiData);
+
 # 18 "nrf24l01.h"
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 
-# 5 "main.c"
-void interrupt ISR(void){
-nrf24l01ISR();
+# 5 "nrf24l01.c"
+nrf24l01SPIData_t spiData;
+
+void nrf24l01ISR(void){
+nrf24l01SPIISR(spiData);
 }
 
-void loop(){
-
-
-}
-
-void main(void) {
-
-INTCONbits.GIE = 0;
-INTCONbits.PEIE = 1;
-
-OSCCONbits.IRCF = 0b1111;
-OSCCONbits.SCS = 0b10;
-
-nrf24l01Init();
-
-INTCONbits.GIE = 1;
-
-while(1){
-loop();
-}
-
-return;
+void nrf24l01Init(void){
+nrf24l01SPIInit(spiData);
 }

@@ -1,5 +1,5 @@
 
-# 1 "spi.c"
+# 1 "nrf24l01spi.c"
 
 # 26 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\htc.h"
 extern const char __xc8_OPTIM_SPEED;
@@ -3760,11 +3760,30 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 4 "spi.c"
-void SPIInit(void){
+# 6 "nrf24l01spi.h"
+typedef struct {
+unsigned char command;
+unsigned char status;
+unsigned int request;
+unsigned int result;
+unsigned char byte;
+} nrf24l01SPIData_t;
+
+void nrf24l01SPIInit(nrf24l01SPIData_t spiData);
+unsigned char nrf24l01SPIComplete(nrf24l01SPIData_t spiData);
+void nrf24l01SPIISR(nrf24l01SPIData_t spiData);
+void nrf24l01SPISend(nrf24l01SPIData_t spiData);
+
+# 5 "nrf24l01spi.c"
+void nrf24l01SPIInit(nrf24l01SPIData_t spiData){
+
 TRISAbits.TRISA1 = 0;
 PORTAbits.RA1 = 1;
 
+TRISCbits.TRISC1 = 1;
+TRISCbits.TRISC2 = 0;
+
+TRISCbits.TRISC0 = 0;
 
 
 SSPCON1bits.SSPEN = 0;
@@ -3772,10 +3791,54 @@ SSPCON1bits.CKP = 0;
 SSP1STATbits.CKE = 1;
 SSP1STATbits.CKE = 0;
 SSPCON1bits.SSPM = 0b0000;
+
+PIE1bits.SSP1IE = 1;
+
 SSPCON1bits.SSPEN = 1;
 }
 
-unsigned char status;
-unsigned int SPISend(unsigned int command){
+unsigned char nrf24l01SPIComplete(nrf24l01SPIData_t spiData){
+return (unsigned char) (spiData.byte == 0);
+}
 
+void nrf24l01SPIISR(nrf24l01SPIData_t spiData){
+
+if (!PIR1bits.SSP1IF){
+return;
+}
+
+PIR1bits.SSP1IF = 0;
+
+if (!spiData.byte){
+return;
+}
+
+switch (spiData.byte){
+case 3:
+spiData.status = SSP1BUF;
+SSP1BUF = spiData.request;
+spiData.byte--;
+break;
+
+case 2:
+spiData.result = SSP1BUF;
+SSP1BUF = spiData.request >> 8;
+spiData.byte--;
+break;
+
+case 1:
+spiData.result |= (unsigned int) (SSP1BUF << 8);
+PORTAbits.RA1 = 1;
+spiData.byte--;
+break;
+}
+}
+
+
+void nrf24l01SPISend(nrf24l01SPIData_t spiData){
+
+spiData.byte = 3;
+
+PORTAbits.RA1 = 0;
+SSP1BUF = spiData.command;
 }
