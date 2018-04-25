@@ -15,6 +15,19 @@
 #define WriteTXPayloadNoACK 0b10110000
 #define NoOperation         0b11111111
 
+#define nrf24l01CONFIG 0x00 
+typedef struct {
+    unsigned PRIM_RX       : 1;
+    unsigned PWR_UP        : 1;
+    unsigned CRCO          : 1;
+    unsigned EN_CRC        : 1;
+    unsigned MASK_MAX_RT   : 1;
+    unsigned MASK_TX_DS    : 1;
+    unsigned MASK_INT_DR   : 1;
+    unsigned reserved      : 1;
+} nrf24l01CONFIGbits_t;
+
+
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 

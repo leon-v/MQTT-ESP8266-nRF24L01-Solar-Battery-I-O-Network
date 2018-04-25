@@ -10,4 +10,19 @@ void nrf24l01ISR(void){
 
 void nrf24l01Init(void){
     nrf24l01SPIInit(spiData);
+    
+    while (!nrf24l01SPIComplete()){ NOP(); }
+    
+    spiData.command = ReadRegister + nrf24l01CONFIG;
+    nrf24l01SPISend(spiData);
+    
+    while (!nrf24l01SPIComplete()){ NOP(); }
+}
+
+void nrf24l01RecieveMode(){
+    
+}
+
+void nrf24l01Transmit(){
+    
 }
