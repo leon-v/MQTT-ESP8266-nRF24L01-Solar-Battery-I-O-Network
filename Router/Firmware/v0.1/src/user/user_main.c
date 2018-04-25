@@ -38,7 +38,8 @@
 #include "user_interface.h"
 #include "mem.h"
 #include "sleep.h"
-#include "spi.h"
+#include "nRF24L01+.h"
+
 
 MQTT_Client mqttClient;
 
@@ -190,6 +191,8 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 		INFO("\r\nStarting MQTT ....\r\n");
 
+		nrf24l01Init(void);
+
 		MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, 0);//sysCfg.security
 
 		MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
@@ -201,7 +204,9 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 		WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
 
-		sleepInit(&mqttClient);
+		// sleepInit(&mqttClient);
+
+		nrf24l01Init(&mqttClient);
 
 		INFO("\r\nSystem started ...\r\n");
 	}
