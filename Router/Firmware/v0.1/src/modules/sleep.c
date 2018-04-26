@@ -28,15 +28,15 @@ void ICACHE_FLASH_ATTR setADC(unsigned int index){
 	}
 
 	if ((index >> 1) & 0x0001){
-		gpio_output_set(BIT12, 0, BIT12, 0);
+		// gpio_output_set(BIT12, 0, BIT12, 0);
 	} else{
-		gpio_output_set(0, BIT12, BIT12, 0);
+		// gpio_output_set(0, BIT12, BIT12, 0);
 	}
 
 	if ((index >> 2) & 0x0001){
-		gpio_output_set(BIT13, 0, BIT13, 0);
+		// gpio_output_set(BIT13, 0, BIT13, 0);
 	} else{
-		gpio_output_set(0, BIT13, BIT13, 0);
+		// gpio_output_set(0, BIT13, BIT13, 0);
 	}
 }
 
@@ -98,46 +98,12 @@ void ICACHE_FLASH_ATTR sendADCData(){
 				adcValue = (unsigned int) ((adcValueSum * sysCfg.mqtt_muladc0) / length);
 				os_sprintf(mqttValue, "%d", adcValue);
 				mqttTopic = strcat(mqttTopic, sysCfg.mqtt_topicadc0);
-				break;
-			case 1:
-				adcValue = (unsigned int) ((adcValueSum * sysCfg.mqtt_muladc1) / length);
-				os_sprintf(mqttValue, "%d", adcValue);
-				mqttTopic = strcat(mqttTopic, sysCfg.mqtt_topicadc1);
-				break;
-			case 2:
-				adcValue = (unsigned int) ((adcValueSum * sysCfg.mqtt_muladc2) / length);
-				os_sprintf(mqttValue, "%d", adcValue);
-				mqttTopic = strcat(mqttTopic, sysCfg.mqtt_topicadc2);
-				break;
-			case 3:
-				adcValue = (unsigned int) ((adcValueSum * sysCfg.mqtt_muladc3) / length);
-				os_sprintf(mqttValue, "%d", adcValue);
-				mqttTopic = strcat(mqttTopic, sysCfg.mqtt_topicadc3);
-				break;
-			case 4:
-				adcValue = (unsigned int) ((adcValueSum * 10) / length);
-				os_sprintf(mqttValue, "%d", adcValue);
-				mqttTopic = strcat(mqttTopic, "/ChargeSupply");
-				break;
-			case 5:
-				adcValue = (unsigned int) ((adcValueSum * 10) / length);
-				mqttTopic = strcat(mqttTopic, "/RegulatedChargeSupply");
-				break;
-			case 6:
-				adcValue = (unsigned int) ((adcValueSum * 4.3) / length);
-				os_sprintf(mqttValue, "%d", adcValue);
-				mqttTopic = strcat(mqttTopic, "/BatteryVoltage");
-				break;
-			case 7:
-				adcValue = (unsigned int) ((adcValueSum * 4.3) / length);
-				os_sprintf(mqttValue, "%d", adcValue);
-				mqttTopic = strcat(mqttTopic, "/Regulated3.3V");
+				os_printf("%s = %s\r\n", mqttTopic, mqttValue);
+				MQTT_Publish(mqttClient, mqttTopic, mqttValue, strlen(mqttValue), 1, 1);
 				break;
 		}
 
-		os_printf("%s = %s\r\n", mqttTopic, mqttValue);
-
-		MQTT_Publish(mqttClient, mqttTopic, mqttValue, strlen(mqttValue), 1, 1);
+		
 	}
 
 	gpio_output_set(BIT15, 0, BIT15, 0); 			// Set GPIO15 high output (up)
@@ -164,14 +130,13 @@ void ICACHE_FLASH_ATTR goToSleep(void *arg){
 }
 
 void ClientConnected(void){
-	
 	os_timer_arm(&goToSleep_timer, 100, 1);
 }
 void ClientDisconnected(void){
 	os_timer_disarm(&goToSleep_timer);
 }
 
-void ICACHE_FLASH_ATTR sleepInit(uint32_t *args){
+void ICACHE_FLASH_ATTR sleepInit(MQTT_Client* p_mqttClient){
 
 	//  gpio_init();
 
@@ -209,7 +174,7 @@ void ICACHE_FLASH_ATTR sleepInit(uint32_t *args){
 	// gpio16_output_set(1);
 
 
-	mqttClient = (MQTT_Client*) args;
+	mqttClient = p_mqttClient;
 
 	// Configure GPIO14 to act as an interrupt to wake the IC and to run a task.
 	// Running a task on interrupt instead of timers enabled the IC to go back to sleep sooner.
@@ -227,9 +192,6 @@ void ICACHE_FLASH_ATTR sleepInit(uint32_t *args){
 
 	os_timer_disarm(&goToSleep_timer);
 	os_timer_setfn(&goToSleep_timer, (os_timer_func_t *)goToSleep, NULL);
-
-
-	
 
 	// ETS_GPIO_INTR_ENABLE();// Enable interrupts
 

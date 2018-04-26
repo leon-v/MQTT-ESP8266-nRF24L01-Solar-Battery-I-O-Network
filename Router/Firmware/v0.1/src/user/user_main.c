@@ -204,7 +204,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 		WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
 
-		// sleepInit(&mqttClient);
+		sleepInit(&mqttClient);
 
 		nrf24l01Init(&mqttClient);
 
