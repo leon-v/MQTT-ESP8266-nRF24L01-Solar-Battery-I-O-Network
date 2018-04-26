@@ -8,6 +8,7 @@
 #include "mem.h"
 #include "gpio16.h"
 
+
 #define MQTT_TASK_PRIO                2
 
 unsigned int counter = 0;

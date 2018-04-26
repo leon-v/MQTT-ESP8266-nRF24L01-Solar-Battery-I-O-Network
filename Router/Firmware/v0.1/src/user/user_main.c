@@ -191,7 +191,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 		INFO("\r\nStarting MQTT ....\r\n");
 
-		nrf24l01Init(void);
+		// nrf24l01Init(void);
 
 		MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, 0);//sysCfg.security
 
