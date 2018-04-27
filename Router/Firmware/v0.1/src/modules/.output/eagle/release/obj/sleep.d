@@ -14,4 +14,4 @@
  ../include/mqtt/queue.h ../include/mqtt/ringbuf.h ../../include/stdlib.h \
  ../../include/machine/stdlib.h ../../include/alloca.h \
  ../include/mqtt/typedef.h ../include/modules/config.h \
- ../../include/mem.h ../include/modules/gpio16.h
+ ../../include/mem.h ../../driver_lib/include/driver/gpio16.h

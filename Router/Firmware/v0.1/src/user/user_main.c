@@ -174,11 +174,17 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 	CFG_Load();
 
+	gpio_init();
+
+	gpio_output_set(BIT2,0, BIT2, 0); // LED OFF (Some ESPs use pin 1)
+
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO4_U, FUNC_GPIO4);
 	GPIO_DIS_OUTPUT(4);
 	// PIN_PULLDWN_DIS(PERIPHS_IO_MUX_GPIO4_U);
 	PIN_PULLUP_EN(PERIPHS_IO_MUX_GPIO4_U);
 	gpio_output_set(0, BIT4, 0, BIT4);// Bit 4 input
+
+	gpio_output_set(0, BIT2, 0, BIT2);// Bit 4 input
 
 
 	// if (resetInfo->reason != 4){
@@ -190,8 +196,6 @@ void ICACHE_FLASH_ATTR user_init(void){
 	else{
 
 		INFO("\r\nStarting MQTT ....\r\n");
-
-		// nrf24l01Init(void);
 
 		MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, 0);//sysCfg.security
 

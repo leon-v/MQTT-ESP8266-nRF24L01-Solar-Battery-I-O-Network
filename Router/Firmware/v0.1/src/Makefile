@@ -122,7 +122,7 @@ DDEFINES +=				\
 # Required for each makefile to inherit from the parent
 #
 
-INCLUDES := $(INCLUDES) -I $(PDIR)include -I $(PDIR)include/mqtt -I $(PDIR)include/modules
+INCLUDES := $(INCLUDES) -I $(PDIR)include -I $(PDIR)include/mqtt -I $(PDIR)include/modules -I $(PDIR)../driver_lib/include/driver
 PDIR := ../$(PDIR)
 sinclude $(PDIR)Makefile
 
