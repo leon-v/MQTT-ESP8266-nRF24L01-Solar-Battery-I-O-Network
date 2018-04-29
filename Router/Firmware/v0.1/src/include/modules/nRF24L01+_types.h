@@ -21,7 +21,7 @@ typedef union{
 		unsigned Reserved	: 1;
 
 	};
-	struct{
+	struct {
 		unsigned bit0	: 1;
 		unsigned bit1	: 1;
 		unsigned bit2	: 1;
@@ -32,6 +32,60 @@ typedef union{
 		unsigned bit7	: 1;
 	};
 } n_CONFIG_t;
+
+#define n_EN_AA			0x01
+typedef union{
+	struct {
+		unsigned byte : 8;
+	};
+	struct {
+		unsigned ENAA_P0	: 1;
+		unsigned ENAA_P1	: 1;
+		unsigned ENAA_P2	: 1;
+		unsigned ENAA_P3	: 1;
+		unsigned ENAA_P4	: 1;
+		unsigned ENAA_P5	: 1;
+		unsigned Reserved	: 2;
+
+	};
+	struct {
+		unsigned bit0	: 1;
+		unsigned bit1	: 1;
+		unsigned bit2	: 1;
+		unsigned bit3	: 1;
+		unsigned bit4	: 1;
+		unsigned bit5	: 1;
+		unsigned bit6	: 1;
+		unsigned bit7	: 1;
+	};
+} n_EN_AA_t;
+
+#define n_EN_RXADDR		0x02
+typedef union{
+	struct {
+		unsigned byte : 8;
+	};
+	struct {
+		unsigned ERX_P0		: 1;
+		unsigned ERX_P1		: 1;
+		unsigned ERX_P2		: 1;
+		unsigned ERX_P3		: 1;
+		unsigned ERX_P4		: 1;
+		unsigned ERX_P5		: 1;
+		unsigned Reserved	: 2;
+
+	};
+	struct {
+		unsigned bit0	: 1;
+		unsigned bit1	: 1;
+		unsigned bit2	: 1;
+		unsigned bit3	: 1;
+		unsigned bit4	: 1;
+		unsigned bit5	: 1;
+		unsigned bit6	: 1;
+		unsigned bit7	: 1;
+	};
+} n_EN_RXADDR_t;
 
 #define n_STATUS		0x07
 typedef union{
@@ -47,14 +101,19 @@ typedef union{
 		unsigned Reserved	: 1;
 
 	};
-	struct{
-		unsigned bit0	: 1;
-		unsigned bit4	: 1;
-		unsigned bit5	: 1;
-		unsigned bit6	: 1;
-		unsigned bit7	: 1;
-	};
 } n_STATUS_t;
 
+
+#define n_RX_PW_P0		0x11
+typedef union{
+	struct {
+		unsigned byte : 8;
+	};
+	struct {
+		unsigned RX_PW_P0	: 6;
+		unsigned Reserved	: 2;
+
+	};
+} n_RX_PW_P0_t;
 
 #endif /* USER_CONFIG_H_ */

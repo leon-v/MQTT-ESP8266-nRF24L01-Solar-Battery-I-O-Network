@@ -29,51 +29,59 @@ uint8 ICACHE_FLASH_ATTR spi_mast_byte_read_write(uint8 spi_no,uint8 data) {
  } 
 
 n_STATUS_t status;
-uint8 nrf24l01Send(uint8 command,uint8 data){
 
+uint8 nrf24l01Send(uint8 command,uint8 data) {
 	ets_intr_lock();		 //close	interrupt
 
     n_CONFIG_t config;
 
     gpio_output_set(0, BIT15, BIT15, 0); // (high, low, out, in)
-    status.byte = spi_mast_byte_read_write(HSPI, n_R_REGISTER | n_CONFIG);
-    config.byte = spi_mast_byte_read_write(HSPI, 0);
+    status.byte = spi_mast_byte_read_write(HSPI, command);
+    uint8 result;
+    result = spi_mast_byte_read_write(HSPI, data);
     gpio_output_set(BIT15, 0, BIT15, 0); // (high, low, out, in)
 
-    config.PRIM_RX = 1;
-
-    gpio_output_set(0, BIT15, BIT15, 0); // (high, low, out, in)
-    status.byte = spi_mast_byte_read_write(HSPI, n_W_REGISTER | n_CONFIG);
-    spi_mast_byte_read_write(HSPI, config.byte);
-    pio_output_set(BIT15, 0, BIT15, 0); // (high, low, out, in)
-
     ets_intr_unlock();	 	 //open	interrupt
+    return result;
 }
 
+
 static os_timer_t spiTestTimer;
-unsigned int spiCounter = 0x00;
 void spiTestTimerFunction(){
-
-	// os_printf("Write Data\r\n");
-
-	// (high, low, out, in)
-	ets_intr_lock();		 //close	interrupt
-
-    gpio_output_set(0, BIT15, BIT15, 0); 			// Set low output
+	
+	n_CONFIG_t config;
+    config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
+    config.PRIM_RX = 1;
+    nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
 
 
-    spi_mast_byte_write(HSPI, spiCounter >> 16);
-	spi_mast_byte_write(HSPI, spiCounter >> 8);
-	spi_mast_byte_write(HSPI, spiCounter >> 0);
+    n_EN_RXADDR_t enRXAddr;
+    enRXAddr.byte = nrf24l01Send(n_R_REGISTER | n_EN_RXADDR, 0);
+    enRXAddr.ERX_P0 = 1;
+    enRXAddr.ERX_P1 = 1;
+    enRXAddr.ERX_P2 = 1;
+    enRXAddr.ERX_P3 = 1;
+    enRXAddr.ERX_P4 = 1;
+    enRXAddr.ERX_P5 = 1;
+    nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
 
-	// (high, low, out, in)
-    gpio_output_set(BIT15, 0, BIT15, 0); 			// Set low output
+    n_EN_AA_t enAA;
+    enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0);
+    enAA.ENAA_P0 = 1;
+    enAA.ENAA_P1 = 1;
+    enAA.ENAA_P2 = 1;
+    enAA.ENAA_P3 = 1;
+    enAA.ENAA_P4 = 1;
+    enAA.ENAA_P5 = 1;
+    nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte);
 
-    ets_intr_unlock();	 	 //open	interrupt
-	spiCounter++;
-	// if (spiCounter == 255){
-	// 	spiCounter = 0;
-	// }
+    n_RX_PW_P0_t rxPWP0;
+    rxPWP0.byte = nrf24l01Send(n_R_REGISTER | n_RX_PW_P0, 0);
+    enAA.RX_PW_P0 = 32;
+    nrf24l01Send(n_W_REGISTER | n_RX_PW_P0, rxPWP0.byte);
+
+
+
 
 }
 
