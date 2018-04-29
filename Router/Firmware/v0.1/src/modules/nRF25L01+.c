@@ -77,7 +77,7 @@ void spiTestTimerFunction(){
 
     n_RX_PW_P0_t rxPWP0;
     rxPWP0.byte = nrf24l01Send(n_R_REGISTER | n_RX_PW_P0, 0);
-    enAA.RX_PW_P0 = 32;
+    rxPWP0.RX_PW_P0 = 32;
     nrf24l01Send(n_W_REGISTER | n_RX_PW_P0, rxPWP0.byte);
 
 
