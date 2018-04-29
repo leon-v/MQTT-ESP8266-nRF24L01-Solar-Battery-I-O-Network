@@ -14,6 +14,7 @@
  ../../include/sys/_types.h ../../include/sys/lock.h \
  ../../include/machine/stdlib.h ../../include/alloca.h \
  ../include/mqtt/typedef.h ../include/modules/nRF24L01+.h \
+ ../include/modules/nRF24L01+_types.h \
  ../../driver_lib/include/driver/spi.h \
  ../../driver_lib/include/driver/spi_register.h ../../include/ets_sys.h \
  ../../include/osapi.h ../../include/string.h \
