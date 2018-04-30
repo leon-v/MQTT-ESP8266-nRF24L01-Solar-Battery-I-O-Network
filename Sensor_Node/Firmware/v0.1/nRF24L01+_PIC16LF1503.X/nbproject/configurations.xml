@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>nrf24l01.h</itemPath>
       <itemPath>nrf24l01spi.h</itemPath>
+      <itemPath>nRF24L01+_types.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"

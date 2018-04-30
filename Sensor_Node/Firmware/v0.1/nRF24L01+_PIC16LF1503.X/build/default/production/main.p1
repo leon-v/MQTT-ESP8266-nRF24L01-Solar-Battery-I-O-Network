@@ -1,5 +1,5 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"18 nrf24l01.h
+"7 nrf24l01.h
 [v _nrf24l01ISR `(v ~T0 @X0 0 ef ]
 [p mainexit ]
 "355 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h
@@ -24,7 +24,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S75 . . . ]
 "1391
 [v _OSCCONbits `VS75 ~T0 @X0 0 e@153 ]
-"19 nrf24l01.h
+"8 nrf24l01.h
 [v _nrf24l01Init `(v ~T0 @X0 0 ef ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
@@ -2803,8 +2803,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 193: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 194: extern __bank0 __bit __powerdown;
 [; ;pic.h: 195: extern __bank0 __bit __timeout;
-[; ;nrf24l01.h: 18: void nrf24l01ISR(void);
-[; ;nrf24l01.h: 19: void nrf24l01Init(void);
+[; ;nrf24l01.h: 7: void nrf24l01ISR(void);
+[; ;nrf24l01.h: 8: void nrf24l01Init(void);
 [v $root$_ISR `(v ~T0 @X0 0 e ]
 [v F2888 `(v ~T0 @X0 1 tf ]
 "5 main.c

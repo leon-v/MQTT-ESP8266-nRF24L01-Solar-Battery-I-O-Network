@@ -1,11 +1,27 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"6 nrf24l01spi.h
-[s S334 `uc 1 `uc 1 `ui 1 `ui 1 `uc 1 ]
-[n S334 . command status request result byte ]
-"16
-[v _nrf24l01SPIISR `(v ~T0 @X0 0 ef1`S334 ]
-"14
-[v _nrf24l01SPIInit `(v ~T0 @X0 0 ef1`S334 ]
+"92 nRF24L01+_types.h
+[s S347 :8 `uc 1 ]
+[n S347 . byte ]
+"95
+[s S348 :1 `uc 1 :3 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S348 . TX_FULL RX_P_NO MAX_RT TX_DS RX_DR Reserved ]
+"91
+[u S346 `S347 1 `S348 1 ]
+[n S346 . . . ]
+"10
+[s S335 :8 `uc 1 ]
+[n S335 . byte ]
+"13
+[s S336 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S336 . PRIM_RX PWR_UP CRCO EN_CRC MASK_MAX_RT MASK_TX_DS MASK_RX_DR Reserved ]
+"24
+[s S337 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S337 . bit0 bit1 bit2 bit3 bit4 bit5 bit6 bit7 ]
+"9
+[u S334 `S335 1 `S336 1 `S337 1 ]
+[n S334 . . . . ]
+"9 nrf24l01spi.h
+[v _nrf24l01SPISend `(uc ~T0 @X0 0 ef2`uc`uc ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -2783,34 +2799,117 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 193: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 194: extern __bank0 __bit __powerdown;
 [; ;pic.h: 195: extern __bank0 __bit __timeout;
-[; ;nrf24l01spi.h: 6: typedef struct {
-[; ;nrf24l01spi.h: 7: unsigned char command;
-[; ;nrf24l01spi.h: 8: unsigned char status;
-[; ;nrf24l01spi.h: 9: unsigned int request;
-[; ;nrf24l01spi.h: 10: unsigned int result;
-[; ;nrf24l01spi.h: 11: unsigned char byte;
-[; ;nrf24l01spi.h: 12: } nrf24l01SPIData_t;
-[; ;nrf24l01spi.h: 14: void nrf24l01SPIInit(nrf24l01SPIData_t spiData);
-[; ;nrf24l01spi.h: 15: unsigned char nrf24l01SPIComplete(nrf24l01SPIData_t spiData);
-[; ;nrf24l01spi.h: 16: void nrf24l01SPIISR(nrf24l01SPIData_t spiData);
-[; ;nrf24l01spi.h: 17: void nrf24l01SPISend(nrf24l01SPIData_t spiData);
-[; ;nrf24l01.h: 18: void nrf24l01ISR(void);
-[; ;nrf24l01.h: 19: void nrf24l01Init(void);
-"5 nrf24l01.c
-[v _spiData `S334 ~T0 @X0 1 e ]
-[; ;nrf24l01.c: 5: nrf24l01SPIData_t spiData;
-"7
+[; ;nRF24L01+_types.h: 9: typedef union{
+[; ;nRF24L01+_types.h: 10: struct {
+[; ;nRF24L01+_types.h: 11: unsigned byte : 8;
+[; ;nRF24L01+_types.h: 12: };
+[; ;nRF24L01+_types.h: 13: struct {
+[; ;nRF24L01+_types.h: 14: unsigned PRIM_RX : 1;
+[; ;nRF24L01+_types.h: 15: unsigned PWR_UP : 1;
+[; ;nRF24L01+_types.h: 16: unsigned CRCO : 1;
+[; ;nRF24L01+_types.h: 17: unsigned EN_CRC : 1;
+[; ;nRF24L01+_types.h: 18: unsigned MASK_MAX_RT: 1;
+[; ;nRF24L01+_types.h: 19: unsigned MASK_TX_DS : 1;
+[; ;nRF24L01+_types.h: 20: unsigned MASK_RX_DR : 1;
+[; ;nRF24L01+_types.h: 21: unsigned Reserved : 1;
+[; ;nRF24L01+_types.h: 23: };
+[; ;nRF24L01+_types.h: 24: struct {
+[; ;nRF24L01+_types.h: 25: unsigned bit0 : 1;
+[; ;nRF24L01+_types.h: 26: unsigned bit1 : 1;
+[; ;nRF24L01+_types.h: 27: unsigned bit2 : 1;
+[; ;nRF24L01+_types.h: 28: unsigned bit3 : 1;
+[; ;nRF24L01+_types.h: 29: unsigned bit4 : 1;
+[; ;nRF24L01+_types.h: 30: unsigned bit5 : 1;
+[; ;nRF24L01+_types.h: 31: unsigned bit6 : 1;
+[; ;nRF24L01+_types.h: 32: unsigned bit7 : 1;
+[; ;nRF24L01+_types.h: 33: };
+[; ;nRF24L01+_types.h: 34: } n_CONFIG_t;
+[; ;nRF24L01+_types.h: 37: typedef union{
+[; ;nRF24L01+_types.h: 38: struct {
+[; ;nRF24L01+_types.h: 39: unsigned byte : 8;
+[; ;nRF24L01+_types.h: 40: };
+[; ;nRF24L01+_types.h: 41: struct {
+[; ;nRF24L01+_types.h: 42: unsigned ENAA_P0 : 1;
+[; ;nRF24L01+_types.h: 43: unsigned ENAA_P1 : 1;
+[; ;nRF24L01+_types.h: 44: unsigned ENAA_P2 : 1;
+[; ;nRF24L01+_types.h: 45: unsigned ENAA_P3 : 1;
+[; ;nRF24L01+_types.h: 46: unsigned ENAA_P4 : 1;
+[; ;nRF24L01+_types.h: 47: unsigned ENAA_P5 : 1;
+[; ;nRF24L01+_types.h: 48: unsigned Reserved : 2;
+[; ;nRF24L01+_types.h: 50: };
+[; ;nRF24L01+_types.h: 51: struct {
+[; ;nRF24L01+_types.h: 52: unsigned bit0 : 1;
+[; ;nRF24L01+_types.h: 53: unsigned bit1 : 1;
+[; ;nRF24L01+_types.h: 54: unsigned bit2 : 1;
+[; ;nRF24L01+_types.h: 55: unsigned bit3 : 1;
+[; ;nRF24L01+_types.h: 56: unsigned bit4 : 1;
+[; ;nRF24L01+_types.h: 57: unsigned bit5 : 1;
+[; ;nRF24L01+_types.h: 58: unsigned bit6 : 1;
+[; ;nRF24L01+_types.h: 59: unsigned bit7 : 1;
+[; ;nRF24L01+_types.h: 60: };
+[; ;nRF24L01+_types.h: 61: } n_EN_AA_t;
+[; ;nRF24L01+_types.h: 64: typedef union{
+[; ;nRF24L01+_types.h: 65: struct {
+[; ;nRF24L01+_types.h: 66: unsigned byte : 8;
+[; ;nRF24L01+_types.h: 67: };
+[; ;nRF24L01+_types.h: 68: struct {
+[; ;nRF24L01+_types.h: 69: unsigned ERX_P0 : 1;
+[; ;nRF24L01+_types.h: 70: unsigned ERX_P1 : 1;
+[; ;nRF24L01+_types.h: 71: unsigned ERX_P2 : 1;
+[; ;nRF24L01+_types.h: 72: unsigned ERX_P3 : 1;
+[; ;nRF24L01+_types.h: 73: unsigned ERX_P4 : 1;
+[; ;nRF24L01+_types.h: 74: unsigned ERX_P5 : 1;
+[; ;nRF24L01+_types.h: 75: unsigned Reserved : 2;
+[; ;nRF24L01+_types.h: 77: };
+[; ;nRF24L01+_types.h: 78: struct {
+[; ;nRF24L01+_types.h: 79: unsigned bit0 : 1;
+[; ;nRF24L01+_types.h: 80: unsigned bit1 : 1;
+[; ;nRF24L01+_types.h: 81: unsigned bit2 : 1;
+[; ;nRF24L01+_types.h: 82: unsigned bit3 : 1;
+[; ;nRF24L01+_types.h: 83: unsigned bit4 : 1;
+[; ;nRF24L01+_types.h: 84: unsigned bit5 : 1;
+[; ;nRF24L01+_types.h: 85: unsigned bit6 : 1;
+[; ;nRF24L01+_types.h: 86: unsigned bit7 : 1;
+[; ;nRF24L01+_types.h: 87: };
+[; ;nRF24L01+_types.h: 88: } n_EN_RXADDR_t;
+[; ;nRF24L01+_types.h: 91: typedef union{
+[; ;nRF24L01+_types.h: 92: struct {
+[; ;nRF24L01+_types.h: 93: unsigned byte : 8;
+[; ;nRF24L01+_types.h: 94: };
+[; ;nRF24L01+_types.h: 95: struct {
+[; ;nRF24L01+_types.h: 96: unsigned TX_FULL : 1;
+[; ;nRF24L01+_types.h: 97: unsigned RX_P_NO : 3;
+[; ;nRF24L01+_types.h: 98: unsigned MAX_RT : 1;
+[; ;nRF24L01+_types.h: 99: unsigned TX_DS : 1;
+[; ;nRF24L01+_types.h: 100: unsigned RX_DR : 1;
+[; ;nRF24L01+_types.h: 101: unsigned Reserved : 1;
+[; ;nRF24L01+_types.h: 103: };
+[; ;nRF24L01+_types.h: 104: } n_STATUS_t;
+[; ;nRF24L01+_types.h: 113: typedef union{
+[; ;nRF24L01+_types.h: 114: struct {
+[; ;nRF24L01+_types.h: 115: unsigned byte : 8;
+[; ;nRF24L01+_types.h: 116: };
+[; ;nRF24L01+_types.h: 117: struct {
+[; ;nRF24L01+_types.h: 118: unsigned RX_PW : 6;
+[; ;nRF24L01+_types.h: 119: unsigned Reserved : 2;
+[; ;nRF24L01+_types.h: 121: };
+[; ;nRF24L01+_types.h: 122: } n_RX_PW_t;
+[; ;nrf24l01spi.h: 8: void nrf24l01SPIInit(void);
+[; ;nrf24l01spi.h: 9: unsigned char nrf24l01SPISend(unsigned char byte1, unsigned char byte2);
+"11 nrf24l01spi.h
+[v _status `S346 ~T0 @X0 1 e ]
+[; ;nrf24l01spi.h: 11: n_STATUS_t status;
+[; ;nrf24l01.h: 7: void nrf24l01ISR(void);
+[; ;nrf24l01.h: 8: void nrf24l01Init(void);
+"7 nrf24l01.c
 [v _nrf24l01ISR `(v ~T0 @X0 1 ef ]
 {
 [; ;nrf24l01.c: 7: void nrf24l01ISR(void){
 [e :U _nrf24l01ISR ]
 [f ]
-[; ;nrf24l01.c: 8: nrf24l01SPIISR(spiData);
-"8
-[e ( _nrf24l01SPIISR (1 _spiData ]
 [; ;nrf24l01.c: 9: }
 "9
-[e :UE 335 ]
+[e :UE 352 ]
 }
 "11
 [v _nrf24l01Init `(v ~T0 @X0 1 ef ]
@@ -2818,10 +2917,39 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.c: 11: void nrf24l01Init(void){
 [e :U _nrf24l01Init ]
 [f ]
-[; ;nrf24l01.c: 12: nrf24l01SPIInit(spiData);
-"12
-[e ( _nrf24l01SPIInit (1 _spiData ]
-[; ;nrf24l01.c: 13: }
 "13
-[e :UE 336 ]
+[v _config `S334 ~T0 @X0 1 a ]
+[; ;nrf24l01.c: 13: n_CONFIG_t config;
+[; ;nrf24l01.c: 14: config.byte = nrf24l01SPISend(0b00000000 | 0x00, 0);
+"14
+[e = . . _config 0 0 ( _nrf24l01SPISend (2 , -> | -> 0 `i -> 0 `i `uc -> -> 0 `i `uc ]
+[; ;nrf24l01.c: 15: config.PRIM_RX = 0;
+"15
+[e = . . _config 1 0 -> -> 0 `i `uc ]
+[; ;nrf24l01.c: 16: nrf24l01SPISend(0b00100000 | 0x00, config.byte);
+"16
+[e ( _nrf24l01SPISend (2 , -> | -> 32 `i -> 0 `i `uc . . _config 0 0 ]
+[; ;nrf24l01.c: 18: }
+"18
+[e :UE 353 ]
+}
+"20
+[v _nrf24l01RecieveMode `(v ~T0 @X0 1 ef ]
+{
+[; ;nrf24l01.c: 20: void nrf24l01RecieveMode(){
+[e :U _nrf24l01RecieveMode ]
+[f ]
+[; ;nrf24l01.c: 22: }
+"22
+[e :UE 354 ]
+}
+"24
+[v _nrf24l01Transmit `(v ~T0 @X0 1 ef ]
+{
+[; ;nrf24l01.c: 24: void nrf24l01Transmit(){
+[e :U _nrf24l01Transmit ]
+[f ]
+[; ;nrf24l01.c: 26: }
+"26
+[e :UE 355 ]
 }

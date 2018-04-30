@@ -1,22 +1,19 @@
 #include <xc.h>
 #include "nrf24l01spi.h"
+#include "nRF24L01+_types.h"
 #include "nrf24l01.h"
 
-nrf24l01SPIData_t spiData;
 
 void nrf24l01ISR(void){
-    nrf24l01SPIISR(spiData);
+    
 }
 
 void nrf24l01Init(void){
-    nrf24l01SPIInit(spiData);
     
-    while (!nrf24l01SPIComplete()){ NOP(); }
-    
-    spiData.command = ReadRegister + nrf24l01CONFIG;
-    nrf24l01SPISend(spiData);
-    
-    while (!nrf24l01SPIComplete()){ NOP(); }
+    n_CONFIG_t config;
+    config.byte = nrf24l01SPISend(n_R_REGISTER | n_CONFIG, 0);
+    config.PRIM_RX = 0;
+    nrf24l01SPISend(n_W_REGISTER | n_CONFIG, config.byte);
 }
 
 void nrf24l01RecieveMode(){
