@@ -105,15 +105,20 @@ typedef union{
 
 
 #define n_RX_PW_P0		0x11
+#define n_RX_PW_P1		0x12
+#define n_RX_PW_P2		0x13
+#define n_RX_PW_P3		0x14
+#define n_RX_PW_P4		0x15
+#define n_RX_PW_P5		0x16
 typedef union{
 	struct {
 		unsigned byte : 8;
 	};
 	struct {
-		unsigned RX_PW_P0	: 6;
+		unsigned RX_PW		: 6;
 		unsigned Reserved	: 2;
 
 	};
-} n_RX_PW_P0_t;
+} n_RX_PW_t;
 
 #endif /* USER_CONFIG_H_ */
