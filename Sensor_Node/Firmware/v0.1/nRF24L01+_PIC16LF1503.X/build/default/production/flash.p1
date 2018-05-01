@@ -1,64 +1,38 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"92 nRF24L01+_types.h
-[s S347 :8 `uc 1 ]
-[n S347 . byte ]
-"95
-[s S348 :1 `uc 1 :3 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S348 . TX_FULL RX_P_NO MAX_RT TX_DS RX_DR Reserved ]
-"91
-[u S346 `S347 1 `S348 1 ]
-[n S346 . . . ]
-"965 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h
-[s S58 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S58 . TRISA0 TRISA1 TRISA2 TRISA3 TRISA4 TRISA5 ]
-"964
-[u S57 `S58 1 ]
-[n S57 . . ]
-"974
-[v _TRISAbits `VS57 ~T0 @X0 0 e@140 ]
-"433
-[s S29 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S29 . RA0 RA1 RA2 RA3 RA4 RA5 ]
-"432
-[u S28 `S29 1 ]
-[n S28 . . ]
-"442
-[v _PORTAbits `VS28 ~T0 @X0 0 e@12 ]
-"1015
-[s S60 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S60 . TRISC0 TRISC1 TRISC2 TRISC3 TRISC4 TRISC5 ]
-"1014
-[u S59 `S60 1 ]
-[n S59 . . ]
-"1024
-[v _TRISCbits `VS59 ~T0 @X0 0 e@142 ]
-"3014
-[s S166 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S166 . SSPM0 SSPM1 SSPM2 SSPM3 CKP SSPEN SSPOV WCOL ]
-"3024
-[s S167 :4 `uc 1 ]
-[n S167 . SSPM ]
-"3013
-[u S165 `S166 1 `S167 1 ]
-[n S165 . . . ]
-"3028
-[v _SSPCON1bits `VS165 ~T0 @X0 0 e@533 ]
-"2763
-[s S156 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S156 . BF UA R_nW S P D_nA CKE SMP ]
-"2762
-[u S155 `S156 1 ]
-[n S155 . . ]
-"2774
-[v _SSP1STATbits `VS155 ~T0 @X0 0 e@532 ]
-"2638
-[v _SSP1BUF `Vuc ~T0 @X0 0 e@529 ]
+"355 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h
+[s S26 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S26 . IOCIF INTF TMR0IF IOCIE INTE TMR0IE PEIE GIE ]
+"365
+[s S27 :2 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 ]
+[n S27 . . T0IF . T0IE ]
+"354
+[u S25 `S26 1 `S27 1 ]
+[n S25 . . . ]
+"372
+[v _INTCONbits `VS25 ~T0 @X0 0 e@11 ]
+"2504
+[v _PMCON1 `Vuc ~T0 @X0 0 e@405 ]
+"2417
+[v _PMADRL `Vuc ~T0 @X0 0 e@401 ]
+"2437
+[v _PMADRH `Vuc ~T0 @X0 0 e@402 ]
+"2510
+[s S137 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S137 . RD WR WREN WRERR FREE LWLO CFGS ]
+"2509
+[u S136 `S137 1 ]
+[n S136 . . ]
+"2520
+[v _PMCON1bits `VS136 ~T0 @X0 0 e@405 ]
+"2560
+[v _PMCON2 `Vuc ~T0 @X0 0 e@406 ]
 "29 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic.h
 [v ___nop `(v ~T0 @X0 0 ef ]
 [p i ___nop ]
-[; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
-[; ;htc.h: 28: extern double __fpnormalize(double);
-[; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
+"2464 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h
+[v _PMDATL `Vuc ~T0 @X0 0 e@403 ]
+"2484
+[v _PMDATH `Vuc ~T0 @X0 0 e@404 ]
 [; ;pic16lf1503.h: 50: extern volatile unsigned char INDF0 @ 0x000;
 "52 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h
 [; ;pic16lf1503.h: 52: asm("INDF0 equ 00h");
@@ -2825,6 +2799,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic16lf1503.h: 7978: extern volatile __bit nT1SYNC @ (((unsigned) &T1CON)*8) + 2;
 [; ;pic16lf1503.h: 7980: extern volatile __bit nTO @ (((unsigned) &STATUS)*8) + 4;
 [; ;pic16lf1503.h: 7982: extern volatile __bit nWPUEN @ (((unsigned) &OPTION_REG)*8) + 7;
+[; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
+[; ;htc.h: 28: extern double __fpnormalize(double);
+[; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
 [; ;pic.h: 29: extern void __nop(void);
 [; ;pic.h: 78: extern unsigned int flash_read(unsigned short addr);
 [; ;pic.h: 153: extern __nonreentrant void _delay(unsigned long);
@@ -2833,198 +2810,182 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 193: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 194: extern __bank0 __bit __powerdown;
 [; ;pic.h: 195: extern __bank0 __bit __timeout;
-[; ;nRF24L01+_types.h: 9: typedef union{
-[; ;nRF24L01+_types.h: 10: struct {
-[; ;nRF24L01+_types.h: 11: unsigned byte : 8;
-[; ;nRF24L01+_types.h: 12: };
-[; ;nRF24L01+_types.h: 13: struct {
-[; ;nRF24L01+_types.h: 14: unsigned PRIM_RX : 1;
-[; ;nRF24L01+_types.h: 15: unsigned PWR_UP : 1;
-[; ;nRF24L01+_types.h: 16: unsigned CRCO : 1;
-[; ;nRF24L01+_types.h: 17: unsigned EN_CRC : 1;
-[; ;nRF24L01+_types.h: 18: unsigned MASK_MAX_RT: 1;
-[; ;nRF24L01+_types.h: 19: unsigned MASK_TX_DS : 1;
-[; ;nRF24L01+_types.h: 20: unsigned MASK_RX_DR : 1;
-[; ;nRF24L01+_types.h: 21: unsigned Reserved : 1;
-[; ;nRF24L01+_types.h: 23: };
-[; ;nRF24L01+_types.h: 24: struct {
-[; ;nRF24L01+_types.h: 25: unsigned bit0 : 1;
-[; ;nRF24L01+_types.h: 26: unsigned bit1 : 1;
-[; ;nRF24L01+_types.h: 27: unsigned bit2 : 1;
-[; ;nRF24L01+_types.h: 28: unsigned bit3 : 1;
-[; ;nRF24L01+_types.h: 29: unsigned bit4 : 1;
-[; ;nRF24L01+_types.h: 30: unsigned bit5 : 1;
-[; ;nRF24L01+_types.h: 31: unsigned bit6 : 1;
-[; ;nRF24L01+_types.h: 32: unsigned bit7 : 1;
-[; ;nRF24L01+_types.h: 33: };
-[; ;nRF24L01+_types.h: 34: } n_CONFIG_t;
-[; ;nRF24L01+_types.h: 37: typedef union{
-[; ;nRF24L01+_types.h: 38: struct {
-[; ;nRF24L01+_types.h: 39: unsigned byte : 8;
-[; ;nRF24L01+_types.h: 40: };
-[; ;nRF24L01+_types.h: 41: struct {
-[; ;nRF24L01+_types.h: 42: unsigned ENAA_P0 : 1;
-[; ;nRF24L01+_types.h: 43: unsigned ENAA_P1 : 1;
-[; ;nRF24L01+_types.h: 44: unsigned ENAA_P2 : 1;
-[; ;nRF24L01+_types.h: 45: unsigned ENAA_P3 : 1;
-[; ;nRF24L01+_types.h: 46: unsigned ENAA_P4 : 1;
-[; ;nRF24L01+_types.h: 47: unsigned ENAA_P5 : 1;
-[; ;nRF24L01+_types.h: 48: unsigned Reserved : 2;
-[; ;nRF24L01+_types.h: 50: };
-[; ;nRF24L01+_types.h: 51: struct {
-[; ;nRF24L01+_types.h: 52: unsigned bit0 : 1;
-[; ;nRF24L01+_types.h: 53: unsigned bit1 : 1;
-[; ;nRF24L01+_types.h: 54: unsigned bit2 : 1;
-[; ;nRF24L01+_types.h: 55: unsigned bit3 : 1;
-[; ;nRF24L01+_types.h: 56: unsigned bit4 : 1;
-[; ;nRF24L01+_types.h: 57: unsigned bit5 : 1;
-[; ;nRF24L01+_types.h: 58: unsigned bit6 : 1;
-[; ;nRF24L01+_types.h: 59: unsigned bit7 : 1;
-[; ;nRF24L01+_types.h: 60: };
-[; ;nRF24L01+_types.h: 61: } n_EN_AA_t;
-[; ;nRF24L01+_types.h: 64: typedef union{
-[; ;nRF24L01+_types.h: 65: struct {
-[; ;nRF24L01+_types.h: 66: unsigned byte : 8;
-[; ;nRF24L01+_types.h: 67: };
-[; ;nRF24L01+_types.h: 68: struct {
-[; ;nRF24L01+_types.h: 69: unsigned ERX_P0 : 1;
-[; ;nRF24L01+_types.h: 70: unsigned ERX_P1 : 1;
-[; ;nRF24L01+_types.h: 71: unsigned ERX_P2 : 1;
-[; ;nRF24L01+_types.h: 72: unsigned ERX_P3 : 1;
-[; ;nRF24L01+_types.h: 73: unsigned ERX_P4 : 1;
-[; ;nRF24L01+_types.h: 74: unsigned ERX_P5 : 1;
-[; ;nRF24L01+_types.h: 75: unsigned Reserved : 2;
-[; ;nRF24L01+_types.h: 77: };
-[; ;nRF24L01+_types.h: 78: struct {
-[; ;nRF24L01+_types.h: 79: unsigned bit0 : 1;
-[; ;nRF24L01+_types.h: 80: unsigned bit1 : 1;
-[; ;nRF24L01+_types.h: 81: unsigned bit2 : 1;
-[; ;nRF24L01+_types.h: 82: unsigned bit3 : 1;
-[; ;nRF24L01+_types.h: 83: unsigned bit4 : 1;
-[; ;nRF24L01+_types.h: 84: unsigned bit5 : 1;
-[; ;nRF24L01+_types.h: 85: unsigned bit6 : 1;
-[; ;nRF24L01+_types.h: 86: unsigned bit7 : 1;
-[; ;nRF24L01+_types.h: 87: };
-[; ;nRF24L01+_types.h: 88: } n_EN_RXADDR_t;
-[; ;nRF24L01+_types.h: 91: typedef union{
-[; ;nRF24L01+_types.h: 92: struct {
-[; ;nRF24L01+_types.h: 93: unsigned byte : 8;
-[; ;nRF24L01+_types.h: 94: };
-[; ;nRF24L01+_types.h: 95: struct {
-[; ;nRF24L01+_types.h: 96: unsigned TX_FULL : 1;
-[; ;nRF24L01+_types.h: 97: unsigned RX_P_NO : 3;
-[; ;nRF24L01+_types.h: 98: unsigned MAX_RT : 1;
-[; ;nRF24L01+_types.h: 99: unsigned TX_DS : 1;
-[; ;nRF24L01+_types.h: 100: unsigned RX_DR : 1;
-[; ;nRF24L01+_types.h: 101: unsigned Reserved : 1;
-[; ;nRF24L01+_types.h: 103: };
-[; ;nRF24L01+_types.h: 104: } n_STATUS_t;
-[; ;nRF24L01+_types.h: 113: typedef union{
-[; ;nRF24L01+_types.h: 114: struct {
-[; ;nRF24L01+_types.h: 115: unsigned byte : 8;
-[; ;nRF24L01+_types.h: 116: };
-[; ;nRF24L01+_types.h: 117: struct {
-[; ;nRF24L01+_types.h: 118: unsigned RX_PW : 6;
-[; ;nRF24L01+_types.h: 119: unsigned Reserved : 2;
-[; ;nRF24L01+_types.h: 121: };
-[; ;nRF24L01+_types.h: 122: } n_RX_PW_t;
-[; ;nrf24l01spi.h: 8: void nrf24l01SPIInit(void);
-[; ;nrf24l01spi.h: 9: unsigned char nrf24l01SPISend(unsigned char byte1, unsigned char byte2);
-"11 nrf24l01spi.h
-[v _status `S346 ~T0 @X0 1 e ]
-[; ;nrf24l01spi.h: 11: n_STATUS_t status;
-"5 nrf24l01spi.c
-[v _nrf24l01SPIInit `(v ~T0 @X0 1 ef ]
-{
-[; ;nrf24l01spi.c: 5: void nrf24l01SPIInit(){
-[e :U _nrf24l01SPIInit ]
-[f ]
-[; ;nrf24l01spi.c: 7: TRISAbits.TRISA1 = 0;
+[; ;flash.h: 6: extern const unsigned char NVMEM[32];
+"5 flash.c
+[v _NVMEM `Cuc ~T0 @X0 -> 32 `i e@2016 ]
+[i _NVMEM
+:U ..
+"6
+-> -> 254 `i `uc
+-> -> 255 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
 "7
-[e = . . _TRISAbits 0 1 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 8: PORTAbits.RA1 = 1;
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
 "8
-[e = . . _PORTAbits 0 1 -> -> 1 `i `uc ]
-[; ;nrf24l01spi.c: 10: TRISCbits.TRISC1 = 1;
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+"9
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
 "10
-[e = . . _TRISCbits 0 1 -> -> 1 `i `uc ]
-[; ;nrf24l01spi.c: 11: TRISCbits.TRISC2 = 0;
-"11
-[e = . . _TRISCbits 0 2 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 13: TRISCbits.TRISC0 = 0;
-"13
-[e = . . _TRISCbits 0 0 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 15: SSPCON1bits.SSPEN = 0;
-"15
-[e = . . _SSPCON1bits 0 5 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 16: SSPCON1bits.CKP = 0;
-"16
-[e = . . _SSPCON1bits 0 4 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 17: SSP1STATbits.CKE = 1;
-"17
-[e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;nrf24l01spi.c: 18: SSP1STATbits.CKE = 0;
-"18
-[e = . . _SSP1STATbits 0 6 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 19: SSPCON1bits.SSPM = 0b0000;
-"19
-[e = . . _SSPCON1bits 1 0 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 21: SSPCON1bits.SSPEN = 1;
-"21
-[e = . . _SSPCON1bits 0 5 -> -> 1 `i `uc ]
-[; ;nrf24l01spi.c: 22: }
-"22
-[e :UE 352 ]
-}
-[; ;nrf24l01spi.c: 24: n_STATUS_t status;
-"25
-[v _nrf24l01SPISend `(uc ~T0 @X0 1 ef2`uc`uc ]
+-> -> 255 `i `uc
+..
+]
+[; ;flash.c: 5: const unsigned char NVMEM[32]@(0x800U-32) = {
+[; ;flash.c: 6: 0xfe, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+[; ;flash.c: 7: 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+[; ;flash.c: 8: 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+[; ;flash.c: 9: 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+[; ;flash.c: 10: };
+"12
+[v _write_flashmem `(v ~T0 @X0 1 ef2`ui`ui ]
 {
-[; ;nrf24l01spi.c: 25: unsigned char nrf24l01SPISend(unsigned char byte1, unsigned char byte2){
-[e :U _nrf24l01SPISend ]
-[v _byte1 `uc ~T0 @X0 1 r1 ]
-[v _byte2 `uc ~T0 @X0 1 r2 ]
+[; ;flash.c: 12: void write_flashmem(unsigned int offset, unsigned int data) {
+[e :U _write_flashmem ]
+[v _offset `ui ~T0 @X0 1 r1 ]
+[v _data `ui ~T0 @X0 1 r2 ]
 [f ]
-[; ;nrf24l01spi.c: 27: PORTAbits.RA1 = 0;
-"27
-[e = . . _PORTAbits 0 1 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 29: SSP1BUF = byte1;
-"29
-[e = _SSP1BUF _byte1 ]
-[; ;nrf24l01spi.c: 31: while (!SSP1STATbits.BF){ __nop(); }
+[; ;flash.c: 14: INTCONbits.GIE = 0;
+"14
+[e = . . _INTCONbits 0 7 -> -> 0 `i `uc ]
+[; ;flash.c: 17: PMCON1 = 0x00;
+"17
+[e = _PMCON1 -> -> 0 `i `uc ]
+[; ;flash.c: 19: PMADRL = (char) (((0x800U-32) + offset) >> 0);
+"19
+[e = _PMADRL -> >> + - -> 2048 `ui -> -> 32 `i `ui _offset -> 0 `i `uc ]
+[; ;flash.c: 20: PMADRH = (char) (((0x800U-32) + offset) >> 8);
+"20
+[e = _PMADRH -> >> + - -> 2048 `ui -> -> 32 `i `ui _offset -> 8 `i `uc ]
+[; ;flash.c: 22: PMCON1bits.FREE = 1;
+"22
+[e = . . _PMCON1bits 0 4 -> -> 1 `i `uc ]
+[; ;flash.c: 23: PMCON1bits.WREN = 1;
+"23
+[e = . . _PMCON1bits 0 2 -> -> 1 `i `uc ]
+[; ;flash.c: 25: PMCON2 = 0x55;
+"25
+[e = _PMCON2 -> -> 85 `i `uc ]
+[; ;flash.c: 26: PMCON2 = 0xAA;
+"26
+[e = _PMCON2 -> -> 170 `i `uc ]
+[; ;flash.c: 28: PMCON1bits.WR = 1;
+"28
+[e = . . _PMCON1bits 0 1 -> -> 1 `i `uc ]
+[; ;flash.c: 30: __nop();
+"30
+[e ( ___nop ..  ]
+[; ;flash.c: 31: __nop();
 "31
-[e $U 354  ]
-[e :U 355 ]
-{
 [e ( ___nop ..  ]
-}
-[e :U 354 ]
-[e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 355  ]
-[e :U 356 ]
-[; ;nrf24l01spi.c: 33: status.byte = SSP1BUF;
+[; ;flash.c: 33: PMCON1bits.WREN = 0;
 "33
-[e = . . _status 0 0 _SSP1BUF ]
-[; ;nrf24l01spi.c: 35: SSP1BUF = byte2;
-"35
-[e = _SSP1BUF _byte2 ]
-[; ;nrf24l01spi.c: 37: while (!SSP1STATbits.BF){ __nop(); }
+[e = . . _PMCON1bits 0 2 -> -> 0 `i `uc ]
+[; ;flash.c: 37: PMCON1 = 0x00;
 "37
-[e $U 357  ]
-[e :U 358 ]
-{
-[e ( ___nop ..  ]
-}
-[e :U 357 ]
-[e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 358  ]
-[e :U 359 ]
-[; ;nrf24l01spi.c: 39: PORTAbits.RA1 = 0;
+[e = _PMCON1 -> -> 0 `i `uc ]
+[; ;flash.c: 39: PMADRL = (char) (((0x800U-32) + offset) >> 0);
 "39
-[e = . . _PORTAbits 0 1 -> -> 0 `i `uc ]
-[; ;nrf24l01spi.c: 41: return SSP1BUF;
-"41
-[e ) _SSP1BUF ]
-[e $UE 353  ]
-[; ;nrf24l01spi.c: 42: }
+[e = _PMADRL -> >> + - -> 2048 `ui -> -> 32 `i `ui _offset -> 0 `i `uc ]
+[; ;flash.c: 40: PMADRH = (char) (((0x800U-32) + offset) >> 8);
+"40
+[e = _PMADRH -> >> + - -> 2048 `ui -> -> 32 `i `ui _offset -> 8 `i `uc ]
+[; ;flash.c: 42: PMCON1bits.FREE = 0;
 "42
-[e :UE 353 ]
+[e = . . _PMCON1bits 0 4 -> -> 0 `i `uc ]
+[; ;flash.c: 43: PMCON1bits.LWLO = 1;
+"43
+[e = . . _PMCON1bits 0 5 -> -> 1 `i `uc ]
+[; ;flash.c: 44: PMCON1bits.WREN = 1;
+"44
+[e = . . _PMCON1bits 0 2 -> -> 1 `i `uc ]
+[; ;flash.c: 46: PMDATL = (data >> 0);
+"46
+[e = _PMDATL -> >> _data -> 0 `i `uc ]
+[; ;flash.c: 47: PMDATH = (data >> 8);
+"47
+[e = _PMDATH -> >> _data -> 8 `i `uc ]
+[; ;flash.c: 49: PMCON1bits.LWLO = 0;
+"49
+[e = . . _PMCON1bits 0 5 -> -> 0 `i `uc ]
+[; ;flash.c: 51: PMCON2 = 0x55;
+"51
+[e = _PMCON2 -> -> 85 `i `uc ]
+[; ;flash.c: 52: PMCON2 = 0xAA;
+"52
+[e = _PMCON2 -> -> 170 `i `uc ]
+[; ;flash.c: 54: PMCON1bits.WR = 1;
+"54
+[e = . . _PMCON1bits 0 1 -> -> 1 `i `uc ]
+[; ;flash.c: 56: __nop();
+"56
+[e ( ___nop ..  ]
+[; ;flash.c: 57: __nop();
+"57
+[e ( ___nop ..  ]
+[; ;flash.c: 59: PMCON1bits.WREN = 0;
+"59
+[e = . . _PMCON1bits 0 2 -> -> 0 `i `uc ]
+[; ;flash.c: 62: INTCONbits.GIE = 1;
+"62
+[e = . . _INTCONbits 0 7 -> -> 1 `i `uc ]
+[; ;flash.c: 63: }
+"63
+[e :UE 334 ]
+}
+"65
+[v _read_flashmem `(ui ~T0 @X0 1 ef1`ui ]
+{
+[; ;flash.c: 65: unsigned int read_flashmem(unsigned int offset) {
+[e :U _read_flashmem ]
+[v _offset `ui ~T0 @X0 1 r1 ]
+[f ]
+[; ;flash.c: 67: PMCON1 = 0x00;
+"67
+[e = _PMCON1 -> -> 0 `i `uc ]
+[; ;flash.c: 69: PMADRL = (char) (((0x800U-32) + offset) >> 0);
+"69
+[e = _PMADRL -> >> + - -> 2048 `ui -> -> 32 `i `ui _offset -> 0 `i `uc ]
+[; ;flash.c: 70: PMADRH = (char) (((0x800U-32) + offset) >> 8);
+"70
+[e = _PMADRH -> >> + - -> 2048 `ui -> -> 32 `i `ui _offset -> 8 `i `uc ]
+[; ;flash.c: 72: PMCON1bits.RD = 1;
+"72
+[e = . . _PMCON1bits 0 0 -> -> 1 `i `uc ]
+[; ;flash.c: 74: __nop();
+"74
+[e ( ___nop ..  ]
+[; ;flash.c: 75: __nop();
+"75
+[e ( ___nop ..  ]
+[; ;flash.c: 77: return (unsigned) ((PMDATH) << 8) | (PMDATL);
+"77
+[e ) | -> << -> _PMDATH `i -> 8 `i `ui -> _PMDATL `ui ]
+[e $UE 335  ]
+[; ;flash.c: 78: }
+"78
+[e :UE 335 ]
 }

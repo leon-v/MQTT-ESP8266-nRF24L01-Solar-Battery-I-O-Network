@@ -103,6 +103,7 @@ typedef union{
 	};
 } n_STATUS_t;
 
+#define n_TX_ADDR       0x10
 
 #define n_RX_PW_P0		0x11
 #define n_RX_PW_P1		0x12

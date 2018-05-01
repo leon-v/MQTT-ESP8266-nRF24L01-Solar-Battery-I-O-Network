@@ -3858,7 +3858,7 @@ unsigned Reserved : 1;
 };
 } n_STATUS_t;
 
-# 113
+# 114
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3870,34 +3870,89 @@ unsigned Reserved : 2;
 };
 } n_RX_PW_t;
 
-# 8 "nrf24l01spi.h"
-void nrf24l01SPIInit(void);
-unsigned char nrf24l01SPISend(unsigned char byte1, unsigned char byte2);
-
-n_STATUS_t status;
-
-# 7 "nrf24l01.h"
+# 6 "nrf24l01.h"
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 
-# 7 "nrf24l01.c"
+# 8 "nrf24l01.c"
 void nrf24l01ISR(void){
+
+}
+
+n_STATUS_t status;
+unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
+
+PORTAbits.RA1 = 0;
+
+SSP1BUF = command;
+
+while (!SSP1STATbits.BF){ __nop(); }
+
+status.byte = SSP1BUF;
+
+SSP1BUF = data;
+
+while (!SSP1STATbits.BF){ __nop(); }
+
+PORTAbits.RA1 = 1;
+
+return SSP1BUF;
+}
+
+void nrf24l01SendFlash(unsigned char command, unsigned int offset, unsigned int length){
+
+PORTAbits.RA1 = 0;
+
+SSP1BUF = command;
+
+while (!SSP1STATbits.BF){ __nop(); }
+
+status.byte = SSP1BUF;
+
+unsigned char unused;
+unsigned int counter = 0;
+while (counter < length){
+
+
+
+
+SSP1BUF = 0xAA;
+while (!SSP1STATbits.BF){ __nop(); }
+unused = SSP1BUF;
+counter++;
+}
+
+PORTAbits.RA1 = 1;
 
 }
 
 void nrf24l01Init(void){
 
+
+
+TRISAbits.TRISA1 = 0;
+PORTAbits.RA1 = 1;
+
+TRISCbits.TRISC1 = 1;
+TRISCbits.TRISC2 = 0;
+
+TRISCbits.TRISC0 = 0;
+
+SSPCON1bits.SSPEN = 0;
+SSPCON1bits.CKP = 0;
+SSP1STATbits.CKE = 1;
+SSP1STATbits.CKE = 0;
+SSPCON1bits.SSPM = 0b0000;
+
+SSPCON1bits.SSPEN = 1;
+
 n_CONFIG_t config;
-config.byte = nrf24l01SPISend(0b00000000 | 0x00, 0);
+config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
 config.PRIM_RX = 0;
-nrf24l01SPISend(0b00100000 | 0x00, config.byte);
+nrf24l01Send(0b00100000 | 0x00, config.byte);
+
+
+nrf24l01SendFlash(0b00100000 | 0x10, 0, 5);
 
 }
 
-void nrf24l01RecieveMode(){
-
-}
-
-void nrf24l01Transmit(){
-
-}

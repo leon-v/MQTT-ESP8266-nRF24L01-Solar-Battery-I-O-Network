@@ -3760,7 +3760,7 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 7 "nrf24l01.h"
+# 6 "nrf24l01.h"
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 

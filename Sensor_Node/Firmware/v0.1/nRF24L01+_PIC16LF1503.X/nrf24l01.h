@@ -3,7 +3,6 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 

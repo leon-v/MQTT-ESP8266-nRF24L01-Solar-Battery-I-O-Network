@@ -36,8 +36,6 @@ n_STATUS_t status;
 uint8 nrf24l01Send(uint8 command,uint8 data) {
 	ets_intr_lock();		 //close	interrupt
 
-	n_CONFIG_t config;
-
 	gpio_output_set(0, CSPIN, CSPIN, 0); // (high, low, out, in)
 	status.byte = spi_mast_byte_read_write(HSPI, command);
 	uint8 result;

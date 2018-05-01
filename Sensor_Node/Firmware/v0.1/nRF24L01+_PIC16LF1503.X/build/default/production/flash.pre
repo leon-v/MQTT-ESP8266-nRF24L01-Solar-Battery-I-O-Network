@@ -1,15 +1,5 @@
 
-# 1 "nrf24l01spi.c"
-
-# 26 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\htc.h"
-extern const char __xc8_OPTIM_SPEED;
-
-extern double __fpnormalize(double);
-
-
-# 13 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\xc8debug.h"
-#pragma intrinsic(__builtin_software_breakpoint)
-extern void __builtin_software_breakpoint(void);
+# 1 "flash.c"
 
 # 50 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h"
 extern volatile unsigned char INDF0 @ 0x000;
@@ -3737,6 +3727,16 @@ extern volatile __bit nTO @ (((unsigned) &STATUS)*8) + 4;
 
 extern volatile __bit nWPUEN @ (((unsigned) &OPTION_REG)*8) + 7;
 
+# 26 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\htc.h"
+extern const char __xc8_OPTIM_SPEED;
+
+extern double __fpnormalize(double);
+
+
+# 13 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\xc8debug.h"
+#pragma intrinsic(__builtin_software_breakpoint)
+extern void __builtin_software_breakpoint(void);
+
 
 # 28 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic.h"
 #pragma intrinsic(__nop)
@@ -3760,158 +3760,82 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 9 "nRF24L01+_types.h"
-typedef union{
-struct {
-unsigned byte : 8;
+# 6 "flash.h"
+extern const unsigned char NVMEM[32];
+
+# 5 "flash.c"
+const unsigned char NVMEM[32]@(0x800U-32) = {
+0xfe, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
-struct {
-unsigned PRIM_RX : 1;
-unsigned PWR_UP : 1;
-unsigned CRCO : 1;
-unsigned EN_CRC : 1;
-unsigned MASK_MAX_RT: 1;
-unsigned MASK_TX_DS : 1;
-unsigned MASK_RX_DR : 1;
-unsigned Reserved : 1;
 
-};
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
-};
-} n_CONFIG_t;
+void write_flashmem(unsigned int offset, unsigned int data) {
+
+INTCONbits.GIE = 0;
 
 
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned ENAA_P0 : 1;
-unsigned ENAA_P1 : 1;
-unsigned ENAA_P2 : 1;
-unsigned ENAA_P3 : 1;
-unsigned ENAA_P4 : 1;
-unsigned ENAA_P5 : 1;
-unsigned Reserved : 2;
+PMCON1 = 0x00;
 
-};
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
-};
-} n_EN_AA_t;
+PMADRL = (char) (((0x800U-32) + offset) >> 0);
+PMADRH = (char) (((0x800U-32) + offset) >> 8);
+
+PMCON1bits.FREE = 1;
+PMCON1bits.WREN = 1;
+
+PMCON2 = 0x55;
+PMCON2 = 0xAA;
+
+PMCON1bits.WR = 1;
+
+__nop();
+__nop();
+
+PMCON1bits.WREN = 0;
 
 
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned ERX_P0 : 1;
-unsigned ERX_P1 : 1;
-unsigned ERX_P2 : 1;
-unsigned ERX_P3 : 1;
-unsigned ERX_P4 : 1;
-unsigned ERX_P5 : 1;
-unsigned Reserved : 2;
 
-};
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
-};
-} n_EN_RXADDR_t;
+PMCON1 = 0x00;
+
+PMADRL = (char) (((0x800U-32) + offset) >> 0);
+PMADRH = (char) (((0x800U-32) + offset) >> 8);
+
+PMCON1bits.FREE = 0;
+PMCON1bits.LWLO = 1;
+PMCON1bits.WREN = 1;
+
+PMDATL = (data >> 0);
+PMDATH = (data >> 8);
+
+PMCON1bits.LWLO = 0;
+
+PMCON2 = 0x55;
+PMCON2 = 0xAA;
+
+PMCON1bits.WR = 1;
+
+__nop();
+__nop();
+
+PMCON1bits.WREN = 0;
 
 
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned TX_FULL : 1;
-unsigned RX_P_NO : 3;
-unsigned MAX_RT : 1;
-unsigned TX_DS : 1;
-unsigned RX_DR : 1;
-unsigned Reserved : 1;
-
-};
-} n_STATUS_t;
-
-# 113
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned RX_PW : 6;
-unsigned Reserved : 2;
-
-};
-} n_RX_PW_t;
-
-# 8 "nrf24l01spi.h"
-void nrf24l01SPIInit(void);
-unsigned char nrf24l01SPISend(unsigned char byte1, unsigned char byte2);
-
-n_STATUS_t status;
-
-# 5 "nrf24l01spi.c"
-void nrf24l01SPIInit(){
-
-TRISAbits.TRISA1 = 0;
-PORTAbits.RA1 = 1;
-
-TRISCbits.TRISC1 = 1;
-TRISCbits.TRISC2 = 0;
-
-TRISCbits.TRISC0 = 0;
-
-SSPCON1bits.SSPEN = 0;
-SSPCON1bits.CKP = 0;
-SSP1STATbits.CKE = 1;
-SSP1STATbits.CKE = 0;
-SSPCON1bits.SSPM = 0b0000;
-
-SSPCON1bits.SSPEN = 1;
+INTCONbits.GIE = 1;
 }
 
-n_STATUS_t status;
-unsigned char nrf24l01SPISend(unsigned char byte1, unsigned char byte2){
+unsigned int read_flashmem(unsigned int offset) {
 
-PORTAbits.RA1 = 0;
+PMCON1 = 0x00;
 
-SSP1BUF = byte1;
+PMADRL = (char) (((0x800U-32) + offset) >> 0);
+PMADRH = (char) (((0x800U-32) + offset) >> 8);
 
-while (!SSP1STATbits.BF){ __nop(); }
+PMCON1bits.RD = 1;
 
-status.byte = SSP1BUF;
+__nop();
+__nop();
 
-SSP1BUF = byte2;
-
-while (!SSP1STATbits.BF){ __nop(); }
-
-PORTAbits.RA1 = 0;
-
-return SSP1BUF;
+return (unsigned) ((PMDATH) << 8) | (PMDATL);
 }
+
