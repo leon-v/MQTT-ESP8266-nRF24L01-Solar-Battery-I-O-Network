@@ -10,23 +10,32 @@ void nrf24l01ISR(void){
 }
 
 n_STATUS_t status;
+unsigned char pipe = 0;
+void nrf24l01SPIStart(void){
+    PORTAbits.RA1 = 0;
+}
+
+unsigned char nrf24l01SPISend(unsigned char data){
+    SSP1BUF = data;
+    while (!SSP1STATbits.BF){ NOP(); }
+    data = SSP1BUF;
+    return data;
+}
+
+void nrf24l01SPIEnd(){
+    PORTAbits.RA1 = 1;
+}
+
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
-    PORTAbits.RA1 = 0;
+    nrf24l01SPIStart();
     
-    SSP1BUF = command;
+    status.byte = nrf24l01SPISend(command);
+    data        = nrf24l01SPISend(data);
     
-    while (!SSP1STATbits.BF){ NOP(); }
+    nrf24l01SPIEnd();
     
-    status.byte = SSP1BUF;
-    
-    SSP1BUF = data;
-    
-    while (!SSP1STATbits.BF){ NOP(); }
-    
-    PORTAbits.RA1 = 1;
-    
-    return SSP1BUF;
+    return data;
 }
 
 void nrf24l01SendFlash(unsigned char command, unsigned int offset, unsigned int length){
@@ -76,13 +85,46 @@ void nrf24l01Init(void){
     
     SSPCON1bits.SSPEN = 1;
     
+    // Set config bit
     n_CONFIG_t config;
 	config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
 	config.PRIM_RX = 0;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
     
-    // Write my address to the module from flash
-    nrf24l01SendFlash(n_W_REGISTER | n_TX_ADDR, 0, 5);
+    
+    // Set TX_ADDR
+    nrf24l01SPIStart();
+    
+    status.byte = nrf24l01SPISend(n_W_REGISTER | n_TX_ADDR);
+    nrf24l01SPISend(n_ADDRESS_P0[0]);
+    nrf24l01SPISend(n_ADDRESS_P0[1]);
+    nrf24l01SPISend(n_ADDRESS_P0[2]);
+    nrf24l01SPISend(n_ADDRESS_P0[3]);
+    nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+    nrf24l01SPIEnd();
+    
+    status.byte = nrf24l01SPISend(n_W_REGISTER | n_RX_ADDR_P0);
+    nrf24l01SPISend(n_ADDRESS_P1[0]);
+    nrf24l01SPISend(n_ADDRESS_P1[1]);
+    nrf24l01SPISend(n_ADDRESS_P1[2]);
+    nrf24l01SPISend(n_ADDRESS_P1[3]);
+    nrf24l01SPISend(n_ADDRESS_P1[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+    
+    nrf24l01SPIEnd();
+    
+    // Write payload data
+    nrf24l01SPIStart();
+    nrf24l01SPISend(n_W_TX_PAYLOAD);
+        
+    unsigned char payloadByte = 'A';
+    while (payloadByte < ('A' + 39) ){
+        nrf24l01SPISend(payloadByte);
+        payloadByte++;
+    }
+    
+    nrf24l01SPIEnd();
+    
+    
     
 }
 

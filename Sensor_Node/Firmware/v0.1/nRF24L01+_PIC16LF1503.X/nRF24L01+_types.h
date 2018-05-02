@@ -3,7 +3,7 @@
 
 #define n_R_REGISTER	0b00000000
 #define n_W_REGISTER	0b00100000
-
+#define n_W_TX_PAYLOAD  0b10100000
 
 #define n_CONFIG 		0x00
 typedef union{
@@ -122,4 +122,10 @@ typedef union{
 	};
 } n_RX_PW_t;
 
+#define n_RX_ADDR_P0		0x0A
+#define n_RX_ADDR_P1		0x0B
+#define n_RX_ADDR_P2		0x0C
+#define n_RX_ADDR_P3		0x0D
+#define n_RX_ADDR_P4		0x0E
+#define n_RX_ADDR_P5		0x0F
 #endif /* USER_CONFIG_H_ */

@@ -8,6 +8,7 @@ void interrupt ISR(void){
 
 void loop(){
     
+    nrf24l01Init();
     
 }
 
