@@ -2,7 +2,7 @@
 #include <pic16lf1503.h>
 #include "nRF24L01+_types.h"
 #include "nrf24l01.h"
-
+#include "config.h"
 
 
 void nrf24l01ISR(void){
@@ -67,8 +67,17 @@ void nrf24l01SendFlash(unsigned char command, unsigned int offset, unsigned int 
 
 void nrf24l01Init(void){
     
+    // 11 INT
+    // 12 CS
+    // 13 CE
+    
+    TRISAbits.TRISA0 = 0; // CE out
+    PORTAbits.RA0 = 0;
     
     /* SPI INIT */
+    TRISAbits.TRISA1 = 0; // CS out
+    PORTAbits.RA1 = 1;
+    
     TRISAbits.TRISA1 = 0; // CS out
     PORTAbits.RA1 = 1;
     
@@ -80,7 +89,7 @@ void nrf24l01Init(void){
     SSPCON1bits.SSPEN = 0; 
     SSPCON1bits.CKP = 0;
     SSP1STATbits.CKE = 1;
-    SSP1STATbits.CKE = 0;
+//    SSP1STATbits.CKE = 0;
     SSPCON1bits.SSPM = 0b0000;
     
     SSPCON1bits.SSPEN = 1;
@@ -117,7 +126,7 @@ void nrf24l01Init(void){
     nrf24l01SPISend(n_W_TX_PAYLOAD);
         
     unsigned char payloadByte = 'A';
-    while (payloadByte < ('A' + 39) ){
+    while (payloadByte < ('A' + 8) ){
         nrf24l01SPISend(payloadByte);
         payloadByte++;
     }
@@ -125,6 +134,10 @@ void nrf24l01Init(void){
     nrf24l01SPIEnd();
     
     
+    PORTAbits.RA0 = 1;
+    __delay_us(10);
+    PORTAbits.RA0 = 0;
     
+    __delay_ms(500);
 }
 

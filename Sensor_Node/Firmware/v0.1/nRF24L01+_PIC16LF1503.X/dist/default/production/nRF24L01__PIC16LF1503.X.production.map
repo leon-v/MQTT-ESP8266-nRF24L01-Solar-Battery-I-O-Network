@@ -5,7 +5,7 @@ Linker command line:
 -W-3 --edf=C:\Program Files (x86)\Microchip\xc8\v1.45\dat\en_msgs.txt -cs \
   -h+dist/default/production\nRF24L01__PIC16LF1503.X.production.sym \
   --cmf=dist/default/production\nRF24L01__PIC16LF1503.X.production.cmf -z \
-  -Q16F1503 -oC:\Users\Leon\AppData\Local\Temp\s610.2 \
+  -Q16LF1503 -oC:\Users\Leon\AppData\Local\Temp\s880.2 \
   -Mdist/default/production/nRF24L01__PIC16LF1503.X.production.map -E1 \
   -ver=XC8 -ASTACK=02000h-0206fh -pstack=STACK -p_NVMEM_text=7E0h \
   -ACODE=00h-07FFh -ASTRCODE=00h-07FFh -ASTRING=00h-0FFhx8 \
@@ -26,38 +26,38 @@ Linker command line:
   -pfunctab=ENTRY -ACONFIG=08007h-08008h -pconfig=CONFIG -DCONFIG=2 \
   -AIDLOC=08000h-08003h -pidloc=IDLOC -DIDLOC=2 -DCODE=2 -DSTRCODE=2 \
   -DSTRING=2 -DCONST=2 -DENTRY=2 -k \
-  C:\Users\Leon\AppData\Local\Temp\s610.obj \
+  C:\Users\Leon\AppData\Local\Temp\s880.obj \
   dist/default/production\nRF24L01__PIC16LF1503.X.production.obj 
 
 Object code version is 3.11
 
-Machine type is 16F1503
+Machine type is 16LF1503
 
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-C:\Users\Leon\AppData\Local\Temp\s610.obj
+C:\Users\Leon\AppData\Local\Temp\s880.obj
                 end_init                              F        F        1        8       0
                 reset_vec                             0        0        1        0       0
                 config                             8007     8007        2    1000E       0
 dist/default/production\nRF24L01__PIC16LF1503.X.production.obj
                 cinit                                10       10        5        8       0
                 intentry                              4        4        B        8       0
-                text9                                F5       F5        1      1EA       0
-                text7                                A6       A6       11        8       0
-                text6                                EF       EF        3      1D8       0
-                text5                                C6       C6        F        8       0
-                text4                                EC       EC        3      1D8       0
-                text3                                B7       B7        F        8       0
-                text2                                15       15       91        8       0
-                text1                                F2       F2        2      1D8       0
-                maintext                             D5       D5        D        8       0
+                text9                               110      110        1      220       0
+                text7                                C1       C1       11        8       0
+                text6                               10A      10A        3      20E       0
+                text5                                E1       E1        F        8       0
+                text4                               107      107        3      20E       0
+                text3                                D2       D2        F        8       0
+                text2                                15       15       AC        8       0
+                text1                               10D      10D        2      20E       0
+                maintext                             F0       F0        D        8       0
                 cstackCOMMON                         70       70        A       70       1
                 bssCOMMON                            7A       7A        2       70       1
                 _NVMEM_text                         7E0      7E0       20      FC0       0
-                stringtext3                          F4       F4        1      1E8       0
-                stringtext2                          E7       E7        5      1C4       0
-                stringtext1                          E2       E2        5      1C4       0
+                stringtext3                         10F      10F        1      21E       0
+                stringtext2                         102      102        5      1FA       0
+                stringtext1                          FD       FD        5      1FA       0
 
 TOTAL           Name                               Link     Load   Length     Space
         CLASS   STACK          
@@ -67,21 +67,21 @@ TOTAL           Name                               Link     Load   Length     Sp
                 cinit                                10       10        5         0
                 intentry                              4        4        B         0
                 reset_vec                             0        0        1         0
-                text9                                F5       F5        1         0
-                text7                                A6       A6       11         0
-                text6                                EF       EF        3         0
-                text5                                C6       C6        F         0
-                text4                                EC       EC        3         0
-                text3                                B7       B7        F         0
-                text2                                15       15       91         0
-                text1                                F2       F2        2         0
-                maintext                             D5       D5        D         0
+                text9                               110      110        1         0
+                text7                                C1       C1       11         0
+                text6                               10A      10A        3         0
+                text5                                E1       E1        F         0
+                text4                               107      107        3         0
+                text3                                D2       D2        F         0
+                text2                                15       15       AC         0
+                text1                               10D      10D        2         0
+                maintext                             F0       F0        D         0
                 _NVMEM_text                         7E0      7E0       20         0
 
         CLASS   STRCODE        
-                stringtext3                          F4       F4        1         0
-                stringtext2                          E7       E7        5         0
-                stringtext1                          E2       E2        5         0
+                stringtext3                         10F      10F        1         0
+                stringtext2                         102      102        5         0
+                stringtext1                          FD       FD        5         0
 
         CLASS   STRING         
 
@@ -240,12 +240,12 @@ TOTAL           Name                               Link     Load   Length     Sp
 SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class     Delta
 
                 reset_vec                      000000  000001  000001         0       0  CODE        2
-                intentry                       000004  0000DE  0000E2         8       0  CODE        2
+                intentry                       000004  0000F9  0000FD         8       0  CODE        2
                 cstackCOMMON                   000070  00000C  00007C        70       1  COMMON      1
-                stringtext1                    0000E2  00000A  0000EC       1C4       0  STRCODE     2
-                text4                          0000EC  000008  0000F4       1D8       0  CODE        2
-                stringtext3                    0000F4  000001  0000F5       1E8       0  STRCODE     2
-                text9                          0000F5  000001  0000F6       1EA       0  CODE        2
+                stringtext1                    0000FD  00000A  000107       1FA       0  STRCODE     2
+                text4                          000107  000008  00010F       20E       0  CODE        2
+                stringtext3                    00010F  000001  000110       21E       0  STRCODE     2
+                text9                          000110  000001  000111       220       0  CODE        2
                 _NVMEM_text                    0007E0  000020  000800       FC0       0  CODE        2
                 config                         008007  000002  008009     1000E       0  CONFIG      2
 
@@ -257,12 +257,12 @@ UNUSED ADDRESS RANGES
         BANK1            000A0-000BF              20           1
         BIGRAM           02000-0206F              70           1
         CODE             00001-00003               3           2
-                         000F6-007DF             6EA
+                         00111-007DF             6CF
         COMMON           0007C-0007D               2           1
         CONST            00001-00003               3           2
-                         000F6-007DF             100
+                         00111-007DF             100
         ENTRY            00001-00003               3           2
-                         000F6-007DF             100
+                         00111-007DF             100
         IDLOC            08000-08003               4           2
         RAM              00020-0006F              50           1
                          000A0-000BF              20
@@ -300,9 +300,9 @@ UNUSED ADDRESS RANGES
         SFR9             00480-004EF              70           1
         STACK            02000-0206F              70           1
         STRCODE          00001-00003               3           2
-                         000F6-007DF             6EA
+                         00111-007DF             6CF
         STRING           00001-00003               3           2
-                         000F6-007DF             100
+                         00111-007DF             100
 
                                   Symbol Table
 
@@ -527,7 +527,7 @@ __Ltext                    text         00000
 __S0                       (abs)        08009
 __S1                       (abs)        0007C
 __S2                       (abs)        00000
-___bmul                    text7        000A6
+___bmul                    text7        000C1
 ___bmul@multiplicand       cstackCOMMON 00071
 ___bmul@multiplier         cstackCOMMON 00074
 ___bmul@product            cstackCOMMON 00073
@@ -536,36 +536,36 @@ ___latbits                 (abs)        00000
 ___sp                      stack        00000
 __end_of_ISR               intentry     0000F
 __end_of_NVMEM             _NVMEM_text  00800
-__end_of___bmul            text7        000B7
+__end_of___bmul            text7        000D2
 __end_of__initialization   cinit        00012
-__end_of_loop              text1        000F4
-__end_of_main              maintext     000E2
-__end_of_n_ADDRESS_MUL     stringtext3  000F5
-__end_of_n_ADDRESS_P0      stringtext2  000EC
-__end_of_n_ADDRESS_P1      stringtext1  000E7
-__end_of_nrf24l01ISR       text9        000F6
-__end_of_nrf24l01Init      text2        000A6
-__end_of_nrf24l01SPIEnd    text6        000F2
-__end_of_nrf24l01SPISend   text5        000D5
-__end_of_nrf24l01SPIStart  text4        000EF
-__end_of_nrf24l01Send      text3        000C6
+__end_of_loop              text1        0010F
+__end_of_main              maintext     000FD
+__end_of_n_ADDRESS_MUL     stringtext3  00110
+__end_of_n_ADDRESS_P0      stringtext2  00107
+__end_of_n_ADDRESS_P1      stringtext1  00102
+__end_of_nrf24l01ISR       text9        00111
+__end_of_nrf24l01Init      text2        000C1
+__end_of_nrf24l01SPIEnd    text6        0010D
+__end_of_nrf24l01SPISend   text5        000F0
+__end_of_nrf24l01SPIStart  text4        0010A
+__end_of_nrf24l01Send      text3        000E1
 __initialization           cinit        00010
 __p_NVMEM_text             _NVMEM_text  007E0
 __pbssCOMMON               bssCOMMON    0007A
 __pcstackCOMMON            cstackCOMMON 00070
 __pintentry                intentry     00004
-__pmaintext                maintext     000D5
-__pstringtext1             stringtext1  000E2
-__pstringtext2             stringtext2  000E7
-__pstringtext3             stringtext3  000F4
-__ptext1                   text1        000F2
+__pmaintext                maintext     000F0
+__pstringtext1             stringtext1  000FD
+__pstringtext2             stringtext2  00102
+__pstringtext3             stringtext3  0010F
+__ptext1                   text1        0010D
 __ptext2                   text2        00015
-__ptext3                   text3        000B7
-__ptext4                   text4        000EC
-__ptext5                   text5        000C6
-__ptext6                   text6        000EF
-__ptext7                   text7        000A6
-__ptext9                   text9        000F5
+__ptext3                   text3        000D2
+__ptext4                   text4        00107
+__ptext5                   text5        000E1
+__ptext6                   text6        0010A
+__ptext7                   text7        000C1
+__ptext9                   text9        00110
 __size_of_ISR              (abs)        00000
 __size_of___bmul           (abs)        00000
 __size_of_loop             (abs)        00000
@@ -576,17 +576,17 @@ __size_of_nrf24l01SPIEnd   (abs)        00000
 __size_of_nrf24l01SPISend  (abs)        00000
 __size_of_nrf24l01SPIStart (abs)        00000
 __size_of_nrf24l01Send     (abs)        00000
-_loop                      text1        000F2
-_main                      maintext     000D5
-_n_ADDRESS_MUL             stringtext3  000F4
-_n_ADDRESS_P0              stringtext2  000E7
-_n_ADDRESS_P1              stringtext1  000E2
-_nrf24l01ISR               text9        000F5
+_loop                      text1        0010D
+_main                      maintext     000F0
+_n_ADDRESS_MUL             stringtext3  0010F
+_n_ADDRESS_P0              stringtext2  00102
+_n_ADDRESS_P1              stringtext1  000FD
+_nrf24l01ISR               text9        00110
 _nrf24l01Init              text2        00015
-_nrf24l01SPIEnd            text6        000EF
-_nrf24l01SPISend           text5        000C6
-_nrf24l01SPIStart          text4        000EC
-_nrf24l01Send              text3        000B7
+_nrf24l01SPIEnd            text6        0010A
+_nrf24l01SPISend           text5        000E1
+_nrf24l01SPIStart          text4        00107
+_nrf24l01Send              text3        000D2
 _pipe                      bssCOMMON    0007A
 _status                    bssCOMMON    0007B
 btemp                      (abs)        0007E
@@ -932,32 +932,32 @@ MODULE INFORMATION
 Module		Function		Class		Link	Load	Size
 shared
 		_NVMEM         		CODE           	07E0	0000	33
-		_n_ADDRESS_P0  		STRCODE        	00E7	0000	6
-		_n_ADDRESS_P1  		STRCODE        	00E2	0000	6
-		_n_ADDRESS_MUL 		STRCODE        	00F4	0000	2
+		_n_ADDRESS_P0  		STRCODE        	0102	0000	6
+		_n_ADDRESS_P1  		STRCODE        	00FD	0000	6
+		_n_ADDRESS_MUL 		STRCODE        	010F	0000	2
 		__initialization		CODE           	0010	0000	3
 
 shared estimated size: 50
 
 nrf24l01.c
-		_nrf24l01SPISend		CODE           	00C6	0000	16
-		_nrf24l01ISR   		CODE           	00F5	0000	2
-		_nrf24l01Send  		CODE           	00B7	0000	16
-		_nrf24l01Init  		CODE           	0015	0000	146
-		_nrf24l01SPIStart		CODE           	00EC	0000	4
-		_nrf24l01SPIEnd		CODE           	00EF	0000	4
+		_nrf24l01SPISend		CODE           	00E1	0000	16
+		_nrf24l01ISR   		CODE           	0110	0000	2
+		_nrf24l01Send  		CODE           	00D2	0000	16
+		_nrf24l01Init  		CODE           	0015	0000	173
+		_nrf24l01SPIStart		CODE           	0107	0000	4
+		_nrf24l01SPIEnd		CODE           	010A	0000	4
 
-nrf24l01.c estimated size: 188
+nrf24l01.c estimated size: 215
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\Umul8.c
-		___bmul        		CODE           	00A6	0000	18
+		___bmul        		CODE           	00C1	0000	18
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\Umul8.c estimated size: 18
 
 main.c
-		_loop          		CODE           	00F2	0000	3
+		_loop          		CODE           	010D	0000	3
 		_ISR           		CODE           	0004	0000	12
-		_main          		CODE           	00D5	0000	14
+		_main          		CODE           	00F0	0000	14
 
 main.c estimated size: 29
 

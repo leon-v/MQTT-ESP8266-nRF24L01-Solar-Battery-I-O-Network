@@ -7,6 +7,7 @@
       <itemPath>nrf24l01.h</itemPath>
       <itemPath>nRF24L01+_types.h</itemPath>
       <itemPath>flash.h</itemPath>
+      <itemPath>config.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -34,7 +35,7 @@
     <conf name="default" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
-        <targetDevice>PIC16F1503</targetDevice>
+        <targetDevice>PIC16LF1503</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
@@ -155,7 +156,7 @@
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-7ff"/>
-        <property key="poweroptions.powerenable" value="true"/>
+        <property key="poweroptions.powerenable" value="false"/>
         <property key="programmertogo.imagename" value=""/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
@@ -173,7 +174,7 @@
         <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
         <property key="programoptions.usehighvoltageonmclr" value="false"/>
         <property key="programoptions.uselvpprogramming" value="false"/>
-        <property key="voltagevalue" value="5.0"/>
+        <property key="voltagevalue" value="3.375"/>
       </PICkit3PlatformTool>
       <Simulator>
         <property key="codecoverage.enabled" value="Disable"/>
