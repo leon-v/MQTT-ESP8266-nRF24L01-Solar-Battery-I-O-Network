@@ -122,11 +122,10 @@ typedef union{
 	};
 } n_RX_PW_t;
 
-#define RX_ADDR_P0		0x0A
-#define RX_ADDR_P1		0x0B
-#define RX_ADDR_P2		0x0C
-#define RX_ADDR_P3		0x0D
-#define RX_ADDR_P4		0x0E
-#define RX_ADDR_P5		0x0F
-
+#define n_RX_ADDR_P0		0x0A
+#define n_RX_ADDR_P1		0x0B
+#define n_RX_ADDR_P2		0x0C
+#define n_RX_ADDR_P3		0x0D
+#define n_RX_ADDR_P4		0x0E
+#define n_RX_ADDR_P5		0x0F
 #endif /* USER_CONFIG_H_ */
