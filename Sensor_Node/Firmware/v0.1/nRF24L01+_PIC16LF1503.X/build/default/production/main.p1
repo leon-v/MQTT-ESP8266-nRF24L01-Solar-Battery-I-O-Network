@@ -2814,7 +2814,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 187 `i `uc
 ..
 ]
-[; ;nrf24l01.h: 6: const char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
+[; ;nrf24l01.h: 6: const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 "7
 [v _n_ADDRESS_P1 `Cuc ~T0 @X0 -> 0 `x e ]
 [i _n_ADDRESS_P1
@@ -2826,13 +2826,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 251 `i `uc
 ..
 ]
-[; ;nrf24l01.h: 7: const char n_ADDRESS_P1[] = {0x9D, 0xBF, 0x97, 0x4D, 0xFB};
+[; ;nrf24l01.h: 7: const unsigned char n_ADDRESS_P1[] = {0x9D, 0xBF, 0x97, 0x4D, 0xFB};
 "8
 [v _n_ADDRESS_MUL `Cuc ~T0 @X0 1 e ]
 [i _n_ADDRESS_MUL
--> -> 3 `i `uc
+-> -> 33 `i `uc
 ]
-[; ;nrf24l01.h: 8: const char n_ADDRESS_MUL = 3;
+[; ;nrf24l01.h: 8: const unsigned char n_ADDRESS_MUL = 33;
 [; ;nrf24l01.h: 10: void nrf24l01ISR(void);
 [; ;nrf24l01.h: 11: void nrf24l01Init(void);
 [v $root$_ISR `(v ~T0 @X0 0 e ]

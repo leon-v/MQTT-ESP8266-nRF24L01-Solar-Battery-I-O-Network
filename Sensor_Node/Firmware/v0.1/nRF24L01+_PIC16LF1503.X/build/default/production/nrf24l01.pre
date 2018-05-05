@@ -3871,9 +3871,9 @@ unsigned Reserved : 2;
 } n_RX_PW_t;
 
 # 6 "nrf24l01.h"
-const char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const char n_ADDRESS_P1[] = {0x9D, 0xBF, 0x97, 0x4D, 0xFB};
-const char n_ADDRESS_MUL = 3;
+const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
+const unsigned char n_ADDRESS_P1[] = {0x9D, 0xBF, 0x97, 0x4D, 0xFB};
+const unsigned char n_ADDRESS_MUL = 33;
 
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
@@ -3884,7 +3884,7 @@ void nrf24l01ISR(void){
 }
 
 n_STATUS_t status;
-unsigned char pipe = 0;
+unsigned char pipe = 1;
 void nrf24l01SPIStart(void){
 PORTAbits.RA1 = 0;
 }
@@ -3896,7 +3896,7 @@ data = SSP1BUF;
 return data;
 }
 
-void nrf24l01SPIEnd(){
+void nrf24l01SPIEnd(void){
 PORTAbits.RA1 = 1;
 }
 
@@ -3939,9 +3939,31 @@ PORTAbits.RA1 = 1;
 
 }
 
+void nrf24l01SetPipe(unsigned char pipe){
+
+
+nrf24l01SPIStart();
+status.byte = nrf24l01SPISend(0b00100000 | 0x10);
+nrf24l01SPISend(n_ADDRESS_P1[0]);
+nrf24l01SPISend(n_ADDRESS_P1[1]);
+nrf24l01SPISend(n_ADDRESS_P1[2]);
+nrf24l01SPISend(n_ADDRESS_P1[3]);
+nrf24l01SPISend(n_ADDRESS_P1[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+nrf24l01SPIEnd();
+
+
+nrf24l01SPIStart();
+status.byte = nrf24l01SPISend(0b00100000 | 0x0A);
+nrf24l01SPISend(n_ADDRESS_P1[0]);
+nrf24l01SPISend(n_ADDRESS_P1[1]);
+nrf24l01SPISend(n_ADDRESS_P1[2]);
+nrf24l01SPISend(n_ADDRESS_P1[3]);
+nrf24l01SPISend(n_ADDRESS_P1[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+nrf24l01SPIEnd();
+}
 void nrf24l01Init(void){
 
-# 74
+# 96
 TRISAbits.TRISA0 = 0;
 PORTAbits.RA0 = 0;
 
@@ -3971,26 +3993,7 @@ config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
 config.PRIM_RX = 0;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
 
-
-
-nrf24l01SPIStart();
-
-status.byte = nrf24l01SPISend(0b00100000 | 0x10);
-nrf24l01SPISend(n_ADDRESS_P0[0]);
-nrf24l01SPISend(n_ADDRESS_P0[1]);
-nrf24l01SPISend(n_ADDRESS_P0[2]);
-nrf24l01SPISend(n_ADDRESS_P0[3]);
-nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
-nrf24l01SPIEnd();
-
-status.byte = nrf24l01SPISend(0b00100000 | 0x0A);
-nrf24l01SPISend(n_ADDRESS_P1[0]);
-nrf24l01SPISend(n_ADDRESS_P1[1]);
-nrf24l01SPISend(n_ADDRESS_P1[2]);
-nrf24l01SPISend(n_ADDRESS_P1[3]);
-nrf24l01SPISend(n_ADDRESS_P1[4] + (unsigned) (pipe * n_ADDRESS_MUL));
-
-nrf24l01SPIEnd();
+nrf24l01SetPipe(pipe);
 
 
 nrf24l01SPIStart();
