@@ -10,7 +10,6 @@
 #include "pin_mux_register.h"
 
 const uint8 n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const uint8 n_ADDRESS_P1[] = {0x9D, 0xBF, 0x97, 0x4D, 0xFB};
 const uint8 n_ADDRESS_MUL = 33;
 
 #define CSPIN BIT15
@@ -80,15 +79,15 @@ void spiTestTimerFunction(){
 	nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte); //4
 
 	// Enable auto-ack for all pipes
-	n_EN_AA_t enAA;
-	enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0); //5
-	enAA.ENAA_P0 = 1;
-	enAA.ENAA_P1 = 1;
-	enAA.ENAA_P2 = 1;
-	enAA.ENAA_P3 = 1;
-	enAA.ENAA_P4 = 1;
-	enAA.ENAA_P5 = 1;
-	nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte); //6
+	// n_EN_AA_t enAA;
+	// enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0); //5
+	// enAA.ENAA_P0 = 1;
+	// enAA.ENAA_P1 = 1;
+	// enAA.ENAA_P2 = 1;
+	// enAA.ENAA_P3 = 1;
+	// enAA.ENAA_P4 = 1;
+	// enAA.ENAA_P5 = 1;
+	// nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte); //6
 
 	// Set pipes payload lengths to 32
 	n_RX_PW_t rxPW;
@@ -115,11 +114,11 @@ void spiTestTimerFunction(){
 	// Receive pipe addres 1
 	nrf24l01SPIStart();
 	status.byte = nrf24l01SPISend(n_W_REGISTER | n_RX_ADDR_P1); // 14
-	nrf24l01SPISend(n_ADDRESS_P1[0]);
-	nrf24l01SPISend(n_ADDRESS_P1[1]);
-	nrf24l01SPISend(n_ADDRESS_P1[2]);
-	nrf24l01SPISend(n_ADDRESS_P1[3]);
-	nrf24l01SPISend(n_ADDRESS_P1[4] + (1 * n_ADDRESS_MUL));
+	nrf24l01SPISend(n_ADDRESS_P0[0]);
+	nrf24l01SPISend(n_ADDRESS_P0[1]);
+	nrf24l01SPISend(n_ADDRESS_P0[2]);
+	nrf24l01SPISend(n_ADDRESS_P0[3]);
+	nrf24l01SPISend(n_ADDRESS_P0[4] + (1 * n_ADDRESS_MUL));
 	nrf24l01SPIEnd();
 
 	// Receive pipe addres 2

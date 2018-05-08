@@ -1,8 +1,16 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"10 nrf24l01.h
+"13 nrf24l01.h
 [v _nrf24l01ISR `(v ~T0 @X0 0 ef ]
-"11
-[v _nrf24l01Init `(v ~T0 @X0 0 ef ]
+"16
+[v _nrf24l01SendStart `(v ~T0 @X0 0 ef ]
+"17
+[v _nrf24l01SendByte `(v ~T0 @X0 0 ef1`uc ]
+"18
+[v _nrf24l01SendEnd `(v ~T0 @X0 0 ef ]
+[v F2872 `(v ~T0 @X0 1 tf1`ul ]
+"153 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic.h
+[v __delay `JF2872 ~T0 @X0 0 e ]
+[p i __delay ]
 [p mainexit ]
 "355 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h
 [s S26 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -26,6 +34,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S75 . . . ]
 "1391
 [v _OSCCONbits `VS75 ~T0 @X0 0 e@153 ]
+"14 nrf24l01.h
+[v _nrf24l01Init `(v ~T0 @X0 0 ef ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -2816,96 +2826,189 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;nrf24l01.h: 6: const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 "7
-[v _n_ADDRESS_P1 `Cuc ~T0 @X0 -> 0 `x e ]
-[i _n_ADDRESS_P1
-:U ..
--> -> 157 `i `uc
--> -> 191 `i `uc
--> -> 151 `i `uc
--> -> 77 `i `uc
--> -> 251 `i `uc
-..
-]
-[; ;nrf24l01.h: 7: const unsigned char n_ADDRESS_P1[] = {0x9D, 0xBF, 0x97, 0x4D, 0xFB};
-"8
 [v _n_ADDRESS_MUL `Cuc ~T0 @X0 1 e ]
 [i _n_ADDRESS_MUL
 -> -> 33 `i `uc
 ]
-[; ;nrf24l01.h: 8: const unsigned char n_ADDRESS_MUL = 33;
-[; ;nrf24l01.h: 10: void nrf24l01ISR(void);
-[; ;nrf24l01.h: 11: void nrf24l01Init(void);
+[; ;nrf24l01.h: 7: const unsigned char n_ADDRESS_MUL = 33;
+[; ;nrf24l01.h: 13: void nrf24l01ISR(void);
+[; ;nrf24l01.h: 14: void nrf24l01Init(void);
+[; ;nrf24l01.h: 16: void nrf24l01SendStart(void);
+[; ;nrf24l01.h: 17: void nrf24l01SendByte(unsigned char payloadByte);
+[; ;nrf24l01.h: 18: void nrf24l01SendEnd(void);
+[; ;flash.h: 6: extern const unsigned char NVMEM[32];
+"14 flash.h
+[v _NVMEM `Cuc ~T0 @X0 -> 32 `i e@2016 ]
+[i _NVMEM
+:U ..
+"15
+-> -> 85 `ui `uc
+-> -> 110 `ui `uc
+-> -> 99 `ui `uc
+-> -> 111 `ui `uc
+-> -> 110 `ui `uc
+-> -> 102 `ui `uc
+-> -> 105 `ui `uc
+-> -> 103 `ui `uc
+-> -> 117 `ui `uc
+-> -> 114 `ui `uc
+-> -> 101 `ui `uc
+-> -> 100 `ui `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+"16
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+"17
+-> -> 0 `i `uc
+..
+]
+[; ;flash.h: 14: const unsigned char NVMEM[32]@(0x800U-32) = {
+[; ;flash.h: 15: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
+[; ;flash.h: 16: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+[; ;flash.h: 17: };
+[; ;flash.h: 23: unsigned int read_flashmem(unsigned int offset);
+[; ;flash.h: 24: void write_flashmem(unsigned int offset, unsigned int data);
 [v $root$_ISR `(v ~T0 @X0 0 e ]
-[v F2891 `(v ~T0 @X0 1 tf ]
-"5 main.c
-[v _ISR `IF2891 ~T0 @X0 1 e ]
+[v F2902 `(v ~T0 @X0 1 tf ]
+"7 main.c
+[v _ISR `IF2902 ~T0 @X0 1 e ]
 {
-[; ;main.c: 5: void interrupt ISR(void){
+[; ;main.c: 7: void interrupt ISR(void){
 [e :U _ISR ]
 [f ]
-[; ;main.c: 6: nrf24l01ISR();
-"6
+[; ;main.c: 8: nrf24l01ISR();
+"8
 [e ( _nrf24l01ISR ..  ]
-[; ;main.c: 7: }
-"7
+[; ;main.c: 9: }
+"9
 [e :UE 334 ]
 }
-"9
+"11
+[v _mode `uc ~T0 @X0 1 e ]
+[i _mode
+-> -> 1 `i `uc
+]
+[; ;main.c: 11: unsigned char mode = 1;
+"14
 [v _loop `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 9: void loop(){
+[; ;main.c: 14: void loop(){
 [e :U _loop ]
 [f ]
-[; ;main.c: 11: nrf24l01Init();
-"11
-[e ( _nrf24l01Init ..  ]
-[; ;main.c: 13: }
-"13
+[; ;main.c: 16: switch (mode){
+"16
+[e $U 337  ]
+{
+[; ;main.c: 17: case 1:
+"17
+[e :U 338 ]
+[; ;main.c: 19: nrf24l01SendStart();
+"19
+[e ( _nrf24l01SendStart ..  ]
+"20
+[v _payloadByte `uc ~T0 @X0 1 a ]
+[; ;main.c: 20: unsigned char payloadByte = 'A';
+[e = _payloadByte -> -> 65 `ui `uc ]
+[; ;main.c: 21: while (payloadByte < ('A' + 8) ){
+"21
+[e $U 339  ]
+[e :U 340 ]
+{
+[; ;main.c: 22: nrf24l01SendByte(payloadByte);
+"22
+[e ( _nrf24l01SendByte (1 _payloadByte ]
+[; ;main.c: 23: payloadByte++;
+"23
+[e ++ _payloadByte -> -> 1 `i `uc ]
+"24
+}
+[e :U 339 ]
+"21
+[e $ < -> _payloadByte `ui + -> 65 `ui -> -> 8 `i `ui 340  ]
+[e :U 341 ]
+[; ;main.c: 24: }
+[; ;main.c: 25: nrf24l01SendEnd();
+"25
+[e ( _nrf24l01SendEnd ..  ]
+[; ;main.c: 26: break;
+"26
+[e $U 336  ]
+"27
+}
+[; ;main.c: 27: }
+[e $U 336  ]
+"16
+[e :U 337 ]
+[e [\ _mode , $ -> -> 1 `i `uc 338
+ 336 ]
+"27
+[e :U 336 ]
+[; ;main.c: 29: _delay((unsigned long)((500)*(16000000/4000.0)));
+"29
+[e ( __delay (1 -> * -> -> 500 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
+[; ;main.c: 31: }
+"31
 [e :UE 335 ]
 }
 [v $root$_main `(v ~T0 @X0 0 e ]
-"15
+"33
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 15: void main(void) {
+[; ;main.c: 33: void main(void) {
 [e :U _main ]
 [f ]
-[; ;main.c: 17: INTCONbits.GIE = 0;
-"17
+[; ;main.c: 35: INTCONbits.GIE = 0;
+"35
 [e = . . _INTCONbits 0 7 -> -> 0 `i `uc ]
-[; ;main.c: 18: INTCONbits.PEIE = 1;
-"18
+[; ;main.c: 36: INTCONbits.PEIE = 1;
+"36
 [e = . . _INTCONbits 0 6 -> -> 1 `i `uc ]
-[; ;main.c: 20: OSCCONbits.IRCF = 0b1111;
-"20
+[; ;main.c: 38: OSCCONbits.IRCF = 0b1111;
+"38
 [e = . . _OSCCONbits 0 2 -> -> 15 `i `uc ]
-[; ;main.c: 21: OSCCONbits.SCS = 0b10;
-"21
+[; ;main.c: 39: OSCCONbits.SCS = 0b10;
+"39
 [e = . . _OSCCONbits 0 0 -> -> 2 `i `uc ]
-[; ;main.c: 23: nrf24l01Init();
-"23
+[; ;main.c: 41: nrf24l01Init();
+"41
 [e ( _nrf24l01Init ..  ]
-[; ;main.c: 25: INTCONbits.GIE = 1;
-"25
+[; ;main.c: 43: INTCONbits.GIE = 1;
+"43
 [e = . . _INTCONbits 0 7 -> -> 1 `i `uc ]
-[; ;main.c: 27: while(1){
-"27
-[e :U 338 ]
+[; ;main.c: 45: while(1){
+"45
+[e :U 344 ]
 {
-[; ;main.c: 28: loop();
-"28
+[; ;main.c: 46: loop();
+"46
 [e ( _loop ..  ]
-"29
+"47
 }
-[e :U 337 ]
-"27
-[e $U 338  ]
-[e :U 339 ]
-[; ;main.c: 29: }
-[; ;main.c: 31: return;
-"31
-[e $UE 336  ]
-[; ;main.c: 32: }
-"32
-[e :UE 336 ]
+[e :U 343 ]
+"45
+[e $U 344  ]
+[e :U 345 ]
+[; ;main.c: 47: }
+[; ;main.c: 49: return;
+"49
+[e $UE 342  ]
+[; ;main.c: 50: }
+"50
+[e :UE 342 ]
 }

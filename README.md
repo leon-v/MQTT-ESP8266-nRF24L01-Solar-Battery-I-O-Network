@@ -20,7 +20,7 @@ Each node will have a short name which will be part of the 32 bytes payload.
 ### Packet format will be fixed length
 |MQTT Topic	| Command	| Value	|
 |:---------:|:---------:|:-----:|
-|19 Bytes	| 5 Bytes	| 8 Bytes|
+|20 Bytes	| 4 Bytes	| 8 Bytes|
 
 
 

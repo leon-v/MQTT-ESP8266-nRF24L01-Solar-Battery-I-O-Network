@@ -87,6 +87,28 @@ typedef union{
 	};
 } n_EN_RXADDR_t;
 
+#define n_SETUP_RETR    0x04
+typedef union{
+	struct {
+		unsigned byte : 8;
+	};
+	struct {
+		unsigned ARC		: 4;
+		unsigned ARD        : 4;
+
+	};
+} n_SETUP_RETR_t;
+
+#define n_RF_CH         0x05
+typedef union {
+    struct {
+		unsigned byte : 8;
+	};
+    struct {
+        unsigned RF_CH         : 7;
+    };
+} n_RF_CH_t;
+
 #define n_STATUS		0x07
 typedef union{
 	struct {

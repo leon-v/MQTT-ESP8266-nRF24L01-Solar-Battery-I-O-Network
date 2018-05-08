@@ -2,13 +2,6 @@
 #include <xc.h>
 #include "flash.h"
 
-const unsigned char NVMEM[NV_MEM_SIZE]@NV_ADDRESS = {
-     0xfe, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,     
-     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,     
-     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,         
-     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff     
- };
-
 void write_flashmem(unsigned int offset, unsigned int data) {
     
     INTCONbits.GIE = 0; //disable interupts incase they interfere
@@ -64,6 +57,8 @@ void write_flashmem(unsigned int offset, unsigned int data) {
 
 unsigned int read_flashmem(unsigned int offset) {
     
+    INTCONbits.GIE = 0; //disable interupts incase they interfere
+    
     PMCON1 = 0x00;     //not configuration space
     
     PMADRL = (char) ((NV_ADDRESS + offset) >> 0);  //least significant bits of address
@@ -74,6 +69,10 @@ unsigned int read_flashmem(unsigned int offset) {
     NOP();              //to give time to read
     NOP();              //to give time to read
     
-    return (unsigned) ((PMDATH) << 8) | (PMDATL);  //joins bytes & returns the value stored
+    unsigned int result = (unsigned) ((PMDATH) << 8) | (PMDATL);  //joins bytes & returns the value stored
+    
+    INTCONbits.GIE = 1;        //enable interupts again
+    
+    return result;
 }
 
