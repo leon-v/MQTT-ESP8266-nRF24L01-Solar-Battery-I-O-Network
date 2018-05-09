@@ -1,14 +1,32 @@
 #include <xc.h>
 #include <pic16lf1503.h>
 #include "nrf24l01.h"
+#include "flash.h"
+#include "config.h"
 
 void interrupt ISR(void){
 	nrf24l01ISR();
 }
 
+unsigned char mode = 1;
+#define SEND_BOOT_MODE 1
+
 void loop(){
     
-    nrf24l01Init();
+    switch (mode){
+        case SEND_BOOT_MODE:
+            // Write payload data
+            nrf24l01SendStart();
+            unsigned char payloadByte = 'A';
+            while (payloadByte < ('A' + 8) ){
+                nrf24l01SendByte(payloadByte);
+                payloadByte++;
+            }
+            nrf24l01SendEnd();
+            break;
+    }
+    
+    __delay_ms(500);
     
 }
 

@@ -3762,20 +3762,53 @@ extern __bank0 __bit __timeout;
 
 # 6 "nrf24l01.h"
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const unsigned char n_ADDRESS_P1[] = {0x9D, 0xBF, 0x97, 0x4D, 0xFB};
 const unsigned char n_ADDRESS_MUL = 33;
 
+# 13
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 
-# 5 "main.c"
+void nrf24l01SendStart(void);
+void nrf24l01SendByte(unsigned char payloadByte);
+void nrf24l01SendEnd(void);
+
+# 6 "flash.h"
+extern const unsigned char NVMEM[32];
+
+# 14
+const unsigned char NVMEM[32]@(0x800U-32) = {
+'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+# 23
+unsigned int read_flashmem(unsigned int offset);
+void write_flashmem(unsigned int offset, unsigned int data);
+
+# 7 "main.c"
 void interrupt ISR(void){
 nrf24l01ISR();
 }
 
+unsigned char mode = 1;
+
+
 void loop(){
 
-nrf24l01Init();
+switch (mode){
+case 1:
+
+nrf24l01SendStart();
+unsigned char payloadByte = 'A';
+while (payloadByte < ('A' + 8) ){
+nrf24l01SendByte(payloadByte);
+payloadByte++;
+}
+nrf24l01SendEnd();
+break;
+}
+
+_delay((unsigned long)((500)*(16000000/4000.0)));
 
 }
 

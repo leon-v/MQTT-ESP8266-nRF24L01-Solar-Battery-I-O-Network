@@ -3848,6 +3848,28 @@ struct {
 unsigned byte : 8;
 };
 struct {
+unsigned ARC : 4;
+unsigned ARD : 4;
+
+};
+} n_SETUP_RETR_t;
+
+
+typedef union {
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned RF_CH : 7;
+};
+} n_RF_CH_t;
+
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
 unsigned TX_FULL : 1;
 unsigned RX_P_NO : 3;
 unsigned MAX_RT : 1;
@@ -3858,7 +3880,7 @@ unsigned Reserved : 1;
 };
 } n_STATUS_t;
 
-# 114
+# 136
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3872,11 +3894,28 @@ unsigned Reserved : 2;
 
 # 6 "nrf24l01.h"
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const unsigned char n_ADDRESS_P1[] = {0x9D, 0xBF, 0x97, 0x4D, 0xFB};
 const unsigned char n_ADDRESS_MUL = 33;
 
+# 13
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
+
+void nrf24l01SendStart(void);
+void nrf24l01SendByte(unsigned char payloadByte);
+void nrf24l01SendEnd(void);
+
+# 6 "flash.h"
+extern const unsigned char NVMEM[32];
+
+# 14
+const unsigned char NVMEM[32]@(0x800U-32) = {
+'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+# 23
+unsigned int read_flashmem(unsigned int offset);
+void write_flashmem(unsigned int offset, unsigned int data);
 
 # 8 "nrf24l01.c"
 void nrf24l01ISR(void){
@@ -3884,7 +3923,7 @@ void nrf24l01ISR(void){
 }
 
 n_STATUS_t status;
-unsigned char pipe = 1;
+
 void nrf24l01SPIStart(void){
 PORTAbits.RA1 = 0;
 }
@@ -3898,6 +3937,7 @@ return data;
 
 void nrf24l01SPIEnd(void){
 PORTAbits.RA1 = 1;
+_delay((unsigned long)((5)*(16000000/4000000.0)));
 }
 
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
@@ -3912,58 +3952,35 @@ nrf24l01SPIEnd();
 return data;
 }
 
-void nrf24l01SendFlash(unsigned char command, unsigned int offset, unsigned int length){
 
-PORTAbits.RA1 = 0;
-
-SSP1BUF = command;
-
-while (!SSP1STATbits.BF){ __nop(); }
-
-status.byte = SSP1BUF;
-
-unsigned char unused;
-unsigned int counter = 0;
-while (counter < length){
+void nrf24l01SendStart(void){
 
 
-
-
-SSP1BUF = 0xAA;
-while (!SSP1STATbits.BF){ __nop(); }
-unused = SSP1BUF;
-counter++;
-}
-
-PORTAbits.RA1 = 1;
-
-}
-
-void nrf24l01SetPipe(unsigned char pipe){
-
+n_CONFIG_t config;
+config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
+config.PRIM_RX = 0;
+nrf24l01Send(0b00100000 | 0x00, config.byte);
 
 nrf24l01SPIStart();
-status.byte = nrf24l01SPISend(0b00100000 | 0x10);
-nrf24l01SPISend(n_ADDRESS_P1[0]);
-nrf24l01SPISend(n_ADDRESS_P1[1]);
-nrf24l01SPISend(n_ADDRESS_P1[2]);
-nrf24l01SPISend(n_ADDRESS_P1[3]);
-nrf24l01SPISend(n_ADDRESS_P1[4] + (unsigned) (pipe * n_ADDRESS_MUL));
-nrf24l01SPIEnd();
 
-
-nrf24l01SPIStart();
-status.byte = nrf24l01SPISend(0b00100000 | 0x0A);
-nrf24l01SPISend(n_ADDRESS_P1[0]);
-nrf24l01SPISend(n_ADDRESS_P1[1]);
-nrf24l01SPISend(n_ADDRESS_P1[2]);
-nrf24l01SPISend(n_ADDRESS_P1[3]);
-nrf24l01SPISend(n_ADDRESS_P1[4] + (unsigned) (pipe * n_ADDRESS_MUL));
-nrf24l01SPIEnd();
+nrf24l01SPISend(0b10100000);
 }
+void nrf24l01SendByte(unsigned char payloadByte){
+nrf24l01SPISend(payloadByte);
+}
+
+void nrf24l01SendEnd(void){
+
+nrf24l01SPIEnd();
+
+PORTAbits.RA0 = 1;
+_delay((unsigned long)((10)*(16000000/4000000.0)));
+PORTAbits.RA0 = 0;
+}
+
 void nrf24l01Init(void){
 
-# 96
+# 74
 TRISAbits.TRISA0 = 0;
 PORTAbits.RA0 = 0;
 
@@ -3988,30 +4005,58 @@ SSPCON1bits.SSPM = 0b0000;
 SSPCON1bits.SSPEN = 1;
 
 
-n_CONFIG_t config;
-config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
-config.PRIM_RX = 0;
-nrf24l01Send(0b00100000 | 0x00, config.byte);
 
-nrf24l01SetPipe(pipe);
+n_RF_CH_t channel;
+channel.RF_CH = 83;
+nrf24l01Send(0b00100000 | 0x05, channel.byte);
+
+
+unsigned char pipe = 0;
+unsigned char i = 0;
+unsigned char byte;
+
+while (i < 16){
+byte = read_flashmem((unsigned) 0 + i);
+
+if (byte == 0){
+break;
+}
+
+pipe+= byte;
+
+i++;
+}
+
+pipe = (unsigned) pipe % 5;
 
 
 nrf24l01SPIStart();
-nrf24l01SPISend(0b10100000);
-
-unsigned char payloadByte = 'A';
-while (payloadByte < ('A' + 8) ){
-nrf24l01SPISend(payloadByte);
-payloadByte++;
-}
-
+status.byte = nrf24l01SPISend(0b00100000 | 0x10);
+nrf24l01SPISend(n_ADDRESS_P0[0]);
+nrf24l01SPISend(n_ADDRESS_P0[1]);
+nrf24l01SPISend(n_ADDRESS_P0[2]);
+nrf24l01SPISend(n_ADDRESS_P0[3]);
+nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
 nrf24l01SPIEnd();
 
 
-PORTAbits.RA0 = 1;
-_delay((unsigned long)((10)*(16000000/4000000.0)));
-PORTAbits.RA0 = 0;
+nrf24l01SPIStart();
+status.byte = nrf24l01SPISend(0b00100000 | 0x0A);
+nrf24l01SPISend(n_ADDRESS_P0[0]);
+nrf24l01SPISend(n_ADDRESS_P0[1]);
+nrf24l01SPISend(n_ADDRESS_P0[2]);
+nrf24l01SPISend(n_ADDRESS_P0[3]);
+nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+nrf24l01SPIEnd();
 
-_delay((unsigned long)((500)*(16000000/4000.0)));
+
+n_RX_PW_t rxPW;
+rxPW.RX_PW = 32;
+nrf24l01Send(0b00100000 | 0x11, rxPW.byte);
+nrf24l01Send(0b00100000 | 0x12, rxPW.byte);
+nrf24l01Send(0b00100000 | 0x13, rxPW.byte);
+nrf24l01Send(0b00100000 | 0x14, rxPW.byte);
+nrf24l01Send(0b00100000 | 0x15, rxPW.byte);
+nrf24l01Send(0b00100000 | 0x16, rxPW.byte);
 }
 

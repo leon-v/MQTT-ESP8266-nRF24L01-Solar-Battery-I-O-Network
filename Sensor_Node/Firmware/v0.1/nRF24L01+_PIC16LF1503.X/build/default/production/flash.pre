@@ -3763,14 +3763,17 @@ extern __bank0 __bit __timeout;
 # 6 "flash.h"
 extern const unsigned char NVMEM[32];
 
-# 5 "flash.c"
+# 14
 const unsigned char NVMEM[32]@(0x800U-32) = {
-0xfe, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
-0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
+# 23
+unsigned int read_flashmem(unsigned int offset);
+void write_flashmem(unsigned int offset, unsigned int data);
+
+# 5 "flash.c"
 void write_flashmem(unsigned int offset, unsigned int data) {
 
 INTCONbits.GIE = 0;
@@ -3826,6 +3829,8 @@ INTCONbits.GIE = 1;
 
 unsigned int read_flashmem(unsigned int offset) {
 
+INTCONbits.GIE = 0;
+
 PMCON1 = 0x00;
 
 PMADRL = (char) (((0x800U-32) + offset) >> 0);
@@ -3836,6 +3841,10 @@ PMCON1bits.RD = 1;
 __nop();
 __nop();
 
-return (unsigned) ((PMDATH) << 8) | (PMDATL);
+unsigned int result = (unsigned) ((PMDATH) << 8) | (PMDATL);
+
+INTCONbits.GIE = 1;
+
+return result;
 }
 
