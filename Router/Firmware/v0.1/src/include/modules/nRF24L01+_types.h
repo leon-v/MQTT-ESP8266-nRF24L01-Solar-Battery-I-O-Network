@@ -150,4 +150,37 @@ typedef union{
 #define n_RX_ADDR_P3		0x0D
 #define n_RX_ADDR_P4		0x0E
 #define n_RX_ADDR_P5		0x0F
+
+
+#define n_DYNPD				0x1C
+typedef union{
+	struct {
+		unsigned byte : 8;
+	};
+	struct {
+		unsigned DPL_P0		: 1;
+		unsigned DPL_P1		: 1;
+		unsigned DPL_P2		: 1;
+		unsigned DPL_P3		: 1;
+		unsigned DPL_P4		: 1;
+		unsigned DPL_P5		: 1;
+		unsigned Reserved	: 2;
+
+	};
+} n_DYNPD_t;
+
+
+#define n_FEATURE			0x1D
+typedef union{
+	struct {
+		unsigned byte : 8;
+	};
+	struct {
+		unsigned EN_DYN_ACK	: 1;
+		unsigned EN_ACK_PAY	: 1;
+		unsigned EN_DPL		: 1;
+		unsigned Reserved	: 5;
+	};
+} n_FEATURE_t;
+
 #endif /* USER_CONFIG_H_ */
