@@ -3,7 +3,10 @@
 
 #define n_R_REGISTER	0b00000000
 #define n_W_REGISTER	0b00100000
+#define n_R_RX_PAYLOAD  0b01100001
 #define n_W_TX_PAYLOAD  0b10100000
+#define n_R_RX_PL_WID	0b01100000
+
 
 #define n_CONFIG 		0x00
 typedef union{

@@ -93,7 +93,12 @@ void nrf24l01Init(void){
     SSPCON1bits.SSPM = 0b0000;
     
     SSPCON1bits.SSPEN = 1;
-    
+       
+    // Set config bit
+    n_CONFIG_t config;
+	config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0); //1
+	config.PWR_UP = 1;
+	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte); //2
     
     // Set Frequency
     n_RF_CH_t channel;
@@ -139,14 +144,21 @@ void nrf24l01Init(void){
     nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
     nrf24l01SPIEnd();
     
+    
     // Set pipes payload lengths to 32
-	n_RX_PW_t rxPW;
-	rxPW.RX_PW = 32;
-	nrf24l01Send(n_W_REGISTER | n_RX_PW_P0, rxPW.byte); // 7
-	nrf24l01Send(n_W_REGISTER | n_RX_PW_P1, rxPW.byte); // 8
-	nrf24l01Send(n_W_REGISTER | n_RX_PW_P2, rxPW.byte); // 9
-	nrf24l01Send(n_W_REGISTER | n_RX_PW_P3, rxPW.byte); // 10
-	nrf24l01Send(n_W_REGISTER | n_RX_PW_P4, rxPW.byte); // 11
-	nrf24l01Send(n_W_REGISTER | n_RX_PW_P5, rxPW.byte); // 12
+//	n_RX_PW_t rxPW;
+//	rxPW.RX_PW = 32;
+//	nrf24l01Send(n_W_REGISTER | n_RX_PW_P0, rxPW.byte); // 7
+//	nrf24l01Send(n_W_REGISTER | n_RX_PW_P1, rxPW.byte); // 8
+//	nrf24l01Send(n_W_REGISTER | n_RX_PW_P2, rxPW.byte); // 9
+//	nrf24l01Send(n_W_REGISTER | n_RX_PW_P3, rxPW.byte); // 10
+//	nrf24l01Send(n_W_REGISTER | n_RX_PW_P4, rxPW.byte); // 11
+//	nrf24l01Send(n_W_REGISTER | n_RX_PW_P5, rxPW.byte); // 12
+    
+    // Set dynamic payload length
+	n_FEATURE_t feature;
+	feature.byte = nrf24l01Send(n_R_REGISTER | n_FEATURE, 0);
+	feature.EN_DPL = 1;
+	nrf24l01Send(n_W_REGISTER | n_FEATURE, feature.byte); 
 }
 

@@ -3760,7 +3760,7 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 9 "nRF24L01+_types.h"
+# 12 "nRF24L01+_types.h"
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3880,7 +3880,7 @@ unsigned Reserved : 1;
 };
 } n_STATUS_t;
 
-# 136
+# 139
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3891,6 +3891,37 @@ unsigned Reserved : 2;
 
 };
 } n_RX_PW_t;
+
+# 159
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned DPL_P0 : 1;
+unsigned DPL_P1 : 1;
+unsigned DPL_P2 : 1;
+unsigned DPL_P3 : 1;
+unsigned DPL_P4 : 1;
+unsigned DPL_P5 : 1;
+unsigned Reserved : 2;
+
+};
+} n_DYNPD_t;
+
+
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned EN_DYN_ACK : 1;
+unsigned EN_ACK_PAY : 1;
+unsigned EN_DPL : 1;
+unsigned Reserved : 5;
+};
+} n_FEATURE_t;
 
 # 6 "nrf24l01.h"
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
@@ -4005,6 +4036,11 @@ SSPCON1bits.SSPM = 0b0000;
 SSPCON1bits.SSPEN = 1;
 
 
+n_CONFIG_t config;
+config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
+config.PWR_UP = 1;
+nrf24l01Send(0b00100000 | 0x00, config.byte);
+
 
 n_RF_CH_t channel;
 channel.RF_CH = 83;
@@ -4049,14 +4085,10 @@ nrf24l01SPISend(n_ADDRESS_P0[3]);
 nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
 nrf24l01SPIEnd();
 
-
-n_RX_PW_t rxPW;
-rxPW.RX_PW = 32;
-nrf24l01Send(0b00100000 | 0x11, rxPW.byte);
-nrf24l01Send(0b00100000 | 0x12, rxPW.byte);
-nrf24l01Send(0b00100000 | 0x13, rxPW.byte);
-nrf24l01Send(0b00100000 | 0x14, rxPW.byte);
-nrf24l01Send(0b00100000 | 0x15, rxPW.byte);
-nrf24l01Send(0b00100000 | 0x16, rxPW.byte);
+# 159
+n_FEATURE_t feature;
+feature.byte = nrf24l01Send(0b00000000 | 0x1D, 0);
+feature.EN_DPL = 1;
+nrf24l01Send(0b00100000 | 0x1D, feature.byte);
 }
 
