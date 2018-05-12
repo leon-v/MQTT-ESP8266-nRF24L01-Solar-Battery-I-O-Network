@@ -22,6 +22,7 @@ LOCAL MQTT_Client* mqttClient;
 void nrf24l01SPIStart(void){
     ets_intr_lock();		 //close	interrupt
 	gpio_output_set(0, CSPIN, CSPIN, 0); // (high, low, out, in)
+	os_delay_us(1);
 }
 
 uint8 nrf24l01SPISend(uint8 data){
@@ -160,8 +161,9 @@ void nrf24l01StartRecieve(){
 
 	// Set config bit
     n_CONFIG_t config;
-	config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0); //1
 	config.PRIM_RX = 1;
+	config.EN_CRC = 1;
+	config.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte); //2
 
 	// (high, low, out, in)
@@ -232,9 +234,11 @@ void ICACHE_FLASH_ATTR nrf24l01Init(MQTT_Client* p_mqttClient){
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDO_U, FUNC_GPIO15);
 
 	// (high, low, out, in)
-	gpio_output_set(CSPIN, 0, CSPIN, 0);
 	gpio_output_set(0, CEPIN, CEPIN, 0);
-
+	os_delay_us(1000);
+	gpio_output_set(CSPIN, 0, CSPIN, 0);
+	
+	os_delay_us(65535);
 
 	// (high, low, out, in)
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO5_U, FUNC_GPIO5);
@@ -264,8 +268,9 @@ void ICACHE_FLASH_ATTR nrf24l01Init(MQTT_Client* p_mqttClient){
 	config.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte); //2
 
-	nrf24l01InitReciever();
 	nrf24l01StartRecieve();
+	nrf24l01InitReciever();
+	
 
 	
 	// os_timer_disarm(&spiTestTimer);
