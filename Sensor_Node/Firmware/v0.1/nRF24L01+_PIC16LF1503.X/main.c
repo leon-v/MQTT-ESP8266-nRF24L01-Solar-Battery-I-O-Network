@@ -19,8 +19,8 @@ void loop(){
             
             nrf24l01SendStart();
             
-            unsigned char payloadByte = 'a';
-            while (payloadByte < ('a' + 20) ){
+            unsigned char payloadByte = '0';
+            while (payloadByte < ('0' + 32) ){
                 nrf24l01SendByte(payloadByte);
                 payloadByte++;
             }

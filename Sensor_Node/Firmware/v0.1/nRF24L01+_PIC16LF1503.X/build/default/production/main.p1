@@ -2923,9 +2923,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _nrf24l01SendStart ..  ]
 "22
 [v _payloadByte `uc ~T0 @X0 1 a ]
-[; ;main.c: 22: unsigned char payloadByte = 'a';
-[e = _payloadByte -> -> 97 `ui `uc ]
-[; ;main.c: 23: while (payloadByte < ('a' + 20) ){
+[; ;main.c: 22: unsigned char payloadByte = '0';
+[e = _payloadByte -> -> 48 `ui `uc ]
+[; ;main.c: 23: while (payloadByte < ('0' + 32) ){
 "23
 [e $U 339  ]
 [e :U 340 ]
@@ -2940,7 +2940,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 339 ]
 "23
-[e $ < -> _payloadByte `ui + -> 97 `ui -> -> 20 `i `ui 340  ]
+[e $ < -> _payloadByte `ui + -> 48 `ui -> -> 32 `i `ui 340  ]
 [e :U 341 ]
 [; ;main.c: 26: }
 [; ;main.c: 27: nrf24l01SendEnd();

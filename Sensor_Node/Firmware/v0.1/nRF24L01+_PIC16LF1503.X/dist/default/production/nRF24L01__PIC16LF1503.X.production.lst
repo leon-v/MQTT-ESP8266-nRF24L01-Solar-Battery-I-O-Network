@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC LITE Macro Assembler V1.45 build -152302408 
-                                                                                               Fri May 18 13:20:32 2018
+                                                                                               Fri May 18 13:27:51 2018
 
 Microchip Technology Omniscient Code Generator v1.45 (Free mode) build 201711160504
      1                           	processor	16LF1503
@@ -1422,15 +1422,15 @@ Microchip Technology Omniscient Code Generator v1.45 (Free mode) build 201711160
   1408                           ;main.c: 20: nrf24l01SendStart();
   1409  00BC  211C               	fcall	_nrf24l01SendStart
   1410                           
-  1411                           ;main.c: 22: unsigned char payloadByte = 'a';
-  1412  00BD  3061               	movlw	97
+  1411                           ;main.c: 22: unsigned char payloadByte = '0';
+  1412  00BD  3030               	movlw	48
   1413  00BE  00F7               	movwf	??_loop
   1414  00BF  0877               	movf	??_loop,w
   1415  00C0  00F9               	movwf	loop@payloadByte
   1416  00C1                     l941:	
-  1417                           ;main.c: 23: while (payloadByte < ('a' + 20) ){
+  1417                           ;main.c: 23: while (payloadByte < ('0' + 32) ){
   1418                           
-  1419  00C1  3075               	movlw	117
+  1419  00C1  3050               	movlw	80
   1420  00C2  0279               	subwf	loop@payloadByte,w
   1421  00C3  1803               	btfsc	3,0
   1422  00C4  28CC               	goto	l943
@@ -2270,7 +2270,7 @@ SFR31                0      0       0      32        0.0%
 
 
 Microchip Technology PIC Macro Assembler V1.45 build -152302408 
-Symbol Table                                                                                   Fri May 18 13:20:32 2018
+Symbol Table                                                                                   Fri May 18 13:27:51 2018
 
                       __CFG_CP$OFF 0000                                 l83 0115  
                                u97 00AA                nrf24l01Send@command 0074  
