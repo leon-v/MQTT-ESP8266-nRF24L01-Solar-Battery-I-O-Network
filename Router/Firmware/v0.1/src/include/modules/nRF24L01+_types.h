@@ -5,6 +5,8 @@
 #define n_W_REGISTER	0b00100000
 #define n_R_RX_PAYLOAD  0b01100001
 #define n_W_TX_PAYLOAD  0b10100000
+#define n_FLUSH_TX      0b11100001
+#define n_FLUSH_RX      0b11100010
 #define n_R_RX_PL_WID	0b01100000
 
 
@@ -90,6 +92,18 @@ typedef union{
 	};
 } n_EN_RXADDR_t;
 
+#define n_SETUP_AW		0x02
+typedef union{
+    struct {
+		unsigned byte 		: 8;
+	};
+    struct {
+        unsigned AW         : 2;
+        unsigned Reserved	: 6;
+    };
+} n_SETUP_AW_t;
+
+
 #define n_SETUP_RETR    0x04
 typedef union{
 	struct {
@@ -105,12 +119,29 @@ typedef union{
 #define n_RF_CH         0x05
 typedef union {
     struct {
-		unsigned byte : 8;
+		unsigned byte   : 8;
 	};
     struct {
-        unsigned RF_CH         : 7;
+        unsigned RF_CH  : 7;
     };
 } n_RF_CH_t;
+
+#define n_RF_SETUP		0x06
+typedef union {
+    struct {
+		unsigned byte       : 8;
+	};
+    struct {
+        unsigned Obsolete   : 1;
+        unsigned RF_PWR     : 2;
+        unsigned RF_DR_HIGH : 1;
+        unsigned PLL_LOCK   : 1;
+        unsigned RF_DR_LOW  : 1;
+        unsigned Reserved   : 1;
+        unsigned CONT_WAVE  : 1;
+    };
+} n_RF_SETUP_t;
+
 
 #define n_STATUS		0x07
 typedef union{

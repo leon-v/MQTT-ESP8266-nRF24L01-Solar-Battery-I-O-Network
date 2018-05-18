@@ -16,17 +16,20 @@ void loop(){
     switch (mode){
         case SEND_BOOT_MODE:
             // Write payload data
+            
             nrf24l01SendStart();
-            unsigned char payloadByte = 'A';
-            while (payloadByte < ('A' + 8) ){
+            
+            unsigned char payloadByte = 'a';
+            while (payloadByte < ('a' + 20) ){
                 nrf24l01SendByte(payloadByte);
                 payloadByte++;
             }
             nrf24l01SendEnd();
+            
             break;
     }
     
-    __delay_ms(500);
+    __delay_ms(1000);
     
 }
 
