@@ -188,7 +188,8 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 
 	// if (resetInfo->reason != 4){
-	if (!GPIO_INPUT_GET(4)){
+	// if (!GPIO_INPUT_GET(4)){
+	 if (0){
 		INFO("\r\nStarting HTTP Config ....\r\n");
 		HTTPConfig_Init();
 	}

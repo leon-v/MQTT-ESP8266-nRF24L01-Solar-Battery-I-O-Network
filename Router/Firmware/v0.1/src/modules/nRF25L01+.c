@@ -279,12 +279,11 @@ void nrf24l01CheckRecieve(void){
 		// Get data
 		uint8 width = nrf24l01Send(n_R_RX_PL_WID, 0); //1
 
-
 		nrf24l01SPIStart();
 
 		nrf24l01SPISend(n_R_RX_PAYLOAD);
 		char *buffer = NULL;
-		buffer = (char *) os_malloc(width * sizeof(char));
+		buffer = (char *) os_malloc((width + 1) * sizeof(char));
 		uint8 i = 0;
 		while (i < width){
 			buffer[i] = nrf24l01SPISend(0);
@@ -294,6 +293,8 @@ void nrf24l01CheckRecieve(void){
 		nrf24l01SPIEnd();
 
 		os_printf("Got %s\r\n", buffer);
+
+		MQTT_Publish(mqttClient, "/radio/raw/", buffer, strlen(buffer), 1, 1);
 
 		os_free(buffer);
 		
