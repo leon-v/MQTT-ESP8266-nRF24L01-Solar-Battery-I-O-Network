@@ -3785,7 +3785,79 @@ const unsigned char NVMEM[32]@(0x800U-32) = {
 unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 
-# 7 "main.c"
+# 4 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\__size_t.h"
+typedef unsigned size_t;
+
+# 7 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\stdlib.h"
+typedef unsigned short wchar_t;
+
+# 15
+typedef struct {
+int rem;
+int quot;
+} div_t;
+typedef struct {
+unsigned rem;
+unsigned quot;
+} udiv_t;
+typedef struct {
+long quot;
+long rem;
+} ldiv_t;
+typedef struct {
+unsigned long quot;
+unsigned long rem;
+} uldiv_t;
+
+# 53
+extern double atof(const char *);
+extern double strtod(const char *, const char **);
+extern int atoi(const char *);
+extern unsigned xtoi(const char *);
+extern long atol(const char *);
+extern long strtol(const char *, char **, int);
+
+extern int rand(void);
+extern void srand(unsigned int);
+extern void * calloc(size_t, size_t);
+extern div_t div(int numer, int denom);
+extern udiv_t udiv(unsigned numer, unsigned denom);
+extern ldiv_t ldiv(long numer, long denom);
+extern uldiv_t uldiv(unsigned long numer,unsigned long denom);
+extern unsigned long _lrotl(unsigned long value, unsigned int shift);
+extern unsigned long _lrotr(unsigned long value, unsigned int shift);
+extern unsigned int _rotl(unsigned int value, unsigned int shift);
+extern unsigned int _rotr(unsigned int value, unsigned int shift);
+
+
+
+
+extern void * malloc(size_t);
+extern void free(void *);
+extern void * realloc(void *, size_t);
+
+# 86
+extern int atexit(void (*)(void));
+extern char * getenv(const char *);
+extern char ** environ;
+extern int system(char *);
+extern void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
+extern void * bsearch(const void *, void *, size_t, size_t, int(*)(const void *, const void *));
+extern int abs(int);
+extern long labs(long);
+
+extern char * itoa(char * buf, int val, int base);
+extern char * utoa(char * buf, unsigned val, int base);
+
+
+
+
+extern char * ltoa(char * buf, long val, int base);
+extern char * ultoa(char * buf, unsigned long val, int base);
+
+extern char * ftoa(float f, int * status);
+
+# 9 "main.c"
 void interrupt ISR(void){
 nrf24l01ISR();
 }
@@ -3793,6 +3865,30 @@ nrf24l01ISR();
 unsigned char mode = 1;
 
 
+
+void sendName(void){
+
+unsigned int offset = 0;
+unsigned char btye;
+while (offset < 16){
+btye = read_flashmem(offset);
+
+if (btye == 0x00){
+return;
+}
+
+nrf24l01SendByte(btye);
+offset++;
+}
+}
+
+void sendString(char * string){
+
+int i;
+for (i = 0; string[i] != '\0'; i++){
+nrf24l01SendByte(string[i]);
+}
+}
 void loop(){
 
 switch (mode){
@@ -3800,18 +3896,65 @@ case 1:
 
 
 nrf24l01SendStart();
-
-unsigned char payloadByte = '0';
-while (payloadByte < ('0' + 32) ){
-nrf24l01SendByte(payloadByte);
-payloadByte++;
-}
+sendName();
+nrf24l01SendByte('/');
+nrf24l01SendByte('B');
+nrf24l01SendByte('O');
+nrf24l01SendByte('O');
+nrf24l01SendByte('T');
+nrf24l01SendByte('/');
+nrf24l01SendByte('1');
 nrf24l01SendEnd();
 
+mode = 2;
 break;
+
+
+case 2:
+
+ADCON0bits.CHS = 3;
+
+_delay((unsigned long)((50)*(16000000/4000000.0)));
+
+ADCON0bits.ADGO = 1;
+
+while (ADCON0bits.ADGO){
+__nop();
 }
 
-_delay((unsigned long)((1000)*(16000000/4000.0)));
+
+char buffer[8];
+int result = 0x00;
+result = ADRESL;
+result|= (ADRESH << 8);
+
+
+
+itoa(buffer, result, 10);
+
+
+
+
+nrf24l01SendStart();
+sendName();
+nrf24l01SendByte('/');
+nrf24l01SendByte('A');
+nrf24l01SendByte('D');
+nrf24l01SendByte('C');
+nrf24l01SendByte('3');
+nrf24l01SendByte('/');
+nrf24l01SendByte(buffer[0]);
+nrf24l01SendByte(buffer[1]);
+nrf24l01SendByte(buffer[2]);
+nrf24l01SendByte(buffer[3]);
+nrf24l01SendByte(buffer[4]);
+nrf24l01SendByte(buffer[5]);
+nrf24l01SendByte(buffer[6]);
+nrf24l01SendByte(buffer[7]);
+nrf24l01SendEnd();
+}
+
+_delay((unsigned long)((500)*(16000000/4000.0)));
 
 }
 
@@ -3823,7 +3966,25 @@ INTCONbits.PEIE = 1;
 OSCCONbits.IRCF = 0b1111;
 OSCCONbits.SCS = 0b10;
 
+_delay((unsigned long)((10)*(16000000/4000.0)));
+
 nrf24l01Init();
+
+OPTION_REGbits.nWPUEN = 0;
+
+
+
+ADCON0bits.ADON = 0;
+
+ANSELAbits.ANSA4 = 1;
+TRISAbits.TRISA4 = 1;
+
+ADCON1bits.ADCS = 0b111;
+ADCON1bits.ADFM = 1;
+ADCON1bits.ADPREF = 0b00;
+
+ADCON0bits.CHS = 3;
+ADCON0bits.ADON = 1;
 
 INTCONbits.GIE = 1;
 

@@ -372,7 +372,7 @@ mqtt_tcpclient_sent_cb(void *arg)
     if ((client->connState == MQTT_DATA || client->connState == MQTT_KEEPALIVE_SEND)
                 && client->mqtt_state.pending_msg_type == MQTT_MSG_TYPE_PUBLISH) {
         if (client->publishedCb)
-            client->publishedCb((uint32_t*)client);
+	            client->publishedCb((uint32_t*)client);
     }
     system_os_post(MQTT_TASK_PRIO, 0, (os_param_t)client);
 }
@@ -801,7 +801,7 @@ MQTT_Connect(MQTT_Client *mqttClient)
 
     os_timer_disarm(&mqttClient->mqttTimer);
     os_timer_setfn(&mqttClient->mqttTimer, (os_timer_func_t *)mqtt_timer, mqttClient);
-    os_timer_arm(&mqttClient->mqttTimer, 1000, 1);
+    os_timer_arm(&mqttClient->mqttTimer, 100, 1);
 
     os_printf("your ESP SSL/TLS configuration is %d.[0:NO_TLS\t1:TLS_WITHOUT_AUTHENTICATION\t2ONE_WAY_ANTHENTICATION\t3TWO_WAY_ANTHENTICATION]\n",DEFAULT_SECURITY);
     if (UTILS_StrToIP(mqttClient->host, &mqttClient->pCon->proto.tcp->remote_ip)) {

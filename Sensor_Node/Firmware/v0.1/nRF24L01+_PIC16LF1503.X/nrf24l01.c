@@ -91,10 +91,16 @@ void nrf24l01SendEnd(void){
     nrf24l01SPIEnd();
 
     CEHIGH();
+    __delay_us(50);
+    CELOW();
 }
 
 
 void nrf24l01InitRegisters(void){
+    
+    nrf24l01Send(n_W_REGISTER | n_CONFIG, 0x00);
+    
+    __delay_us(130);
     
     n_SETUP_AW_t setupAW;
     setupAW.byte = 0x00;
@@ -206,7 +212,5 @@ void nrf24l01Init(void){
     nrf24l01InitRegisters();
     
     __delay_ms(2);
-    
-    CEHIGH();
 }
 

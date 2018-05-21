@@ -7,6 +7,8 @@
 #define RADIO_FREQUENCY 83
 
 void ICACHE_FLASH_ATTR nrf24l01Init(MQTT_Client* p_mqttClient);
+void ICACHE_FLASH_ATTR nrf24l01Pause(void);
+void ICACHE_FLASH_ATTR nrf24l01Unpause(void);
 
 
 #endif /* USER_CONFIG_H_ */

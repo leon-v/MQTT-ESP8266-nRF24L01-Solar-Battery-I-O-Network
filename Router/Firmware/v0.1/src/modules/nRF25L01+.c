@@ -34,6 +34,14 @@ const uint8 n_ADDRESS_MUL = 33;
 
 LOCAL MQTT_Client* mqttClient;
 
+uint8 paused = 1;
+void ICACHE_FLASH_ATTR nrf24l01Pause(void){
+	paused = 1;
+}
+void ICACHE_FLASH_ATTR nrf24l01Unpause(void){
+	paused = 0;
+}
+
 void nrf24l01SPIInit(void){
 
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDI_U, FUNC_GPIO12); // MISO
@@ -294,7 +302,10 @@ void nrf24l01CheckRecieve(void){
 
 		os_printf("Got %s\r\n", buffer);
 
-		MQTT_Publish(mqttClient, "/radio/raw/", buffer, strlen(buffer), 1, 1);
+		if (!paused){
+			MQTT_Publish(mqttClient, "/radio/raw/", buffer, strlen(buffer), 1, 1);
+		}
+		
 
 		os_free(buffer);
 		

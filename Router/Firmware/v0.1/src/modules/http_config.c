@@ -323,6 +323,9 @@ LOCAL void ICACHE_FLASH_ATTR HTTPConfig_SetData(){
 		}
 		else if (strcmp(key, "mqtt_keepalive") == 0) {
 			sysCfg.mqtt_keepalive = atoi(value);
+			if (sysCfg.mqtt_keepalive <= 0){
+				sysCfg.mqtt_keepalive = 500;
+			}
 		}
 		else if (strcmp(key, "mqtt_topicroot") == 0) {
 			strcpy(sysCfg.mqtt_topicroot, value);
