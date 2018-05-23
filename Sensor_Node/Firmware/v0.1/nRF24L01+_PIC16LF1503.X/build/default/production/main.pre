@@ -4063,7 +4063,7 @@ ADCON0bits.CHS = 3;
 ADCON0bits.ADON = 1;
 
 # 234
-WDTCONbits.WDTPS = 6;
+WDTCONbits.WDTPS = 11;
 INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 

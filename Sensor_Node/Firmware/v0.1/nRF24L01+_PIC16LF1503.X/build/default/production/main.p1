@@ -3601,9 +3601,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 223: ADCON0bits.ADON = 1;
 "223
 [e = . . _ADCON0bits 0 0 -> -> 1 `i `uc ]
-[; ;main.c: 234: WDTCONbits.WDTPS = 6;
+[; ;main.c: 234: WDTCONbits.WDTPS = 11;
 "234
-[e = . . _WDTCONbits 0 1 -> -> 6 `i `uc ]
+[e = . . _WDTCONbits 0 1 -> -> 11 `i `uc ]
 [; ;main.c: 235: INTCONbits.PEIE = 1;
 "235
 [e = . . _INTCONbits 0 6 -> -> 1 `i `uc ]

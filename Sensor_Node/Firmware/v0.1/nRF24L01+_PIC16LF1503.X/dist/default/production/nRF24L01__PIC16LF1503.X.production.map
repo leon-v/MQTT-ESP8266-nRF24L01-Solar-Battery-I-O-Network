@@ -5,7 +5,7 @@ Linker command line:
 -W-3 --edf=C:\Program Files (x86)\Microchip\xc8\v1.45\dat\en_msgs.txt -cs \
   -h+dist/default/production\nRF24L01__PIC16LF1503.X.production.sym \
   --cmf=dist/default/production\nRF24L01__PIC16LF1503.X.production.cmf -z \
-  -Q16LF1503 -oC:\Users\Leon\AppData\Local\Temp\secc.2 \
+  -Q16LF1503 -oC:\Users\Leon\AppData\Local\Temp\sg74.2 \
   -Mdist/default/production/nRF24L01__PIC16LF1503.X.production.map -E1 \
   -ver=XC8 -ASTACK=0202Ah-0206fh -pstack=STACK -p_NVMEM_text=7E0h \
   -ACODE=00h-07FFh -ASTRCODE=00h-07FFh -ASTRING=00h-0FFhx8 \
@@ -26,7 +26,7 @@ Linker command line:
   -pfunctab=ENTRY -ACONFIG=08007h-08008h -pconfig=CONFIG -DCONFIG=2 \
   -AIDLOC=08000h-08003h -pidloc=IDLOC -DIDLOC=2 -DCODE=2 -DSTRCODE=2 \
   -DSTRING=2 -DCONST=2 -DENTRY=2 -k \
-  C:\Users\Leon\AppData\Local\Temp\secc.obj \
+  C:\Users\Leon\AppData\Local\Temp\sg74.obj \
   dist/default/production\nRF24L01__PIC16LF1503.X.production.obj 
 
 Object code version is 3.11
@@ -36,7 +36,7 @@ Machine type is 16LF1503
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-C:\Users\Leon\AppData\Local\Temp\secc.obj
+C:\Users\Leon\AppData\Local\Temp\sg74.obj
                 end_init                             49       49        1        8       0
                 reset_vec                             0        0        1        0       0
                 config                             8007     8007        2    1000E       0

@@ -231,7 +231,7 @@ void main(void) {
 //    PIE1bits.TMR1IE = 1;
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 6;
+    WDTCONbits.WDTPS = 11;
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
     
