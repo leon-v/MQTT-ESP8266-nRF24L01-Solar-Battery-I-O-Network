@@ -2,7 +2,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "7 config.c
 [p x FOSC=INTOSC ]
 "8
-[p x WDTE=OFF ]
+[p x WDTE=ON ]
 "9
 [p x PWRTE=ON ]
 "10
@@ -10,7 +10,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "11
 [p x CP=OFF ]
 "12
-[p x BOREN=OFF ]
+[p x BOREN=ON ]
 "13
 [p x CLKOUTEN=OFF ]
 "16

@@ -4057,6 +4057,8 @@ nrf24l01SPIEnd();
 PORTAbits.RA0 = 1;
 _delay((unsigned long)((50)*(16000000/4000000.0)));
 PORTAbits.RA0 = 0;
+
+
 }
 
 
@@ -4064,7 +4066,7 @@ void nrf24l01InitRegisters(void){
 
 nrf24l01Send(0b00100000 | 0x00, 0x00);
 
-_delay((unsigned long)((130)*(16000000/4000000.0)));
+_delay((unsigned long)((10)*(16000000/4000.0)));
 
 n_SETUP_AW_t setupAW;
 setupAW.byte = 0x00;
@@ -4077,7 +4079,7 @@ setupRetries.ARD = 15;
 setupRetries.ARC = 15;
 nrf24l01Send(0b00100000 | 0x04, setupRetries.byte);
 
-# 122
+# 124
 n_RF_SETUP_t rfSetup;
 rfSetup.RF_DR_LOW = 0;
 rfSetup.RF_DR_HIGH = 1;
