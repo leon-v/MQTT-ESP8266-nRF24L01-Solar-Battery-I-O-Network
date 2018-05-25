@@ -3105,6 +3105,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.h: 16: void nrf24l01SendStart(void);
 [; ;nrf24l01.h: 17: void nrf24l01SendByte(unsigned char payloadByte);
 [; ;nrf24l01.h: 18: void nrf24l01SendEnd(void);
+[; ;nrf24l01.h: 19: void nrf24l01SetRecieveMode(void);
 [; ;flash.h: 6: extern const unsigned char NVMEM[32];
 "14 flash.h
 [v _NVMEM `Cuc ~T0 @X0 -> 32 `i e@2016 ]

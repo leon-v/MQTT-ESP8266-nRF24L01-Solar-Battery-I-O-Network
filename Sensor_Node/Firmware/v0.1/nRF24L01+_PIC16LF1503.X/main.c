@@ -14,18 +14,21 @@ unsigned char mode = 1;
 #define RUN_MODE            2
 #define START_ADC3_MODE     3
 #define START_ADC7_MODE     4
-#define SEND_COUNTER_MODE   5
+#define START_FVR_MODE      5
+#define START_TEMP_MODE     6
 
-#define SLEEP_MODE          6
+#define SLEEP_MODE          7
 
 #define SUM_ADC_MODE        100
 #define SEND_ADC_MODE       101
+
+#define ADC_OVERSAMPLE_COUNT 255
 
 
 long adcSum = 0;
 unsigned char adcLoop = 0;
 char buffer[6];
-char byte[2];
+char byte[3];
 
 void interrupt ISR(void){
     
@@ -53,7 +56,10 @@ void interrupt ISR(void){
         PIR1bits.ADIF = 0;
     }
     
-	nrf24l01ISR();
+    if (INTCONbits.INTF){
+        nrf24l01ISR();
+        INTCONbits.INTF = 0;
+    }
 }
 
 
@@ -80,6 +86,19 @@ void sendString(char * string){
         nrf24l01SendByte(string[i]);
     }
 }
+
+void startADC(unsigned char channel){
+    adcSum = 0;
+    adcLoop = ADC_OVERSAMPLE_COUNT;
+
+    if (ADCON0bits.CHS != channel) {
+        ADCON0bits.CHS = channel;
+        __delay_us(200);
+    }
+
+    ADCON0bits.ADGO = 1;
+    mode = SUM_ADC_MODE;
+}
 void loop(){
     
     if (mode != SLEEP_MODE) {
@@ -89,6 +108,7 @@ void loop(){
     switch (mode){
         
         case SLEEP_MODE:
+//            nrf24l01SetRecieveMode();
             SLEEP();
             NOP();
             NOP();
@@ -119,33 +139,24 @@ void loop(){
             mode = SLEEP_MODE;
             nextMode = START_ADC3_MODE;
             break;
+            
         case START_ADC3_MODE:
-            
-            adcSum = 0;
-            adcLoop = 255;
-            
-            if (ADCON0bits.CHS != 3) {
-                ADCON0bits.CHS = 3;
-                __delay_us(50);
-            }
-            
-            ADCON0bits.ADGO = 1;
-            mode = SUM_ADC_MODE;
+            startADC(3);
             nextMode = START_ADC7_MODE;
             break;
         
         case START_ADC7_MODE:
+            startADC(7);
+            nextMode = START_FVR_MODE;
+            break;
             
-            adcSum = 0;
-            adcLoop = 255;
+        case START_FVR_MODE:
+            startADC(31);
+            nextMode = START_TEMP_MODE;
+            break;
             
-            if (ADCON0bits.CHS != 7) {
-                ADCON0bits.CHS = 7;
-                __delay_us(50);
-            }
-            
-            ADCON0bits.ADGO = 1;
-            mode = SUM_ADC_MODE;
+        case START_TEMP_MODE:
+            startADC(29);
             nextMode = RUN_MODE;
             break;
 
@@ -153,10 +164,24 @@ void loop(){
             
             switch (ADCON0bits.CHS){
                 case 3:
-                    adcSum/= 21;
+                    adcSum/= 22;
                     break;
+                    
                 case 7:
                     adcSum/= 25;
+                    break;
+                 
+                case 31:
+                    adcSum=  (long) (( (float) adcSum) / 24.8);
+                    break;
+                    
+                 case 29:
+                    adcSum/= 2089;
+                    adcSum-= 40;
+                    break;
+                    
+                default:
+                    adcSum/= 255;
                     break;
             }
             
@@ -169,7 +194,7 @@ void loop(){
             nrf24l01SendByte('A');
             nrf24l01SendByte('D');
             nrf24l01SendByte('C');
-            nrf24l01SendByte(byte[0]);
+            sendString(byte);
             nrf24l01SendByte('/');
             
             unsigned char i;
@@ -190,6 +215,10 @@ void loop(){
 
 void main(void) {
     
+    // Pin 11 is int
+//    RA2
+    
+    /* Reset Interrupts */
     INTCONbits.PEIE = 0;
     INTCONbits.GIE = 0;
     
@@ -202,6 +231,15 @@ void main(void) {
     
     OPTION_REGbits.nWPUEN = 0;
     
+    /* Configure FVR */
+    FVRCONbits.FVREN = 0;
+    FVRCONbits.ADFVR = 1; // 1.024V
+    FVRCONbits.FVREN = 1;
+    
+    /* Configure Temp sensor*/
+    FVRCONbits.TSEN = 0;
+    FVRCONbits.TSRNG = 0; // 2V Low Range
+    FVRCONbits.TSEN = 1;
 
     /* Setup ADC */
     ADCON0bits.ADON = 0;
@@ -222,16 +260,18 @@ void main(void) {
     ADCON0bits.CHS = 3;
     ADCON0bits.ADON = 1;
     
-    /* Setup Timer 1*/
     
-//    T1CONbits.TMR1CS = 0b01; // FOSC Internal Oscilator
-    
-//    T1CONbits.TMR1ON = 1;
-//    T1CONbits.T1CKPS = 0b11;
-//    PIE1bits.TMR1IE = 1;
+    /* Setup Interrupt Pin */
+    TRISAbits.TRISA2 = 1;
+    INTCONbits.INTE = 1;
+    OPTION_REGbits.INTEDG = 0;
+            
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 11;
+    WDTCONbits.WDTPS = 12;
+    
+    
+    /* Start Interrupts */
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
     

@@ -3771,6 +3771,7 @@ void nrf24l01Init(void);
 void nrf24l01SendStart(void);
 void nrf24l01SendByte(unsigned char payloadByte);
 void nrf24l01SendEnd(void);
+void nrf24l01SetRecieveMode(void);
 
 # 6 "flash.h"
 extern const unsigned char NVMEM[32];
@@ -3861,11 +3862,11 @@ extern char * ftoa(float f, int * status);
 unsigned char nextMode = 1;
 unsigned char mode = 1;
 
-# 25
+# 28
 long adcSum = 0;
 unsigned char adcLoop = 0;
 char buffer[6];
-char byte[2];
+char byte[3];
 
 void interrupt ISR(void){
 
@@ -3893,7 +3894,10 @@ adcLoop--;
 PIR1bits.ADIF = 0;
 }
 
+if (INTCONbits.INTF){
 nrf24l01ISR();
+INTCONbits.INTF = 0;
+}
 }
 
 
@@ -3920,15 +3924,29 @@ for (i = 0; string[i] != '\0'; i++){
 nrf24l01SendByte(string[i]);
 }
 }
+
+void startADC(unsigned char channel){
+adcSum = 0;
+adcLoop = 255;
+
+if (ADCON0bits.CHS != channel) {
+ADCON0bits.CHS = channel;
+_delay((unsigned long)((200)*(16000000/4000000.0)));
+}
+
+ADCON0bits.ADGO = 1;
+mode = 100;
+}
 void loop(){
 
-if (mode != 6) {
+if (mode != 7) {
 asm("clrwdt");
 }
 
 switch (mode){
 
-case 6:
+case 7:
+
 asm("sleep");
 __nop();
 __nop();
@@ -3956,36 +3974,27 @@ break;
 
 
 case 2:
-mode = 6;
+mode = 7;
 nextMode = 3;
 break;
+
 case 3:
-
-adcSum = 0;
-adcLoop = 255;
-
-if (ADCON0bits.CHS != 3) {
-ADCON0bits.CHS = 3;
-_delay((unsigned long)((50)*(16000000/4000000.0)));
-}
-
-ADCON0bits.ADGO = 1;
-mode = 100;
+startADC(3);
 nextMode = 4;
 break;
 
 case 4:
+startADC(7);
+nextMode = 5;
+break;
 
-adcSum = 0;
-adcLoop = 255;
+case 5:
+startADC(31);
+nextMode = 6;
+break;
 
-if (ADCON0bits.CHS != 7) {
-ADCON0bits.CHS = 7;
-_delay((unsigned long)((50)*(16000000/4000000.0)));
-}
-
-ADCON0bits.ADGO = 1;
-mode = 100;
+case 6:
+startADC(29);
 nextMode = 2;
 break;
 
@@ -3993,10 +4002,24 @@ case 101:
 
 switch (ADCON0bits.CHS){
 case 3:
-adcSum/= 21;
+adcSum/= 22;
 break;
+
 case 7:
 adcSum/= 25;
+break;
+
+case 31:
+adcSum= (long) (( (float) adcSum) / 24.8);
+break;
+
+case 29:
+adcSum/= 2089;
+adcSum-= 40;
+break;
+
+default:
+adcSum/= 255;
 break;
 }
 
@@ -4009,7 +4032,7 @@ nrf24l01SendByte('/');
 nrf24l01SendByte('A');
 nrf24l01SendByte('D');
 nrf24l01SendByte('C');
-nrf24l01SendByte(byte[0]);
+sendString(byte);
 nrf24l01SendByte('/');
 
 unsigned char i;
@@ -4030,6 +4053,7 @@ break;
 
 void main(void) {
 
+# 222
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -4042,6 +4066,15 @@ nrf24l01Init();
 
 OPTION_REGbits.nWPUEN = 0;
 
+
+FVRCONbits.FVREN = 0;
+FVRCONbits.ADFVR = 1;
+FVRCONbits.FVREN = 1;
+
+
+FVRCONbits.TSEN = 0;
+FVRCONbits.TSRNG = 0;
+FVRCONbits.TSEN = 1;
 
 
 ADCON0bits.ADON = 0;
@@ -4062,8 +4095,18 @@ PIE1bits.ADIE = 1;
 ADCON0bits.CHS = 3;
 ADCON0bits.ADON = 1;
 
-# 234
-WDTCONbits.WDTPS = 11;
+
+
+TRISAbits.TRISA2 = 1;
+INTCONbits.INTE = 1;
+OPTION_REGbits.INTEDG = 0;
+
+
+
+WDTCONbits.WDTPS = 12;
+
+
+
 INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 

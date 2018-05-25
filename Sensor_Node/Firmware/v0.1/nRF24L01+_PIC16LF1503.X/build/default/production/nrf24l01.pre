@@ -3963,6 +3963,7 @@ void nrf24l01Init(void);
 void nrf24l01SendStart(void);
 void nrf24l01SendByte(unsigned char payloadByte);
 void nrf24l01SendEnd(void);
+void nrf24l01SetRecieveMode(void);
 
 # 6 "flash.h"
 extern const unsigned char NVMEM[32];
