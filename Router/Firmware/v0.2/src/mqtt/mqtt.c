@@ -120,10 +120,12 @@ deliver_publish(MQTT_Client* client, uint8_t* message, int length)
 
 }
 
-void ICACHE_FLASH_ATTR
-mqtt_send_keepalive(MQTT_Client *client)
-{
+void ICACHE_FLASH_ATTR mqtt_send_keepalive(MQTT_Client *client) {
+
+	ets_intr_lock();		 //close	interrupt
+
     INFO("\r\nMQTT: Send keepalive packet to %s:%d!\r\n", client->host, client->port);
+
     client->mqtt_state.outbound_message = mqtt_msg_pingreq(&client->mqtt_state.mqtt_connection);
     client->mqtt_state.pending_msg_type = MQTT_MSG_TYPE_PINGREQ;
     client->mqtt_state.pending_msg_type = mqtt_get_type(client->mqtt_state.outbound_message->data);
@@ -154,6 +156,8 @@ mqtt_send_keepalive(MQTT_Client *client)
         client->connState = TCP_RECONNECT_DISCONNECTING;
         system_os_post(MQTT_TASK_PRIO, 0, (os_param_t)client);
     }
+
+    ets_intr_unlock();
 }
 
 /**
@@ -447,9 +451,10 @@ mqtt_tcpclient_discon_cb(void *arg)
   * @param  arg: contain the ip link information
   * @retval None
   */
-void ICACHE_FLASH_ATTR
-mqtt_tcpclient_connect_cb(void *arg)
-{
+void ICACHE_FLASH_ATTR mqtt_tcpclient_connect_cb(void *arg) {
+
+	ets_intr_lock();
+
     struct espconn *pCon = (struct espconn *)arg;
     MQTT_Client* client = (MQTT_Client *)pCon->reverse;
 
@@ -480,6 +485,8 @@ mqtt_tcpclient_connect_cb(void *arg)
     client->mqtt_state.outbound_message = NULL;
     client->connState = MQTT_CONNECT_SENDING;
     system_os_post(MQTT_TASK_PRIO, 0, (os_param_t)client);
+
+    ets_intr_unlock();
 }
 
 /**
@@ -617,23 +624,32 @@ MQTT_Ping(MQTT_Client *client)
     return TRUE;
 }
 
-void ICACHE_FLASH_ATTR
-MQTT_Task(os_event_t *e)
-{
+void ICACHE_FLASH_ATTR MQTT_Task(os_event_t *e) {
+
+	ets_intr_lock();		 //close	interrupt
+
     MQTT_Client* client = (MQTT_Client*)e->par;
     uint8_t dataBuffer[MQTT_BUF_SIZE];
     uint16_t dataLen;
-    if (e->par == 0)
+
+    if (e->par == 0){
+    	ets_intr_unlock();	 	 //open	interrupt
         return;
+    }
+
     switch (client->connState) {
 
     case TCP_RECONNECT_REQ:
         break;
+
+
     case TCP_RECONNECT:
         mqtt_tcpclient_delete(client);
         MQTT_Connect(client);
         INFO("TCP: Reconnect to: %s:%d\r\n", client->host, client->port);
         client->connState = TCP_CONNECTING;
+
+
         break;
     case MQTT_DELETING:
     case TCP_DISCONNECTING:
@@ -649,21 +665,28 @@ MQTT_Task(os_event_t *e)
             espconn_disconnect(client->pCon);
         }
         break;
+
+
     case TCP_DISCONNECTED:
         INFO("MQTT: Disconnected\r\n");
         mqtt_tcpclient_delete(client);
         break;
+
     case MQTT_DELETED:
         INFO("MQTT: Deleted client\r\n");
         mqtt_client_delete(client);
         break;
+
     case MQTT_KEEPALIVE_SEND:
         mqtt_send_keepalive(client);
         break;
+
     case MQTT_DATA:
+
         if (QUEUE_IsEmpty(&client->msgQueue) || client->sendTimeout != 0) {
             break;
         }
+
         if (QUEUE_Gets(&client->msgQueue, dataBuffer, &dataLen, MQTT_BUF_SIZE) == 0) {
             client->mqtt_state.pending_msg_type = mqtt_get_type(dataBuffer);
             client->mqtt_state.pending_msg_id = mqtt_get_id(dataBuffer, dataLen);
@@ -687,6 +710,8 @@ MQTT_Task(os_event_t *e)
         }
         break;
     }
+
+    ets_intr_unlock();	 	 //open	interrupt
 }
 
 /**

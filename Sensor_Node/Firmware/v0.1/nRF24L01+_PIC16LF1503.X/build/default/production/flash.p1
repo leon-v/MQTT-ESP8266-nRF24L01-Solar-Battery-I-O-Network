@@ -2828,36 +2828,38 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 114 `ui `uc
 -> -> 101 `ui `uc
 -> -> 100 `ui `uc
--> -> 0 `i `uc
+-> -> 49 `ui `uc
 -> -> 0 `i `uc
 -> -> 0 `i `uc
 -> -> 0 `i `uc
 "16
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
+-> -> 1 `i `uc
 "17
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+"18
 -> -> 0 `i `uc
 ..
 ]
 [; ;flash.h: 14: const unsigned char NVMEM[32]@(0x800U-32) = {
-[; ;flash.h: 15: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
-[; ;flash.h: 16: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-[; ;flash.h: 17: };
-[; ;flash.h: 23: unsigned int read_flashmem(unsigned int offset);
-[; ;flash.h: 24: void write_flashmem(unsigned int offset, unsigned int data);
+[; ;flash.h: 15: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '1', 0, 0, 0,
+[; ;flash.h: 16: 1,
+[; ;flash.h: 17: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+[; ;flash.h: 18: };
+[; ;flash.h: 24: unsigned int read_flashmem(unsigned int offset);
+[; ;flash.h: 25: void write_flashmem(unsigned int offset, unsigned int data);
 "5 flash.c
 [v _write_flashmem `(v ~T0 @X0 1 ef2`ui`ui ]
 {

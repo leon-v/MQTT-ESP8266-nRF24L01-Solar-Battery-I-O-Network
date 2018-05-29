@@ -11,26 +11,26 @@ typedef enum{
 
 /*IMPORTANT: the following configuration maybe need modified*/
 /***********************************************************************************************************************/
-#define CFG_HOLDER    0x00FF55A4    /* Change this value to load default configurations */
+#define CFG_HOLDER    0x00000000    /* Change this value to load default configurations */
 
 /*DEFAULT CONFIGURATIONS*/
 
 #define DEFAULT_SECURITY    NO_TLS      // very important: you must config DEFAULT_SECURITY for SSL/TLS
 
-#define CA_CERT_FLASH_ADDRESS 0x77              // CA certificate address in flash to read, 0x77 means address 0x77000
-#define CLIENT_CERT_FLASH_ADDRESS 0x78          // client certificate and private key address in flash to read, 0x78 means address 0x78000
+// #define CA_CERT_FLASH_ADDRESS 0x77              // CA certificate address in flash to read, 0x77 means address 0x77000
+// #define CLIENT_CERT_FLASH_ADDRESS 0x78          // client certificate and private key address in flash to read, 0x78 means address 0x78000
 /***********************************************************************************************************************/
 
 
 /*Please Keep the following configuration if you have no very deep understanding of ESP SSL/TLS*/
-#define CFG_LOCATION    0x79    /* Please don't change or if you know what you doing */
-#define MQTT_BUF_SIZE        1024
-#define MQTT_KEEPALIVE        120     /*second*/
-#define MQTT_RECONNECT_TIMEOUT     5    /*second*/
-#define MQTT_SSL_ENABLE //* Please don't change or if you know what you doing */
+#define CFG_LOCATION    		0x79    /* Please don't change or if you know what you doing */
+#define MQTT_BUF_SIZE       	2048
+// #define MQTT_KEEPALIVE        	120     /*second*/
+#define MQTT_RECONNECT_TIMEOUT  5    /*second*/
+// #define MQTT_SSL_ENABLE //* Please don't change or if you know what you doing */
 
 #define STA_TYPE AUTH_WPA2_PSK
-#define QUEUE_BUFFER_SIZE                 2048
+// #define QUEUE_BUFFER_SIZE                 2048
 
 #define PROTOCOL_NAMEv31    /*MQTT version 3.1 compatible with Mosquitto v0.15*/
 //PROTOCOL_NAMEv311            /*MQTT version 3.11 compatible with https://eclipse.org/paho/clients/testing/*/

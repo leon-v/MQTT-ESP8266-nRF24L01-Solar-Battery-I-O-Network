@@ -77,7 +77,8 @@ void ICACHE_FLASH_ATTR CFG_Load() {
 
 		sysCfg.cfg_holder = CFG_HOLDER;
 
-		os_sprintf(sysCfg.device_id, "nRF25L01+ Router", system_get_chip_id());
+		os_sprintf(sysCfg.device_id, "nRF25L01+ Router :%u:", system_get_chip_id());
+
 		sysCfg.device_id[sizeof(sysCfg.device_id) - 1] = '\0';
 		
 		sysCfg.sta_type = STA_TYPE;

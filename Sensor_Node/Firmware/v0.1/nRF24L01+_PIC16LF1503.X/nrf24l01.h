@@ -18,6 +18,8 @@ void nrf24l01SendByte(unsigned char payloadByte);
 void nrf24l01SendEnd(void);
 void nrf24l01SetRecieveMode(void);
 
+void nrf24l01SendString(char * string);
+void nrf24l01SendFlash(unsigned char offset);
 
 #endif	/* NRF24L01_H */
 

@@ -14,8 +14,8 @@
 
 #pragma config WRT = OFF
 #pragma config STVREN = ON
-#pragma config BORV = LO
-#pragma config LPBOR = OFF
+#pragma config BORV = HI
+#pragma config LPBOR = ON
 #pragma config LVP = ON
 
 # 26 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\htc.h"

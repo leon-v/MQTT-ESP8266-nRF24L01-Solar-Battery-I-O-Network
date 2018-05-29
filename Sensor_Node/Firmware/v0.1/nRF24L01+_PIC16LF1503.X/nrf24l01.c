@@ -14,28 +14,28 @@
 #define CSLOW() CSPIN = 0
 #define CSHIGH() CSPIN = 1
 
-void nrf24l01ISR(void){
-    
-}
-
 n_STATUS_t status;
 
+#pragma interrupt_level 1
 void nrf24l01SPIStart(void){
     CSLOW();
     __delay_us(10);
 }
 
+#pragma interrupt_level 1
 unsigned char nrf24l01SPISend(unsigned char data){
     SSP1BUF = data;
     while (!SSP1STATbits.BF){ NOP(); }
     return SSP1BUF;
 }
 
+#pragma interrupt_level 1
 void nrf24l01SPIEnd(void){
     __delay_us(10);
     CSHIGH();
 }
 
+#pragma interrupt_level 1
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
     nrf24l01SPIStart();
@@ -48,8 +48,21 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     return data;
 }
 
+void nrf24l01ISR(void){
+    
+    status.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
+    
+    if (status.TX_DS){
+        status.TX_DS = 1;
+        nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
+    }
+    
+}
 
 void nrf24l01SetTransmitMode(void){
+    
+    CELOW();
+    
     n_CONFIG_t config;
     config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
     if (config.PRIM_RX == 1){
@@ -57,14 +70,19 @@ void nrf24l01SetTransmitMode(void){
         nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
         __delay_us(130);
     }
+    
 }
 
 void nrf24l01SetRecieveMode(void){
+    
+    CELOW();
+    
     n_CONFIG_t config;
     config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
     if (config.PRIM_RX == 0){
         config.PRIM_RX = 1;
         nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
+        CEHIGH();
         __delay_us(130);
     }
 }
@@ -73,8 +91,6 @@ void nrf24l01SetRecieveMode(void){
 
 void nrf24l01SendStart(void){
     
-    CELOW();
-    
     nrf24l01SetTransmitMode();
     
     nrf24l01SPIStart();
@@ -82,19 +98,42 @@ void nrf24l01SendStart(void){
     nrf24l01SPISend(n_W_TX_PAYLOAD);
 }
 
-void nrf24l01SendByte(unsigned char payloadByte){
-    nrf24l01SPISend(payloadByte);
+void nrf24l01SendString(char * string){
+    unsigned char i;
+    for (i = 0; string[i] != '\0'; i++){
+        nrf24l01SPISend(string[i]);
+    }
+}
+
+void nrf24l01SendFlash(unsigned char offset){
+    
+    unsigned char btye = 1;
+    unsigned char i = 0;
+    
+    while (1){
+        btye = read_flashmem((unsigned) (offset + i));
+        
+        if (btye == '\0'){
+            break;
+        }
+        
+        nrf24l01SPISend(btye);
+        i++;
+    }
 }
 
 void nrf24l01SendEnd(void){
     
     nrf24l01SPIEnd();
-
+            
     CEHIGH();
     __delay_us(50);
     CELOW();
     
-//    __delay_ms(100);
+    // Wait for the IC to trigger INT and wake up
+    SLEEP();
+    NOP();
+    NOP();
 }
 
 
@@ -146,15 +185,15 @@ void nrf24l01InitRegisters(void){
 	nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
 
 	// Disable Auto ACK MCU needs to do this
-	n_EN_AA_t enAA;
-	enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0);
-	enAA.ENAA_P0 = 0;
-	enAA.ENAA_P1 = 0;
-	enAA.ENAA_P2 = 0;
-	enAA.ENAA_P3 = 0;
-	enAA.ENAA_P4 = 0;
-	enAA.ENAA_P5 = 0;
-	nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte);
+//	n_EN_AA_t enAA;
+//	enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0);
+//	enAA.ENAA_P0 = 0;
+//	enAA.ENAA_P1 = 0;
+//	enAA.ENAA_P2 = 0;
+//	enAA.ENAA_P3 = 0;
+//	enAA.ENAA_P4 = 0;
+//	enAA.ENAA_P5 = 0;
+//	nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte);
     
     
     // Set dynamic payload length

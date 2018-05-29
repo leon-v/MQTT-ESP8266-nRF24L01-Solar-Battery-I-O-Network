@@ -3765,11 +3765,12 @@ extern const unsigned char NVMEM[32];
 
 # 14
 const unsigned char NVMEM[32]@(0x800U-32) = {
-'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '1', 0, 0, 0,
+1,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-# 23
+# 24
 unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 

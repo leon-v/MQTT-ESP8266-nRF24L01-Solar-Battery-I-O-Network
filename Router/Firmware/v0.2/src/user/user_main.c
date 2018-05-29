@@ -88,6 +88,7 @@ void ICACHE_FLASH_ATTR mqttPublishedCb(uint32_t *args){
 	//sleepSetEnable();
 }
 
+
 void ICACHE_FLASH_ATTR mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const char *data, uint32_t data_len){
 	char *topicBuf = (char*)os_zalloc(topic_len+1),
 			*dataBuf = (char*)os_zalloc(data_len+1);
@@ -165,6 +166,9 @@ void ICACHE_FLASH_ATTR user_init(void){
 	INFO("\r\nDEBUG DISABLE\r\n");
 	//uart_init(BIT_RATE_115200, BIT_RATE_115200);
 	os_delay_us(65535);
+	os_delay_us(65535);
+	os_delay_us(65535);
+	os_delay_us(65535);
 
 	struct rst_info* resetInfo;
 	resetInfo = system_get_rst_info();
@@ -198,6 +202,10 @@ void ICACHE_FLASH_ATTR user_init(void){
 		INFO("\r\nStarting MQTT ....\r\n");
 
 		MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, 0);//sysCfg.security
+
+		INFO("MQTT: Init: device_id %s\r\n", sysCfg.device_id);
+		INFO("MQTT: Init: mqtt_user %s\r\n", sysCfg.mqtt_user);
+		INFO("MQTT: Init: mqtt_keepalive %u\r\n", sysCfg.mqtt_keepalive);
 
 		MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
 

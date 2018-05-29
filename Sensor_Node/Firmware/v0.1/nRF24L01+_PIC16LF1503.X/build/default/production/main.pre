@@ -3773,16 +3773,20 @@ void nrf24l01SendByte(unsigned char payloadByte);
 void nrf24l01SendEnd(void);
 void nrf24l01SetRecieveMode(void);
 
+void nrf24l01SendString(char * string);
+void nrf24l01SendFlash(unsigned char offset);
+
 # 6 "flash.h"
 extern const unsigned char NVMEM[32];
 
 # 14
 const unsigned char NVMEM[32]@(0x800U-32) = {
-'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '1', 0, 0, 0,
+1,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-# 23
+# 24
 unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 
@@ -3858,21 +3862,22 @@ extern char * ultoa(char * buf, unsigned long val, int base);
 
 extern char * ftoa(float f, int * status);
 
-# 10 "main.c"
-unsigned char nextMode = 1;
-unsigned char mode = 1;
+# 22 "main.c"
+unsigned char nextMode = 10;
+unsigned char mode = 10;
 
-# 28
+# 30
 long adcSum = 0;
 unsigned char adcLoop = 0;
 char buffer[6];
 char byte[3];
+int intCount = 0;
 
 void interrupt ISR(void){
-
+intCount ++;
 if (PIR1bits.ADIF){
 
-if (mode == 100) {
+if (mode == 2) {
 
 int result = 0x00;
 result = ADRESL;
@@ -3881,7 +3886,7 @@ result|= (ADRESH << 8);
 adcSum+= result;
 
 if (!adcLoop){
-mode = 101;
+mode = 3;
 }else{
 
 ADCON0bits.ADGO = 1;
@@ -3896,32 +3901,8 @@ PIR1bits.ADIF = 0;
 
 if (INTCONbits.INTF){
 nrf24l01ISR();
+intCount++;
 INTCONbits.INTF = 0;
-}
-}
-
-
-void sendName(void){
-
-unsigned int offset = 0;
-unsigned char btye;
-while (offset < 16){
-btye = read_flashmem(offset);
-
-if (btye == 0x00){
-return;
-}
-
-nrf24l01SendByte(btye);
-offset++;
-}
-}
-
-void sendString(char * string){
-
-unsigned char i;
-for (i = 0; string[i] != '\0'; i++){
-nrf24l01SendByte(string[i]);
 }
 }
 
@@ -3935,17 +3916,17 @@ _delay((unsigned long)((200)*(16000000/4000000.0)));
 }
 
 ADCON0bits.ADGO = 1;
-mode = 100;
+mode = 2;
 }
 void loop(){
 
-if (mode != 7) {
+if (mode != 1) {
 asm("clrwdt");
 }
 
 switch (mode){
 
-case 7:
+case 1:
 
 asm("sleep");
 __nop();
@@ -3955,54 +3936,52 @@ mode = nextMode;
 }
 break;
 
-case 1:
+case 10:
+
+
+itoa(buffer, read_flashmem(16), 10);
 
 
 nrf24l01SendStart();
-sendName();
-nrf24l01SendByte('/');
-nrf24l01SendByte('B');
-nrf24l01SendByte('O');
-nrf24l01SendByte('O');
-nrf24l01SendByte('T');
-nrf24l01SendByte('/');
-nrf24l01SendByte('1');
+nrf24l01SendFlash(0);
+nrf24l01SendString( (char *) "/BOOT/");
+nrf24l01SendString(buffer);
 nrf24l01SendEnd();
 
-mode = 2;
+mode = 11;
 break;
 
 
-case 2:
-mode = 7;
-nextMode = 3;
+case 11:
+mode = 1;
+nextMode = 12;
+break;
+
+case 12:
+startADC(3);
+nextMode = 13;
+break;
+
+case 13:
+startADC(7);
+nextMode = 15;
+break;
+
+case 15:
+startADC(29);
+nextMode = 14;
+break;
+
+case 14:
+startADC(31);
+nextMode = 11;
 break;
 
 case 3:
-startADC(3);
-nextMode = 4;
-break;
-
-case 4:
-startADC(7);
-nextMode = 5;
-break;
-
-case 5:
-startADC(31);
-nextMode = 6;
-break;
-
-case 6:
-startADC(29);
-nextMode = 2;
-break;
-
-case 101:
 
 switch (ADCON0bits.CHS){
 case 3:
-adcSum/= 22;
+adcSum= (long) (( (float) adcSum) / 25.05);
 break;
 
 case 7:
@@ -4023,22 +4002,16 @@ adcSum/= 255;
 break;
 }
 
+
 itoa(buffer, adcSum, 10);
 itoa(byte, ADCON0bits.CHS, 10);
 
 nrf24l01SendStart();
-sendName();
-nrf24l01SendByte('/');
-nrf24l01SendByte('A');
-nrf24l01SendByte('D');
-nrf24l01SendByte('C');
-sendString(byte);
-nrf24l01SendByte('/');
-
-unsigned char i;
-for (i = 0; buffer[i] != '\0'; i++){
-nrf24l01SendByte(buffer[i]);
-}
+nrf24l01SendFlash(0);
+nrf24l01SendString((char *) "/ADC");
+nrf24l01SendString(byte);
+nrf24l01SendString((char *) "/");
+nrf24l01SendString(buffer);
 
 nrf24l01SendEnd();
 
@@ -4053,7 +4026,7 @@ break;
 
 void main(void) {
 
-# 222
+# 193
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -4103,13 +4076,16 @@ OPTION_REGbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 12;
+WDTCONbits.WDTPS = 7;
 
 
 
 INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 
+unsigned int bootCount = read_flashmem(16);
+bootCount++;
+write_flashmem(16, bootCount);
 
 while(1){
 loop();

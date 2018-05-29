@@ -18,9 +18,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "17
 [p x STVREN=ON ]
 "18
-[p x BORV=LO ]
+[p x BORV=HI ]
 "19
-[p x LPBOR=OFF ]
+[p x LPBOR=ON ]
 "20
 [p x LVP=ON ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
