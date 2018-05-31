@@ -30,31 +30,31 @@ void ICACHE_FLASH_ATTR wifi_check_ip() {
 	wifiStatus = wifi_station_get_connect_status();
 	switch (wifiStatus) {
 		case STATION_GOT_IP:
-			os_printf("WiFi STATION_GOT_IP\r\n");
+			// os_printf("WiFi STATION_GOT_IP\r\n");
 			break;
 
 		case STATION_CONNECTING:
-			os_printf("WiFi STATION_CONNECTING\r\n");
+			// os_printf("WiFi STATION_CONNECTING\r\n");
 			break;
 
 		case STATION_WRONG_PASSWORD:
-			os_printf("WiFi STATION_WRONG_PASSWORD\r\n");
+			// os_printf("WiFi STATION_WRONG_PASSWORD\r\n");
 			wifi_station_connect();
 			break;
 
 		case STATION_NO_AP_FOUND:
-			os_printf("WiFi STATION_NO_AP_FOUND\r\n");
+			// os_printf("WiFi STATION_NO_AP_FOUND\r\n");
 			wifi_station_connect();
 			break;
 
 		case STATION_CONNECT_FAIL:
-			os_printf("WiFi STATION_CONNECT_FAIL\r\n");
+			// os_printf("WiFi STATION_CONNECT_FAIL\r\n");
 			wifi_station_connect();
 
 
-		case STATION_IDLE:
-		default:
-			os_printf("WiFi STATION_IDLE\r\n");
+		// case STATION_IDLE:
+		// default:
+			// os_printf("WiFi STATION_IDLE\r\n");
 
 	}
 

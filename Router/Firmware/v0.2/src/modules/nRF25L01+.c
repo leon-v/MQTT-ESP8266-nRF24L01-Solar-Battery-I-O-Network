@@ -30,9 +30,12 @@ const uint8 n_ADDRESS_MUL = 33;
 #define CSLOW()		gpio_output_set(0, CSPIN, CSPIN, 0); // (high, low, out, in)
 #define CSHIGH()	gpio_output_set(CSPIN, 0, CSPIN, 0); // (high, low, out, in)
 
-
-
 LOCAL MQTT_Client* mqttClient;
+
+#define NRF24L01_TASK_PRIO             	1
+#define NRF24L01_TASK_QUEUE_SIZE        1
+os_event_t nrf24l01procTaskQueue[NRF24L01_TASK_QUEUE_SIZE];
+
 
 uint8 paused = 1;
 void ICACHE_FLASH_ATTR nrf24l01Pause(void){
@@ -278,14 +281,12 @@ void nrf24l01CheckRecieve(void){
 
 	rf24l01UpdateStatus();
 
-	// os_printf("nrf24l01CheckRecieve %02X \r\n", status.byte);
+	os_printf("nrf24l01CheckRecieve %02X \r\n", status.byte);
 
 	if (status.RX_DR){
 
 		// (high, low, out, in)
 		gpio_output_set(0, CEPIN, CEPIN, 0);
-
-		
 
 		// Get data
 		uint8 width = nrf24l01Send(n_R_RX_PL_WID, 0); //1
@@ -331,11 +332,24 @@ void nrf24l01CheckRecieve(void){
 		// (high, low, out, in)
 		gpio_output_set(CEPIN, 0, CEPIN, 0);
 	}
+
+	ets_intr_unlock();
 }
 
 static os_timer_t spiTestTimer;
 void ICACHE_FLASH_ATTR spiTestTimerFunction(void *arg){
-	nrf24l01CheckRecieve();
+	os_printf("nrf24l01 Timer \r\n");
+	system_os_post(NRF24L01_TASK_PRIO, 0, (os_param_t) mqttClient);
+}
+
+
+void ICACHE_FLASH_ATTR nrf24l01_Task(os_event_t *e) {
+
+	
+
+	os_printf("nrf24l01_Task \r\n");
+
+    nrf24l01CheckRecieve();
 }
 
 
@@ -343,9 +357,15 @@ void nrf24l01Interrupt(int * arg){
 
 	uint32 gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
 
-	// os_printf("nrf24l01Interrupt\r\n");
+	ets_intr_lock();		 //close	interrupt
 
-	nrf24l01CheckRecieve();
+	os_printf("nrf24l01Interrupt\r\n");
+
+	// nrf24l01CheckRecieve();
+
+	// os_timer_arm(&spiTestTimer, 10, 0);
+
+	system_os_post(NRF24L01_TASK_PRIO, 0, (os_param_t) mqttClient);
 
 	GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);
 }
@@ -364,15 +384,9 @@ void ICACHE_FLASH_ATTR nrf24l01Init(MQTT_Client* p_mqttClient){
 	GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, BIT(5));
 
 	gpio_output_set(0, GPIO_ID_PIN(5), 0, GPIO_ID_PIN(5));
-	gpio_pin_intr_state_set(GPIO_ID_PIN(5), GPIO_PIN_INTR_LOLEVEL);
+	gpio_pin_intr_state_set(GPIO_ID_PIN(5), GPIO_PIN_INTR_NEGEDGE);
 	ets_isr_attach(ETS_GPIO_INUM, (ets_isr_t) nrf24l01Interrupt, NULL);
 	ETS_GPIO_INTR_ENABLE();// Enable interrupts
-
-	
-	os_timer_disarm(&spiTestTimer);
-	os_timer_setfn(&spiTestTimer, (os_timer_func_t *)spiTestTimerFunction, NULL);
-
-	os_timer_arm(&spiTestTimer, 2000, 1);
 
 
 	CELOW();
@@ -388,6 +402,13 @@ void ICACHE_FLASH_ATTR nrf24l01Init(MQTT_Client* p_mqttClient){
     os_delay_us(2000);
     
     CEHIGH();
+
+
+	os_timer_disarm(&spiTestTimer);
+	os_timer_setfn(&spiTestTimer, (os_timer_func_t *)spiTestTimerFunction, NULL);
+	os_timer_arm(&spiTestTimer, 2000, 1);
+
+	system_os_task(nrf24l01_Task, NRF24L01_TASK_PRIO, nrf24l01procTaskQueue, NRF24L01_TASK_QUEUE_SIZE);
 
 }
 // void spi_mast_byte_write(uint8 spi_no,uint8 reg, uint8 value)

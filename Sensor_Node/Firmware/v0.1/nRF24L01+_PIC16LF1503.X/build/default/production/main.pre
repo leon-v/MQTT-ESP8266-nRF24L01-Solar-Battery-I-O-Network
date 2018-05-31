@@ -3782,7 +3782,7 @@ extern const unsigned char NVMEM[32];
 # 14
 const unsigned char NVMEM[32]@(0x800U-32) = {
 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '1', 0, 0, 0,
-1,
+0x0000,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
@@ -3871,10 +3871,9 @@ long adcSum = 0;
 unsigned char adcLoop = 0;
 char buffer[6];
 char byte[3];
-int intCount = 0;
+unsigned char sleepLoop = 0;
 
 void interrupt ISR(void){
-intCount ++;
 if (PIR1bits.ADIF){
 
 if (mode == 2) {
@@ -3901,7 +3900,6 @@ PIR1bits.ADIF = 0;
 
 if (INTCONbits.INTF){
 nrf24l01ISR();
-intCount++;
 INTCONbits.INTF = 0;
 }
 }
@@ -3933,6 +3931,11 @@ __nop();
 __nop();
 if (!STATUSbits.nTO && !STATUSbits.nPD){
 mode = nextMode;
+sleepLoop = 0;
+}
+
+if (sleepLoop++ > 200){
+asm("reset");
 }
 break;
 
@@ -3940,7 +3943,6 @@ case 10:
 
 
 itoa(buffer, read_flashmem(16), 10);
-
 
 nrf24l01SendStart();
 nrf24l01SendFlash(0);
@@ -3955,6 +3957,7 @@ break;
 case 11:
 mode = 1;
 nextMode = 12;
+
 break;
 
 case 12:
@@ -4026,7 +4029,7 @@ break;
 
 void main(void) {
 
-# 193
+# 196
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -4084,6 +4087,9 @@ INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 
 unsigned int bootCount = read_flashmem(16);
+if (bootCount == 13313){
+bootCount = 1;
+}
 bootCount++;
 write_flashmem(16, bootCount);
 

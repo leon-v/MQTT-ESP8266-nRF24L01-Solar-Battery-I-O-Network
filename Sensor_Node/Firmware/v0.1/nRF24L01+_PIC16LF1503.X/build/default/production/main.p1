@@ -3011,7 +3011,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 0 `i `uc
 -> -> 0 `i `uc
 "16
--> -> 1 `i `uc
+-> -> 0 `i `uc
 "17
 -> -> 0 `i `uc
 -> -> 0 `i `uc
@@ -3033,7 +3033,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;flash.h: 14: const unsigned char NVMEM[32]@(0x800U-32) = {
 [; ;flash.h: 15: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '1', 0, 0, 0,
-[; ;flash.h: 16: 1,
+[; ;flash.h: 16: 0x0000,
 [; ;flash.h: 17: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 [; ;flash.h: 18: };
 [; ;flash.h: 24: unsigned int read_flashmem(unsigned int offset);
@@ -3120,11 +3120,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _byte `uc ~T0 @X0 -> 3 `i e ]
 [; ;main.c: 33: char byte[3];
 "34
-[v _intCount `i ~T0 @X0 1 e ]
-[i _intCount
--> 0 `i
+[v _sleepLoop `uc ~T0 @X0 1 e ]
+[i _sleepLoop
+-> -> 0 `i `uc
 ]
-[; ;main.c: 34: int intCount = 0;
+[; ;main.c: 34: unsigned char sleepLoop = 0;
 [v $root$_ISR `(v ~T0 @X0 0 e ]
 [v F3035 `(v ~T0 @X0 1 tf ]
 "36
@@ -3133,508 +3133,527 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 36: void interrupt ISR(void){
 [e :U _ISR ]
 [f ]
-[; ;main.c: 37: intCount ++;
+[; ;main.c: 37: if (PIR1bits.ADIF){
 "37
-[e ++ _intCount -> 1 `i ]
-[; ;main.c: 38: if (PIR1bits.ADIF){
-"38
 [e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 339  ]
 {
-[; ;main.c: 40: if (mode == 2) {
-"40
+[; ;main.c: 39: if (mode == 2) {
+"39
 [e $ ! == -> _mode `i -> 2 `i 340  ]
 {
-"42
+"41
 [v _result `i ~T0 @X0 1 a ]
-[; ;main.c: 42: int result = 0x00;
+[; ;main.c: 41: int result = 0x00;
 [e = _result -> 0 `i ]
-[; ;main.c: 43: result = ADRESL;
-"43
+[; ;main.c: 42: result = ADRESL;
+"42
 [e = _result -> _ADRESL `i ]
-[; ;main.c: 44: result|= (ADRESH << 8);
-"44
+[; ;main.c: 43: result|= (ADRESH << 8);
+"43
 [e =| _result << -> _ADRESH `i -> 8 `i ]
-[; ;main.c: 46: adcSum+= result;
-"46
+[; ;main.c: 45: adcSum+= result;
+"45
 [e =+ _adcSum -> _result `l ]
-[; ;main.c: 48: if (!adcLoop){
-"48
+[; ;main.c: 47: if (!adcLoop){
+"47
 [e $ ! ! != -> _adcLoop `i -> -> -> 0 `i `uc `i 341  ]
 {
-[; ;main.c: 49: mode = 3;
-"49
+[; ;main.c: 48: mode = 3;
+"48
 [e = _mode -> -> 3 `i `uc ]
-"50
+"49
 }
-[; ;main.c: 50: }else{
+[; ;main.c: 49: }else{
 [e $U 342  ]
 [e :U 341 ]
 {
-[; ;main.c: 52: ADCON0bits.ADGO = 1;
-"52
+[; ;main.c: 51: ADCON0bits.ADGO = 1;
+"51
 [e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
-"53
+"52
 }
 [e :U 342 ]
-[; ;main.c: 53: }
-[; ;main.c: 55: adcLoop--;
-"55
+[; ;main.c: 52: }
+[; ;main.c: 54: adcLoop--;
+"54
 [e -- _adcLoop -> -> 1 `i `uc ]
-"56
+"55
 }
 [e :U 340 ]
-[; ;main.c: 56: }
-[; ;main.c: 59: PIR1bits.ADIF = 0;
-"59
+[; ;main.c: 55: }
+[; ;main.c: 58: PIR1bits.ADIF = 0;
+"58
 [e = . . _PIR1bits 0 5 -> -> 0 `i `uc ]
-"60
+"59
 }
 [e :U 339 ]
-[; ;main.c: 60: }
-[; ;main.c: 62: if (INTCONbits.INTF){
-"62
+[; ;main.c: 59: }
+[; ;main.c: 61: if (INTCONbits.INTF){
+"61
 [e $ ! != -> . . _INTCONbits 0 1 `i -> -> -> 0 `i `Vuc `i 343  ]
 {
-[; ;main.c: 63: nrf24l01ISR();
-"63
+[; ;main.c: 62: nrf24l01ISR();
+"62
 [e ( _nrf24l01ISR ..  ]
-[; ;main.c: 64: intCount++;
-"64
-[e ++ _intCount -> 1 `i ]
-[; ;main.c: 65: INTCONbits.INTF = 0;
-"65
+[; ;main.c: 63: INTCONbits.INTF = 0;
+"63
 [e = . . _INTCONbits 0 1 -> -> 0 `i `uc ]
-"66
+"64
 }
 [e :U 343 ]
-[; ;main.c: 66: }
-[; ;main.c: 67: }
-"67
+[; ;main.c: 64: }
+[; ;main.c: 65: }
+"65
 [e :UE 338 ]
 }
-"69
+"67
 [v _startADC `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;main.c: 69: void startADC(unsigned char channel){
+[; ;main.c: 67: void startADC(unsigned char channel){
 [e :U _startADC ]
 [v _channel `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;main.c: 70: adcSum = 0;
-"70
+[; ;main.c: 68: adcSum = 0;
+"68
 [e = _adcSum -> -> 0 `i `l ]
-[; ;main.c: 71: adcLoop = 255;
-"71
+[; ;main.c: 69: adcLoop = 255;
+"69
 [e = _adcLoop -> -> 255 `i `uc ]
-[; ;main.c: 73: if (ADCON0bits.CHS != channel) {
-"73
+[; ;main.c: 71: if (ADCON0bits.CHS != channel) {
+"71
 [e $ ! != -> . . _ADCON0bits 0 2 `i -> _channel `i 345  ]
 {
-[; ;main.c: 74: ADCON0bits.CHS = channel;
-"74
+[; ;main.c: 72: ADCON0bits.CHS = channel;
+"72
 [e = . . _ADCON0bits 0 2 _channel ]
-[; ;main.c: 75: _delay((unsigned long)((200)*(16000000/4000000.0)));
-"75
+[; ;main.c: 73: _delay((unsigned long)((200)*(16000000/4000000.0)));
+"73
 [e ( __delay (1 -> * -> -> 200 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-"76
+"74
 }
 [e :U 345 ]
-[; ;main.c: 76: }
-[; ;main.c: 78: ADCON0bits.ADGO = 1;
-"78
+[; ;main.c: 74: }
+[; ;main.c: 76: ADCON0bits.ADGO = 1;
+"76
 [e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
-[; ;main.c: 79: mode = 2;
-"79
+[; ;main.c: 77: mode = 2;
+"77
 [e = _mode -> -> 2 `i `uc ]
-[; ;main.c: 80: }
-"80
+[; ;main.c: 78: }
+"78
 [e :UE 344 ]
 }
-"81
+"79
 [v _loop `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 81: void loop(){
+[; ;main.c: 79: void loop(){
 [e :U _loop ]
 [f ]
-[; ;main.c: 83: if (mode != 1) {
-"83
+[; ;main.c: 81: if (mode != 1) {
+"81
 [e $ ! != -> _mode `i -> 1 `i 347  ]
 {
-[; ;main.c: 84: asm("clrwdt");
-"84
+[; ;main.c: 82: asm("clrwdt");
+"82
 [; <" clrwdt ;# ">
-"85
+"83
 }
 [e :U 347 ]
-[; ;main.c: 85: }
-[; ;main.c: 87: switch (mode){
-"87
+[; ;main.c: 83: }
+[; ;main.c: 85: switch (mode){
+"85
 [e $U 349  ]
 {
-[; ;main.c: 89: case 1:
-"89
+[; ;main.c: 87: case 1:
+"87
 [e :U 350 ]
-[; ;main.c: 91: asm("sleep");
-"91
+[; ;main.c: 89: asm("sleep");
+"89
 [; <" sleep ;# ">
-[; ;main.c: 92: __nop();
+[; ;main.c: 90: __nop();
+"90
+[e ( ___nop ..  ]
+[; ;main.c: 91: __nop();
+"91
+[e ( ___nop ..  ]
+[; ;main.c: 92: if (!STATUSbits.nTO && !STATUSbits.nPD){
 "92
-[e ( ___nop ..  ]
-[; ;main.c: 93: __nop();
-"93
-[e ( ___nop ..  ]
-[; ;main.c: 94: if (!STATUSbits.nTO && !STATUSbits.nPD){
-"94
 [e $ ! && ! != -> . . _STATUSbits 0 4 `i -> -> -> 0 `i `Vuc `i ! != -> . . _STATUSbits 0 3 `i -> -> -> 0 `i `Vuc `i 351  ]
 {
-[; ;main.c: 95: mode = nextMode;
-"95
+[; ;main.c: 93: mode = nextMode;
+"93
 [e = _mode _nextMode ]
-"96
+[; ;main.c: 94: sleepLoop = 0;
+"94
+[e = _sleepLoop -> -> 0 `i `uc ]
+"95
 }
 [e :U 351 ]
-[; ;main.c: 96: }
-[; ;main.c: 97: break;
+[; ;main.c: 95: }
+[; ;main.c: 97: if (sleepLoop++ > 200){
 "97
-[e $U 348  ]
-[; ;main.c: 99: case 10:
-"99
-[e :U 352 ]
-[; ;main.c: 102: itoa(buffer, read_flashmem(16), 10);
-"102
-[e ( _itoa (3 , , &U _buffer -> ( _read_flashmem (1 -> -> 16 `i `ui `i -> 10 `i ]
-[; ;main.c: 105: nrf24l01SendStart();
-"105
-[e ( _nrf24l01SendStart ..  ]
-[; ;main.c: 106: nrf24l01SendFlash(0);
-"106
-[e ( _nrf24l01SendFlash (1 -> -> 0 `i `uc ]
-[; ;main.c: 107: nrf24l01SendString( (char *) "/BOOT/");
-"107
-[e ( _nrf24l01SendString (1 -> :s 1C `*uc ]
-[; ;main.c: 108: nrf24l01SendString(buffer);
-"108
-[e ( _nrf24l01SendString (1 &U _buffer ]
-[; ;main.c: 109: nrf24l01SendEnd();
-"109
-[e ( _nrf24l01SendEnd ..  ]
-[; ;main.c: 111: mode = 11;
-"111
-[e = _mode -> -> 11 `i `uc ]
-[; ;main.c: 112: break;
-"112
-[e $U 348  ]
-[; ;main.c: 115: case 11:
-"115
-[e :U 353 ]
-[; ;main.c: 116: mode = 1;
-"116
-[e = _mode -> -> 1 `i `uc ]
-[; ;main.c: 117: nextMode = 12;
-"117
-[e = _nextMode -> -> 12 `i `uc ]
-[; ;main.c: 118: break;
-"118
-[e $U 348  ]
-[; ;main.c: 120: case 12:
-"120
-[e :U 354 ]
-[; ;main.c: 121: startADC(3);
-"121
-[e ( _startADC (1 -> -> 3 `i `uc ]
-[; ;main.c: 122: nextMode = 13;
-"122
-[e = _nextMode -> -> 13 `i `uc ]
-[; ;main.c: 123: break;
-"123
-[e $U 348  ]
-[; ;main.c: 125: case 13:
-"125
-[e :U 355 ]
-[; ;main.c: 126: startADC(7);
-"126
-[e ( _startADC (1 -> -> 7 `i `uc ]
-[; ;main.c: 127: nextMode = 15;
-"127
-[e = _nextMode -> -> 15 `i `uc ]
-[; ;main.c: 128: break;
-"128
-[e $U 348  ]
-[; ;main.c: 130: case 15:
-"130
-[e :U 356 ]
-[; ;main.c: 131: startADC(29);
-"131
-[e ( _startADC (1 -> -> 29 `i `uc ]
-[; ;main.c: 132: nextMode = 14;
-"132
-[e = _nextMode -> -> 14 `i `uc ]
-[; ;main.c: 133: break;
-"133
-[e $U 348  ]
-[; ;main.c: 135: case 14:
-"135
-[e :U 357 ]
-[; ;main.c: 136: startADC(31);
-"136
-[e ( _startADC (1 -> -> 31 `i `uc ]
-[; ;main.c: 137: nextMode = 11;
-"137
-[e = _nextMode -> -> 11 `i `uc ]
-[; ;main.c: 138: break;
-"138
-[e $U 348  ]
-[; ;main.c: 140: case 3:
-"140
-[e :U 358 ]
-[; ;main.c: 142: switch (ADCON0bits.CHS){
-"142
-[e $U 360  ]
+[e $ ! > -> ++ _sleepLoop -> -> 1 `i `uc `i -> 200 `i 352  ]
 {
+[; ;main.c: 98: asm("reset");
+"98
+[; <" reset ;# ">
+"99
+}
+[e :U 352 ]
+[; ;main.c: 99: }
+[; ;main.c: 100: break;
+"100
+[e $U 348  ]
+[; ;main.c: 102: case 10:
+"102
+[e :U 353 ]
+[; ;main.c: 105: itoa(buffer, read_flashmem(16), 10);
+"105
+[e ( _itoa (3 , , &U _buffer -> ( _read_flashmem (1 -> -> 16 `i `ui `i -> 10 `i ]
+[; ;main.c: 107: nrf24l01SendStart();
+"107
+[e ( _nrf24l01SendStart ..  ]
+[; ;main.c: 108: nrf24l01SendFlash(0);
+"108
+[e ( _nrf24l01SendFlash (1 -> -> 0 `i `uc ]
+[; ;main.c: 109: nrf24l01SendString( (char *) "/BOOT/");
+"109
+[e ( _nrf24l01SendString (1 -> :s 1C `*uc ]
+[; ;main.c: 110: nrf24l01SendString(buffer);
+"110
+[e ( _nrf24l01SendString (1 &U _buffer ]
+[; ;main.c: 111: nrf24l01SendEnd();
+"111
+[e ( _nrf24l01SendEnd ..  ]
+[; ;main.c: 113: mode = 11;
+"113
+[e = _mode -> -> 11 `i `uc ]
+[; ;main.c: 114: break;
+"114
+[e $U 348  ]
+[; ;main.c: 117: case 11:
+"117
+[e :U 354 ]
+[; ;main.c: 118: mode = 1;
+"118
+[e = _mode -> -> 1 `i `uc ]
+[; ;main.c: 119: nextMode = 12;
+"119
+[e = _nextMode -> -> 12 `i `uc ]
+[; ;main.c: 121: break;
+"121
+[e $U 348  ]
+[; ;main.c: 123: case 12:
+"123
+[e :U 355 ]
+[; ;main.c: 124: startADC(3);
+"124
+[e ( _startADC (1 -> -> 3 `i `uc ]
+[; ;main.c: 125: nextMode = 13;
+"125
+[e = _nextMode -> -> 13 `i `uc ]
+[; ;main.c: 126: break;
+"126
+[e $U 348  ]
+[; ;main.c: 128: case 13:
+"128
+[e :U 356 ]
+[; ;main.c: 129: startADC(7);
+"129
+[e ( _startADC (1 -> -> 7 `i `uc ]
+[; ;main.c: 130: nextMode = 15;
+"130
+[e = _nextMode -> -> 15 `i `uc ]
+[; ;main.c: 131: break;
+"131
+[e $U 348  ]
+[; ;main.c: 133: case 15:
+"133
+[e :U 357 ]
+[; ;main.c: 134: startADC(29);
+"134
+[e ( _startADC (1 -> -> 29 `i `uc ]
+[; ;main.c: 135: nextMode = 14;
+"135
+[e = _nextMode -> -> 14 `i `uc ]
+[; ;main.c: 136: break;
+"136
+[e $U 348  ]
+[; ;main.c: 138: case 14:
+"138
+[e :U 358 ]
+[; ;main.c: 139: startADC(31);
+"139
+[e ( _startADC (1 -> -> 31 `i `uc ]
+[; ;main.c: 140: nextMode = 11;
+"140
+[e = _nextMode -> -> 11 `i `uc ]
+[; ;main.c: 141: break;
+"141
+[e $U 348  ]
 [; ;main.c: 143: case 3:
 "143
-[e :U 361 ]
-[; ;main.c: 144: adcSum= (long) (( (float) adcSum) / 25.05);
-"144
-[e = _adcSum -> / -> -> _adcSum `f `d .25.05 `l ]
-[; ;main.c: 145: break;
-"145
-[e $U 359  ]
-[; ;main.c: 147: case 7:
-"147
-[e :U 362 ]
-[; ;main.c: 148: adcSum/= 25;
-"148
-[e =/ _adcSum -> -> 25 `uc `l ]
-[; ;main.c: 149: break;
-"149
-[e $U 359  ]
-[; ;main.c: 151: case 31:
-"151
-[e :U 363 ]
-[; ;main.c: 152: adcSum= (long) (( (float) adcSum) / 24.8);
-"152
-[e = _adcSum -> / -> -> _adcSum `f `d .24.8 `l ]
-[; ;main.c: 153: break;
-"153
-[e $U 359  ]
-[; ;main.c: 155: case 29:
-"155
-[e :U 364 ]
-[; ;main.c: 156: adcSum/= 2089;
-"156
-[e =/ _adcSum -> -> 2089 `us `l ]
-[; ;main.c: 157: adcSum-= 40;
-"157
-[e =- _adcSum -> -> 40 `i `l ]
-[; ;main.c: 158: break;
-"158
-[e $U 359  ]
-[; ;main.c: 160: default:
-"160
-[e :U 365 ]
-[; ;main.c: 161: adcSum/= 255;
-"161
-[e =/ _adcSum -> -> 255 `uc `l ]
-[; ;main.c: 162: break;
-"162
-[e $U 359  ]
-"163
-}
-[; ;main.c: 163: }
-[e $U 359  ]
-"142
-[e :U 360 ]
-[e [\ . . _ADCON0bits 0 2 , $ -> -> 3 `i `uc 361
- , $ -> -> 7 `i `uc 362
- , $ -> -> 31 `i `uc 363
- , $ -> -> 29 `i `uc 364
- 365 ]
-"163
 [e :U 359 ]
-[; ;main.c: 166: itoa(buffer, adcSum, 10);
+[; ;main.c: 145: switch (ADCON0bits.CHS){
+"145
+[e $U 361  ]
+{
+[; ;main.c: 146: case 3:
+"146
+[e :U 362 ]
+[; ;main.c: 147: adcSum= (long) (( (float) adcSum) / 25.05);
+"147
+[e = _adcSum -> / -> -> _adcSum `f `d .25.05 `l ]
+[; ;main.c: 148: break;
+"148
+[e $U 360  ]
+[; ;main.c: 150: case 7:
+"150
+[e :U 363 ]
+[; ;main.c: 151: adcSum/= 25;
+"151
+[e =/ _adcSum -> -> 25 `uc `l ]
+[; ;main.c: 152: break;
+"152
+[e $U 360  ]
+[; ;main.c: 154: case 31:
+"154
+[e :U 364 ]
+[; ;main.c: 155: adcSum= (long) (( (float) adcSum) / 24.8);
+"155
+[e = _adcSum -> / -> -> _adcSum `f `d .24.8 `l ]
+[; ;main.c: 156: break;
+"156
+[e $U 360  ]
+[; ;main.c: 158: case 29:
+"158
+[e :U 365 ]
+[; ;main.c: 159: adcSum/= 2089;
+"159
+[e =/ _adcSum -> -> 2089 `us `l ]
+[; ;main.c: 160: adcSum-= 40;
+"160
+[e =- _adcSum -> -> 40 `i `l ]
+[; ;main.c: 161: break;
+"161
+[e $U 360  ]
+[; ;main.c: 163: default:
+"163
+[e :U 366 ]
+[; ;main.c: 164: adcSum/= 255;
+"164
+[e =/ _adcSum -> -> 255 `uc `l ]
+[; ;main.c: 165: break;
+"165
+[e $U 360  ]
 "166
-[e ( _itoa (3 , , &U _buffer -> _adcSum `i -> 10 `i ]
-[; ;main.c: 167: itoa(byte, ADCON0bits.CHS, 10);
-"167
-[e ( _itoa (3 , , &U _byte -> . . _ADCON0bits 0 2 `i -> 10 `i ]
-[; ;main.c: 169: nrf24l01SendStart();
-"169
-[e ( _nrf24l01SendStart ..  ]
-[; ;main.c: 170: nrf24l01SendFlash(0);
-"170
-[e ( _nrf24l01SendFlash (1 -> -> 0 `i `uc ]
-[; ;main.c: 171: nrf24l01SendString((char *) "/ADC");
-"171
-[e ( _nrf24l01SendString (1 -> :s 2C `*uc ]
-[; ;main.c: 172: nrf24l01SendString(byte);
-"172
-[e ( _nrf24l01SendString (1 &U _byte ]
-[; ;main.c: 173: nrf24l01SendString((char *) "/");
-"173
-[e ( _nrf24l01SendString (1 -> :s 3C `*uc ]
-[; ;main.c: 174: nrf24l01SendString(buffer);
-"174
-[e ( _nrf24l01SendString (1 &U _buffer ]
-[; ;main.c: 176: nrf24l01SendEnd();
-"176
-[e ( _nrf24l01SendEnd ..  ]
-[; ;main.c: 178: mode = nextMode;
-"178
-[e = _mode _nextMode ]
-[; ;main.c: 179: break;
-"179
-[e $U 348  ]
-"181
 }
-[; ;main.c: 181: }
+[; ;main.c: 166: }
+[e $U 360  ]
+"145
+[e :U 361 ]
+[e [\ . . _ADCON0bits 0 2 , $ -> -> 3 `i `uc 362
+ , $ -> -> 7 `i `uc 363
+ , $ -> -> 31 `i `uc 364
+ , $ -> -> 29 `i `uc 365
+ 366 ]
+"166
+[e :U 360 ]
+[; ;main.c: 169: itoa(buffer, adcSum, 10);
+"169
+[e ( _itoa (3 , , &U _buffer -> _adcSum `i -> 10 `i ]
+[; ;main.c: 170: itoa(byte, ADCON0bits.CHS, 10);
+"170
+[e ( _itoa (3 , , &U _byte -> . . _ADCON0bits 0 2 `i -> 10 `i ]
+[; ;main.c: 172: nrf24l01SendStart();
+"172
+[e ( _nrf24l01SendStart ..  ]
+[; ;main.c: 173: nrf24l01SendFlash(0);
+"173
+[e ( _nrf24l01SendFlash (1 -> -> 0 `i `uc ]
+[; ;main.c: 174: nrf24l01SendString((char *) "/ADC");
+"174
+[e ( _nrf24l01SendString (1 -> :s 2C `*uc ]
+[; ;main.c: 175: nrf24l01SendString(byte);
+"175
+[e ( _nrf24l01SendString (1 &U _byte ]
+[; ;main.c: 176: nrf24l01SendString((char *) "/");
+"176
+[e ( _nrf24l01SendString (1 -> :s 3C `*uc ]
+[; ;main.c: 177: nrf24l01SendString(buffer);
+"177
+[e ( _nrf24l01SendString (1 &U _buffer ]
+[; ;main.c: 179: nrf24l01SendEnd();
+"179
+[e ( _nrf24l01SendEnd ..  ]
+[; ;main.c: 181: mode = nextMode;
+"181
+[e = _mode _nextMode ]
+[; ;main.c: 182: break;
+"182
 [e $U 348  ]
-"87
+"184
+}
+[; ;main.c: 184: }
+[e $U 348  ]
+"85
 [e :U 349 ]
 [e [\ _mode , $ -> -> 1 `i `uc 350
- , $ -> -> 10 `i `uc 352
- , $ -> -> 11 `i `uc 353
- , $ -> -> 12 `i `uc 354
- , $ -> -> 13 `i `uc 355
- , $ -> -> 15 `i `uc 356
- , $ -> -> 14 `i `uc 357
- , $ -> -> 3 `i `uc 358
+ , $ -> -> 10 `i `uc 353
+ , $ -> -> 11 `i `uc 354
+ , $ -> -> 12 `i `uc 355
+ , $ -> -> 13 `i `uc 356
+ , $ -> -> 15 `i `uc 357
+ , $ -> -> 14 `i `uc 358
+ , $ -> -> 3 `i `uc 359
  348 ]
-"181
-[e :U 348 ]
-[; ;main.c: 184: }
 "184
+[e :U 348 ]
+[; ;main.c: 187: }
+"187
 [e :UE 346 ]
 }
 [v $root$_main `(v ~T0 @X0 0 e ]
-"187
+"190
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 187: void main(void) {
+[; ;main.c: 190: void main(void) {
 [e :U _main ]
 [f ]
-[; ;main.c: 193: INTCONbits.PEIE = 0;
-"193
-[e = . . _INTCONbits 0 6 -> -> 0 `i `uc ]
-[; ;main.c: 194: INTCONbits.GIE = 0;
-"194
-[e = . . _INTCONbits 0 7 -> -> 0 `i `uc ]
-[; ;main.c: 196: OSCCONbits.IRCF = 0b1111;
+[; ;main.c: 196: INTCONbits.PEIE = 0;
 "196
-[e = . . _OSCCONbits 0 2 -> -> 15 `i `uc ]
-[; ;main.c: 197: OSCCONbits.SCS = 0b10;
+[e = . . _INTCONbits 0 6 -> -> 0 `i `uc ]
+[; ;main.c: 197: INTCONbits.GIE = 0;
 "197
-[e = . . _OSCCONbits 0 0 -> -> 2 `i `uc ]
-[; ;main.c: 199: _delay((unsigned long)((10)*(16000000/4000.0)));
+[e = . . _INTCONbits 0 7 -> -> 0 `i `uc ]
+[; ;main.c: 199: OSCCONbits.IRCF = 0b1111;
 "199
+[e = . . _OSCCONbits 0 2 -> -> 15 `i `uc ]
+[; ;main.c: 200: OSCCONbits.SCS = 0b10;
+"200
+[e = . . _OSCCONbits 0 0 -> -> 2 `i `uc ]
+[; ;main.c: 202: _delay((unsigned long)((10)*(16000000/4000.0)));
+"202
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
-[; ;main.c: 201: nrf24l01Init();
-"201
+[; ;main.c: 204: nrf24l01Init();
+"204
 [e ( _nrf24l01Init ..  ]
-[; ;main.c: 203: OPTION_REGbits.nWPUEN = 0;
-"203
-[e = . . _OPTION_REGbits 0 5 -> -> 0 `i `uc ]
-[; ;main.c: 206: FVRCONbits.FVREN = 0;
+[; ;main.c: 206: OPTION_REGbits.nWPUEN = 0;
 "206
+[e = . . _OPTION_REGbits 0 5 -> -> 0 `i `uc ]
+[; ;main.c: 209: FVRCONbits.FVREN = 0;
+"209
 [e = . . _FVRCONbits 0 5 -> -> 0 `i `uc ]
-[; ;main.c: 207: FVRCONbits.ADFVR = 1;
-"207
+[; ;main.c: 210: FVRCONbits.ADFVR = 1;
+"210
 [e = . . _FVRCONbits 0 0 -> -> 1 `i `uc ]
-[; ;main.c: 208: FVRCONbits.FVREN = 1;
-"208
-[e = . . _FVRCONbits 0 5 -> -> 1 `i `uc ]
-[; ;main.c: 211: FVRCONbits.TSEN = 0;
+[; ;main.c: 211: FVRCONbits.FVREN = 1;
 "211
+[e = . . _FVRCONbits 0 5 -> -> 1 `i `uc ]
+[; ;main.c: 214: FVRCONbits.TSEN = 0;
+"214
 [e = . . _FVRCONbits 0 3 -> -> 0 `i `uc ]
-[; ;main.c: 212: FVRCONbits.TSRNG = 0;
-"212
+[; ;main.c: 215: FVRCONbits.TSRNG = 0;
+"215
 [e = . . _FVRCONbits 0 2 -> -> 0 `i `uc ]
-[; ;main.c: 213: FVRCONbits.TSEN = 1;
-"213
-[e = . . _FVRCONbits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 216: ADCON0bits.ADON = 0;
+[; ;main.c: 216: FVRCONbits.TSEN = 1;
 "216
-[e = . . _ADCON0bits 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 218: ANSELAbits.ANSA4 = 1;
-"218
-[e = . . _ANSELAbits 0 4 -> -> 1 `i `uc ]
-[; ;main.c: 219: TRISAbits.TRISA4 = 1;
+[e = . . _FVRCONbits 0 3 -> -> 1 `i `uc ]
+[; ;main.c: 219: ADCON0bits.ADON = 0;
 "219
-[e = . . _TRISAbits 0 4 -> -> 1 `i `uc ]
-[; ;main.c: 220: WPUAbits.WPUA4 = 0;
-"220
-[e = . . _WPUAbits 0 4 -> -> 0 `i `uc ]
-[; ;main.c: 222: ANSELCbits.ANSC3 = 1;
+[e = . . _ADCON0bits 0 0 -> -> 0 `i `uc ]
+[; ;main.c: 221: ANSELAbits.ANSA4 = 1;
+"221
+[e = . . _ANSELAbits 0 4 -> -> 1 `i `uc ]
+[; ;main.c: 222: TRISAbits.TRISA4 = 1;
 "222
-[e = . . _ANSELCbits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 223: TRISCbits.TRISC3 = 1;
+[e = . . _TRISAbits 0 4 -> -> 1 `i `uc ]
+[; ;main.c: 223: WPUAbits.WPUA4 = 0;
 "223
-[e = . . _TRISCbits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 225: ADCON1bits.ADCS = 0b111;
+[e = . . _WPUAbits 0 4 -> -> 0 `i `uc ]
+[; ;main.c: 225: ANSELCbits.ANSC3 = 1;
 "225
-[e = . . _ADCON1bits 0 2 -> -> 7 `i `uc ]
-[; ;main.c: 226: ADCON1bits.ADFM = 1;
+[e = . . _ANSELCbits 0 3 -> -> 1 `i `uc ]
+[; ;main.c: 226: TRISCbits.TRISC3 = 1;
 "226
-[e = . . _ADCON1bits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 227: ADCON1bits.ADPREF = 0b00;
-"227
-[e = . . _ADCON1bits 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 229: PIE1bits.ADIE = 1;
+[e = . . _TRISCbits 0 3 -> -> 1 `i `uc ]
+[; ;main.c: 228: ADCON1bits.ADCS = 0b111;
+"228
+[e = . . _ADCON1bits 0 2 -> -> 7 `i `uc ]
+[; ;main.c: 229: ADCON1bits.ADFM = 1;
 "229
-[e = . . _PIE1bits 0 5 -> -> 1 `i `uc ]
-[; ;main.c: 231: ADCON0bits.CHS = 3;
-"231
-[e = . . _ADCON0bits 0 2 -> -> 3 `i `uc ]
-[; ;main.c: 232: ADCON0bits.ADON = 1;
+[e = . . _ADCON1bits 0 3 -> -> 1 `i `uc ]
+[; ;main.c: 230: ADCON1bits.ADPREF = 0b00;
+"230
+[e = . . _ADCON1bits 0 0 -> -> 0 `i `uc ]
+[; ;main.c: 232: PIE1bits.ADIE = 1;
 "232
+[e = . . _PIE1bits 0 5 -> -> 1 `i `uc ]
+[; ;main.c: 234: ADCON0bits.CHS = 3;
+"234
+[e = . . _ADCON0bits 0 2 -> -> 3 `i `uc ]
+[; ;main.c: 235: ADCON0bits.ADON = 1;
+"235
 [e = . . _ADCON0bits 0 0 -> -> 1 `i `uc ]
-[; ;main.c: 236: TRISAbits.TRISA2 = 1;
-"236
+[; ;main.c: 239: TRISAbits.TRISA2 = 1;
+"239
 [e = . . _TRISAbits 0 2 -> -> 1 `i `uc ]
-[; ;main.c: 237: INTCONbits.INTE = 1;
-"237
+[; ;main.c: 240: INTCONbits.INTE = 1;
+"240
 [e = . . _INTCONbits 0 4 -> -> 1 `i `uc ]
-[; ;main.c: 238: OPTION_REGbits.INTEDG = 0;
-"238
+[; ;main.c: 241: OPTION_REGbits.INTEDG = 0;
+"241
 [e = . . _OPTION_REGbits 0 4 -> -> 0 `i `uc ]
-[; ;main.c: 242: WDTCONbits.WDTPS = 7;
-"242
+[; ;main.c: 245: WDTCONbits.WDTPS = 7;
+"245
 [e = . . _WDTCONbits 0 1 -> -> 7 `i `uc ]
-[; ;main.c: 246: INTCONbits.PEIE = 1;
-"246
-[e = . . _INTCONbits 0 6 -> -> 1 `i `uc ]
-[; ;main.c: 247: INTCONbits.GIE = 1;
-"247
-[e = . . _INTCONbits 0 7 -> -> 1 `i `uc ]
+[; ;main.c: 249: INTCONbits.PEIE = 1;
 "249
-[v _bootCount `ui ~T0 @X0 1 a ]
-[; ;main.c: 249: unsigned int bootCount = read_flashmem(16);
-[e = _bootCount ( _read_flashmem (1 -> -> 16 `i `ui ]
-[; ;main.c: 250: bootCount++;
+[e = . . _INTCONbits 0 6 -> -> 1 `i `uc ]
+[; ;main.c: 250: INTCONbits.GIE = 1;
 "250
-[e ++ _bootCount -> -> 1 `i `ui ]
-[; ;main.c: 251: write_flashmem(16, bootCount);
-"251
-[e ( _write_flashmem (2 , -> -> 16 `i `ui _bootCount ]
-[; ;main.c: 253: while(1){
+[e = . . _INTCONbits 0 7 -> -> 1 `i `uc ]
+"252
+[v _bootCount `ui ~T0 @X0 1 a ]
+[; ;main.c: 252: unsigned int bootCount = read_flashmem(16);
+[e = _bootCount ( _read_flashmem (1 -> -> 16 `i `ui ]
+[; ;main.c: 253: if (bootCount == 13313){
 "253
-[e :U 368 ]
+[e $ ! == _bootCount -> -> 13313 `i `ui 368  ]
 {
-[; ;main.c: 254: loop();
+[; ;main.c: 254: bootCount = 1;
 "254
-[e ( _loop ..  ]
+[e = _bootCount -> -> 1 `i `ui ]
 "255
 }
-[e :U 367 ]
-"253
-[e $U 368  ]
-[e :U 369 ]
+[e :U 368 ]
 [; ;main.c: 255: }
-[; ;main.c: 257: return;
+[; ;main.c: 256: bootCount++;
+"256
+[e ++ _bootCount -> -> 1 `i `ui ]
+[; ;main.c: 257: write_flashmem(16, bootCount);
 "257
-[e $UE 366  ]
-[; ;main.c: 258: }
-"258
-[e :UE 366 ]
+[e ( _write_flashmem (2 , -> -> 16 `i `ui _bootCount ]
+[; ;main.c: 259: while(1){
+"259
+[e :U 370 ]
+{
+[; ;main.c: 260: loop();
+"260
+[e ( _loop ..  ]
+"261
+}
+[e :U 369 ]
+"259
+[e $U 370  ]
+[e :U 371 ]
+[; ;main.c: 261: }
+[; ;main.c: 263: return;
+"263
+[e $UE 367  ]
+[; ;main.c: 264: }
+"264
+[e :UE 367 ]
 }
 [a 2C 47 65 68 67 0 ]
 [a 1C 47 66 79 79 84 47 0 ]

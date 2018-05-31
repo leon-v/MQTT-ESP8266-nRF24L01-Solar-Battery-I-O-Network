@@ -6,11 +6,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 "9
 [p x PWRTE=ON ]
 "10
-[p x MCLRE=OFF ]
+[p x MCLRE=ON ]
 "11
 [p x CP=OFF ]
 "12
-[p x BOREN=ON ]
+[p x BOREN=OFF ]
 "13
 [p x CLKOUTEN=OFF ]
 "16
@@ -18,9 +18,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "17
 [p x STVREN=ON ]
 "18
-[p x BORV=HI ]
+[p x BORV=LO ]
 "19
-[p x LPBOR=ON ]
+[p x LPBOR=OFF ]
 "20
 [p x LVP=ON ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;

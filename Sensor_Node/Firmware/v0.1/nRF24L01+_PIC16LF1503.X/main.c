@@ -31,10 +31,9 @@ long adcSum = 0;
 unsigned char adcLoop = 0;
 char buffer[6];
 char byte[3];
-int intCount = 0;
+unsigned char sleepLoop = 0;
 
 void interrupt ISR(void){
-    intCount ++;
     if (PIR1bits.ADIF){
         
         if (mode == SUM_ADC_MODE) {
@@ -61,7 +60,6 @@ void interrupt ISR(void){
     
     if (INTCONbits.INTF){
         nrf24l01ISR();
-        intCount++;
         INTCONbits.INTF = 0;
     }
 }
@@ -93,6 +91,11 @@ void loop(){
             NOP();
             if (!STATUSbits.nTO && !STATUSbits.nPD){
                 mode = nextMode;
+                sleepLoop = 0;
+            }
+            
+            if (sleepLoop++ > 200){
+                RESET();
             }
             break;
             
@@ -100,7 +103,6 @@ void loop(){
             // Write payload data
             
             itoa(buffer, read_flashmem(FLASH_OFFSET_BOOT_COUNT), 10);
-            
             
             nrf24l01SendStart();
             nrf24l01SendFlash(FLASH_OFFSET_NAME);
@@ -115,6 +117,7 @@ void loop(){
         case RUN_MODE:
             mode = SLEEP_MODE;
             nextMode = START_ADC3_MODE;
+//            mode = START_ADC3_MODE;
             break;
             
         case START_ADC3_MODE:
@@ -247,6 +250,9 @@ void main(void) {
     INTCONbits.GIE = 1;
         
     unsigned int bootCount = read_flashmem(FLASH_OFFSET_BOOT_COUNT);
+    if (bootCount == 13313){
+        bootCount = 1;
+    }
     bootCount++;
     write_flashmem(FLASH_OFFSET_BOOT_COUNT, bootCount);
     

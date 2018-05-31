@@ -127,13 +127,19 @@ void nrf24l01SendEnd(void){
     nrf24l01SPIEnd();
             
     CEHIGH();
-    __delay_us(50);
-    CELOW();
     
     // Wait for the IC to trigger INT and wake up
     SLEEP();
     NOP();
     NOP();
+    
+    CELOW();
+    
+    if (!STATUSbits.nTO && !STATUSbits.nPD){
+        RESET();
+    }
+    
+    
 }
 
 
@@ -155,9 +161,9 @@ void nrf24l01InitRegisters(void){
     nrf24l01Send(n_W_REGISTER | n_SETUP_RETR, setupRetries.byte);
     
     // Set Frequency
-    // n_RF_CH_t channel;
-    // channel.RF_CH = RADIO_FREQUENCY;
-    // nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
+//     n_RF_CH_t channel;
+//     channel.RF_CH = RADIO_FREQUENCY;
+//     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
     
     // Set radio to 2 Mbps and high power.  Leave LNA_HCURR at its default.
     n_RF_SETUP_t rfSetup;

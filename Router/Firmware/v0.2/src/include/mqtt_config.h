@@ -24,13 +24,13 @@ typedef enum{
 
 /*Please Keep the following configuration if you have no very deep understanding of ESP SSL/TLS*/
 #define CFG_LOCATION    		0x79    /* Please don't change or if you know what you doing */
-#define MQTT_BUF_SIZE       	2048
+#define MQTT_BUF_SIZE       	4096
 // #define MQTT_KEEPALIVE        	120     /*second*/
 #define MQTT_RECONNECT_TIMEOUT  5    /*second*/
 // #define MQTT_SSL_ENABLE //* Please don't change or if you know what you doing */
 
 #define STA_TYPE AUTH_WPA2_PSK
-// #define QUEUE_BUFFER_SIZE                 2048
+#define QUEUE_BUFFER_SIZE                 MQTT_BUF_SIZE
 
 #define PROTOCOL_NAMEv31    /*MQTT version 3.1 compatible with Mosquitto v0.15*/
 //PROTOCOL_NAMEv311            /*MQTT version 3.11 compatible with https://eclipse.org/paho/clients/testing/*/
