@@ -122,16 +122,16 @@ void spiTestTimerFunction(){
 	nrf24l01SPIEnd();
 
 	// Receive pipe addres 2
-	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P2, n_ADDRESS_P1[4] + (2 * n_ADDRESS_MUL)); // 15
+	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P2, n_ADDRESS_P0[4] + (2 * n_ADDRESS_MUL)); // 15
 
 	// Receive pipe addres 3
-	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P3, n_ADDRESS_P1[4] + (3 * n_ADDRESS_MUL)); // 16
+	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P3, n_ADDRESS_P0[4] + (3 * n_ADDRESS_MUL)); // 16
 
 	// Receive pipe addres 4
-	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P4, n_ADDRESS_P1[4] + (4 * n_ADDRESS_MUL)); // 17
+	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P4, n_ADDRESS_P0[4] + (4 * n_ADDRESS_MUL)); // 17
 
 	// Receive pipe addres 5
-	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P5, n_ADDRESS_P1[4] + (5 * n_ADDRESS_MUL)); // 18
+	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P5, n_ADDRESS_P0[4] + (5 * n_ADDRESS_MUL)); // 18
 
 	// (high, low, out, in)
 	gpio_output_set(CEPIN, 0, CEPIN, 0);
