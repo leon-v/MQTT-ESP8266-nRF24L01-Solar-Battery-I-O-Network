@@ -37,7 +37,6 @@
 #include "gpio.h"
 #include "user_interface.h"
 #include "mem.h"
-#include "sleep.h"
 #include "nRF24L01+.h"
 
 
@@ -53,7 +52,7 @@ void ICACHE_FLASH_ATTR wifiConnectCb(uint8_t status){
 void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args){
 	MQTT_Client* client = (MQTT_Client*)args;
 	INFO("MQTT: Connected\r\n");
-
+	nrf24l01Unpause();
 	// MQTT_Publish(client, "/sensor/test/online", "1", 1, 1, 1);
 	// MQTT_InitLWT(client, "/sensor/test/online", "0", 1, 1);
 	
@@ -71,15 +70,15 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args){
 
 	//sleepSetEnable();
 
-	ClientConnected();
+	// ClientConnected();
 }
 
 void ICACHE_FLASH_ATTR mqttDisconnectedCb(uint32_t *args){
 	MQTT_Client* client = (MQTT_Client*)args;
 	INFO("MQTT: Disconnected\r\n");
-
+	nrf24l01Pause();
 	//sleepSetDisable();
-	ClientDisconnected();
+	// ClientDisconnected();
 }
 
 void ICACHE_FLASH_ATTR mqttPublishedCb(uint32_t *args){
@@ -188,7 +187,8 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 
 	// if (resetInfo->reason != 4){
-	if (!GPIO_INPUT_GET(4)){
+	// if (!GPIO_INPUT_GET(4)){
+	 if (0){
 		INFO("\r\nStarting HTTP Config ....\r\n");
 		HTTPConfig_Init();
 	}
@@ -207,8 +207,6 @@ void ICACHE_FLASH_ATTR user_init(void){
 		MQTT_OnData(&mqttClient, mqttDataCb);
 
 		WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
-
-		sleepInit(&mqttClient);
 
 		nrf24l01Init(&mqttClient);
 

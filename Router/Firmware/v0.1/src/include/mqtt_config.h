@@ -13,7 +13,7 @@
 
 #define STA_TYPE AUTH_WPA2_PSK
 
-#define MQTT_RECONNECT_TIMEOUT 	5	/*second*/
+#define MQTT_RECONNECT_TIMEOUT 	500	// X 10 ms // 500
 
 #define DEFAULT_SECURITY	0
 #define QUEUE_BUFFER_SIZE		 		2048

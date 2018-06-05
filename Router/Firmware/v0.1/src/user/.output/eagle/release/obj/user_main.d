@@ -16,5 +16,4 @@
  ../../include/machine/stdlib.h ../../include/alloca.h \
  ../include/mqtt/typedef.h ../include/modules/wifi.h \
  ../include/modules/config.h ../include/mqtt/debug.h ../../include/gpio.h \
- ../../include/mem.h ../include/modules/sleep.h \
- ../include/modules/nRF24L01+.h
+ ../../include/mem.h ../include/modules/nRF24L01+.h

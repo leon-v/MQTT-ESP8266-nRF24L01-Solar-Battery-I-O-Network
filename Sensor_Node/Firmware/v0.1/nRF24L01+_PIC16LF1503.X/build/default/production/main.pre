@@ -3771,58 +3771,327 @@ void nrf24l01Init(void);
 void nrf24l01SendStart(void);
 void nrf24l01SendByte(unsigned char payloadByte);
 void nrf24l01SendEnd(void);
+void nrf24l01SetRecieveMode(void);
+
+void nrf24l01SendString(char * string);
+void nrf24l01SendFlash(unsigned char offset);
 
 # 6 "flash.h"
 extern const unsigned char NVMEM[32];
 
 # 14
 const unsigned char NVMEM[32]@(0x800U-32) = {
-'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '1', 0, 0, 0,
+0x0000,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-# 23
+# 24
 unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 
-# 7 "main.c"
+# 4 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\__size_t.h"
+typedef unsigned size_t;
+
+# 7 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\stdlib.h"
+typedef unsigned short wchar_t;
+
+# 15
+typedef struct {
+int rem;
+int quot;
+} div_t;
+typedef struct {
+unsigned rem;
+unsigned quot;
+} udiv_t;
+typedef struct {
+long quot;
+long rem;
+} ldiv_t;
+typedef struct {
+unsigned long quot;
+unsigned long rem;
+} uldiv_t;
+
+# 53
+extern double atof(const char *);
+extern double strtod(const char *, const char **);
+extern int atoi(const char *);
+extern unsigned xtoi(const char *);
+extern long atol(const char *);
+extern long strtol(const char *, char **, int);
+
+extern int rand(void);
+extern void srand(unsigned int);
+extern void * calloc(size_t, size_t);
+extern div_t div(int numer, int denom);
+extern udiv_t udiv(unsigned numer, unsigned denom);
+extern ldiv_t ldiv(long numer, long denom);
+extern uldiv_t uldiv(unsigned long numer,unsigned long denom);
+extern unsigned long _lrotl(unsigned long value, unsigned int shift);
+extern unsigned long _lrotr(unsigned long value, unsigned int shift);
+extern unsigned int _rotl(unsigned int value, unsigned int shift);
+extern unsigned int _rotr(unsigned int value, unsigned int shift);
+
+
+
+
+extern void * malloc(size_t);
+extern void free(void *);
+extern void * realloc(void *, size_t);
+
+# 86
+extern int atexit(void (*)(void));
+extern char * getenv(const char *);
+extern char ** environ;
+extern int system(char *);
+extern void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
+extern void * bsearch(const void *, void *, size_t, size_t, int(*)(const void *, const void *));
+extern int abs(int);
+extern long labs(long);
+
+extern char * itoa(char * buf, int val, int base);
+extern char * utoa(char * buf, unsigned val, int base);
+
+
+
+
+extern char * ltoa(char * buf, long val, int base);
+extern char * ultoa(char * buf, unsigned long val, int base);
+
+extern char * ftoa(float f, int * status);
+
+# 22 "main.c"
+unsigned char nextMode = 10;
+unsigned char mode = 10;
+
+# 30
+long adcSum = 0;
+unsigned char adcLoop = 0;
+char buffer[6];
+char byte[3];
+unsigned char sleepLoop = 0;
+
 void interrupt ISR(void){
-nrf24l01ISR();
+if (PIR1bits.ADIF){
+
+if (mode == 2) {
+
+int result = 0x00;
+result = ADRESL;
+result|= (ADRESH << 8);
+
+adcSum+= result;
+
+if (!adcLoop){
+mode = 3;
+}else{
+
+ADCON0bits.ADGO = 1;
 }
 
-unsigned char mode = 1;
+adcLoop--;
+}
 
 
+PIR1bits.ADIF = 0;
+}
+
+if (INTCONbits.INTF){
+nrf24l01ISR();
+INTCONbits.INTF = 0;
+}
+}
+
+void startADC(unsigned char channel){
+adcSum = 0;
+adcLoop = 255;
+
+if (ADCON0bits.CHS != channel) {
+ADCON0bits.CHS = channel;
+_delay((unsigned long)((200)*(16000000/4000000.0)));
+}
+
+ADCON0bits.ADGO = 1;
+mode = 2;
+}
 void loop(){
 
+if (mode != 1) {
+asm("clrwdt");
+}
+
 switch (mode){
+
 case 1:
 
-nrf24l01SendStart();
-unsigned char payloadByte = 'A';
-while (payloadByte < ('A' + 8) ){
-nrf24l01SendByte(payloadByte);
-payloadByte++;
+asm("sleep");
+__nop();
+__nop();
+if (!STATUSbits.nTO && !STATUSbits.nPD){
+mode = nextMode;
+sleepLoop = 0;
 }
+
+if (sleepLoop++ > 200){
+asm("reset");
+}
+break;
+
+case 10:
+
+
+itoa(buffer, read_flashmem(16), 10);
+
+nrf24l01SendStart();
+nrf24l01SendFlash(0);
+nrf24l01SendString( (char *) "/BOOT/");
+nrf24l01SendString(buffer);
 nrf24l01SendEnd();
+
+mode = 11;
+break;
+
+
+case 11:
+mode = 1;
+nextMode = 12;
+
+break;
+
+case 12:
+startADC(3);
+nextMode = 13;
+break;
+
+case 13:
+startADC(7);
+nextMode = 15;
+break;
+
+case 15:
+startADC(29);
+nextMode = 14;
+break;
+
+case 14:
+startADC(31);
+nextMode = 11;
+break;
+
+case 3:
+
+switch (ADCON0bits.CHS){
+case 3:
+adcSum= (long) (( (float) adcSum) / 25.05);
+break;
+
+case 7:
+adcSum/= 25;
+break;
+
+case 31:
+adcSum= (long) (( (float) adcSum) / 24.8);
+break;
+
+case 29:
+adcSum/= 2089;
+adcSum-= 40;
+break;
+
+default:
+adcSum/= 255;
 break;
 }
 
-_delay((unsigned long)((500)*(16000000/4000.0)));
+
+itoa(buffer, adcSum, 10);
+itoa(byte, ADCON0bits.CHS, 10);
+
+nrf24l01SendStart();
+nrf24l01SendFlash(0);
+nrf24l01SendString((char *) "/ADC");
+nrf24l01SendString(byte);
+nrf24l01SendString((char *) "/");
+nrf24l01SendString(buffer);
+
+nrf24l01SendEnd();
+
+mode = nextMode;
+break;
 
 }
 
+
+}
+
+
 void main(void) {
 
+# 196
+INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
-INTCONbits.PEIE = 1;
 
 OSCCONbits.IRCF = 0b1111;
 OSCCONbits.SCS = 0b10;
 
+_delay((unsigned long)((10)*(16000000/4000.0)));
+
 nrf24l01Init();
 
+OPTION_REGbits.nWPUEN = 0;
+
+
+FVRCONbits.FVREN = 0;
+FVRCONbits.ADFVR = 1;
+FVRCONbits.FVREN = 1;
+
+
+FVRCONbits.TSEN = 0;
+FVRCONbits.TSRNG = 0;
+FVRCONbits.TSEN = 1;
+
+
+ADCON0bits.ADON = 0;
+
+ANSELAbits.ANSA4 = 1;
+TRISAbits.TRISA4 = 1;
+WPUAbits.WPUA4 = 0;
+
+ANSELCbits.ANSC3 = 1;
+TRISCbits.TRISC3 = 1;
+
+ADCON1bits.ADCS = 0b111;
+ADCON1bits.ADFM = 1;
+ADCON1bits.ADPREF = 0b00;
+
+PIE1bits.ADIE = 1;
+
+ADCON0bits.CHS = 3;
+ADCON0bits.ADON = 1;
+
+
+
+TRISAbits.TRISA2 = 1;
+INTCONbits.INTE = 1;
+OPTION_REGbits.INTEDG = 0;
+
+
+
+WDTCONbits.WDTPS = 7;
+
+
+
+INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
+
+unsigned int bootCount = read_flashmem(16);
+if (bootCount == 13313){
+bootCount = 1;
+}
+bootCount++;
+write_flashmem(16, bootCount);
 
 while(1){
 loop();

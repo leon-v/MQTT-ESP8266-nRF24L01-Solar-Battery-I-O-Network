@@ -4,13 +4,16 @@
 
 void write_flashmem(unsigned int offset, unsigned int data) {
     
+    unsigned int address;
+    
     INTCONbits.GIE = 0; //disable interupts incase they interfere
     
     //ERASE SECTION
     PMCON1 = 0x00;     //not configuration space
     
-    PMADRL = (char) ((NV_ADDRESS + offset) >> 0);  //least significant bits of address
-    PMADRH = (char) ((NV_ADDRESS + offset) >> 8);  //most significant bits of address 
+    address = NV_ADDRESS + offset;
+    PMADRL = (char) (address >> 0);  //least significant bits of address
+    PMADRH = (char) (address >> 8);  //most significant bits of address 
     
     PMCON1bits.FREE = 1; //specify erase operation
     PMCON1bits.WREN = 1; //allow write
@@ -29,8 +32,8 @@ void write_flashmem(unsigned int offset, unsigned int data) {
     //WRITE SECTION
     PMCON1 = 0x00;     //not configuration space
     
-    PMADRL = (char) ((NV_ADDRESS + offset) >> 0);  //least significant bits of address
-    PMADRH = (char) ((NV_ADDRESS + offset) >> 8);  //most significant bits of address 
+    PMADRL = (char) (address >> 0);  //least significant bits of address
+    PMADRH = (char) (address >> 8);  //most significant bits of address 
     
     PMCON1bits.FREE = 0;    //selecting write operation
     PMCON1bits.LWLO = 1;    //load write latches only
@@ -57,19 +60,24 @@ void write_flashmem(unsigned int offset, unsigned int data) {
 
 unsigned int read_flashmem(unsigned int offset) {
     
+    unsigned int address;
+    
     INTCONbits.GIE = 0; //disable interupts incase they interfere
     
     PMCON1 = 0x00;     //not configuration space
     
-    PMADRL = (char) ((NV_ADDRESS + offset) >> 0);  //least significant bits of address
-    PMADRH = (char) ((NV_ADDRESS + offset) >> 8);  //most significant bits of address 
+    address = NV_ADDRESS + offset;
+    PMADRL = (char) (address >> 0);  //least significant bits of address
+    PMADRH = (char) (address >> 8);  //most significant bits of address 
     
     PMCON1bits.RD = 1;  //initiate read operation
     
     NOP();              //to give time to read
     NOP();              //to give time to read
     
-    unsigned int result = (unsigned) ((PMDATH) << 8) | (PMDATL);  //joins bytes & returns the value stored
+    unsigned int result = 0;
+    result = PMDATL;
+    result|= ( (unsigned) (PMDATH) << 8);
     
     INTCONbits.GIE = 1;        //enable interupts again
     

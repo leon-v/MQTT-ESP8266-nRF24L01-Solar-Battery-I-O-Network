@@ -45,7 +45,7 @@
 #define MQTT_SEND_TIMOUT            5
 
 #ifndef QUEUE_BUFFER_SIZE
-#define QUEUE_BUFFER_SIZE             512
+#define QUEUE_BUFFER_SIZE             2048
 #endif
 
 unsigned char *default_certificate;
@@ -78,7 +78,23 @@ mqtt_dns_found(const char *name, ip_addr_t *ipaddr, void *arg)
     if (client->ip.addr == 0 && ipaddr->addr != 0)
     {
         os_memcpy(client->pCon->proto.tcp->remote_ip, &ipaddr->addr, 4);
-        espconn_connect(client->pCon);
+        if (client->security) {
+#ifdef MQTT_SSL_ENABLE
+            if(DEFAULT_SECURITY >= ONE_WAY_ANTHENTICATION ) {
+                espconn_secure_ca_enable(ESPCONN_CLIENT,CA_CERT_FLASH_ADDRESS);
+            }
+            if(DEFAULT_SECURITY >= TWO_WAY_ANTHENTICATION) {
+                espconn_secure_cert_req_enable(ESPCONN_CLIENT,CLIENT_CERT_FLASH_ADDRESS);
+            }
+
+            espconn_secure_connect(client->pCon);
+#else
+            INFO("TCP: Do not support SSL\r\n");
+#endif
+        }
+        else {
+            espconn_connect(client->pCon);
+        }
 
         client->connState = TCP_CONNECTING;
         INFO("TCP: connecting...\r\n");
@@ -601,11 +617,10 @@ MQTT_Ping(MQTT_Client *client)
     return TRUE;
 }
 
-void ICACHE_FLASH_ATTR MQTT_Task(os_event_t *e) {
+void ICACHE_FLASH_ATTR
+MQTT_Task(os_event_t *e)
+{
     MQTT_Client* client = (MQTT_Client*)e->par;
-
-    INFO("Exec MQTT_Task\r\n");
-
     uint8_t dataBuffer[MQTT_BUF_SIZE];
     uint16_t dataLen;
     if (e->par == 0)
@@ -806,7 +821,24 @@ MQTT_Connect(MQTT_Client *mqttClient)
     os_printf("your ESP SSL/TLS configuration is %d.[0:NO_TLS\t1:TLS_WITHOUT_AUTHENTICATION\t2ONE_WAY_ANTHENTICATION\t3TWO_WAY_ANTHENTICATION]\n",DEFAULT_SECURITY);
     if (UTILS_StrToIP(mqttClient->host, &mqttClient->pCon->proto.tcp->remote_ip)) {
         INFO("TCP: Connect to ip  %s:%d\r\n", mqttClient->host, mqttClient->port);
-        espconn_connect(mqttClient->pCon);
+        if (mqttClient->security)
+        {
+#ifdef MQTT_SSL_ENABLE
+            if(DEFAULT_SECURITY >= ONE_WAY_ANTHENTICATION ) {
+                espconn_secure_ca_enable(ESPCONN_CLIENT,CA_CERT_FLASH_ADDRESS);
+            }
+            if(DEFAULT_SECURITY >= TWO_WAY_ANTHENTICATION) {
+                espconn_secure_cert_req_enable(ESPCONN_CLIENT,CLIENT_CERT_FLASH_ADDRESS);
+            }
+            espconn_secure_connect(mqttClient->pCon);
+#else
+            INFO("TCP: Do not support SSL\r\n");
+#endif
+        }
+        else
+        {
+            espconn_connect(mqttClient->pCon);
+        }
     }
     else {
         INFO("TCP: Connect to domain %s:%d\r\n", mqttClient->host, mqttClient->port);
