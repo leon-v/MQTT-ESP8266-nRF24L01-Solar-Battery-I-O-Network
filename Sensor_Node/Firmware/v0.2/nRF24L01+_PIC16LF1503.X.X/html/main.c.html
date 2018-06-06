@@ -1,0 +1,305 @@
+<HTML>
+<HEAD>
+<TITLE>Listing of main.c</TITLE>
+<LINK rel=stylesheet href="udf_styles.css" type="text/css">
+</HEAD>
+<BODY>
+<table class="">
+<tr><td><code><i>     1</i> </code></td><td><code>&nbsp #include&nbsp&lsaquo  xc.h&rsaquo  </code></td></tr>
+<tr><td><code><i>     2</i> </code></td><td><code>&nbsp #include&nbsp "nrf24l01.h"</code></td></tr>
+<tr><td><code><i>     3</i> </code></td><td><code>&nbsp #include&nbsp "flash.h"</code></td></tr>
+<tr><td><code><i>     4</i> </code></td><td><code>&nbsp #include&nbsp "interface.h"</code></td></tr>
+<tr><td><code><i>     5</i> </code></td><td><code>&nbsp #include&nbsp "stdlib.h"</code></td></tr>
+<tr><td><code><i>     6</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>     7</i> </code></td><td><code>&nbsp #define&nbsp SLEEP_MODE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 1</code></td></tr>
+<tr><td><code><i>     8</i> </code></td><td><code>&nbsp #define&nbsp SUM_ADC_MODE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 2</code></td></tr>
+<tr><td><code><i>     9</i> </code></td><td><code>&nbsp #define&nbsp SEND_ADC_MODE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 3</code></td></tr>
+<tr><td><code><i>    10</i> </code></td><td><code>&nbsp #define&nbsp SEND_COUNTER_MODE&nbsp&nbsp&nbsp 4</code></td></tr>
+<tr><td><code><i>    11</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    12</i> </code></td><td><code>&nbsp #define&nbsp SEND_BOOT_MODE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 10</code></td></tr>
+<tr><td><code><i>    13</i> </code></td><td><code>&nbsp #define&nbsp RUN_MODE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 11</code></td></tr>
+<tr><td><code><i>    14</i> </code></td><td><code>&nbsp #define&nbsp START_ADC3_MODE&nbsp&nbsp&nbsp&nbsp&nbsp 12</code></td></tr>
+<tr><td><code><i>    15</i> </code></td><td><code>&nbsp #define&nbsp START_ADC7_MODE&nbsp&nbsp&nbsp&nbsp&nbsp 13</code></td></tr>
+<tr><td><code><i>    16</i> </code></td><td><code>&nbsp #define&nbsp START_FVR_MODE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 14</code></td></tr>
+<tr><td><code><i>    17</i> </code></td><td><code>&nbsp #define&nbsp START_TEMP_MODE&nbsp&nbsp&nbsp&nbsp&nbsp 15</code></td></tr>
+<tr><td><code><i>    18</i> </code></td><td><code>&nbsp #define&nbsp SEND_INT_MODE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 16</code></td></tr>
+<tr><td><code><i>    19</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    20</i> </code></td><td><code>&nbsp unsigned&nbsp char&nbsp nextMode&nbsp =&nbsp SEND_BOOT_MODE;</code></td></tr>
+<tr><td><code><i>    21</i> </code></td><td><code>&nbsp unsigned&nbsp char&nbsp mode&nbsp =&nbsp SEND_BOOT_MODE;</code></td></tr>
+<tr><td><code><i>    22</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    23</i> </code></td><td><code>&nbsp #define&nbsp ADC_OVERSAMPLE_COUNT&nbsp 255</code></td></tr>
+<tr><td><code><i>    24</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    25</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    26</i> </code></td><td><code>&nbsp unsigned&nbsp long&nbsp adcSum&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    27</i> </code></td><td><code>&nbsp unsigned&nbsp char&nbsp adcLoop&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    28</i> </code></td><td><code>&nbsp char&nbsp buffer[6];</code></td></tr>
+<tr><td><code><i>    29</i> </code></td><td><code>&nbsp char&nbsp byte[3];</code></td></tr>
+<tr><td><code><i>    30</i> </code></td><td><code>&nbsp unsigned&nbsp char&nbsp sleepLoop&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    31</i> </code></td><td><code>&nbsp unsigned&nbsp int&nbsp counter&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    32</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    33</i> </code></td><td><code>&nbsp void&nbsp interrupt&nbsp ISR(void){</code></td></tr>
+<tr><td><code><i>    34</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp if&nbsp (PIR1bits.ADIF){</code></td></tr>
+<tr><td><code><i>    35</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    36</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp if&nbsp (mode&nbsp ==&nbsp SUM_ADC_MODE)&nbsp {</code></td></tr>
+<tr><td><code><i>    37</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    38</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp int&nbsp result&nbsp =&nbsp 0x00;</code></td></tr>
+<tr><td><code><i>    39</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp result&nbsp =&nbsp ADRESL;</code></td></tr>
+<tr><td><code><i>    40</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp result|=&nbsp (ADRESH&nbsp&lsaquo &lsaquo &nbsp 8);</code></td></tr>
+<tr><td><code><i>    41</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    42</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum+=&nbsp (unsigned)&nbsp result;</code></td></tr>
+<tr><td><code><i>    43</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    44</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp if&nbsp (!adcLoop){</code></td></tr>
+<tr><td><code><i>    45</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp mode&nbsp =&nbsp SEND_ADC_MODE;</code></td></tr>
+<tr><td><code><i>    46</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }else{</code></td></tr>
+<tr><td><code><i>    47</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    48</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ADCON0bits.ADGO&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>    49</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    50</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    51</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcLoop--;</code></td></tr>
+<tr><td><code><i>    52</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    53</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    54</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    55</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PIR1bits.ADIF&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    56</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    57</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    58</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp if&nbsp (INTCONbits.INTF){</code></td></tr>
+<tr><td><code><i>    59</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01ISR();</code></td></tr>
+<tr><td><code><i>    60</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INTCONbits.INTF&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    61</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    62</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    63</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    64</i> </code></td><td><code>&nbsp void&nbsp startADC(unsigned&nbsp char&nbsp channel){</code></td></tr>
+<tr><td><code><i>    65</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp adcSum&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    66</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp adcLoop&nbsp =&nbsp ADC_OVERSAMPLE_COUNT;</code></td></tr>
+<tr><td><code><i>    67</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    68</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp if&nbsp (ADCON0bits.CHS&nbsp !=&nbsp channel)&nbsp {</code></td></tr>
+<tr><td><code><i>    69</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ADCON0bits.CHS&nbsp =&nbsp channel;</code></td></tr>
+<tr><td><code><i>    70</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp delayUs(200);</code></td></tr>
+<tr><td><code><i>    71</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    72</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    73</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ADCON0bits.ADGO&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>    74</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp mode&nbsp =&nbsp SUM_ADC_MODE;</code></td></tr>
+<tr><td><code><i>    75</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    76</i> </code></td><td><code>&nbsp void&nbsp loop(){</code></td></tr>
+<tr><td><code><i>    77</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    78</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp if&nbsp (mode&nbsp !=&nbsp SLEEP_MODE)&nbsp {</code></td></tr>
+<tr><td><code><i>    79</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CLRWDT();</code></td></tr>
+<tr><td><code><i>    80</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    81</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    82</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp switch&nbsp (mode){</code></td></tr>
+<tr><td><code><i>    83</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    84</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp SLEEP_MODE:</code></td></tr>
+<tr><td><code><i>    85</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SetRecieveMode();</code></td></tr>
+<tr><td><code><i>    86</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    87</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PORTAbits.RA5&nbsp =&nbsp (unsigned)&nbsp !PORTAbits.RA5;</code></td></tr>
+<tr><td><code><i>    88</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    89</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SLEEP();</code></td></tr>
+<tr><td><code><i>    90</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOP();</code></td></tr>
+<tr><td><code><i>    91</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOP();</code></td></tr>
+<tr><td><code><i>    92</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp if&nbsp (!STATUSbits.nTO&nbsp &&&nbsp !STATUSbits.nPD){</code></td></tr>
+<tr><td><code><i>    93</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp mode&nbsp =&nbsp nextMode;</code></td></tr>
+<tr><td><code><i>    94</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp sleepLoop&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    95</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    96</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    97</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp if&nbsp (sleepLoop++&nbsp&rsaquo &nbsp 5){</code></td></tr>
+<tr><td><code><i>    98</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp RESET();</code></td></tr>
+<tr><td><code><i>    99</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>   100</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   101</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   102</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp SEND_BOOT_MODE:</code></td></tr>
+<tr><td><code><i>   103</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //&nbsp Write&nbsp payload&nbsp data</code></td></tr>
+<tr><td><code><i>   104</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   105</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp itoa(buffer,&nbsp read_flashmem(FLASH_OFFSET_BOOT_COUNT),&nbsp 10);</code></td></tr>
+<tr><td><code><i>   106</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   107</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendStart();</code></td></tr>
+<tr><td><code><i>   108</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendFlash(FLASH_OFFSET_NAME);</code></td></tr>
+<tr><td><code><i>   109</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendString(&nbsp (char&nbsp *)&nbsp "/BOOT/");</code></td></tr>
+<tr><td><code><i>   110</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendString(buffer);</code></td></tr>
+<tr><td><code><i>   111</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendEnd();</code></td></tr>
+<tr><td><code><i>   112</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   113</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp mode&nbsp =&nbsp RUN_MODE;</code></td></tr>
+<tr><td><code><i>   114</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   115</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   116</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   117</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp RUN_MODE:</code></td></tr>
+<tr><td><code><i>   118</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp mode&nbsp =&nbsp SLEEP_MODE;</code></td></tr>
+<tr><td><code><i>   119</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nextMode&nbsp =&nbsp SEND_COUNTER_MODE;</code></td></tr>
+<tr><td><code><i>   120</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp mode&nbsp =&nbsp START_ADC3_MODE;</code></td></tr>
+<tr><td><code><i>   121</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   122</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   123</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp SEND_COUNTER_MODE:</code></td></tr>
+<tr><td><code><i>   124</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp itoa(buffer,&nbsp counter++,&nbsp 10);</code></td></tr>
+<tr><td><code><i>   125</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   126</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendStart();</code></td></tr>
+<tr><td><code><i>   127</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendString((char&nbsp *)&nbsp "/COUNT/");</code></td></tr>
+<tr><td><code><i>   128</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendString(buffer);</code></td></tr>
+<tr><td><code><i>   129</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   130</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendEnd();</code></td></tr>
+<tr><td><code><i>   131</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   132</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp mode&nbsp =&nbsp START_ADC3_MODE;</code></td></tr>
+<tr><td><code><i>   133</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   134</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   135</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp START_ADC3_MODE:</code></td></tr>
+<tr><td><code><i>   136</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp startADC(3);</code></td></tr>
+<tr><td><code><i>   137</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   138</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp if&nbsp (&nbsp (adcSum&nbsp&rsaquo  =&nbsp 4200)&nbsp &&&nbsp (PORTAbits.RA5&nbsp ==&nbsp 1)&nbsp )&nbsp {</code></td></tr>
+<tr><td><code><i>   139</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PORTAbits.RA5&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   140</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>   141</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   142</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp if&nbsp (&nbsp (adcSum&nbsp&lsaquo  =&nbsp 4100)&nbsp &&&nbsp (PORTAbits.RA5&nbsp ==&nbsp 0)&nbsp )&nbsp {</code></td></tr>
+<tr><td><code><i>   143</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PORTAbits.RA5&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   144</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>   145</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nextMode&nbsp =&nbsp START_ADC7_MODE;</code></td></tr>
+<tr><td><code><i>   146</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   147</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   148</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp START_ADC7_MODE:</code></td></tr>
+<tr><td><code><i>   149</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp startADC(7);</code></td></tr>
+<tr><td><code><i>   150</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nextMode&nbsp =&nbsp START_TEMP_MODE;</code></td></tr>
+<tr><td><code><i>   151</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   152</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   153</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp START_TEMP_MODE:</code></td></tr>
+<tr><td><code><i>   154</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp startADC(29);</code></td></tr>
+<tr><td><code><i>   155</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nextMode&nbsp =&nbsp START_FVR_MODE;</code></td></tr>
+<tr><td><code><i>   156</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   157</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   158</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp START_FVR_MODE:</code></td></tr>
+<tr><td><code><i>   159</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp startADC(31);</code></td></tr>
+<tr><td><code><i>   160</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nextMode&nbsp =&nbsp RUN_MODE;</code></td></tr>
+<tr><td><code><i>   161</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   162</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   163</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp SEND_ADC_MODE:</code></td></tr>
+<tr><td><code><i>   164</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   165</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp switch&nbsp (ADCON0bits.CHS){</code></td></tr>
+<tr><td><code><i>   166</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp 3:</code></td></tr>
+<tr><td><code><i>   167</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum*&nbsp 10;</code></td></tr>
+<tr><td><code><i>   168</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum/=&nbsp 2505;</code></td></tr>
+<tr><td><code><i>   169</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   170</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   171</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp 7:</code></td></tr>
+<tr><td><code><i>   172</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum*&nbsp 10;</code></td></tr>
+<tr><td><code><i>   173</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum/=&nbsp 2500;</code></td></tr>
+<tr><td><code><i>   174</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   175</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   176</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp 31:</code></td></tr>
+<tr><td><code><i>   177</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum*&nbsp 10;</code></td></tr>
+<tr><td><code><i>   178</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum/=&nbsp 2475;</code></td></tr>
+<tr><td><code><i>   179</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   180</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   181</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp case&nbsp 29:</code></td></tr>
+<tr><td><code><i>   182</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum/=&nbsp 2089;</code></td></tr>
+<tr><td><code><i>   183</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum-=&nbsp 40;</code></td></tr>
+<tr><td><code><i>   184</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   185</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   186</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp default:</code></td></tr>
+<tr><td><code><i>   187</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp adcSum/=&nbsp 255;</code></td></tr>
+<tr><td><code><i>   188</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   189</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>   190</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   191</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   192</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp itoa(buffer,&nbsp adcSum,&nbsp 10);</code></td></tr>
+<tr><td><code><i>   193</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp itoa(byte,&nbsp ADCON0bits.CHS,&nbsp 10);</code></td></tr>
+<tr><td><code><i>   194</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   195</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendStart();</code></td></tr>
+<tr><td><code><i>   196</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendString((char&nbsp *)&nbsp "/ADC");</code></td></tr>
+<tr><td><code><i>   197</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendString(byte);</code></td></tr>
+<tr><td><code><i>   198</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendString((char&nbsp *)&nbsp "/");</code></td></tr>
+<tr><td><code><i>   199</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendString(buffer);</code></td></tr>
+<tr><td><code><i>   200</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   201</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SendEnd();</code></td></tr>
+<tr><td><code><i>   202</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   203</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp mode&nbsp =&nbsp nextMode;</code></td></tr>
+<tr><td><code><i>   204</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>   205</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   206</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>   207</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   208</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   209</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>   210</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   211</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   212</i> </code></td><td><code>&nbsp void&nbsp main(void)&nbsp {</code></td></tr>
+<tr><td><code><i>   213</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   214</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp I&nbsp Always&nbsp forget&nbsp to&nbsp reset&nbsp that&nbsp damn&nbsp ADC</code></td></tr>
+<tr><td><code><i>   215</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ANSELA&nbsp =&nbsp 0x00;</code></td></tr>
+<tr><td><code><i>   216</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ANSELC&nbsp =&nbsp 0x00;</code></td></tr>
+<tr><td><code><i>   217</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   218</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp Pin&nbsp 11&nbsp is&nbsp int</code></td></tr>
+<tr><td><code><i>   219</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp RA2</code></td></tr>
+<tr><td><code><i>   220</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   221</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp Reset&nbsp Interrupts&nbsp */</code></td></tr>
+<tr><td><code><i>   222</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.PEIE&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   223</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.GIE&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   224</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   225</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp OSCCONbits.IRCF&nbsp =&nbsp 0b1111;&nbsp //&nbsp 16&nbsp MHz</code></td></tr>
+<tr><td><code><i>   226</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp OSCCONbits.SCS&nbsp =&nbsp 0b10;&nbsp //&nbsp Internal&nbsp oscillator&nbsp block</code></td></tr>
+<tr><td><code><i>   227</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   228</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp delayMs(10);</code></td></tr>
+<tr><td><code><i>   229</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   230</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01Init();</code></td></tr>
+<tr><td><code><i>   231</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   232</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp OPTION_REGbits.nWPUEN&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   233</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   234</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp Configure&nbsp FVR&nbsp */</code></td></tr>
+<tr><td><code><i>   235</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp FVRCONbits.FVREN&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   236</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp FVRCONbits.ADFVR&nbsp =&nbsp 1;&nbsp //&nbsp 1.024V</code></td></tr>
+<tr><td><code><i>   237</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp FVRCONbits.FVREN&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   238</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   239</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp Configure&nbsp Temp&nbsp sensor*/</code></td></tr>
+<tr><td><code><i>   240</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp FVRCONbits.TSEN&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   241</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp FVRCONbits.TSRNG&nbsp =&nbsp 0;&nbsp //&nbsp 2V&nbsp Low&nbsp Range</code></td></tr>
+<tr><td><code><i>   242</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp FVRCONbits.TSEN&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   243</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   244</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp Setup&nbsp ADC&nbsp */</code></td></tr>
+<tr><td><code><i>   245</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ADCON0bits.ADON&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   246</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   247</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ANSELAbits.ANSA4&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   248</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp TRISAbits.TRISA4&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   249</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp WPUAbits.WPUA4&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   250</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   251</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ANSELCbits.ANSC3&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   252</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp TRISCbits.TRISC3&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   253</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   254</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ADCON1bits.ADCS&nbsp =&nbsp 0b111;</code></td></tr>
+<tr><td><code><i>   255</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ADCON1bits.ADFM&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   256</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ADCON1bits.ADPREF&nbsp =&nbsp 0b00;</code></td></tr>
+<tr><td><code><i>   257</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   258</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PIE1bits.ADIE&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   259</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   260</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ADCON0bits.CHS&nbsp =&nbsp 3;</code></td></tr>
+<tr><td><code><i>   261</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp ADCON0bits.ADON&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   262</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   263</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   264</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp Setup&nbsp Interrupt&nbsp Pin&nbsp */</code></td></tr>
+<tr><td><code><i>   265</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp TRISAbits.TRISA2&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   266</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.INTE&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   267</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp OPTION_REGbits.INTEDG&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   268</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   269</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   270</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp Setup&nbsp WDT*/</code></td></tr>
+<tr><td><code><i>   271</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp WDTCONbits.WDTPS&nbsp =&nbsp 10;</code></td></tr>
+<tr><td><code><i>   272</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   273</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   274</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp Setup&nbsp Charge&nbsp Control&nbsp */</code></td></tr>
+<tr><td><code><i>   275</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   276</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp TRISAbits.TRISA5&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   277</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PORTAbits.RA5&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   278</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   279</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   280</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   281</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp Start&nbsp Interrupts&nbsp */</code></td></tr>
+<tr><td><code><i>   282</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.PEIE&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   283</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.GIE&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   284</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   285</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp unsigned&nbsp int&nbsp bootCount&nbsp =&nbsp read_flashmem(FLASH_OFFSET_BOOT_COUNT);</code></td></tr>
+<tr><td><code><i>   286</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp if&nbsp (bootCount&nbsp ==&nbsp 13313){</code></td></tr>
+<tr><td><code><i>   287</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp bootCount&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   288</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>   289</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp bootCount++;</code></td></tr>
+<tr><td><code><i>   290</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp write_flashmem(FLASH_OFFSET_BOOT_COUNT,&nbsp bootCount);</code></td></tr>
+<tr><td><code><i>   291</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   292</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp while(1){</code></td></tr>
+<tr><td><code><i>   293</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp loop();</code></td></tr>
+<tr><td><code><i>   294</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>   295</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   296</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp return;</code></td></tr>
+<tr><td><code><i>   297</i> </code></td><td><code>&nbsp }</code></code></BODY>
+</HTML>

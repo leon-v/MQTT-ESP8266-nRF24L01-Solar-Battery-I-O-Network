@@ -101,11 +101,11 @@ uint8 nrf24l01SPISend(uint8 data) {
 		}
 
 		// Clock Up
-		os_delay_us(10);
+		os_delay_us(20);
 		gpio_output_set(CLKPIN, 0, CLKPIN, 0);// (high, low, out, in)
 
 		// Clock Down
-		os_delay_us(10);
+		os_delay_us(20);
 		gpio_output_set(0, CLKPIN, CLKPIN, 0);// (high, low, out, in)
 
 		bit--;
@@ -236,15 +236,15 @@ void nrf24l01InitRegisters(void){
 	nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
 
 	// Disable Auto ACK MCU needs to do this
-	// n_EN_AA_t enAA;
-	// enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0);
-	// enAA.ENAA_P0 = 0;
-	// enAA.ENAA_P1 = 0;
-	// enAA.ENAA_P2 = 0;
-	// enAA.ENAA_P3 = 0;
-	// enAA.ENAA_P4 = 0;
-	// enAA.ENAA_P5 = 0;
-	// nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte);
+	n_EN_AA_t enAA;
+	enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0);
+	enAA.ENAA_P0 = 0;
+	enAA.ENAA_P1 = 0;
+	enAA.ENAA_P2 = 0;
+	enAA.ENAA_P3 = 0;
+	enAA.ENAA_P4 = 0;
+	enAA.ENAA_P5 = 0;
+	nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte);
     
     
     // Set dynamic payload length
@@ -282,6 +282,10 @@ void nrf24l01CheckRecieve(void){
 	rf24l01UpdateStatus();
 
 	os_printf("nrf24l01CheckRecieve %02X \r\n", status.byte);
+
+	if ( (status.byte == 0x00) || (status.byte == 0xFF) ) {
+		system_restart();
+	}
 
 	if (status.RX_DR){
 
