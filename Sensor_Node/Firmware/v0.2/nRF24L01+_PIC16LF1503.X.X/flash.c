@@ -1,5 +1,6 @@
 #include "flash.h"
 
+#pragma interrupt_level 1
 void write_flashmem(unsigned int offset, unsigned int data) {
     
     unsigned int address;
@@ -56,6 +57,7 @@ void write_flashmem(unsigned int offset, unsigned int data) {
     INTCONbits.GIE = 1;        //enable interupts again
 }
 
+#pragma interrupt_level 1
 unsigned int read_flashmem(unsigned int offset) {
     
     unsigned int address;

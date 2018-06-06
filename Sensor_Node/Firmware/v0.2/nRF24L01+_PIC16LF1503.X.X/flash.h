@@ -13,7 +13,7 @@
 
  const unsigned char NVMEM[NV_MEM_SIZE]@NV_ADDRESS = {
     'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '2', 0, 0, 0,   //FLASH_OFFSET_NAME
-    0x0000,                                                                          //FLASH_OFFSET_BOOT_COUNT
+    0x0000,                                                                     //FLASH_OFFSET_BOOT_COUNT
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
  };
  

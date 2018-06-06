@@ -6,6 +6,7 @@
 
 
 #pragma interrupt_level 1
+
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
     nrf24l01SPIStart();
@@ -18,6 +19,38 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     return data;
 }
 
+void nrf24l01HandleRX(void){
+    
+    // Check the packet matches this name
+    unsigned char byte;
+    unsigned char i;
+    
+    unsigned char width = nrf24l01Send(n_R_RX_PL_WID, 0);
+    
+    i = 0;
+    while (i < width){
+        byte = nrf24l01SPISend(0);
+        
+        if (byte == '/'){
+            break;
+        }
+        
+        if (byte != read_flashmem( (unsigned) FLASH_OFFSET_NAME + i)){
+            return;
+        }
+        
+        i++;
+    }
+    
+    while (i < width){
+        byte = nrf24l01SPISend(0);
+        
+        string[strlen(string)] = byte;
+        
+        i++;
+    }
+}
+
 void nrf24l01ISR(void){
     
     n_STATUS_t status;
@@ -26,6 +59,12 @@ void nrf24l01ISR(void){
     if (status.TX_DS){
         nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
     }
+    
+    if (status.RX_DR){
+//        nrf24l01HandleRX();
+        nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
+    }
+    
 }
 
 void nrf24l01SetTransmitMode(void){
@@ -60,9 +99,10 @@ void nrf24l01SetRecieveMode(void){
     }
 }
 
-
-
-void nrf24l01SendStart(void){
+void nrf24l01SendString(char * string){
+    
+    unsigned char btye;
+    unsigned char i;
     
     nrf24l01SetTransmitMode();
     
@@ -70,53 +110,32 @@ void nrf24l01SendStart(void){
     
     nrf24l01SPISend(n_W_TX_PAYLOAD);
     
-    nrf24l01SendFlash(FLASH_OFFSET_NAME);
-}
-
-void nrf24l01SendString(char * string){
-    unsigned char i;
-    for (i = 0; string[i] != '\0'; i++){
-        nrf24l01SPISend(string[i]);
-    }
-}
-
-void nrf24l01SendFlash(unsigned char offset){
-    
-    unsigned char btye = 1;
-    unsigned char i = 0;
-    
+    i = 0;
     while (1){
-        btye = read_flashmem((unsigned) (offset + i));
+        btye = read_flashmem((unsigned) FLASH_OFFSET_NAME + i++);
         
         if (btye == '\0'){
             break;
         }
         
         nrf24l01SPISend(btye);
-        i++;
     }
-}
-
-void nrf24l01SendEnd(void){
+    
+    for (i = 0; string[i] != '\0'; i++){
+        nrf24l01SPISend(string[i]);
+    }
     
     nrf24l01SPIEnd();
             
     nrf24l01CEHigh();
     
-//    delayUs(100);
-    delayMs(100);
-    // Wait for the IC to trigger INT and wake up
-//    SLEEP();
-//    NOP();
-//    NOP();
+    delayUs(100);
     
     nrf24l01CELow();
     
-//    if (!STATUSbits.nTO && !STATUSbits.nPD){
-//        RESET();
-//    }
+    // Wait for ACK
     
-    
+    delayMs(100);
 }
 
 
@@ -138,9 +157,9 @@ void nrf24l01InitRegisters(void){
 //    nrf24l01Send(n_W_REGISTER | n_SETUP_RETR, setupRetries.byte);
     
     // Set Frequency
-//     n_RF_CH_t channel;
-//     channel.RF_CH = RADIO_FREQUENCY;
-//     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
+     n_RF_CH_t channel;
+     channel.RF_CH = RADIO_FREQUENCY;
+     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
     
     // Set radio to 2 Mbps and high power.  Leave LNA_HCURR at its default.
     n_RF_SETUP_t rfSetup;

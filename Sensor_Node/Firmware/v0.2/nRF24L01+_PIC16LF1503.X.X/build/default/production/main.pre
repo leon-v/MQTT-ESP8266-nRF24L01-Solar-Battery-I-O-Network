@@ -3790,7 +3790,51 @@ const unsigned char NVMEM[32]@(0x800U-32) = {
 unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 
-# 17 "interface.h"
+# 4 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\__size_t.h"
+typedef unsigned size_t;
+
+# 14 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\string.h"
+extern void * memcpy(void *, const void *, size_t);
+extern void * memmove(void *, const void *, size_t);
+extern void * memset(void *, int, size_t);
+
+
+
+
+extern void * __builtin_memcpy(void *, const void *, size_t);
+#pragma intrinsic(__builtin_memcpy)
+
+# 36
+extern char * strcat(char *, const char *);
+extern char * strcpy(char *, const char *);
+extern char * strncat(char *, const char *, size_t);
+extern char * strncpy(char *, const char *, size_t);
+extern char * strdup(const char *);
+extern char * strtok(char *, const char *);
+
+
+extern int memcmp(const void *, const void *, size_t);
+extern int strcmp(const char *, const char *);
+extern int stricmp(const char *, const char *);
+extern int strncmp(const char *, const char *, size_t);
+extern int strnicmp(const char *, const char *, size_t);
+extern void * memchr(const void *, int, size_t);
+extern size_t strcspn(const char *, const char *);
+extern char * strpbrk(const char *, const char *);
+extern size_t strspn(const char *, const char *);
+extern char * strstr(const char *, const char *);
+extern char * stristr(const char *, const char *);
+extern char * strerror(int);
+extern size_t strlen(const char *);
+extern char * strchr(const char *, int);
+extern char * strichr(const char *, int);
+extern char * strrchr(const char *, int);
+extern char * strrichr(const char *, int);
+
+# 12 "interface.h"
+extern char string[16];
+
+# 20
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -3798,7 +3842,7 @@ void nrf24l01SPIEnd(void);
 
 void _itoa(char * buffer, unsigned int number, unsigned char base);
 
-# 20 "main.c"
+# 19 "main.c"
 unsigned char nextMode = 10;
 unsigned char mode = 10;
 
@@ -3807,9 +3851,6 @@ unsigned char mode = 10;
 
 unsigned long adcSum = 0;
 unsigned char adcLoop = 0;
-char buffer[6];
-char byte[3];
-unsigned char sleepLoop = 0;
 unsigned int counter = 0;
 
 void interrupt ISR(void){
@@ -3873,24 +3914,19 @@ __nop();
 __nop();
 if (!STATUSbits.nTO && !STATUSbits.nPD){
 mode = nextMode;
-sleepLoop = 0;
 }
 
-if (sleepLoop++ > 5){
 asm("reset");
-}
 break;
 
 case 10:
 
 
-_itoa(buffer, read_flashmem(16), 10);
 
-nrf24l01SendStart();
-nrf24l01SendFlash(0);
-nrf24l01SendString( (char *) "/BOOT/");
-nrf24l01SendString(buffer);
-nrf24l01SendEnd();
+strcpy(string, "/BOOT/");
+_itoa(string + strlen(string), read_flashmem(16), 10);
+
+nrf24l01SendString(string);
 
 mode = 11;
 break;
@@ -3903,13 +3939,11 @@ nextMode = 4;
 break;
 
 case 4:
-_itoa(buffer, counter++, 10);
 
-nrf24l01SendStart();
-nrf24l01SendString((char *) "/COUNT/");
-nrf24l01SendString(buffer);
+strcpy(string, "/COUNT/");
+_itoa(string + strlen(string), counter++, 10);
 
-nrf24l01SendEnd();
+nrf24l01SendString(string);
 
 mode = 12;
 break;
@@ -3917,7 +3951,7 @@ break;
 case 12:
 startADC(3);
 
-# 145
+# 134
 nextMode = 13;
 break;
 
@@ -3940,17 +3974,17 @@ case 3:
 
 switch (ADCON0bits.CHS){
 case 3:
-adcSum* 10;
+adcSum*= 100;
 adcSum/= 2505;
 break;
 
 case 7:
-adcSum* 10;
+adcSum*= 100;
 adcSum/= 2500;
 break;
 
 case 31:
-adcSum* 10;
+adcSum*= 100;
 adcSum/= 2475;
 break;
 
@@ -3964,17 +3998,12 @@ adcSum/= 255;
 break;
 }
 
+strcpy(string, "/ADC");
+_itoa(string + strlen(string), ADCON0bits.CHS, 10);
+strcpy(string + strlen(string), "/");
+_itoa(string + strlen(string), adcSum, 10);
 
-_itoa(buffer, adcSum, 10);
-_itoa(byte, ADCON0bits.CHS, 10);
-
-nrf24l01SendStart();
-nrf24l01SendString((char *) "/ADC");
-nrf24l01SendString(byte);
-nrf24l01SendString((char *) "/");
-nrf24l01SendString(buffer);
-
-nrf24l01SendEnd();
+nrf24l01SendString(string);
 
 mode = nextMode;
 break;
@@ -3991,7 +4020,7 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 222
+# 206
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -4041,7 +4070,7 @@ OPTION_REGbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 10;
+WDTCONbits.WDTPS = 12;
 
 
 

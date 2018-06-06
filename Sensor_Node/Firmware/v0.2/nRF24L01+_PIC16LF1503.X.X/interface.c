@@ -4,6 +4,7 @@
 
 
 /* nrf24l01 Interfaces */
+char string[16];
 
 void nrf24l01InterfaceInit(void){
     

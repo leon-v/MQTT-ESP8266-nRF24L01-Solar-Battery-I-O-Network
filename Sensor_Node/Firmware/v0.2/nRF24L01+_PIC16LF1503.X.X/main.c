@@ -2,7 +2,6 @@
 #include "nrf24l01.h"
 #include "flash.h"
 #include "interface.h"
-//#include "stdlib.h"
 
 #define SLEEP_MODE          1
 #define SUM_ADC_MODE        2
@@ -25,9 +24,6 @@ unsigned char mode = SEND_BOOT_MODE;
 
 unsigned long adcSum = 0;
 unsigned char adcLoop = 0;
-char buffer[6];
-char byte[3];
-unsigned char sleepLoop = 0;
 unsigned int counter = 0;
 
 void interrupt ISR(void){
@@ -91,24 +87,19 @@ void loop(){
             NOP();
             if (!STATUSbits.nTO && !STATUSbits.nPD){
                 mode = nextMode;
-                sleepLoop = 0;
             }
             
-            if (sleepLoop++ > 5){
-                RESET();
-            }
+            RESET();
             break;
             
         case SEND_BOOT_MODE:
             // Write payload data
             
-            _itoa(buffer, read_flashmem(FLASH_OFFSET_BOOT_COUNT), 10);
             
-            nrf24l01SendStart();
-            nrf24l01SendFlash(FLASH_OFFSET_NAME);
-            nrf24l01SendString( (char *) "/BOOT/");
-            nrf24l01SendString(buffer);
-            nrf24l01SendEnd();
+            strcpy(string, "/BOOT/");
+            _itoa(stringAppend, read_flashmem(FLASH_OFFSET_BOOT_COUNT), 10);
+            
+            nrf24l01SendString(string);
             
             mode = RUN_MODE;
             break;
@@ -121,19 +112,17 @@ void loop(){
             break;
             
         case SEND_COUNTER_MODE:
-            _itoa(buffer, counter++, 10);
             
-            nrf24l01SendStart();
-            nrf24l01SendString((char *) "/COUNT/");
-            nrf24l01SendString(buffer);
+            strcpy(string, "/COUNT/");
+            _itoa(stringAppend, counter++, 10);
             
-            nrf24l01SendEnd();
+            nrf24l01SendString(string);
             
             mode = START_ADC3_MODE;
             break;
             
         case START_ADC3_MODE:
-            startADC(3);
+               startADC(3);
             
 //            if ( (adcSum >= 4200) && (PORTAbits.RA5 == 1) ) {
 //                PORTAbits.RA5 = 0;
@@ -164,17 +153,17 @@ void loop(){
             
             switch (ADCON0bits.CHS){
                 case 3:
-                    adcSum* 10;
+                    adcSum*= 100;
                     adcSum/= 2505;
                     break;
                     
                 case 7:
-                    adcSum* 10;
+                    adcSum*= 100;
                     adcSum/= 2500;
                     break;
                  
                 case 31:
-                    adcSum* 10;
+                    adcSum*= 100;
                     adcSum/= 2475;
                     break;
                     
@@ -188,17 +177,12 @@ void loop(){
                     break;
             }
             
+            strcpy(string, "/ADC");
+            _itoa(stringAppend, ADCON0bits.CHS, 10);
+            strcpy(stringAppend, "/");
+            _itoa(stringAppend, adcSum, 10);
             
-            _itoa(buffer, adcSum, 10);
-            _itoa(byte, ADCON0bits.CHS, 10);
-            
-            nrf24l01SendStart();
-            nrf24l01SendString((char *) "/ADC");
-            nrf24l01SendString(byte);
-            nrf24l01SendString((char *) "/");
-            nrf24l01SendString(buffer);
-            
-            nrf24l01SendEnd();
+            nrf24l01SendString(string);
 
             mode = nextMode;
             break;
@@ -268,7 +252,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 10;
+    WDTCONbits.WDTPS = 12;
     
     
     /* Setup Charge Control */

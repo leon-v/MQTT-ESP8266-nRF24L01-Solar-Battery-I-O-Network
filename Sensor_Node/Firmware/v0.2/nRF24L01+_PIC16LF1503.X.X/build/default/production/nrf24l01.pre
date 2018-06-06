@@ -3760,7 +3760,51 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 17 "interface.h"
+# 4 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\__size_t.h"
+typedef unsigned size_t;
+
+# 14 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\string.h"
+extern void * memcpy(void *, const void *, size_t);
+extern void * memmove(void *, const void *, size_t);
+extern void * memset(void *, int, size_t);
+
+
+
+
+extern void * __builtin_memcpy(void *, const void *, size_t);
+#pragma intrinsic(__builtin_memcpy)
+
+# 36
+extern char * strcat(char *, const char *);
+extern char * strcpy(char *, const char *);
+extern char * strncat(char *, const char *, size_t);
+extern char * strncpy(char *, const char *, size_t);
+extern char * strdup(const char *);
+extern char * strtok(char *, const char *);
+
+
+extern int memcmp(const void *, const void *, size_t);
+extern int strcmp(const char *, const char *);
+extern int stricmp(const char *, const char *);
+extern int strncmp(const char *, const char *, size_t);
+extern int strnicmp(const char *, const char *, size_t);
+extern void * memchr(const void *, int, size_t);
+extern size_t strcspn(const char *, const char *);
+extern char * strpbrk(const char *, const char *);
+extern size_t strspn(const char *, const char *);
+extern char * strstr(const char *, const char *);
+extern char * stristr(const char *, const char *);
+extern char * strerror(int);
+extern size_t strlen(const char *);
+extern char * strchr(const char *, int);
+extern char * strichr(const char *, int);
+extern char * strrchr(const char *, int);
+extern char * strrichr(const char *, int);
+
+# 12 "interface.h"
+extern char string[16];
+
+# 20
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -3993,6 +4037,7 @@ void write_flashmem(unsigned int offset, unsigned int data);
 
 # 8 "nrf24l01.c"
 #pragma interrupt_level 1
+
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
 
 nrf24l01SPIStart();
@@ -4005,6 +4050,38 @@ nrf24l01SPIEnd();
 return data;
 }
 
+void nrf24l01HandleRX(void){
+
+
+unsigned char byte;
+unsigned char i;
+
+unsigned char width = nrf24l01Send(0b01100000, 0);
+
+i = 0;
+while (i < width){
+byte = nrf24l01SPISend(0);
+
+if (byte == '/'){
+break;
+}
+
+if (byte != read_flashmem( (unsigned) 0 + i)){
+return;
+}
+
+i++;
+}
+
+while (i < width){
+byte = nrf24l01SPISend(0);
+
+string[strlen(string)] = byte;
+
+i++;
+}
+}
+
 void nrf24l01ISR(void){
 
 n_STATUS_t status;
@@ -4013,6 +4090,12 @@ status.byte = nrf24l01Send(0b00000000 | 0x07, 0);
 if (status.TX_DS){
 nrf24l01Send(0b00100000 | 0x07, status.byte);
 }
+
+if (status.RX_DR){
+
+nrf24l01Send(0b00100000 | 0x07, status.byte);
+}
+
 }
 
 void nrf24l01SetTransmitMode(void){
@@ -4047,9 +4130,10 @@ _delay((unsigned long)((200)*(16000000/4000000.0)));
 }
 }
 
+void nrf24l01SendString(char * string){
 
-
-void nrf24l01SendStart(void){
+unsigned char btye;
+unsigned char i;
 
 nrf24l01SetTransmitMode();
 
@@ -4057,46 +4141,32 @@ nrf24l01SPIStart();
 
 nrf24l01SPISend(0b10100000);
 
-nrf24l01SendFlash(0);
-}
-
-void nrf24l01SendString(char * string){
-unsigned char i;
-for (i = 0; string[i] != '\0'; i++){
-nrf24l01SPISend(string[i]);
-}
-}
-
-void nrf24l01SendFlash(unsigned char offset){
-
-unsigned char btye = 1;
-unsigned char i = 0;
-
+i = 0;
 while (1){
-btye = read_flashmem((unsigned) (offset + i));
+btye = read_flashmem((unsigned) 0 + i++);
 
 if (btye == '\0'){
 break;
 }
 
 nrf24l01SPISend(btye);
-i++;
-}
 }
 
-void nrf24l01SendEnd(void){
+for (i = 0; string[i] != '\0'; i++){
+nrf24l01SPISend(string[i]);
+}
 
 nrf24l01SPIEnd();
 
 PORTAbits.RA0 = 1;
 
+_delay((unsigned long)((100)*(16000000/4000000.0)));
 
-_delay((unsigned long)((100)*(16000000/4000.0)));
-
-# 113
 PORTAbits.RA0 = 0;
 
-# 120
+
+
+_delay((unsigned long)((100)*(16000000/4000.0)));
 }
 
 
@@ -4111,7 +4181,12 @@ setupAW.byte = 0x00;
 setupAW.AW = 3;
 nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
 
-# 146
+# 160
+n_RF_CH_t channel;
+channel.RF_CH = 83;
+nrf24l01Send(0b00100000 | 0x05, channel.byte);
+
+
 n_RF_SETUP_t rfSetup;
 rfSetup.RF_DR_LOW = 0;
 rfSetup.RF_DR_HIGH = 1;

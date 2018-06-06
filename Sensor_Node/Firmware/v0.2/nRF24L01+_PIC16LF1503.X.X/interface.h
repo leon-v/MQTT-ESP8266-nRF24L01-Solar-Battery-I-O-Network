@@ -2,12 +2,15 @@
 #define	INTERFACE_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
+#include <string.h>
 
 #define _XTAL_FREQ 16000000
 
 #define delayUs(x) __delay_us(x)
 #define delayMs(x) __delay_ms(x)
 
+extern char string[16];
+#define stringAppend string + strlen(string)
 
 #define nrf24l01CELow() PORTAbits.RA0 = 0
 #define nrf24l01CEHigh() PORTAbits.RA0 = 1
