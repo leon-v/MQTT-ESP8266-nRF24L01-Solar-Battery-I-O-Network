@@ -273,12 +273,26 @@ void nrf24l01InitRegisters(void){
 }
 
 
+<<<<<<< HEAD
+	// Receive pipe addres 2
+	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P2, n_ADDRESS_P0[4] + (2 * n_ADDRESS_MUL)); // 15
+
+	// Receive pipe addres 3
+	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P3, n_ADDRESS_P0[4] + (3 * n_ADDRESS_MUL)); // 16
+
+	// Receive pipe addres 4
+	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P4, n_ADDRESS_P0[4] + (4 * n_ADDRESS_MUL)); // 17
+
+	// Receive pipe addres 5
+	nrf24l01Send(n_W_REGISTER | n_RX_ADDR_P5, n_ADDRESS_P0[4] + (5 * n_ADDRESS_MUL)); // 18
+=======
 
 void nrf24l01CheckRecieve(void){
 
 	rf24l01UpdateStatus();
 
 	// os_printf("nrf24l01CheckRecieve %02X \r\n", status.byte);
+>>>>>>> 4701f05cb28ef2cac22c086f737e7895c2e014f9
 
 	if (status.RX_DR){
 
