@@ -24,7 +24,10 @@ unsigned char mode = SEND_BOOT_MODE;
 
 unsigned long adcSum = 0;
 unsigned char adcLoop = 0;
+unsigned char sleepLoop = 0;
 unsigned int counter = 0;
+
+// Cahnge ISR to trigger super loop code to do its bidding
 
 void interrupt ISR(void){
     if (PIR1bits.ADIF){
@@ -87,9 +90,12 @@ void loop(){
             NOP();
             if (!STATUSbits.nTO && !STATUSbits.nPD){
                 mode = nextMode;
+                sleepLoop = 0;
             }
             
-            RESET();
+            if (sleepLoop++ > 5){
+                RESET();
+            }
             break;
             
         case SEND_BOOT_MODE:

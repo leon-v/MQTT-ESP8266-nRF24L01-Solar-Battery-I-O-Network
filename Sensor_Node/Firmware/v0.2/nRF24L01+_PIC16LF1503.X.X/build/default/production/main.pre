@@ -3851,6 +3851,7 @@ unsigned char mode = 10;
 
 unsigned long adcSum = 0;
 unsigned char adcLoop = 0;
+unsigned char sleepLoop = 0;
 unsigned int counter = 0;
 
 void interrupt ISR(void){
@@ -3914,9 +3915,12 @@ __nop();
 __nop();
 if (!STATUSbits.nTO && !STATUSbits.nPD){
 mode = nextMode;
+sleepLoop = 0;
 }
 
+if (sleepLoop++ > 5){
 asm("reset");
+}
 break;
 
 case 10:
@@ -3951,7 +3955,7 @@ break;
 case 12:
 startADC(3);
 
-# 134
+# 138
 nextMode = 13;
 break;
 
@@ -4020,7 +4024,7 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 206
+# 210
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
