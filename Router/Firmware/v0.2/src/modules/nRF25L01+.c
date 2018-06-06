@@ -296,9 +296,10 @@ void nrf24l01CheckRecieve(void){
 		uint8 width = nrf24l01Send(n_R_RX_PL_WID, 0); //1
 
 		char *buffer = NULL;
-		buffer = (char *) os_malloc((width + 16) * sizeof(char));
+		buffer = (char *) os_malloc((width + 32) * sizeof(char));
 		buffer[0] = '\0';
-		strcat(buffer, "/radio/raw/");
+
+		os_sprintf(buffer, "/radio/%u/", system_get_chip_id());
 		char *buffer1 = buffer + strlen(buffer);
 		nrf24l01SPIStart();
 
