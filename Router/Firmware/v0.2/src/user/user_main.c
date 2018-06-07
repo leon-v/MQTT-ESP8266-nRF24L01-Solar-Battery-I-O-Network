@@ -199,18 +199,15 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 	gpio_output_set(BIT2,0, BIT2, 0); // LED OFF (Some ESPs use pin 1)
 
-	PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO4_U, FUNC_GPIO4);
-	GPIO_DIS_OUTPUT(4);
-	// PIN_PULLDWN_DIS(PERIPHS_IO_MUX_GPIO4_U);
+	// PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO4_U, FUNC_GPIO4);
+	// GPIO_DIS_OUTPUT(4);
 	PIN_PULLUP_EN(PERIPHS_IO_MUX_GPIO4_U);
 	gpio_output_set(0, BIT4, 0, BIT4);// Bit 4 input
 
-	gpio_output_set(0, BIT2, 0, BIT2);// Bit 4 input
-
 
 	// if (resetInfo->reason != 4){
-	// if (!GPIO_INPUT_GET(4)){
-	 if (0){
+	if (!GPIO_INPUT_GET(4)){
+	 // if (1){
 			INFO("\r\nStarting HTTP Config ....\r\n");
 		HTTPConfig_Init();
 	}

@@ -11,7 +11,7 @@ typedef enum{
 
 /*IMPORTANT: the following configuration maybe need modified*/
 /***********************************************************************************************************************/
-#define CFG_HOLDER    0x00000000    /* Change this value to load default configurations */
+#define CFG_HOLDER    0x00000001    /* Change this value to load default configurations */
 
 /*DEFAULT CONFIGURATIONS*/
 
