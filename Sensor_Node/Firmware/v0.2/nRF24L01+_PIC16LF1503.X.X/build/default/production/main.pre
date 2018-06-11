@@ -3760,11 +3760,209 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 6 "nrf24l01.h"
+# 14 "nRF24L01+_types.h"
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned PRIM_RX : 1;
+unsigned PWR_UP : 1;
+unsigned CRCO : 1;
+unsigned EN_CRC : 1;
+unsigned MASK_MAX_RT: 1;
+unsigned MASK_TX_DS : 1;
+unsigned MASK_RX_DR : 1;
+unsigned Reserved : 1;
+
+};
+struct {
+unsigned bit0 : 1;
+unsigned bit1 : 1;
+unsigned bit2 : 1;
+unsigned bit3 : 1;
+unsigned bit4 : 1;
+unsigned bit5 : 1;
+unsigned bit6 : 1;
+unsigned bit7 : 1;
+};
+} n_CONFIG_t;
+
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned ENAA_P0 : 1;
+unsigned ENAA_P1 : 1;
+unsigned ENAA_P2 : 1;
+unsigned ENAA_P3 : 1;
+unsigned ENAA_P4 : 1;
+unsigned ENAA_P5 : 1;
+unsigned Reserved : 2;
+
+};
+struct {
+unsigned bit0 : 1;
+unsigned bit1 : 1;
+unsigned bit2 : 1;
+unsigned bit3 : 1;
+unsigned bit4 : 1;
+unsigned bit5 : 1;
+unsigned bit6 : 1;
+unsigned bit7 : 1;
+};
+} n_EN_AA_t;
+
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned ERX_P0 : 1;
+unsigned ERX_P1 : 1;
+unsigned ERX_P2 : 1;
+unsigned ERX_P3 : 1;
+unsigned ERX_P4 : 1;
+unsigned ERX_P5 : 1;
+unsigned Reserved : 2;
+
+};
+struct {
+unsigned bit0 : 1;
+unsigned bit1 : 1;
+unsigned bit2 : 1;
+unsigned bit3 : 1;
+unsigned bit4 : 1;
+unsigned bit5 : 1;
+unsigned bit6 : 1;
+unsigned bit7 : 1;
+};
+} n_EN_RXADDR_t;
+
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned AW : 2;
+unsigned Reserved : 6;
+};
+} n_SETUP_AW_t;
+
+
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned ARC : 4;
+unsigned ARD : 4;
+
+};
+} n_SETUP_RETR_t;
+
+
+typedef union {
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned RF_CH : 7;
+};
+} n_RF_CH_t;
+
+
+typedef union {
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned Obsolete : 1;
+unsigned RF_PWR : 2;
+unsigned RF_DR_HIGH : 1;
+unsigned PLL_LOCK : 1;
+unsigned RF_DR_LOW : 1;
+unsigned Reserved : 1;
+unsigned CONT_WAVE : 1;
+};
+} n_RF_SETUP_t;
+
+
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned TX_FULL : 1;
+unsigned RX_P_NO : 3;
+unsigned MAX_RT : 1;
+unsigned TX_DS : 1;
+unsigned RX_DR : 1;
+unsigned Reserved : 1;
+
+};
+} n_STATUS_t;
+
+# 170
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned RX_PW : 6;
+unsigned Reserved : 2;
+
+};
+} n_RX_PW_t;
+
+# 190
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned DPL_P0 : 1;
+unsigned DPL_P1 : 1;
+unsigned DPL_P2 : 1;
+unsigned DPL_P3 : 1;
+unsigned DPL_P4 : 1;
+unsigned DPL_P5 : 1;
+unsigned Reserved : 2;
+
+};
+} n_DYNPD_t;
+
+
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned EN_DYN_ACK : 1;
+unsigned EN_ACK_PAY : 1;
+unsigned EN_DPL : 1;
+unsigned Reserved : 5;
+};
+} n_FEATURE_t;
+
+# 7 "nrf24l01.h"
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-# 13
+typedef struct{
+n_STATUS_t radio;
+unsigned waitForTXACK : 1;
+unsigned waitForTXACKCount : 4;
+} nrf24l01Status_t;
+
+# 20
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 
@@ -3773,8 +3971,10 @@ void nrf24l01SendByte(unsigned char payloadByte);
 void nrf24l01SendEnd(void);
 void nrf24l01SetRecieveMode(void);
 
-void nrf24l01SendString(char * string);
+void nrf24l01SendString(char * string, char waitForAck);
 void nrf24l01SendFlash(unsigned char offset);
+
+unsigned char nrf24l01Service(void);
 
 # 6 "flash.h"
 extern const unsigned char NVMEM[32];
@@ -3901,6 +4101,14 @@ mode = 2;
 }
 void loop(){
 
+
+while (nrf24l01Service()){
+asm("sleep");
+__nop();
+__nop();
+}
+
+
 if (mode != 1) {
 asm("clrwdt");
 }
@@ -3932,7 +4140,7 @@ case 10:
 strcpy(string, "/BOOT/");
 _itoa(string + strlen(string), read_flashmem(16), 10);
 
-nrf24l01SendString(string);
+nrf24l01SendString(string, 0);
 
 mode = 11;
 break;
@@ -3949,7 +4157,7 @@ case 4:
 strcpy(string, "/COUNT/");
 _itoa(string + strlen(string), counter++, 10);
 
-nrf24l01SendString(string);
+nrf24l01SendString(string, 1);
 
 mode = 12;
 break;
@@ -3957,7 +4165,7 @@ break;
 case 12:
 startADC(3);
 
-# 140
+# 148
 nextMode = 13;
 break;
 
@@ -4009,7 +4217,7 @@ _itoa(string + strlen(string), ADCON0bits.CHS, 10);
 strcpy(string + strlen(string), "/");
 _itoa(string + strlen(string), adcSum, 10);
 
-nrf24l01SendString(string);
+nrf24l01SendString(string, 1);
 
 mode = nextMode;
 break;
@@ -4026,7 +4234,7 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 212
+# 220
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 

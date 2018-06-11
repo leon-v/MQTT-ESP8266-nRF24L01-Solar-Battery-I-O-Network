@@ -1,12 +1,12 @@
-#include <xc.h>
+
 #include "interface.h"
 #include "nRF24L01+_types.h"
 #include "nrf24l01.h"
 #include "flash.h"
 
-nrf24l01Status_t nrf24l01Status;
 
 #pragma interrupt_level 1
+
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
     nrf24l01SPIStart();
@@ -19,14 +19,55 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     return data;
 }
 
+void nrf24l01HandleRX(void){
+    
+    // Check the packet matches this name
+    unsigned char byte;
+    unsigned char i;
+    
+    unsigned char width = nrf24l01Send(n_R_RX_PL_WID, 0);
+    
+    i = 0;
+    while (i < width){
+        byte = nrf24l01SPISend(0);
+        
+        if (byte == '/'){
+            break;
+        }
+        
+        if (byte != read_flashmem( (unsigned) FLASH_OFFSET_NAME + i)){
+            return;
+        }
+        
+        i++;
+    }
+    
+    while (i < width){
+        byte = nrf24l01SPISend(0);
+        
+        string[strlen(string)] = byte;
+        
+        i++;
+    }
+}
 
+void nrf24l01ISR(void){
+    
+    n_STATUS_t status;
+    status.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
+    
+    if (status.TX_DS){
+        nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
+    }
+    
+    if (status.RX_DR){
+//        nrf24l01HandleRX();
+        nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
+    }
+    
+}
 
 void nrf24l01SetTransmitMode(void){
-    
-    // Don't change to transmit mode when we are waiting for an ACK
-    if (nrf24l01Status.waitForTXACK){
-        return;
-    }
     
     nrf24l01CELow();
     
@@ -58,106 +99,7 @@ void nrf24l01SetRecieveMode(void){
     }
 }
 
-
-void nrf24l01HandleRX(void){
-    
-    // Check the packet matches this name
-    unsigned char byte;
-    unsigned char i;
-    
-    unsigned char width = nrf24l01Send(n_R_RX_PL_WID, 0);
-    
-    i = 0;
-    while (i < width){
-        byte = nrf24l01SPISend(0);
-        
-        if (byte == '/'){
-            break;
-        }
-        
-        if (byte != read_flashmem( (unsigned) FLASH_OFFSET_NAME + i)){
-            return;
-        }
-        
-        i++;
-    }
-    
-    while (i < width){
-        byte = nrf24l01SPISend(0);
-        string[strlen(string)] = byte;
-        i++;
-    }
-}
-
-unsigned char nrf24l01IsACK(void){
-    if (strcmp(string, "ACK") == 0){
-        return 1;
-    }
-    
-    return 0;
-}
-
-void nrf24l01ISR(void){
-    
-    if (nrf24l01Status.waitForTXACK){
-        nrf24l01Status.radio.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
-    }
-}
-
-unsigned char nrf24l01Service(void){
-    
-    // If we never got an ACK, reset the device.
-    if (nrf24l01Status.waitForTXACK){
-        if (nrf24l01Status.waitForTXACKCount++ == 15){
-            RESET();
-        }
-    }
-            
-    // Check if the packet was transmitted
-    if (nrf24l01Status.radio.TX_DS){
-        
-        // If we are waiting for an ACK, swap to receive mode
-        if (nrf24l01Status.waitForTXACK){
-            nrf24l01Status.waitForTXACKCount = 0;
-            nrf24l01SetRecieveMode();
-        }
-        
-        // Clear the interrupt on the nrf24l01 and update our status to reflect this
-        nrf24l01Send(n_W_REGISTER | n_STATUS, nrf24l01Status.radio.byte);
-        nrf24l01Status.radio.TX_DS = 0;
-    }
-    
-    
-    // Check id there is a received packet waiting
-    if (nrf24l01Status.radio.RX_DR){
-        
-        // Handle the received packer and store it in string
-        nrf24l01HandleRX();
-        
-        // Clear the interrupt on the nrf24l01 and update our status to reflect this
-        nrf24l01Send(n_W_REGISTER | n_STATUS, nrf24l01Status.radio.byte);
-        nrf24l01Status.radio.RX_DR = 0;
-        
-        // If we were waiting for an ACK 
-        if (nrf24l01Status.waitForTXACK){
-            
-            // Check if we did get one and clear the status flag
-            if (nrf24l01IsACK()){
-                nrf24l01Status.waitForTXACK = 0;
-            }
-        }
-    }
-    
-    // Return 1 if the MCU needs to wait for the nrf24l01 to be ready
-    return nrf24l01Status.waitForTXACK;
-}
-
-
-void nrf24l01SendString(char * string, char waitForAck){
-    
-    if (nrf24l01Status.waitForTXACK){
-        return;
-    }
+void nrf24l01SendString(char * string){
     
     unsigned char btye;
     unsigned char i;
@@ -187,11 +129,13 @@ void nrf24l01SendString(char * string, char waitForAck){
             
     nrf24l01CEHigh();
     
-    delayUs(15);
+    delayUs(100);
     
     nrf24l01CELow();
     
-    nrf24l01Status.waitForTXACK = waitForAck;
+    // Wait for ACK
+    
+    delayMs(100);
 }
 
 

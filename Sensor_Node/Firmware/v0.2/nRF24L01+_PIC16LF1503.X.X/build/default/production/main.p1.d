@@ -3,4 +3,5 @@
  main.c  \
 flash.h  \
 nrf24l01.h  \
-interface.h 
+interface.h  \
+nRF24L01+_types.h 

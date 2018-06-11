@@ -1,4 +1,4 @@
-#include <xc.h>
+
 #include "nrf24l01.h"
 #include "flash.h"
 #include "interface.h"
@@ -73,15 +73,7 @@ void startADC(unsigned char channel){
     mode = SUM_ADC_MODE;
 }
 void loop(){
-        
-    // Sleep while the radio is waiting for something
-    while (nrf24l01Service()){
-        SLEEP();
-        NOP();
-        NOP();
-    }
     
-            
     if (mode != SLEEP_MODE) {
         CLRWDT();
     }
@@ -113,7 +105,7 @@ void loop(){
             strcpy(string, "/BOOT/");
             _itoa(stringAppend, read_flashmem(FLASH_OFFSET_BOOT_COUNT), 10);
             
-            nrf24l01SendString(string, 0);
+            nrf24l01SendString(string);
             
             mode = RUN_MODE;
             break;
@@ -130,7 +122,7 @@ void loop(){
             strcpy(string, "/COUNT/");
             _itoa(stringAppend, counter++, 10);
             
-            nrf24l01SendString(string, 1);
+            nrf24l01SendString(string);
             
             mode = START_ADC3_MODE;
             break;
@@ -196,7 +188,7 @@ void loop(){
             strcpy(stringAppend, "/");
             _itoa(stringAppend, adcSum, 10);
             
-            nrf24l01SendString(string, 1);
+            nrf24l01SendString(string);
 
             mode = nextMode;
             break;

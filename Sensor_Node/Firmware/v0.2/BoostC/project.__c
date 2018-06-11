@@ -1,0 +1,19 @@
+[Settings]
+Target=PIC16LF1503
+Active Compiler=BoostC
+Active Directory=C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\v0.2\BoostC\
+Active Config=Debug
+Last Ext=h
+[Files]
+Count=9
+File0=config.c
+File1=flash.c
+File2=flash.h
+File3=interface.c
+File4=interface.h
+File5=main.c
+File6=nrf24l01.c
+File7=nrf24l01.h
+File8=nRF24L01+_types.h
+[Debugger]
+DebugFromMain=1
