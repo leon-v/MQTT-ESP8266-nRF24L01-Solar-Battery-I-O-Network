@@ -1,6 +1,17 @@
 #ifndef NRF24L01_H_
 #define NRF24L01_H_
 
+#include "nRF24L01+_types.h"
+
+typedef struct{
+    n_STATUS_t status;
+    unsigned waitForTXACK       : 1;
+    unsigned waitForTXACKCount  : 4;
+    unsigned TXBusy             : 1;
+    unsigned TXBusyCount        : 4;
+    unsigned RXPending			: 1;
+} nrf24l01_t;
+
 
 //Transmitters using e.i.r.p.s greater than 0 dBW (1 W)
 //must employ frequency hopping or digital modulation techniques.

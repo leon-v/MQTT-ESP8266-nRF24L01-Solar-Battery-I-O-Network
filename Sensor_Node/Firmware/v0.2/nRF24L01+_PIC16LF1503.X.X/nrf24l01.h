@@ -7,11 +7,17 @@
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
+unsigned int counter = 0;
+
 typedef struct{
-    n_STATUS_t radio;
+    n_STATUS_t status;
     unsigned waitForTXACK       : 1;
     unsigned waitForTXACKCount  : 4;
-} nrf24l01Status_t;
+    unsigned TXBusy             : 1;
+    unsigned TXBusyCount        : 4;
+    unsigned RXPending			: 1;
+    unsigned RXMode             : 1;
+} nrf24l01_t;
 
 //Transmitters using e.i.r.p.s greater than 0 dBW (1 W)
 //must employ frequency hopping or digital modulation techniques.

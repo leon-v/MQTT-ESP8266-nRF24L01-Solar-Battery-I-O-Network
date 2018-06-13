@@ -3812,7 +3812,7 @@ void nrf24l01SPIEnd(void);
 
 void _itoa(char * buffer, unsigned int number, unsigned char base);
 
-# 14 "nRF24L01+_types.h"
+# 15 "nRF24L01+_types.h"
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3961,7 +3961,7 @@ unsigned Reserved : 1;
 };
 } n_STATUS_t;
 
-# 170
+# 171
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3973,7 +3973,7 @@ unsigned Reserved : 2;
 };
 } n_RX_PW_t;
 
-# 190
+# 191
 typedef union{
 struct {
 unsigned byte : 8;
@@ -4008,13 +4008,19 @@ unsigned Reserved : 5;
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
+unsigned int counter = 0;
+
 typedef struct{
-n_STATUS_t radio;
+n_STATUS_t status;
 unsigned waitForTXACK : 1;
 unsigned waitForTXACKCount : 4;
-} nrf24l01Status_t;
+unsigned TXBusy : 1;
+unsigned TXBusyCount : 4;
+unsigned RXPending : 1;
+unsigned RXMode : 1;
+} nrf24l01_t;
 
-# 20
+# 26
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 
@@ -4043,7 +4049,7 @@ unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 
 # 7 "nrf24l01.c"
-nrf24l01Status_t nrf24l01Status;
+volatile nrf24l01_t nrf24l01;
 
 #pragma interrupt_level 1
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
@@ -4059,41 +4065,22 @@ return data;
 }
 
 
-
-void nrf24l01SetTransmitMode(void){
-
-
-if (nrf24l01Status.waitForTXACK){
-return;
-}
-
-PORTAbits.RA0 = 0;
-
-_delay((unsigned long)((200)*(16000000/4000000.0)));
+void nrf24l01SetMode(){
 
 n_CONFIG_t config;
 config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
-if (config.PRIM_RX == 1){
-config.PRIM_RX = 0;
-nrf24l01Send(0b00100000 | 0x00, config.byte);
-_delay((unsigned long)((200)*(16000000/4000000.0)));
-}
 
-}
-
-void nrf24l01SetRecieveMode(void){
+if (config.PRIM_RX != nrf24l01.RXMode){
 
 PORTAbits.RA0 = 0;
+_delay((unsigned long)((130)*(16000000/4000000.0)));
 
-_delay((unsigned long)((200)*(16000000/4000000.0)));
-
-n_CONFIG_t config;
-config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
-if (config.PRIM_RX == 0){
-config.PRIM_RX = 1;
+config.PRIM_RX = nrf24l01.RXMode;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
+
 PORTAbits.RA0 = 1;
-_delay((unsigned long)((200)*(16000000/4000000.0)));
+_delay((unsigned long)((130)*(16000000/4000000.0)));
+
 }
 }
 
@@ -4115,6 +4102,7 @@ break;
 }
 
 if (byte != read_flashmem( (unsigned) 0 + i)){
+nrf24l01.RXPending = 0;
 return;
 }
 
@@ -4128,84 +4116,125 @@ i++;
 }
 }
 
-unsigned char nrf24l01IsACK(void){
-if (strcmp(string, "ACK") == 0){
-return 1;
-}
+void nrf24l01CheckACK(void){
 
-return 0;
+
+
+
+nrf24l01.RXPending = 0;
 }
 
 void nrf24l01ISR(void){
 
-if (nrf24l01Status.waitForTXACK){
-nrf24l01Status.radio.byte = nrf24l01Send(0b00000000 | 0x07, 0);
+counter++;
+
+n_STATUS_t tempStatus;
+nrf24l01.status.byte = nrf24l01Send(0b00000000 | 0x07, 0);
+
+
+if (nrf24l01.status.byte == 0x00){
+asm("reset");
+}
+
+
+if (nrf24l01.status.byte == 0xFF){
+asm("reset");
+}
+
+if (nrf24l01.status.TX_DS){
+
+
+tempStatus.byte = 0x00;
+tempStatus.TX_DS = 1;
+nrf24l01Send(0b00100000 | 0x07, tempStatus.byte);
+
+
+
+nrf24l01.TXBusy = 0;
+}
+
+
+
+if (nrf24l01.status.RX_DR){
+
+
+tempStatus.byte = 0x00;
+tempStatus.RX_DR = 1;
+nrf24l01Send(0b00100000 | 0x07, tempStatus.byte);
+nrf24l01HandleRX();
+
+nrf24l01.RXPending = 1;
 }
 }
 
 unsigned char nrf24l01Service(void){
 
 
-if (nrf24l01Status.waitForTXACK){
-if (nrf24l01Status.waitForTXACKCount++ == 15){
-asm("reset");
+if (nrf24l01.RXPending){
+
+
+if (nrf24l01.waitForTXACK){
+nrf24l01CheckACK();
+
+
+if (!nrf24l01.waitForTXACK){
+nrf24l01.waitForTXACK = 0;
+}
+}
+
+if (nrf24l01.waitForTXACK){
+
+}
+
+}
+
+
+if (nrf24l01.RXMode == 0){
+if (nrf24l01.waitForTXACK){
+
+
+nrf24l01.waitForTXACKCount = 0;
+nrf24l01.RXMode = 1;
+nrf24l01SetMode();
+
 }
 }
 
 
-if (nrf24l01Status.radio.TX_DS){
 
-
-if (nrf24l01Status.waitForTXACK){
-nrf24l01Status.waitForTXACKCount = 0;
-nrf24l01SetRecieveMode();
-}
-
-
-nrf24l01Send(0b00100000 | 0x07, nrf24l01Status.radio.byte);
-nrf24l01Status.radio.TX_DS = 0;
-}
-
-
-
-if (nrf24l01Status.radio.RX_DR){
-
-
-nrf24l01HandleRX();
-
-
-nrf24l01Send(0b00100000 | 0x07, nrf24l01Status.radio.byte);
-nrf24l01Status.radio.RX_DR = 0;
-
-
-if (nrf24l01Status.waitForTXACK){
-
-
-if (nrf24l01IsACK()){
-nrf24l01Status.waitForTXACK = 0;
+if (nrf24l01.RXMode == 1){
+if (nrf24l01.waitForTXACK){
+if (++nrf24l01.waitForTXACKCount >= 10) {
+nrf24l01.waitForTXACK = 0;
 }
 }
 }
 
 
-return nrf24l01Status.waitForTXACK;
+return nrf24l01.waitForTXACK;
 }
 
 
 void nrf24l01SendString(char * string, char waitForAck){
 
-if (nrf24l01Status.waitForTXACK){
-return;
+nrf24l01.TXBusyCount = 0;
+while (nrf24l01.TXBusy){
+if (++nrf24l01.TXBusyCount >= 5) {
+nrf24l01.TXBusy = 0;
+}
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
 }
 
+# 188
 unsigned char btye;
 unsigned char i;
 
-nrf24l01SetTransmitMode();
+nrf24l01.RXMode = 0;
+nrf24l01SetMode();
 
 nrf24l01SPIStart();
 
-nrf24l01SPISend(0b10100000);
+nrf24l01SPISend(0b10110000);
 
 i = 0;
 while (1){
@@ -4224,38 +4253,27 @@ nrf24l01SPISend(string[i]);
 
 nrf24l01SPIEnd();
 
+nrf24l01.TXBusy = 1;
+nrf24l01.waitForTXACK = waitForAck;
+
 PORTAbits.RA0 = 1;
 
-_delay((unsigned long)((15)*(16000000/4000000.0)));
+_delay((unsigned long)((20)*(16000000/4000000.0)));
 
 PORTAbits.RA0 = 0;
 
-nrf24l01Status.waitForTXACK = waitForAck;
+if (waitForAck){
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+}
 }
 
 
 void nrf24l01InitRegisters(void){
 
-nrf24l01Send(0b00100000 | 0x00, 0x00);
-
-_delay((unsigned long)((10)*(16000000/4000.0)));
-
-n_SETUP_AW_t setupAW;
-setupAW.byte = 0x00;
-setupAW.AW = 3;
-nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
-
-# 216
-n_RF_CH_t channel;
-channel.RF_CH = 83;
-nrf24l01Send(0b00100000 | 0x05, channel.byte);
 
 
-n_RF_SETUP_t rfSetup;
-rfSetup.RF_DR_LOW = 0;
-rfSetup.RF_DR_HIGH = 1;
-rfSetup.RF_PWR = 3;
-nrf24l01Send(0b00100000 | 0x06, rfSetup.byte);
+_delay((unsigned long)((10000)*(16000000/4000000.0)));
 
 
 n_CONFIG_t config;
@@ -4264,6 +4282,13 @@ config.EN_CRC = 1;
 config.CRCO = 1;
 config.PWR_UP = 1;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
+
+# 262
+n_RF_SETUP_t rfSetup;
+rfSetup.RF_DR_LOW = 0;
+rfSetup.RF_DR_HIGH = 1;
+rfSetup.RF_PWR = 3;
+nrf24l01Send(0b00100000 | 0x06, rfSetup.byte);
 
 
 n_EN_RXADDR_t enRXAddr;
@@ -4291,6 +4316,7 @@ nrf24l01Send(0b00100000 | 0x01, enAA.byte);
 n_FEATURE_t feature;
 feature.byte = nrf24l01Send(0b00000000 | 0x1D, 0);
 feature.EN_DPL = 1;
+feature.EN_DYN_ACK = 1;
 nrf24l01Send(0b00100000 | 0x1D, feature.byte);
 
 n_DYNPD_t DynPD;
@@ -4304,12 +4330,11 @@ DynPD.DPL_P5 = 1;
 nrf24l01Send(0b00100000 | 0x1C, DynPD.byte);
 
 
-n_STATUS_t status;
-status.byte = 0x00;
-status.RX_DR = 1;
-status.TX_DS = 1;
-status.MAX_RT = 1;
-nrf24l01Send(0b00100000 | 0x07, status.byte);
+nrf24l01.status.byte = 0x00;
+nrf24l01.status.RX_DR = 1;
+nrf24l01.status.TX_DS = 1;
+nrf24l01.status.MAX_RT = 1;
+nrf24l01Send(0b00100000 | 0x07, nrf24l01.status.byte);
 
 
 nrf24l01Send(0b11100001, 0);
@@ -4330,5 +4355,7 @@ _delay((unsigned long)((11)*(16000000/4000.0)));
 nrf24l01InitRegisters();
 
 _delay((unsigned long)((2)*(16000000/4000.0)));
+
+nrf24l01.status.byte = nrf24l01Send(0b00000000 | 0x07, 0);
 }
 

@@ -2947,9 +2947,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.c: 20: SSP1STATbits.CKE = 1;
 "20
 [e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;interface.c: 21: SSPCON1bits.SSPM = 0b0000;
+[; ;interface.c: 21: SSPCON1bits.SSPM = 0b0010;
 "21
-[e = . . _SSPCON1bits 1 0 -> -> 0 `i `uc ]
+[e = . . _SSPCON1bits 1 0 -> -> 2 `i `uc ]
 [; ;interface.c: 23: SSPCON1bits.SSPEN = 1;
 "23
 [e = . . _SSPCON1bits 0 5 -> -> 1 `i `uc ]

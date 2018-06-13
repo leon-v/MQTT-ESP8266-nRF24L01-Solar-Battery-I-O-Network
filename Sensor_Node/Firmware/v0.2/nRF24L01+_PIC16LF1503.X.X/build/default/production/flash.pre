@@ -3774,9 +3774,7 @@ const unsigned char NVMEM[32]@(0x800U-32) = {
 unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 
-
 # 3 "flash.c"
-#pragma interrupt_level 1
 void write_flashmem(unsigned int offset, unsigned int data) {
 
 unsigned int address;
@@ -3833,7 +3831,6 @@ PMCON1bits.WREN = 0;
 INTCONbits.GIE = 1;
 }
 
-#pragma interrupt_level 1
 unsigned int read_flashmem(unsigned int offset) {
 
 unsigned int address;

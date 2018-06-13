@@ -3760,7 +3760,7 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 14 "nRF24L01+_types.h"
+# 15 "nRF24L01+_types.h"
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3909,7 +3909,7 @@ unsigned Reserved : 1;
 };
 } n_STATUS_t;
 
-# 170
+# 171
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3921,7 +3921,7 @@ unsigned Reserved : 2;
 };
 } n_RX_PW_t;
 
-# 190
+# 191
 typedef union{
 struct {
 unsigned byte : 8;
@@ -3956,13 +3956,19 @@ unsigned Reserved : 5;
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
+unsigned int counter = 0;
+
 typedef struct{
-n_STATUS_t radio;
+n_STATUS_t status;
 unsigned waitForTXACK : 1;
 unsigned waitForTXACKCount : 4;
-} nrf24l01Status_t;
+unsigned TXBusy : 1;
+unsigned TXBusyCount : 4;
+unsigned RXPending : 1;
+unsigned RXMode : 1;
+} nrf24l01_t;
 
-# 20
+# 26
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 
@@ -4052,7 +4058,6 @@ unsigned char mode = 10;
 unsigned long adcSum = 0;
 unsigned char adcLoop = 0;
 unsigned char sleepLoop = 0;
-unsigned int counter = 0;
 
 
 
@@ -4103,11 +4108,8 @@ void loop(){
 
 
 while (nrf24l01Service()){
-asm("sleep");
-__nop();
-__nop();
+_delay((unsigned long)((10000)*(16000000/4000000.0)));
 }
-
 
 if (mode != 1) {
 asm("clrwdt");
@@ -4116,17 +4118,20 @@ asm("clrwdt");
 switch (mode){
 
 case 1:
-nrf24l01SetRecieveMode();
+
 
 PORTAbits.RA5 = (unsigned) !PORTAbits.RA5;
 
 asm("sleep");
 __nop();
 __nop();
+
 if (!STATUSbits.nTO && !STATUSbits.nPD){
 mode = nextMode;
 sleepLoop = 0;
 }
+
+nrf24l01Service();
 
 if (sleepLoop++ > 5){
 asm("reset");
@@ -4149,15 +4154,14 @@ break;
 case 11:
 mode = 1;
 nextMode = 4;
-
 break;
 
 case 4:
 
 strcpy(string, "/COUNT/");
-_itoa(string + strlen(string), counter++, 10);
+_itoa(string + strlen(string), counter, 10);
 
-nrf24l01SendString(string, 1);
+nrf24l01SendString(string, 0);
 
 mode = 12;
 break;
@@ -4165,7 +4169,7 @@ break;
 case 12:
 startADC(3);
 
-# 148
+# 146
 nextMode = 13;
 break;
 
@@ -4217,7 +4221,8 @@ _itoa(string + strlen(string), ADCON0bits.CHS, 10);
 strcpy(string + strlen(string), "/");
 _itoa(string + strlen(string), adcSum, 10);
 
-nrf24l01SendString(string, 1);
+nrf24l01SendString(string, 0);
+
 
 mode = nextMode;
 break;
@@ -4234,7 +4239,7 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 220
+# 219
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -4284,7 +4289,7 @@ OPTION_REGbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 12;
+WDTCONbits.WDTPS = 10;
 
 
 

@@ -25,7 +25,6 @@ unsigned char mode = SEND_BOOT_MODE;
 unsigned long adcSum = 0;
 unsigned char adcLoop = 0;
 unsigned char sleepLoop = 0;
-unsigned int counter = 0;
 
 // Cahnge ISR to trigger super loop code to do its bidding
 
@@ -76,11 +75,8 @@ void loop(){
         
     // Sleep while the radio is waiting for something
     while (nrf24l01Service()){
-        SLEEP();
-        NOP();
-        NOP();
+        delayUs(10000);
     }
-    
             
     if (mode != SLEEP_MODE) {
         CLRWDT();
@@ -89,17 +85,20 @@ void loop(){
     switch (mode){
         
         case SLEEP_MODE:
-            nrf24l01SetRecieveMode();
+//            nrf24l01SetRecieveMode();
             
             PORTAbits.RA5 = (unsigned) !PORTAbits.RA5;
             
             SLEEP();
             NOP();
             NOP();
+                    
             if (!STATUSbits.nTO && !STATUSbits.nPD){
                 mode = nextMode;
                 sleepLoop = 0;
             }
+            
+            nrf24l01Service();
             
             if (sleepLoop++ > 5){
                 RESET();
@@ -122,15 +121,14 @@ void loop(){
         case RUN_MODE:
             mode = SLEEP_MODE;
             nextMode = SEND_COUNTER_MODE;
-//            mode = START_ADC3_MODE;
             break;
             
         case SEND_COUNTER_MODE:
             
             strcpy(string, "/COUNT/");
-            _itoa(stringAppend, counter++, 10);
+            _itoa(stringAppend, counter, 10);
             
-            nrf24l01SendString(string, 1);
+            nrf24l01SendString(string, 0);
             
             mode = START_ADC3_MODE;
             break;
@@ -196,7 +194,8 @@ void loop(){
             strcpy(stringAppend, "/");
             _itoa(stringAppend, adcSum, 10);
             
-            nrf24l01SendString(string, 1);
+            nrf24l01SendString(string, 0);
+            
 
             mode = nextMode;
             break;
@@ -266,7 +265,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 12;
+    WDTCONbits.WDTPS = 10;
     
     
     /* Setup Charge Control */

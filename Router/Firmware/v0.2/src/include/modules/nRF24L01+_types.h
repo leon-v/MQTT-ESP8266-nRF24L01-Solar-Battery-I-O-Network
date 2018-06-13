@@ -8,6 +8,7 @@
 #define n_FLUSH_TX      0b11100001
 #define n_FLUSH_RX      0b11100010
 #define n_R_RX_PL_WID	0b01100000
+#define W_TX_PAYLOAD_NOACK 0b10110000
 
 
 #define n_CONFIG 		0x00

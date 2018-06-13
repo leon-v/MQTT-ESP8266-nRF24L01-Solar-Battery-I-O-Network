@@ -29,4 +29,5 @@
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/alloca.h \
  ../include/mqtt/typedef.h ../include/modules/wifi.h \
  ../include/modules/config.h ../include/mqtt/debug.h ../../include/gpio.h \
- ../../include/mem.h ../include/modules/nRF24L01+.h
+ ../../include/mem.h ../include/modules/nRF24L01+.h \
+ ../include/modules/nRF24L01+_types.h
