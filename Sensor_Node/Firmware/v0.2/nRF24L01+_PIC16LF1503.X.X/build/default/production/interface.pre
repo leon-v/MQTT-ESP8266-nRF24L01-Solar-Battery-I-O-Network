@@ -3810,6 +3810,8 @@ unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
+void enableInterrupts(unsigned char enable);
+
 void _itoa(char * buffer, unsigned int number, unsigned char base);
 
 # 7 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\stdlib.h"
@@ -3896,7 +3898,7 @@ TRISCbits.TRISC0 = 0;
 SSPCON1bits.SSPEN = 0;
 SSPCON1bits.CKP = 0;
 SSP1STATbits.CKE = 1;
-SSPCON1bits.SSPM = 0b0010;
+SSPCON1bits.SSPM = 0b0000;
 
 SSPCON1bits.SSPEN = 1;
 
@@ -3923,6 +3925,11 @@ _delay((unsigned long)((10)*(16000000/4000000.0)));
 void nrf24l01SPIEnd(void){
 _delay((unsigned long)((10)*(16000000/4000000.0)));
 PORTAbits.RA1 = 1;
+}
+
+#pragma interrupt_level 1
+void enableInterrupts(unsigned char enable){
+INTCONbits.INTE = enable;
 }
 
 

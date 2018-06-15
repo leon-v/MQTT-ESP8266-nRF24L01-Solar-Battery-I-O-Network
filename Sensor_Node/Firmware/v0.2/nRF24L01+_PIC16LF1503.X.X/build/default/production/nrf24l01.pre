@@ -3810,6 +3810,8 @@ unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
+void enableInterrupts(unsigned char enable);
+
 void _itoa(char * buffer, unsigned int number, unsigned char base);
 
 # 15 "nRF24L01+_types.h"
@@ -4032,8 +4034,6 @@ void nrf24l01SetRecieveMode(void);
 void nrf24l01SendString(char * string, char waitForAck);
 void nrf24l01SendFlash(unsigned char offset);
 
-unsigned char nrf24l01Service(void);
-
 # 6 "flash.h"
 extern const unsigned char NVMEM[32];
 
@@ -4054,6 +4054,8 @@ volatile nrf24l01_t nrf24l01;
 #pragma interrupt_level 1
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
 
+enableInterrupts(0);
+
 nrf24l01SPIStart();
 
 nrf24l01SPISend(command);
@@ -4061,26 +4063,31 @@ data = nrf24l01SPISend(data);
 
 nrf24l01SPIEnd();
 
+enableInterrupts(1);
+
 return data;
 }
 
 
-void nrf24l01SetMode(){
-
+void nrf24l01SetRXMode(unsigned char rxMode){
 n_CONFIG_t config;
 config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
+
+nrf24l01.RXMode = rxMode;
 
 if (config.PRIM_RX != nrf24l01.RXMode){
 
 PORTAbits.RA0 = 0;
-_delay((unsigned long)((130)*(16000000/4000000.0)));
+_delay((unsigned long)((200)*(16000000/4000000.0)));
 
 config.PRIM_RX = nrf24l01.RXMode;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
+_delay((unsigned long)((200)*(16000000/4000000.0)));
 
+if (nrf24l01.RXMode){
 PORTAbits.RA0 = 1;
-_delay((unsigned long)((130)*(16000000/4000000.0)));
-
+_delay((unsigned long)((200)*(16000000/4000000.0)));
+}
 }
 }
 
@@ -4114,19 +4121,19 @@ byte = nrf24l01SPISend(0);
 string[strlen(string)] = byte;
 i++;
 }
+
+nrf24l01.RXPending = 1;
 }
 
 void nrf24l01CheckACK(void){
 
-
-
-
+# 92
+nrf24l01.waitForTXACK = 0;
 nrf24l01.RXPending = 0;
+nrf24l01SetRXMode(0);
 }
 
 void nrf24l01ISR(void){
-
-counter++;
 
 n_STATUS_t tempStatus;
 nrf24l01.status.byte = nrf24l01Send(0b00000000 | 0x07, 0);
@@ -4141,6 +4148,25 @@ if (nrf24l01.status.byte == 0xFF){
 asm("reset");
 }
 
+
+if (nrf24l01.status.RX_DR){
+
+nrf24l01.waitForTXACK = 0;
+
+
+tempStatus.byte = 0x00;
+tempStatus.RX_DR = 1;
+nrf24l01Send(0b00100000 | 0x07, tempStatus.byte);
+
+
+nrf24l01HandleRX();
+
+
+nrf24l01CheckACK();
+}
+
+
+
 if (nrf24l01.status.TX_DS){
 
 
@@ -4149,88 +4175,54 @@ tempStatus.TX_DS = 1;
 nrf24l01Send(0b00100000 | 0x07, tempStatus.byte);
 
 
-
 nrf24l01.TXBusy = 0;
-}
-
-
-
-if (nrf24l01.status.RX_DR){
-
-
-tempStatus.byte = 0x00;
-tempStatus.RX_DR = 1;
-nrf24l01Send(0b00100000 | 0x07, tempStatus.byte);
-nrf24l01HandleRX();
-
-nrf24l01.RXPending = 1;
-}
-}
-
-unsigned char nrf24l01Service(void){
-
-
-if (nrf24l01.RXPending){
-
-
-if (nrf24l01.waitForTXACK){
-nrf24l01CheckACK();
-
-
-if (!nrf24l01.waitForTXACK){
-nrf24l01.waitForTXACK = 0;
-}
-}
-
-if (nrf24l01.waitForTXACK){
-
-}
-
-}
 
 
 if (nrf24l01.RXMode == 0){
-if (nrf24l01.waitForTXACK){
 
 
-nrf24l01.waitForTXACKCount = 0;
-nrf24l01.RXMode = 1;
-nrf24l01SetMode();
+counter++;
+
 
 }
 }
-
-
-
-if (nrf24l01.RXMode == 1){
-if (nrf24l01.waitForTXACK){
-if (++nrf24l01.waitForTXACKCount >= 10) {
-nrf24l01.waitForTXACK = 0;
-}
-}
-}
-
-
-return nrf24l01.waitForTXACK;
 }
 
 
 void nrf24l01SendString(char * string, char waitForAck){
 
-nrf24l01.TXBusyCount = 0;
-while (nrf24l01.TXBusy){
-if (++nrf24l01.TXBusyCount >= 5) {
-nrf24l01.TXBusy = 0;
-}
+if (!waitForAck){
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
 _delay((unsigned long)((50000)*(16000000/4000000.0)));
 }
 
-# 188
+nrf24l01.TXBusyCount = 0;
+while (nrf24l01.TXBusy){
+if (++nrf24l01.TXBusyCount == 15) {
+asm("reset");
+}
+_delay((unsigned long)((10000)*(16000000/4000000.0)));
+}
+
+nrf24l01.waitForTXACKCount = 0;
+while (nrf24l01.waitForTXACK){
+if (++nrf24l01.waitForTXACKCount == 15) {
+asm("reset");
+}
+_delay((unsigned long)((1000)*(16000000/4000000.0)));
+}
+
+enableInterrupts(0);
+
 unsigned char btye;
 unsigned char i;
 
-nrf24l01.RXMode = 0;
-nrf24l01SetMode();
+nrf24l01SetRXMode(0);
+
+nrf24l01.TXBusy = 1;
+nrf24l01.waitForTXACK = waitForAck;
 
 nrf24l01SPIStart();
 
@@ -4253,44 +4245,27 @@ nrf24l01SPISend(string[i]);
 
 nrf24l01SPIEnd();
 
-nrf24l01.TXBusy = 1;
-nrf24l01.waitForTXACK = waitForAck;
-
 PORTAbits.RA0 = 1;
 
 _delay((unsigned long)((20)*(16000000/4000000.0)));
 
 PORTAbits.RA0 = 0;
 
-if (waitForAck){
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-}
+enableInterrupts(1);
 }
 
 
 void nrf24l01InitRegisters(void){
 
 
+n_CONFIG_t config;
+
+config.PWR_UP = 0;
+nrf24l01Send(0b00100000 | 0x00, config.byte);
 
 _delay((unsigned long)((10000)*(16000000/4000000.0)));
 
-
-n_CONFIG_t config;
-config.PRIM_RX = 1;
-config.EN_CRC = 1;
-config.CRCO = 1;
-config.PWR_UP = 1;
-nrf24l01Send(0b00100000 | 0x00, config.byte);
-
-# 262
-n_RF_SETUP_t rfSetup;
-rfSetup.RF_DR_LOW = 0;
-rfSetup.RF_DR_HIGH = 1;
-rfSetup.RF_PWR = 3;
-nrf24l01Send(0b00100000 | 0x06, rfSetup.byte);
-
-
+# 253
 n_EN_RXADDR_t enRXAddr;
 enRXAddr.ERX_P0 = 1;
 enRXAddr.ERX_P1 = 1;
@@ -4330,15 +4305,23 @@ DynPD.DPL_P5 = 1;
 nrf24l01Send(0b00100000 | 0x1C, DynPD.byte);
 
 
-nrf24l01.status.byte = 0x00;
-nrf24l01.status.RX_DR = 1;
-nrf24l01.status.TX_DS = 1;
-nrf24l01.status.MAX_RT = 1;
-nrf24l01Send(0b00100000 | 0x07, nrf24l01.status.byte);
+n_STATUS_t status;
+status.byte = 0x00;
+status.RX_DR = 1;
+status.TX_DS = 1;
+status.MAX_RT = 1;
+nrf24l01Send(0b00100000 | 0x07, status.byte);
 
 
 nrf24l01Send(0b11100001, 0);
 nrf24l01Send(0b11100010, 0);
+
+
+config.PRIM_RX = 1;
+config.EN_CRC = 1;
+config.CRCO = 1;
+config.PWR_UP = 1;
+nrf24l01Send(0b00100000 | 0x00, config.byte);
 }
 
 void nrf24l01Init(void){

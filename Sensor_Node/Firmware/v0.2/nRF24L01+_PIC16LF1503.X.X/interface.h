@@ -22,6 +22,8 @@ unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
+void enableInterrupts(unsigned char enable);
+
 void _itoa(char * buffer, unsigned int number, unsigned char base);
 
 #endif	/* INTERFACE_H */

@@ -9,6 +9,8 @@ volatile nrf24l01_t nrf24l01;
 #pragma interrupt_level 1
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
+    enableInterrupts(0);
+    
     nrf24l01SPIStart();
     
     nrf24l01SPISend(command);
@@ -16,26 +18,31 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
     nrf24l01SPIEnd();
     
+    enableInterrupts(1);
+    
     return data;
 }
 
 
-void nrf24l01SetMode(){
-    
-    n_CONFIG_t config;
+void nrf24l01SetRXMode(unsigned char rxMode){
+     n_CONFIG_t config;
     config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
     
+    nrf24l01.RXMode = rxMode;
+            
     if (config.PRIM_RX != nrf24l01.RXMode){
         
         nrf24l01CELow();
-        delayUs(130);
+        delayUs(200);
 
         config.PRIM_RX = nrf24l01.RXMode;
         nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
-        
-        nrf24l01CEHigh();
-        delayUs(130);
-        
+        delayUs(200);
+
+        if (nrf24l01.RXMode){
+        	nrf24l01CEHigh();
+            delayUs(200);
+        }
     }
 }
 
@@ -69,20 +76,26 @@ void nrf24l01HandleRX(void){
         string[strlen(string)] = byte;
         i++;
     }
+    
+    nrf24l01.RXPending = 1;
 }
 
 void nrf24l01CheckACK(void){
+    
+//    if (!nrf24l01.waitForTXACK){
+//        return;
+//    }
 //    if (strcmp(string, "ACK") == 0){
 //        nrf24l01.RXPending = 0;
 //    }
     
+    nrf24l01.waitForTXACK = 0;
     nrf24l01.RXPending = 0;
+    nrf24l01SetRXMode(0);
 }
 
 void nrf24l01ISR(void){
-    
-    counter++;
-    
+   
     n_STATUS_t tempStatus;
     nrf24l01.status.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
     
@@ -96,6 +109,25 @@ void nrf24l01ISR(void){
         RESET();
     }
     
+    // Check id there is a received packet waiting
+    if (nrf24l01.status.RX_DR){
+
+        nrf24l01.waitForTXACK = 0;
+        
+        // Clear the interrupt on the nrf24l01
+        tempStatus.byte = 0x00;
+        tempStatus.RX_DR = 1;
+        nrf24l01Send(n_W_REGISTER | n_STATUS, tempStatus.byte);
+        
+        // Get the RX data into the buffer
+        nrf24l01HandleRX();
+        
+        // Check if the RX data is an ACK
+        nrf24l01CheckACK();
+    }
+    
+
+    
     if (nrf24l01.status.TX_DS){
         
         // Clear the interrupt on the nrf24l01 and update our status to reflect this
@@ -103,93 +135,55 @@ void nrf24l01ISR(void){
         tempStatus.TX_DS = 1;
         nrf24l01Send(n_W_REGISTER | n_STATUS, tempStatus.byte);
         
-        
         // Flag PTX as not busy anymore
         nrf24l01.TXBusy = 0;
-    }
-    
-    
-    // Check id there is a received packet waiting
-    if (nrf24l01.status.RX_DR){
         
-        // Clear the interrupt on the nrf24l01
-        tempStatus.byte = 0x00;
-        tempStatus.RX_DR = 1;
-        nrf24l01Send(n_W_REGISTER | n_STATUS, tempStatus.byte);
-        nrf24l01HandleRX();
-        // Set the RX Pending flag to tell the MCU it has something to do
-        nrf24l01.RXPending = 1;
-    }
-}
-
-unsigned char nrf24l01Service(void){
-    
-    // If the nrf24l01 has received a packet
-    if (nrf24l01.RXPending){
-            
-        // And the TX packet is pending its ACK
-        if (nrf24l01.waitForTXACK){
-            nrf24l01CheckACK();
-
-            // If the packet is no longer pending, the packet must have been ACK
-            if (!nrf24l01.waitForTXACK){
-                nrf24l01.waitForTXACK = 0;
-            }
-        }
-
-        if (nrf24l01.waitForTXACK){
-            // Add user func here
-        }
-        
-    }
-    
-    // If the nrf24l01 is in PTX mode and we are waiting for an ACK
-    if (nrf24l01.RXMode == 0){
-        if (nrf24l01.waitForTXACK){
-            
-            // Reset the ACK wait counter and set RX mode
-            nrf24l01.waitForTXACKCount = 0;
-            nrf24l01.RXMode = 1;
-            nrf24l01SetMode();
-            
+        // If the nrf24l01 is in PTX mode and we are waiting for an ACK
+        if (nrf24l01.RXMode == 0){
+//            if (nrf24l01.waitForTXACK){
+                // Reset the ACK wait counter and set RX mode
+                counter++;
+//                nrf24l01SetRXMode(1);
+//            }
         }
     }
-    
-    
-    // If we never got an ACK, reset the device.
-    if (nrf24l01.RXMode == 1){
-        if (nrf24l01.waitForTXACK){
-            if (++nrf24l01.waitForTXACKCount >= 10) {
-                nrf24l01.waitForTXACK = 0;
-            }
-        }
-    }
-    
-    // Return 1 if the MCU needs to wait for the nrf24l01 to be ready
-    return nrf24l01.waitForTXACK;
 }
 
 
 void nrf24l01SendString(char * string, char waitForAck){
     
-    nrf24l01.TXBusyCount = 0;
-    while (nrf24l01.TXBusy){
-        if (++nrf24l01.TXBusyCount >= 5) {
-            nrf24l01.TXBusy = 0;
-        }
+    if (!waitForAck){
+        delayUs(50000);
+        delayUs(50000);
+        delayUs(50000);
         delayUs(50000);
     }
     
-//    if (nrf24l01.waitForTXACK){
-//        return 0;
-//    }
+    nrf24l01.TXBusyCount = 0;
+    while (nrf24l01.TXBusy){
+        if (++nrf24l01.TXBusyCount == 15) {
+            RESET();
+        }
+        delayUs(10000);
+    }
     
+    nrf24l01.waitForTXACKCount = 0;
+    while (nrf24l01.waitForTXACK){
+        if (++nrf24l01.waitForTXACKCount == 15) {
+            RESET();
+        }
+        delayUs(1000);
+    }
+    
+    enableInterrupts(0);
     
     unsigned char btye;
     unsigned char i;
     
-    nrf24l01.RXMode = 0;
-    nrf24l01SetMode();
+    nrf24l01SetRXMode(0);
+    
+    nrf24l01.TXBusy = 1;
+    nrf24l01.waitForTXACK = waitForAck;
     
     nrf24l01SPIStart();
     
@@ -211,9 +205,6 @@ void nrf24l01SendString(char * string, char waitForAck){
     }
     
     nrf24l01SPIEnd();
-    
-    nrf24l01.TXBusy = 1;
-    nrf24l01.waitForTXACK = waitForAck;
             
     nrf24l01CEHigh();
     
@@ -221,26 +212,19 @@ void nrf24l01SendString(char * string, char waitForAck){
     
     nrf24l01CELow();
     
-    if (waitForAck){
-        delayUs(50000);
-        delayUs(50000);
-    }
+    enableInterrupts(1);
 }
 
 
 void nrf24l01InitRegisters(void){
     
-
-    
-    delayUs(10000);
-    
 // Enable 2-byte CRC and power up in receive mode.
     n_CONFIG_t config;
-	config.PRIM_RX = 1;
-	config.EN_CRC = 1;
-    config.CRCO = 1;
-	config.PWR_UP = 1;
+    
+	config.PWR_UP = 0;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
+    
+    delayUs(10000);
     
 //    n_SETUP_AW_t setupAW;
 //    setupAW.byte = 0x00;
@@ -259,11 +243,11 @@ void nrf24l01InitRegisters(void){
 //     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
     
     // Set radio to 2 Mbps and high power.  Leave LNA_HCURR at its default.
-    n_RF_SETUP_t rfSetup;
-    rfSetup.RF_DR_LOW = 0;
-    rfSetup.RF_DR_HIGH = 1;
-    rfSetup.RF_PWR = 3;
-    nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
+    // n_RF_SETUP_t rfSetup;
+    // rfSetup.RF_DR_LOW = 0;
+    // rfSetup.RF_DR_HIGH = 1;
+    // rfSetup.RF_PWR = 3;
+    // nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
     
     // Enable all data pipes
 	n_EN_RXADDR_t enRXAddr;
@@ -305,15 +289,23 @@ void nrf24l01InitRegisters(void){
 	nrf24l01Send(n_W_REGISTER | n_DYNPD, DynPD.byte);
     
     // clear the interrupt flags in case the radio's still asserting an old unhandled interrupt
-    nrf24l01.status.byte = 0x00;
-    nrf24l01.status.RX_DR = 1;
-    nrf24l01.status.TX_DS = 1;
-    nrf24l01.status.MAX_RT = 1;
-    nrf24l01Send(n_W_REGISTER | n_STATUS, nrf24l01.status.byte);
+    n_STATUS_t status;
+    status.byte = 0x00;
+    status.RX_DR = 1;
+    status.TX_DS = 1;
+    status.MAX_RT = 1;
+    nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
     
     // flush the FIFOs in case there are old data in them.
     nrf24l01Send(n_FLUSH_TX, 0);
     nrf24l01Send(n_FLUSH_RX, 0);
+    
+    // Enable 2-byte CRC and power up in receive mode.
+	config.PRIM_RX = 1;
+	config.EN_CRC = 1;
+    config.CRCO = 1;
+	config.PWR_UP = 1;
+	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
 }
 
 void nrf24l01Init(void){

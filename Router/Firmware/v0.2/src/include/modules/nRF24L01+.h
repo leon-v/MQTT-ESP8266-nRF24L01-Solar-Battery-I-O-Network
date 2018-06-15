@@ -10,6 +10,7 @@ typedef struct{
     unsigned TXBusy             : 1;
     unsigned TXBusyCount        : 4;
     unsigned RXPending			: 1;
+    unsigned RXMode             : 1;
 } nrf24l01_t;
 
 

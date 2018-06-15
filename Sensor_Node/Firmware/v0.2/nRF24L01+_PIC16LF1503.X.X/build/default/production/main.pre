@@ -3980,8 +3980,6 @@ void nrf24l01SetRecieveMode(void);
 void nrf24l01SendString(char * string, char waitForAck);
 void nrf24l01SendFlash(unsigned char offset);
 
-unsigned char nrf24l01Service(void);
-
 # 6 "flash.h"
 extern const unsigned char NVMEM[32];
 
@@ -4046,6 +4044,8 @@ unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
+void enableInterrupts(unsigned char enable);
+
 void _itoa(char * buffer, unsigned int number, unsigned char base);
 
 # 19 "main.c"
@@ -4106,11 +4106,6 @@ mode = 2;
 }
 void loop(){
 
-
-while (nrf24l01Service()){
-_delay((unsigned long)((10000)*(16000000/4000000.0)));
-}
-
 if (mode != 1) {
 asm("clrwdt");
 }
@@ -4118,9 +4113,6 @@ asm("clrwdt");
 switch (mode){
 
 case 1:
-
-
-PORTAbits.RA5 = (unsigned) !PORTAbits.RA5;
 
 asm("sleep");
 __nop();
@@ -4131,8 +4123,6 @@ mode = nextMode;
 sleepLoop = 0;
 }
 
-nrf24l01Service();
-
 if (sleepLoop++ > 5){
 asm("reset");
 }
@@ -4140,16 +4130,11 @@ break;
 
 case 10:
 
-
-
 strcpy(string, "/BOOT/");
 _itoa(string + strlen(string), read_flashmem(16), 10);
-
 nrf24l01SendString(string, 0);
-
 mode = 11;
 break;
-
 
 case 11:
 mode = 1;
@@ -4157,19 +4142,16 @@ nextMode = 4;
 break;
 
 case 4:
-
 strcpy(string, "/COUNT/");
 _itoa(string + strlen(string), counter, 10);
-
 nrf24l01SendString(string, 0);
-
 mode = 12;
 break;
 
 case 12:
 startADC(3);
 
-# 146
+# 128
 nextMode = 13;
 break;
 
@@ -4239,7 +4221,7 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 219
+# 201
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -4289,15 +4271,11 @@ OPTION_REGbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 10;
-
-
+WDTCONbits.WDTPS = 12;
 
 
 TRISAbits.TRISA5 = 0;
 PORTAbits.RA5 = 0;
-
-
 
 
 INTCONbits.PEIE = 1;

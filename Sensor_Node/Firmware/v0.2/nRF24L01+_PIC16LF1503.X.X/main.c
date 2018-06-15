@@ -72,11 +72,6 @@ void startADC(unsigned char channel){
     mode = SUM_ADC_MODE;
 }
 void loop(){
-        
-    // Sleep while the radio is waiting for something
-    while (nrf24l01Service()){
-        delayUs(10000);
-    }
             
     if (mode != SLEEP_MODE) {
         CLRWDT();
@@ -85,9 +80,6 @@ void loop(){
     switch (mode){
         
         case SLEEP_MODE:
-//            nrf24l01SetRecieveMode();
-            
-            PORTAbits.RA5 = (unsigned) !PORTAbits.RA5;
             
             SLEEP();
             NOP();
@@ -98,8 +90,6 @@ void loop(){
                 sleepLoop = 0;
             }
             
-            nrf24l01Service();
-            
             if (sleepLoop++ > 5){
                 RESET();
             }
@@ -107,16 +97,11 @@ void loop(){
             
         case SEND_BOOT_MODE:
             // Write payload data
-            
-            
             strcpy(string, "/BOOT/");
             _itoa(stringAppend, read_flashmem(FLASH_OFFSET_BOOT_COUNT), 10);
-            
             nrf24l01SendString(string, 0);
-            
             mode = RUN_MODE;
             break;
-            
             
         case RUN_MODE:
             mode = SLEEP_MODE;
@@ -124,12 +109,9 @@ void loop(){
             break;
             
         case SEND_COUNTER_MODE:
-            
             strcpy(string, "/COUNT/");
             _itoa(stringAppend, counter, 10);
-            
             nrf24l01SendString(string, 0);
-            
             mode = START_ADC3_MODE;
             break;
             
@@ -265,15 +247,11 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 10;
-    
+    WDTCONbits.WDTPS = 12;
     
     /* Setup Charge Control */
-    
     TRISAbits.TRISA5 = 0;
     PORTAbits.RA5 = 0;
-    
-    
     
     /* Start Interrupts */
     INTCONbits.PEIE = 1;

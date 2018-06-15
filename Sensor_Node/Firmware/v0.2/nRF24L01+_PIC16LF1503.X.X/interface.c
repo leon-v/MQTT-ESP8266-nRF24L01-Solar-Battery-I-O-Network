@@ -18,7 +18,7 @@ void nrf24l01InterfaceInit(void){
     SSPCON1bits.SSPEN = 0; 
     SSPCON1bits.CKP = 0;
     SSP1STATbits.CKE = 1;
-    SSPCON1bits.SSPM = 0b0010;
+    SSPCON1bits.SSPM = 0b0000;
     
     SSPCON1bits.SSPEN = 1;
     
@@ -45,6 +45,11 @@ void nrf24l01SPIStart(void){
 void nrf24l01SPIEnd(void){
     delayUs(10);
     nrf24l01CSHigh();
+}
+
+#pragma interrupt_level 1
+void enableInterrupts(unsigned char enable){
+    INTCONbits.INTE = enable;
 }
 
 //itoa(buffer, read_flashmem(FLASH_OFFSET_BOOT_COUNT), 10);

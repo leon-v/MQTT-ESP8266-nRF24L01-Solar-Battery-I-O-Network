@@ -34,7 +34,5 @@ void nrf24l01SetRecieveMode(void);
 void nrf24l01SendString(char * string, char waitForAck);
 void nrf24l01SendFlash(unsigned char offset);
 
-unsigned char nrf24l01Service(void);
-
 #endif	/* NRF24L01_H */
 

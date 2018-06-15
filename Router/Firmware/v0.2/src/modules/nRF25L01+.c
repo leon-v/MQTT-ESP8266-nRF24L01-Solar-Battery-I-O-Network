@@ -151,20 +151,24 @@ uint8 nrf24l01Send(uint8 command,uint8 data) {
 }
 
 
-void nrf24l01SetMode(uint8 primaryReceiver){
-    n_CONFIG_t config;
+void nrf24l01SetRXMode(uint8 rxMode){
+     n_CONFIG_t config;
     config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
-    if (config.PRIM_RX != primaryReceiver){
+    
+    nrf24l01.RXMode = rxMode;
+            
+    if (config.PRIM_RX != nrf24l01.RXMode){
         
         nrf24l01CELow();
         delayUs(200);
 
-        config.PRIM_RX = primaryReceiver;
+        config.PRIM_RX = nrf24l01.RXMode;
         nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
         delayUs(200);
 
-        if (primaryReceiver){
+        if (nrf24l01.RXMode){
         	nrf24l01CEHigh();
+            delayUs(200);
         }
     }
 }
@@ -176,10 +180,10 @@ void nrf24l01SetTransmitMode(void){
     //     return;
     // }
     
-    nrf24l01SetMode(0);
+    nrf24l01SetRXMode(0);
 }
 void nrf24l01SetRecieveMode(void){
-    nrf24l01SetMode(1);
+    nrf24l01SetRXMode(1);
 }
 
 
@@ -210,11 +214,11 @@ void nrf24l01InitRegisters(void){
 //     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
     
     // Set radio to 2 Mbps and high power.  Leave LNA_HCURR at its default.
-    n_RF_SETUP_t rfSetup;
-    rfSetup.RF_DR_LOW = 0;
-    rfSetup.RF_DR_HIGH = 1;
-    rfSetup.RF_PWR = 3;
-    nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
+    // n_RF_SETUP_t rfSetup;
+    // rfSetup.RF_DR_LOW = 0;
+    // rfSetup.RF_DR_HIGH = 1;
+    // rfSetup.RF_PWR = 3;
+    // nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
     
     // Enable all data pipes
 	n_EN_RXADDR_t enRXAddr;
@@ -305,6 +309,8 @@ void nrf24l01SendString(char * string){
 
 void nrf24l01CheckRecieve(void){
 
+	n_STATUS_t status;
+
 	rf24l01UpdateStatus();
 
 	os_printf("nrf24l01CheckRecieve %02X \r\n", nrf24l01.status.byte);
@@ -353,39 +359,35 @@ void nrf24l01CheckRecieve(void){
 		}
 
 		//Clear 
-		nrf24l01Send(n_W_REGISTER | n_STATUS, nrf24l01.status.byte);
+		status.byte = 0x00;
+		status.RX_DR = 1;
+		nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
 		
-		
-
 		strcat(buffer1, "/ACK");
 
-
-		i = 2;
-		while (i--){
-			os_printf("nrf24l01 ACK: %s\r\n", buffer1);
-			nrf24l01SendString(buffer1);
-		}
-		
+		nrf24l01SendString(buffer1);
+		delayUs(50000);
+		delayUs(50000);
+		nrf24l01SendString(buffer1);
 		
 		os_free(buffer);
 		
 
-		nrf24l01SetRecieveMode();
+		// nrf24l01SetRecieveMode();
 
 		
 	}
 
 	if (nrf24l01.status.TX_DS){
-		// (high, low, out, in)
-		gpio_output_set(0, CEPIN, CEPIN, 0);
 
 		os_printf("nrf24l01 TX Done\r\n");
 
-		// nrf24l01SetRecieveMode();
-		nrf24l01Send(n_W_REGISTER | n_STATUS, nrf24l01.status.byte); //2
+		nrf24l01SetRecieveMode();
 
-		// (high, low, out, in)
-		gpio_output_set(CEPIN, 0, CEPIN, 0);
+
+		status.byte = 0x00;
+		status.TX_DS = 1;
+		nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte); //2
 	}
 
 
@@ -400,11 +402,7 @@ void ICACHE_FLASH_ATTR spiTestTimerFunction(void *arg){
 
 
 void ICACHE_FLASH_ATTR nrf24l01_Task(os_event_t *e) {
-
-	
-
 	os_printf("nrf24l01_Task \r\n");
-
     nrf24l01CheckRecieve();
 }
 

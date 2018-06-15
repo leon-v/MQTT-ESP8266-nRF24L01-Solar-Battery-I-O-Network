@@ -51,6 +51,17 @@ Version 3.2 HI-TECH Software Intermediate Code
 "153 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic.h
 [v __delay `JF2872 ~T0 @X0 0 e ]
 [p i __delay ]
+"355 C:\Program Files (x86)\Microchip\xc8\v1.45\include\pic16lf1503.h
+[s S26 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S26 . IOCIF INTF TMR0IF IOCIE INTE TMR0IE PEIE GIE ]
+"365
+[s S27 :2 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 ]
+[n S27 . . T0IF . T0IE ]
+"354
+[u S25 `S26 1 `S27 1 ]
+[n S25 . . . ]
+"372
+[v _INTCONbits `VS25 ~T0 @X0 0 e@11 ]
 "95 C:\Program Files (x86)\Microchip\xc8\v1.45\include\stdlib.h
 [v _itoa `(*uc ~T0 @X0 0 ef3`*uc`i`i ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
@@ -2863,7 +2874,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.h: 21: unsigned char nrf24l01SPISend(unsigned char data);
 [; ;interface.h: 22: void nrf24l01SPIStart(void);
 [; ;interface.h: 23: void nrf24l01SPIEnd(void);
-[; ;interface.h: 25: void _itoa(char * buffer, unsigned int number, unsigned char base);
+[; ;interface.h: 25: void enableInterrupts(unsigned char enable);
+[; ;interface.h: 27: void _itoa(char * buffer, unsigned int number, unsigned char base);
 [; ;stdlib.h: 7: typedef unsigned short wchar_t;
 [; ;stdlib.h: 15: typedef struct {
 [; ;stdlib.h: 16: int rem;
@@ -2947,9 +2959,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.c: 20: SSP1STATbits.CKE = 1;
 "20
 [e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;interface.c: 21: SSPCON1bits.SSPM = 0b0010;
+[; ;interface.c: 21: SSPCON1bits.SSPM = 0b0000;
 "21
-[e = . . _SSPCON1bits 1 0 -> -> 2 `i `uc ]
+[e = . . _SSPCON1bits 1 0 -> -> 0 `i `uc ]
 [; ;interface.c: 23: SSPCON1bits.SSPEN = 1;
 "23
 [e = . . _SSPCON1bits 0 5 -> -> 1 `i `uc ]
@@ -3028,19 +3040,35 @@ Version 3.2 HI-TECH Software Intermediate Code
 "48
 [e :UE 344 ]
 }
+"50
+[p l 1 ]
 "51
+[v _enableInterrupts `(v ~T0 @X0 1 ef1`uc ]
+{
+[; ;interface.c: 51: void enableInterrupts(unsigned char enable){
+[e :U _enableInterrupts ]
+[v _enable `uc ~T0 @X0 1 r1 ]
+[f ]
+[; ;interface.c: 52: INTCONbits.INTE = enable;
+"52
+[e = . . _INTCONbits 0 4 _enable ]
+[; ;interface.c: 53: }
+"53
+[e :UE 345 ]
+}
+"56
 [v __itoa `(v ~T0 @X0 1 ef3`*uc`ui`uc ]
 {
-[; ;interface.c: 51: void _itoa(char * buffer, unsigned int number, unsigned char base){
+[; ;interface.c: 56: void _itoa(char * buffer, unsigned int number, unsigned char base){
 [e :U __itoa ]
 [v _buffer `*uc ~T0 @X0 1 r1 ]
 [v _number `ui ~T0 @X0 1 r2 ]
 [v _base `uc ~T0 @X0 1 r3 ]
 [f ]
-[; ;interface.c: 52: itoa(buffer, number, base);
-"52
+[; ;interface.c: 57: itoa(buffer, number, base);
+"57
 [e ( _itoa (3 , , _buffer -> _number `i -> _base `i ]
-[; ;interface.c: 53: }
-"53
-[e :UE 345 ]
+[; ;interface.c: 58: }
+"58
+[e :UE 346 ]
 }
