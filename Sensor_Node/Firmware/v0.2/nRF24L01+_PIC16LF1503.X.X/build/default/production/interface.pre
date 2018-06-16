@@ -3801,10 +3801,7 @@ extern char * strichr(const char *, int);
 extern char * strrchr(const char *, int);
 extern char * strrichr(const char *, int);
 
-# 12 "interface.h"
-extern char string[16];
-
-# 20
+# 19 "interface.h"
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -3883,9 +3880,7 @@ extern char * ultoa(char * buf, unsigned long val, int base);
 
 extern char * ftoa(float f, int * status);
 
-# 7 "interface.c"
-char string[16];
-
+# 8 "interface.c"
 void nrf24l01InterfaceInit(void){
 
 TRISAbits.TRISA0 = 0;

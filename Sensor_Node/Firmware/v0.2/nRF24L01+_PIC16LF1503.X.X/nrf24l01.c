@@ -4,8 +4,6 @@
 #include "nrf24l01.h"
 #include "flash.h"
 
-volatile nrf24l01_t nrf24l01;
-
 #pragma interrupt_level 1
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
@@ -23,7 +21,7 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     return data;
 }
 
-
+#pragma interrupt_level 1
 void nrf24l01SetRXMode(unsigned char rxMode){
      n_CONFIG_t config;
     config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
@@ -55,27 +53,35 @@ void nrf24l01HandleRX(void){
     
     unsigned char width = nrf24l01Send(n_R_RX_PL_WID, 0);
     
+    nrf24l01CELow();
+    
+    		nrf24l01SPIStart();
+
+		nrf24l01SPISend(n_R_RX_PAYLOAD);
+    
     i = 0;
     while (i < width){
         byte = nrf24l01SPISend(0);
         
-        if (byte == '/'){
-            break;
-        }
-        
-        if (byte != read_flashmem( (unsigned) FLASH_OFFSET_NAME + i)){
-            nrf24l01.RXPending = 0;
-            return;
-        }
+//        if (byte == '/'){
+//            break;
+//        }
+//        
+//        if (byte != read_flashmem( (unsigned) FLASH_OFFSET_NAME + i)){
+//            nrf24l01.RXPending = 0;
+//            return;
+//        }
         
         i++;
     }
     
-    while (i < width){
-        byte = nrf24l01SPISend(0);
-        string[strlen(string)] = byte;
-        i++;
-    }
+    nrf24l01SPIEnd();
+    
+//    while (i < width){
+//        byte = nrf24l01SPISend(0);
+//        //nrf24l01.rxBuffer[strlen((char *)nrf24l01.rxBuffer)] = byte;
+//        i++;
+//    }
     
     nrf24l01.RXPending = 1;
 }
@@ -101,11 +107,13 @@ void nrf24l01ISR(void){
     
     // I have had the IC lock up and return 0x00, reset it
     if (nrf24l01.status.byte == 0x00){
+        write_flashmem(FLASH_OFFSET_BOOT_REASON, 2003);
         RESET();
     }
     
     // Also reset if we get 0xFF since that likely means there is an SPI error
     if (nrf24l01.status.byte == 0xFF){
+        write_flashmem(FLASH_OFFSET_BOOT_REASON, 2004);
         RESET();
     }
     
@@ -119,11 +127,13 @@ void nrf24l01ISR(void){
         tempStatus.RX_DR = 1;
         nrf24l01Send(n_W_REGISTER | n_STATUS, tempStatus.byte);
         
+        counter++;
+        
         // Get the RX data into the buffer
         nrf24l01HandleRX();
         
         // Check if the RX data is an ACK
-        nrf24l01CheckACK();
+//        nrf24l01CheckACK();
     }
     
 
@@ -142,15 +152,14 @@ void nrf24l01ISR(void){
         if (nrf24l01.RXMode == 0){
 //            if (nrf24l01.waitForTXACK){
                 // Reset the ACK wait counter and set RX mode
-                counter++;
-//                nrf24l01SetRXMode(1);
+                nrf24l01SetRXMode(1);
 //            }
         }
     }
 }
 
 
-void nrf24l01SendString(char * string, char waitForAck){
+void nrf24l01SendString(char waitForAck){
     
     if (!waitForAck){
         delayUs(50000);
@@ -162,14 +171,16 @@ void nrf24l01SendString(char * string, char waitForAck){
     nrf24l01.TXBusyCount = 0;
     while (nrf24l01.TXBusy){
         if (++nrf24l01.TXBusyCount == 15) {
+            write_flashmem(FLASH_OFFSET_BOOT_REASON, 2001);
             RESET();
         }
-        delayUs(10000);
+        delayUs(50000);
     }
     
     nrf24l01.waitForTXACKCount = 0;
     while (nrf24l01.waitForTXACK){
         if (++nrf24l01.waitForTXACKCount == 15) {
+            write_flashmem(FLASH_OFFSET_BOOT_REASON, 2002);
             RESET();
         }
         delayUs(1000);
@@ -200,9 +211,18 @@ void nrf24l01SendString(char * string, char waitForAck){
         nrf24l01SPISend(btye);
     }
     
-    for (i = 0; string[i] != '\0'; i++){
-        nrf24l01SPISend(string[i]);
+    nrf24l01SPISend('/');
+    
+    for (i = 0; nrf24l01.txTopic[i] != '\0'; i++){
+        nrf24l01SPISend(nrf24l01.txTopic[i]);
     }
+    
+    nrf24l01SPISend('/');
+    
+    for (i = 0; nrf24l01.txValue[i] != '\0'; i++){
+        nrf24l01SPISend(nrf24l01.txValue[i]);
+    }
+    
     
     nrf24l01SPIEnd();
             

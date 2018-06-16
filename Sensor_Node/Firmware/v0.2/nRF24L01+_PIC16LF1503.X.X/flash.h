@@ -12,13 +12,13 @@
  #define NV_ADDRESS (0x800U-NV_MEM_SIZE)  
 
  const unsigned char NVMEM[NV_MEM_SIZE]@NV_ADDRESS = {
-    'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '1', 0, 0, 0,   //FLASH_OFFSET_NAME
+    'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,   //FLASH_OFFSET_NAME
     0x0000,                                                                     //FLASH_OFFSET_BOOT_COUNT
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
  };
  
- #define FLASH_OFFSET_NAME          0
- #define FLASH_OFFSET_BOOT_COUNT    16
+#define FLASH_OFFSET_NAME           0
+#define FLASH_OFFSET_BOOT_REASON    16
 
 
 unsigned int read_flashmem(unsigned int offset);

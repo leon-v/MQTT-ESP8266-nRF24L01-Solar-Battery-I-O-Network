@@ -91,15 +91,16 @@ void loop(){
             }
             
             if (sleepLoop++ > 5){
+                write_flashmem(FLASH_OFFSET_BOOT_REASON, 1001);
                 RESET();
             }
             break;
             
         case SEND_BOOT_MODE:
             // Write payload data
-            strcpy(string, "/BOOT/");
-            _itoa(stringAppend, read_flashmem(FLASH_OFFSET_BOOT_COUNT), 10);
-            nrf24l01SendString(string, 0);
+            strcpy((char *)nrf24l01.txTopic, "BOOT");
+            _itoa((char *)nrf24l01.txValue, read_flashmem(FLASH_OFFSET_BOOT_REASON), 10);
+            nrf24l01SendString(0);
             mode = RUN_MODE;
             break;
             
@@ -109,9 +110,9 @@ void loop(){
             break;
             
         case SEND_COUNTER_MODE:
-            strcpy(string, "/COUNT/");
-            _itoa(stringAppend, counter, 10);
-            nrf24l01SendString(string, 0);
+            strcpy((char *)nrf24l01.txTopic, "COUNT");
+            _itoa((char *)nrf24l01.txValue, counter, 10);
+            nrf24l01SendString(0);
             mode = START_ADC3_MODE;
             break;
             
@@ -171,12 +172,12 @@ void loop(){
                     break;
             }
             
-            strcpy(string, "/ADC");
-            _itoa(stringAppend, ADCON0bits.CHS, 10);
-            strcpy(stringAppend, "/");
-            _itoa(stringAppend, adcSum, 10);
+            strcpy((char *)nrf24l01.txTopic, "ADC");
+            _itoa(append((char *)nrf24l01.txTopic), ADCON0bits.CHS, 10);
             
-            nrf24l01SendString(string, 0);
+            _itoa((char *)nrf24l01.txValue, adcSum, 10);
+            
+            nrf24l01SendString(0);
             
 
             mode = nextMode;
@@ -247,7 +248,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 12;
+    WDTCONbits.WDTPS = 10 ;
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;
@@ -256,13 +257,6 @@ void main(void) {
     /* Start Interrupts */
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
-        
-    unsigned int bootCount = read_flashmem(FLASH_OFFSET_BOOT_COUNT);
-    if (bootCount == 13313){
-        bootCount = 1;
-    }
-    bootCount++;
-    write_flashmem(FLASH_OFFSET_BOOT_COUNT, bootCount);
     
     while(1){
         loop();

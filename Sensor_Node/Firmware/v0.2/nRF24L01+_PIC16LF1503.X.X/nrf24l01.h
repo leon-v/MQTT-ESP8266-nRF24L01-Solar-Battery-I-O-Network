@@ -17,7 +17,14 @@ typedef struct{
     unsigned TXBusyCount        : 4;
     unsigned RXPending			: 1;
     unsigned RXMode             : 1;
+    char txTopic[6];
+    char txValue[8];
+    char rxTopic[6];
+    char rxValue[8];
+    
 } nrf24l01_t;
+
+volatile nrf24l01_t nrf24l01;
 
 //Transmitters using e.i.r.p.s greater than 0 dBW (1 W)
 //must employ frequency hopping or digital modulation techniques.
@@ -31,7 +38,7 @@ void nrf24l01SendByte(unsigned char payloadByte);
 void nrf24l01SendEnd(void);
 void nrf24l01SetRecieveMode(void);
 
-void nrf24l01SendString(char * string, char waitForAck);
+void nrf24l01SendString(char waitForAck);
 void nrf24l01SendFlash(unsigned char offset);
 
 #endif	/* NRF24L01_H */

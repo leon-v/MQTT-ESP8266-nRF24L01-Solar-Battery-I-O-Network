@@ -2869,13 +2869,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;string.h: 58: extern char * strichr(const char *, int);
 [; ;string.h: 59: extern char * strrchr(const char *, int);
 [; ;string.h: 60: extern char * strrichr(const char *, int);
-[; ;interface.h: 12: extern char string[16];
-[; ;interface.h: 20: void nrf24l01InterfaceInit(void);
-[; ;interface.h: 21: unsigned char nrf24l01SPISend(unsigned char data);
-[; ;interface.h: 22: void nrf24l01SPIStart(void);
-[; ;interface.h: 23: void nrf24l01SPIEnd(void);
-[; ;interface.h: 25: void enableInterrupts(unsigned char enable);
-[; ;interface.h: 27: void _itoa(char * buffer, unsigned int number, unsigned char base);
+[; ;interface.h: 19: void nrf24l01InterfaceInit(void);
+[; ;interface.h: 20: unsigned char nrf24l01SPISend(unsigned char data);
+[; ;interface.h: 21: void nrf24l01SPIStart(void);
+[; ;interface.h: 22: void nrf24l01SPIEnd(void);
+[; ;interface.h: 24: void enableInterrupts(unsigned char enable);
+[; ;interface.h: 26: void _itoa(char * buffer, unsigned int number, unsigned char base);
 [; ;stdlib.h: 7: typedef unsigned short wchar_t;
 [; ;stdlib.h: 15: typedef struct {
 [; ;stdlib.h: 16: int rem;
@@ -2926,149 +2925,146 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;stdlib.h: 101: extern char * ltoa(char * buf, long val, int base);
 [; ;stdlib.h: 102: extern char * ultoa(char * buf, unsigned long val, int base);
 [; ;stdlib.h: 104: extern char * ftoa(float f, int * status);
-"7 interface.c
-[v _string `uc ~T0 @X0 -> 16 `i e ]
-[; ;interface.c: 7: char string[16];
-"9
+"8 interface.c
 [v _nrf24l01InterfaceInit `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 9: void nrf24l01InterfaceInit(void){
+[; ;interface.c: 8: void nrf24l01InterfaceInit(void){
 [e :U _nrf24l01InterfaceInit ]
 [f ]
-[; ;interface.c: 11: TRISAbits.TRISA0 = 0;
-"11
+[; ;interface.c: 10: TRISAbits.TRISA0 = 0;
+"10
 [e = . . _TRISAbits 0 0 -> -> 0 `i `uc ]
-[; ;interface.c: 12: TRISAbits.TRISA1 = 0;
-"12
+[; ;interface.c: 11: TRISAbits.TRISA1 = 0;
+"11
 [e = . . _TRISAbits 0 1 -> -> 0 `i `uc ]
-[; ;interface.c: 14: TRISCbits.TRISC1 = 1;
-"14
+[; ;interface.c: 13: TRISCbits.TRISC1 = 1;
+"13
 [e = . . _TRISCbits 0 1 -> -> 1 `i `uc ]
-[; ;interface.c: 15: TRISCbits.TRISC2 = 0;
-"15
+[; ;interface.c: 14: TRISCbits.TRISC2 = 0;
+"14
 [e = . . _TRISCbits 0 2 -> -> 0 `i `uc ]
-[; ;interface.c: 16: TRISCbits.TRISC0 = 0;
-"16
+[; ;interface.c: 15: TRISCbits.TRISC0 = 0;
+"15
 [e = . . _TRISCbits 0 0 -> -> 0 `i `uc ]
-[; ;interface.c: 18: SSPCON1bits.SSPEN = 0;
-"18
+[; ;interface.c: 17: SSPCON1bits.SSPEN = 0;
+"17
 [e = . . _SSPCON1bits 0 5 -> -> 0 `i `uc ]
-[; ;interface.c: 19: SSPCON1bits.CKP = 0;
-"19
+[; ;interface.c: 18: SSPCON1bits.CKP = 0;
+"18
 [e = . . _SSPCON1bits 0 4 -> -> 0 `i `uc ]
-[; ;interface.c: 20: SSP1STATbits.CKE = 1;
-"20
+[; ;interface.c: 19: SSP1STATbits.CKE = 1;
+"19
 [e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;interface.c: 21: SSPCON1bits.SSPM = 0b0000;
-"21
+[; ;interface.c: 20: SSPCON1bits.SSPM = 0b0000;
+"20
 [e = . . _SSPCON1bits 1 0 -> -> 0 `i `uc ]
-[; ;interface.c: 23: SSPCON1bits.SSPEN = 1;
-"23
+[; ;interface.c: 22: SSPCON1bits.SSPEN = 1;
+"22
 [e = . . _SSPCON1bits 0 5 -> -> 1 `i `uc ]
-[; ;interface.c: 25: }
-"25
+[; ;interface.c: 24: }
+"24
 [e :UE 338 ]
 }
-"27
+"26
 [p l 1 ]
-"28
+"27
 [v _nrf24l01SPISend `(uc ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 28: unsigned char nrf24l01SPISend(unsigned char data){
+[; ;interface.c: 27: unsigned char nrf24l01SPISend(unsigned char data){
 [e :U _nrf24l01SPISend ]
 [v _data `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 29: SSP1BUF = data;
-"29
+[; ;interface.c: 28: SSP1BUF = data;
+"28
 [e = _SSP1BUF _data ]
-[; ;interface.c: 31: while (!SSP1STATbits.BF){
-"31
+[; ;interface.c: 30: while (!SSP1STATbits.BF){
+"30
 [e $U 340  ]
 [e :U 341 ]
 {
-[; ;interface.c: 32: __nop();
-"32
+[; ;interface.c: 31: __nop();
+"31
 [e ( ___nop ..  ]
-"33
+"32
 }
 [e :U 340 ]
-"31
+"30
 [e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 341  ]
 [e :U 342 ]
-[; ;interface.c: 33: }
-[; ;interface.c: 35: return SSP1BUF;
-"35
+[; ;interface.c: 32: }
+[; ;interface.c: 34: return SSP1BUF;
+"34
 [e ) _SSP1BUF ]
 [e $UE 339  ]
-[; ;interface.c: 36: }
-"36
+[; ;interface.c: 35: }
+"35
 [e :UE 339 ]
 }
-"38
+"37
 [p l 1 ]
-"39
+"38
 [v _nrf24l01SPIStart `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 39: void nrf24l01SPIStart(void){
+[; ;interface.c: 38: void nrf24l01SPIStart(void){
 [e :U _nrf24l01SPIStart ]
 [f ]
-[; ;interface.c: 40: PORTAbits.RA1 = 0;
-"40
+[; ;interface.c: 39: PORTAbits.RA1 = 0;
+"39
 [e = . . _PORTAbits 0 1 -> -> 0 `i `uc ]
-[; ;interface.c: 41: _delay((unsigned long)((10)*(16000000/4000000.0)));
-"41
+[; ;interface.c: 40: _delay((unsigned long)((10)*(16000000/4000000.0)));
+"40
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;interface.c: 42: }
-"42
+[; ;interface.c: 41: }
+"41
 [e :UE 343 ]
 }
-"44
+"43
 [p l 1 ]
-"45
+"44
 [v _nrf24l01SPIEnd `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 45: void nrf24l01SPIEnd(void){
+[; ;interface.c: 44: void nrf24l01SPIEnd(void){
 [e :U _nrf24l01SPIEnd ]
 [f ]
-[; ;interface.c: 46: _delay((unsigned long)((10)*(16000000/4000000.0)));
-"46
+[; ;interface.c: 45: _delay((unsigned long)((10)*(16000000/4000000.0)));
+"45
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;interface.c: 47: PORTAbits.RA1 = 1;
-"47
+[; ;interface.c: 46: PORTAbits.RA1 = 1;
+"46
 [e = . . _PORTAbits 0 1 -> -> 1 `i `uc ]
-[; ;interface.c: 48: }
-"48
+[; ;interface.c: 47: }
+"47
 [e :UE 344 ]
 }
-"50
+"49
 [p l 1 ]
-"51
+"50
 [v _enableInterrupts `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 51: void enableInterrupts(unsigned char enable){
+[; ;interface.c: 50: void enableInterrupts(unsigned char enable){
 [e :U _enableInterrupts ]
 [v _enable `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 52: INTCONbits.INTE = enable;
-"52
+[; ;interface.c: 51: INTCONbits.INTE = enable;
+"51
 [e = . . _INTCONbits 0 4 _enable ]
-[; ;interface.c: 53: }
-"53
+[; ;interface.c: 52: }
+"52
 [e :UE 345 ]
 }
-"56
+"55
 [v __itoa `(v ~T0 @X0 1 ef3`*uc`ui`uc ]
 {
-[; ;interface.c: 56: void _itoa(char * buffer, unsigned int number, unsigned char base){
+[; ;interface.c: 55: void _itoa(char * buffer, unsigned int number, unsigned char base){
 [e :U __itoa ]
 [v _buffer `*uc ~T0 @X0 1 r1 ]
 [v _number `ui ~T0 @X0 1 r2 ]
 [v _base `uc ~T0 @X0 1 r3 ]
 [f ]
-[; ;interface.c: 57: itoa(buffer, number, base);
-"57
+[; ;interface.c: 56: itoa(buffer, number, base);
+"56
 [e ( _itoa (3 , , _buffer -> _number `i -> _base `i ]
-[; ;interface.c: 58: }
-"58
+[; ;interface.c: 57: }
+"57
 [e :UE 346 ]
 }

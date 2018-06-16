@@ -9,8 +9,7 @@
 #define delayUs(x) __delay_us(x)
 #define delayMs(x) __delay_ms(x)
 
-extern char string[16];
-#define stringAppend string + strlen(string)
+#define append(x) x + strlen(x)
 
 #define nrf24l01CELow() PORTAbits.RA0 = 0
 #define nrf24l01CEHigh() PORTAbits.RA0 = 1
