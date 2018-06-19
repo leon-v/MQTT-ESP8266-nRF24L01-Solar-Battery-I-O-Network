@@ -3760,48 +3760,7 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 4 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\__size_t.h"
-typedef unsigned size_t;
-
-# 14 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\string.h"
-extern void * memcpy(void *, const void *, size_t);
-extern void * memmove(void *, const void *, size_t);
-extern void * memset(void *, int, size_t);
-
-
-
-
-extern void * __builtin_memcpy(void *, const void *, size_t);
-#pragma intrinsic(__builtin_memcpy)
-
-# 36
-extern char * strcat(char *, const char *);
-extern char * strcpy(char *, const char *);
-extern char * strncat(char *, const char *, size_t);
-extern char * strncpy(char *, const char *, size_t);
-extern char * strdup(const char *);
-extern char * strtok(char *, const char *);
-
-
-extern int memcmp(const void *, const void *, size_t);
-extern int strcmp(const char *, const char *);
-extern int stricmp(const char *, const char *);
-extern int strncmp(const char *, const char *, size_t);
-extern int strnicmp(const char *, const char *, size_t);
-extern void * memchr(const void *, int, size_t);
-extern size_t strcspn(const char *, const char *);
-extern char * strpbrk(const char *, const char *);
-extern size_t strspn(const char *, const char *);
-extern char * strstr(const char *, const char *);
-extern char * stristr(const char *, const char *);
-extern char * strerror(int);
-extern size_t strlen(const char *);
-extern char * strchr(const char *, int);
-extern char * strichr(const char *, int);
-extern char * strrchr(const char *, int);
-extern char * strrichr(const char *, int);
-
-# 19 "interface.h"
+# 18 "interface.h"
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -3809,78 +3768,7 @@ void nrf24l01SPIEnd(void);
 
 void enableInterrupts(unsigned char enable);
 
-void _itoa(char * buffer, unsigned int number, unsigned char base);
-
-# 7 "C:\Program Files (x86)\Microchip\xc8\v1.45\include\stdlib.h"
-typedef unsigned short wchar_t;
-
-# 15
-typedef struct {
-int rem;
-int quot;
-} div_t;
-typedef struct {
-unsigned rem;
-unsigned quot;
-} udiv_t;
-typedef struct {
-long quot;
-long rem;
-} ldiv_t;
-typedef struct {
-unsigned long quot;
-unsigned long rem;
-} uldiv_t;
-
-# 53
-extern double atof(const char *);
-extern double strtod(const char *, const char **);
-extern int atoi(const char *);
-extern unsigned xtoi(const char *);
-extern long atol(const char *);
-extern long strtol(const char *, char **, int);
-
-extern int rand(void);
-extern void srand(unsigned int);
-extern void * calloc(size_t, size_t);
-extern div_t div(int numer, int denom);
-extern udiv_t udiv(unsigned numer, unsigned denom);
-extern ldiv_t ldiv(long numer, long denom);
-extern uldiv_t uldiv(unsigned long numer,unsigned long denom);
-extern unsigned long _lrotl(unsigned long value, unsigned int shift);
-extern unsigned long _lrotr(unsigned long value, unsigned int shift);
-extern unsigned int _rotl(unsigned int value, unsigned int shift);
-extern unsigned int _rotr(unsigned int value, unsigned int shift);
-
-
-
-
-extern void * malloc(size_t);
-extern void free(void *);
-extern void * realloc(void *, size_t);
-
-# 86
-extern int atexit(void (*)(void));
-extern char * getenv(const char *);
-extern char ** environ;
-extern int system(char *);
-extern void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
-extern void * bsearch(const void *, void *, size_t, size_t, int(*)(const void *, const void *));
-extern int abs(int);
-extern long labs(long);
-
-extern char * itoa(char * buf, int val, int base);
-extern char * utoa(char * buf, unsigned val, int base);
-
-
-
-
-extern char * ltoa(char * buf, long val, int base);
-extern char * ultoa(char * buf, unsigned long val, int base);
-
-extern char * ftoa(float f, int * status);
-
-# 8 "interface.c"
+# 7 "interface.c"
 void nrf24l01InterfaceInit(void){
 
 TRISAbits.TRISA0 = 0;
@@ -3925,9 +3813,4 @@ PORTAbits.RA1 = 1;
 #pragma interrupt_level 1
 void enableInterrupts(unsigned char enable){
 INTCONbits.INTE = enable;
-}
-
-
-void _itoa(char * buffer, unsigned int number, unsigned char base){
-itoa(buffer, number, base);
 }

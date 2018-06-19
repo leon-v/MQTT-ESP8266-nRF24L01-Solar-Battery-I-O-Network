@@ -1,6 +1,5 @@
 #include <xc.h>
 #include "interface.h"
-#include "stdlib.h"
 
 
 /* nrf24l01 Interfaces */
@@ -49,9 +48,4 @@ void nrf24l01SPIEnd(void){
 #pragma interrupt_level 1
 void enableInterrupts(unsigned char enable){
     INTCONbits.INTE = enable;
-}
-
-//itoa(buffer, read_flashmem(FLASH_OFFSET_BOOT_COUNT), 10);
-void _itoa(char * buffer, unsigned int number, unsigned char base){
-    itoa(buffer, number, base);
 }

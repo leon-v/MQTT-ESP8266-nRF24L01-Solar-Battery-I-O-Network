@@ -62,8 +62,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S25 . . . ]
 "372
 [v _INTCONbits `VS25 ~T0 @X0 0 e@11 ]
-"95 C:\Program Files (x86)\Microchip\xc8\v1.45\include\stdlib.h
-[v _itoa `(*uc ~T0 @X0 0 ef3`*uc`i`i ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -2841,230 +2839,135 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 193: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 194: extern __bank0 __bit __powerdown;
 [; ;pic.h: 195: extern __bank0 __bit __timeout;
-[; ;__size_t.h: 4: typedef unsigned size_t;
-[; ;string.h: 14: extern void * memcpy(void *, const void *, size_t);
-[; ;string.h: 15: extern void * memmove(void *, const void *, size_t);
-[; ;string.h: 16: extern void * memset(void *, int, size_t);
-[; ;string.h: 21: extern void * __builtin_memcpy(void *, const void *, size_t);
-[; ;string.h: 36: extern char * strcat(char *, const char *);
-[; ;string.h: 37: extern char * strcpy(char *, const char *);
-[; ;string.h: 38: extern char * strncat(char *, const char *, size_t);
-[; ;string.h: 39: extern char * strncpy(char *, const char *, size_t);
-[; ;string.h: 40: extern char * strdup(const char *);
-[; ;string.h: 41: extern char * strtok(char *, const char *);
-[; ;string.h: 44: extern int memcmp(const void *, const void *, size_t);
-[; ;string.h: 45: extern int strcmp(const char *, const char *);
-[; ;string.h: 46: extern int stricmp(const char *, const char *);
-[; ;string.h: 47: extern int strncmp(const char *, const char *, size_t);
-[; ;string.h: 48: extern int strnicmp(const char *, const char *, size_t);
-[; ;string.h: 49: extern void * memchr(const void *, int, size_t);
-[; ;string.h: 50: extern size_t strcspn(const char *, const char *);
-[; ;string.h: 51: extern char * strpbrk(const char *, const char *);
-[; ;string.h: 52: extern size_t strspn(const char *, const char *);
-[; ;string.h: 53: extern char * strstr(const char *, const char *);
-[; ;string.h: 54: extern char * stristr(const char *, const char *);
-[; ;string.h: 55: extern char * strerror(int);
-[; ;string.h: 56: extern size_t strlen(const char *);
-[; ;string.h: 57: extern char * strchr(const char *, int);
-[; ;string.h: 58: extern char * strichr(const char *, int);
-[; ;string.h: 59: extern char * strrchr(const char *, int);
-[; ;string.h: 60: extern char * strrichr(const char *, int);
-[; ;interface.h: 19: void nrf24l01InterfaceInit(void);
-[; ;interface.h: 20: unsigned char nrf24l01SPISend(unsigned char data);
-[; ;interface.h: 21: void nrf24l01SPIStart(void);
-[; ;interface.h: 22: void nrf24l01SPIEnd(void);
-[; ;interface.h: 24: void enableInterrupts(unsigned char enable);
-[; ;interface.h: 26: void _itoa(char * buffer, unsigned int number, unsigned char base);
-[; ;stdlib.h: 7: typedef unsigned short wchar_t;
-[; ;stdlib.h: 15: typedef struct {
-[; ;stdlib.h: 16: int rem;
-[; ;stdlib.h: 17: int quot;
-[; ;stdlib.h: 18: } div_t;
-[; ;stdlib.h: 19: typedef struct {
-[; ;stdlib.h: 20: unsigned rem;
-[; ;stdlib.h: 21: unsigned quot;
-[; ;stdlib.h: 22: } udiv_t;
-[; ;stdlib.h: 23: typedef struct {
-[; ;stdlib.h: 24: long quot;
-[; ;stdlib.h: 25: long rem;
-[; ;stdlib.h: 26: } ldiv_t;
-[; ;stdlib.h: 27: typedef struct {
-[; ;stdlib.h: 28: unsigned long quot;
-[; ;stdlib.h: 29: unsigned long rem;
-[; ;stdlib.h: 30: } uldiv_t;
-[; ;stdlib.h: 53: extern double atof(const char *);
-[; ;stdlib.h: 54: extern double strtod(const char *, const char **);
-[; ;stdlib.h: 55: extern int atoi(const char *);
-[; ;stdlib.h: 56: extern unsigned xtoi(const char *);
-[; ;stdlib.h: 57: extern long atol(const char *);
-[; ;stdlib.h: 58: extern long strtol(const char *, char **, int);
-[; ;stdlib.h: 60: extern int rand(void);
-[; ;stdlib.h: 61: extern void srand(unsigned int);
-[; ;stdlib.h: 62: extern void * calloc(size_t, size_t);
-[; ;stdlib.h: 63: extern div_t div(int numer, int denom);
-[; ;stdlib.h: 64: extern udiv_t udiv(unsigned numer, unsigned denom);
-[; ;stdlib.h: 65: extern ldiv_t ldiv(long numer, long denom);
-[; ;stdlib.h: 66: extern uldiv_t uldiv(unsigned long numer,unsigned long denom);
-[; ;stdlib.h: 67: extern unsigned long _lrotl(unsigned long value, unsigned int shift);
-[; ;stdlib.h: 68: extern unsigned long _lrotr(unsigned long value, unsigned int shift);
-[; ;stdlib.h: 69: extern unsigned int _rotl(unsigned int value, unsigned int shift);
-[; ;stdlib.h: 70: extern unsigned int _rotr(unsigned int value, unsigned int shift);
-[; ;stdlib.h: 75: extern void * malloc(size_t);
-[; ;stdlib.h: 76: extern void free(void *);
-[; ;stdlib.h: 77: extern void * realloc(void *, size_t);
-[; ;stdlib.h: 86: extern int atexit(void (*)(void));
-[; ;stdlib.h: 87: extern char * getenv(const char *);
-[; ;stdlib.h: 88: extern char ** environ;
-[; ;stdlib.h: 89: extern int system(char *);
-[; ;stdlib.h: 90: extern void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
-[; ;stdlib.h: 91: extern void * bsearch(const void *, void *, size_t, size_t, int(*)(const void *, const void *));
-[; ;stdlib.h: 92: extern int abs(int);
-[; ;stdlib.h: 93: extern long labs(long);
-[; ;stdlib.h: 95: extern char * itoa(char * buf, int val, int base);
-[; ;stdlib.h: 96: extern char * utoa(char * buf, unsigned val, int base);
-[; ;stdlib.h: 101: extern char * ltoa(char * buf, long val, int base);
-[; ;stdlib.h: 102: extern char * ultoa(char * buf, unsigned long val, int base);
-[; ;stdlib.h: 104: extern char * ftoa(float f, int * status);
-"8 interface.c
+[; ;interface.h: 18: void nrf24l01InterfaceInit(void);
+[; ;interface.h: 19: unsigned char nrf24l01SPISend(unsigned char data);
+[; ;interface.h: 20: void nrf24l01SPIStart(void);
+[; ;interface.h: 21: void nrf24l01SPIEnd(void);
+[; ;interface.h: 23: void enableInterrupts(unsigned char enable);
+"7 interface.c
 [v _nrf24l01InterfaceInit `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 8: void nrf24l01InterfaceInit(void){
+[; ;interface.c: 7: void nrf24l01InterfaceInit(void){
 [e :U _nrf24l01InterfaceInit ]
 [f ]
-[; ;interface.c: 10: TRISAbits.TRISA0 = 0;
-"10
+[; ;interface.c: 9: TRISAbits.TRISA0 = 0;
+"9
 [e = . . _TRISAbits 0 0 -> -> 0 `i `uc ]
-[; ;interface.c: 11: TRISAbits.TRISA1 = 0;
-"11
+[; ;interface.c: 10: TRISAbits.TRISA1 = 0;
+"10
 [e = . . _TRISAbits 0 1 -> -> 0 `i `uc ]
-[; ;interface.c: 13: TRISCbits.TRISC1 = 1;
-"13
+[; ;interface.c: 12: TRISCbits.TRISC1 = 1;
+"12
 [e = . . _TRISCbits 0 1 -> -> 1 `i `uc ]
-[; ;interface.c: 14: TRISCbits.TRISC2 = 0;
-"14
+[; ;interface.c: 13: TRISCbits.TRISC2 = 0;
+"13
 [e = . . _TRISCbits 0 2 -> -> 0 `i `uc ]
-[; ;interface.c: 15: TRISCbits.TRISC0 = 0;
-"15
+[; ;interface.c: 14: TRISCbits.TRISC0 = 0;
+"14
 [e = . . _TRISCbits 0 0 -> -> 0 `i `uc ]
-[; ;interface.c: 17: SSPCON1bits.SSPEN = 0;
-"17
+[; ;interface.c: 16: SSPCON1bits.SSPEN = 0;
+"16
 [e = . . _SSPCON1bits 0 5 -> -> 0 `i `uc ]
-[; ;interface.c: 18: SSPCON1bits.CKP = 0;
-"18
+[; ;interface.c: 17: SSPCON1bits.CKP = 0;
+"17
 [e = . . _SSPCON1bits 0 4 -> -> 0 `i `uc ]
-[; ;interface.c: 19: SSP1STATbits.CKE = 1;
-"19
+[; ;interface.c: 18: SSP1STATbits.CKE = 1;
+"18
 [e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;interface.c: 20: SSPCON1bits.SSPM = 0b0000;
-"20
+[; ;interface.c: 19: SSPCON1bits.SSPM = 0b0000;
+"19
 [e = . . _SSPCON1bits 1 0 -> -> 0 `i `uc ]
-[; ;interface.c: 22: SSPCON1bits.SSPEN = 1;
-"22
+[; ;interface.c: 21: SSPCON1bits.SSPEN = 1;
+"21
 [e = . . _SSPCON1bits 0 5 -> -> 1 `i `uc ]
-[; ;interface.c: 24: }
-"24
-[e :UE 338 ]
+[; ;interface.c: 23: }
+"23
+[e :UE 334 ]
 }
-"26
+"25
 [p l 1 ]
-"27
+"26
 [v _nrf24l01SPISend `(uc ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 27: unsigned char nrf24l01SPISend(unsigned char data){
+[; ;interface.c: 26: unsigned char nrf24l01SPISend(unsigned char data){
 [e :U _nrf24l01SPISend ]
 [v _data `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 28: SSP1BUF = data;
-"28
+[; ;interface.c: 27: SSP1BUF = data;
+"27
 [e = _SSP1BUF _data ]
-[; ;interface.c: 30: while (!SSP1STATbits.BF){
-"30
-[e $U 340  ]
-[e :U 341 ]
+[; ;interface.c: 29: while (!SSP1STATbits.BF){
+"29
+[e $U 336  ]
+[e :U 337 ]
 {
-[; ;interface.c: 31: __nop();
-"31
-[e ( ___nop ..  ]
-"32
-}
-[e :U 340 ]
+[; ;interface.c: 30: __nop();
 "30
-[e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 341  ]
-[e :U 342 ]
-[; ;interface.c: 32: }
-[; ;interface.c: 34: return SSP1BUF;
-"34
-[e ) _SSP1BUF ]
-[e $UE 339  ]
-[; ;interface.c: 35: }
-"35
-[e :UE 339 ]
+[e ( ___nop ..  ]
+"31
 }
-"37
+[e :U 336 ]
+"29
+[e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 337  ]
+[e :U 338 ]
+[; ;interface.c: 31: }
+[; ;interface.c: 33: return SSP1BUF;
+"33
+[e ) _SSP1BUF ]
+[e $UE 335  ]
+[; ;interface.c: 34: }
+"34
+[e :UE 335 ]
+}
+"36
 [p l 1 ]
-"38
+"37
 [v _nrf24l01SPIStart `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 38: void nrf24l01SPIStart(void){
+[; ;interface.c: 37: void nrf24l01SPIStart(void){
 [e :U _nrf24l01SPIStart ]
 [f ]
-[; ;interface.c: 39: PORTAbits.RA1 = 0;
-"39
+[; ;interface.c: 38: PORTAbits.RA1 = 0;
+"38
 [e = . . _PORTAbits 0 1 -> -> 0 `i `uc ]
-[; ;interface.c: 40: _delay((unsigned long)((10)*(16000000/4000000.0)));
-"40
+[; ;interface.c: 39: _delay((unsigned long)((10)*(16000000/4000000.0)));
+"39
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;interface.c: 41: }
-"41
-[e :UE 343 ]
+[; ;interface.c: 40: }
+"40
+[e :UE 339 ]
 }
-"43
+"42
 [p l 1 ]
-"44
+"43
 [v _nrf24l01SPIEnd `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 44: void nrf24l01SPIEnd(void){
+[; ;interface.c: 43: void nrf24l01SPIEnd(void){
 [e :U _nrf24l01SPIEnd ]
 [f ]
-[; ;interface.c: 45: _delay((unsigned long)((10)*(16000000/4000000.0)));
-"45
+[; ;interface.c: 44: _delay((unsigned long)((10)*(16000000/4000000.0)));
+"44
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;interface.c: 46: PORTAbits.RA1 = 1;
-"46
+[; ;interface.c: 45: PORTAbits.RA1 = 1;
+"45
 [e = . . _PORTAbits 0 1 -> -> 1 `i `uc ]
-[; ;interface.c: 47: }
-"47
-[e :UE 344 ]
+[; ;interface.c: 46: }
+"46
+[e :UE 340 ]
 }
-"49
+"48
 [p l 1 ]
-"50
+"49
 [v _enableInterrupts `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 50: void enableInterrupts(unsigned char enable){
+[; ;interface.c: 49: void enableInterrupts(unsigned char enable){
 [e :U _enableInterrupts ]
 [v _enable `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 51: INTCONbits.INTE = enable;
-"51
+[; ;interface.c: 50: INTCONbits.INTE = enable;
+"50
 [e = . . _INTCONbits 0 4 _enable ]
-[; ;interface.c: 52: }
-"52
-[e :UE 345 ]
-}
-"55
-[v __itoa `(v ~T0 @X0 1 ef3`*uc`ui`uc ]
-{
-[; ;interface.c: 55: void _itoa(char * buffer, unsigned int number, unsigned char base){
-[e :U __itoa ]
-[v _buffer `*uc ~T0 @X0 1 r1 ]
-[v _number `ui ~T0 @X0 1 r2 ]
-[v _base `uc ~T0 @X0 1 r3 ]
-[f ]
-[; ;interface.c: 56: itoa(buffer, number, base);
-"56
-[e ( _itoa (3 , , _buffer -> _number `i -> _base `i ]
-[; ;interface.c: 57: }
-"57
-[e :UE 346 ]
+[; ;interface.c: 51: }
+"51
+[e :UE 341 ]
 }
