@@ -67,27 +67,6 @@ void nrf24l01HandleRX(void){
     
     nrf24l01CELow();
     
-<<<<<<< HEAD
-    nrf24l01SPIStart();
-
-	nrf24l01SPISend(n_R_RX_PAYLOAD);
-    
-    i = 0;
-    while (i < width){
-        byte = nrf24l01SPISend(0);
-        
-//        if (byte == '/'){
-//            break;
-//        }
-//        
-//        if (byte != read_flashmem( (unsigned) FLASH_OFFSET_NAME + i)){
-//            nrf24l01.RXPending = 0;
-//            return;
-//        }
-        
-        i++;
-    }
-=======
 	nrf24l01SPIStart();
 
 	nrf24l01SPISend(n_R_RX_PAYLOAD);
@@ -123,7 +102,6 @@ void nrf24l01HandleRX(void){
     for (i = 0; (i < sizeof(nrf24l01RXValue)) && (offset + i < width) ; i++){
 		nrf24l01RXValue[i] = nrf24l01SPISend(0);
 	}
->>>>>>> 98cceb51537cc0678eebd99d31e008967f4ce7a5
     
     nrf24l01SPIEnd();
     
