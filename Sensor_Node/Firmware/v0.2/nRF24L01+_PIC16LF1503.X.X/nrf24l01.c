@@ -55,9 +55,9 @@ void nrf24l01HandleRX(void){
     
     nrf24l01CELow();
     
-    		nrf24l01SPIStart();
+    nrf24l01SPIStart();
 
-		nrf24l01SPISend(n_R_RX_PAYLOAD);
+	nrf24l01SPISend(n_R_RX_PAYLOAD);
     
     i = 0;
     while (i < width){
