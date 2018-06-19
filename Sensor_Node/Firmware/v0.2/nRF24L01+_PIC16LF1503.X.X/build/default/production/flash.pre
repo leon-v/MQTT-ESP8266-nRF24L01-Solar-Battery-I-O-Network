@@ -3770,7 +3770,7 @@ const unsigned char NVMEM[32]@(0x800U-32) = {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-# 24
+# 27
 unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 

@@ -16,9 +16,12 @@
     0x0000,                                                                     //FLASH_OFFSET_BOOT_COUNT
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
  };
+
+#define FLASH_OFFSET_NAME_LENGTH		16
+#define FLASH_OFFSET_NAME				0
  
-#define FLASH_OFFSET_NAME           0
-#define FLASH_OFFSET_BOOT_REASON    16
+#define FLASH_OFFSET_BOOT_REASON_LENGTH	1
+#define FLASH_OFFSET_BOOT_REASON		FLASH_OFFSET_NAME + FLASH_OFFSET_NAME_LENGTH
 
 
 unsigned int read_flashmem(unsigned int offset);

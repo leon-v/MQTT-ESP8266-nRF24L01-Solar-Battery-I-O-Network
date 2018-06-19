@@ -1,7 +1,11 @@
 #include <xc.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "nrf24l01.h"
 #include "flash.h"
 #include "interface.h"
+
 
 #define SLEEP_MODE          1
 #define SUM_ADC_MODE        2
@@ -12,8 +16,8 @@
 #define RUN_MODE            11
 #define START_ADC3_MODE     12
 #define START_ADC7_MODE     13
-#define START_FVR_MODE      14
-#define START_TEMP_MODE     15
+#define START_ADC31_MODE    14
+#define START_ADC29_MODE    15
 #define SEND_INT_MODE       16
 
 unsigned char nextMode = SEND_BOOT_MODE;
@@ -22,172 +26,100 @@ unsigned char mode = SEND_BOOT_MODE;
 #define ADC_OVERSAMPLE_COUNT 255
 
 
-unsigned long adcSum = 0;
-unsigned char adcLoop = 0;
+
 unsigned char sleepLoop = 0;
 
 // Cahnge ISR to trigger super loop code to do its bidding
 
-void interrupt ISR(void){
-    if (PIR1bits.ADIF){
-        
-        if (mode == SUM_ADC_MODE) {
-            
-            int result = 0x00;
-            result = ADRESL;
-            result|= (ADRESH << 8);
-
-            adcSum+= (unsigned) result;
-            
-            if (!adcLoop){
-                mode = SEND_ADC_MODE;
-            }else{
-                
-                ADCON0bits.ADGO = 1;
-            }
-            
-            adcLoop--;
-        }
-        
-        
-        PIR1bits.ADIF = 0;
-    }
-    
+void interrupt ISR(void){    
     if (INTCONbits.INTF){
         nrf24l01ISR();
         INTCONbits.INTF = 0;
     }
 }
 
-void startADC(unsigned char channel){
-    adcSum = 0;
-    adcLoop = ADC_OVERSAMPLE_COUNT;
-
-    if (ADCON0bits.CHS != channel) {
-        ADCON0bits.CHS = channel;
-        delayUs(200);
-    }
-
-    ADCON0bits.ADGO = 1;
-    mode = SUM_ADC_MODE;
+unsigned long getADCValue(unsigned char channel, unsigned long divider){
+	
+	unsigned long adcSum = 0;
+	unsigned char adcLoop = 255;
+	
+	ADCON0bits.CHS = channel;
+	delayUs(200);
+	
+	while (--adcLoop){
+		
+		ADCON0bits.ADGO = 1;
+		while (ADCON0bits.ADGO){
+			NOP();
+		}
+		
+		adcSum+= ADRESL;
+		adcSum+= (unsigned) (ADRESH << 8);
+	}
+	
+	adcSum*= 100;
+	adcSum/= divider;
+	
+	return adcSum;
 }
+
+void sleep(){
+	while (1){
+		
+		SLEEP();
+		NOP();
+		NOP();
+
+		if (!STATUSbits.nTO && !STATUSbits.nPD) {
+			return;
+		}
+	}
+}
+
+void checkRxData(void){
+	
+	nrf24l01SetRXMode(1);
+	
+	sleep();
+	
+	if (!nrf24l01.RXPending){
+		return;
+	}
+	
+	counter++;
+}
+
 void loop(){
-            
-    if (mode != SLEEP_MODE) {
-        CLRWDT();
-    }
     
-    switch (mode){
-        
-        case SLEEP_MODE:
-            
-            SLEEP();
-            NOP();
-            NOP();
-                    
-            if (!STATUSbits.nTO && !STATUSbits.nPD){
-                mode = nextMode;
-                sleepLoop = 0;
-            }
-            
-            if (sleepLoop++ > 5){
-                write_flashmem(FLASH_OFFSET_BOOT_REASON, 1001);
-                RESET();
-            }
-            break;
-            
-        case SEND_BOOT_MODE:
-            // Write payload data
-            strcpy((char *)nrf24l01.txTopic, "BOOT");
-            _itoa((char *)nrf24l01.txValue, read_flashmem(FLASH_OFFSET_BOOT_REASON), 10);
-            nrf24l01SendString(0);
-            mode = RUN_MODE;
-            break;
-            
-        case RUN_MODE:
-            mode = SLEEP_MODE;
-            nextMode = SEND_COUNTER_MODE;
-            break;
-            
-        case SEND_COUNTER_MODE:
-            strcpy((char *)nrf24l01.txTopic, "COUNT");
-            _itoa((char *)nrf24l01.txValue, counter, 10);
-            nrf24l01SendString(0);
-            mode = START_ADC3_MODE;
-            break;
-            
-        case START_ADC3_MODE:
-               startADC(3);
-            
-//            if ( (adcSum >= 4200) && (PORTAbits.RA5 == 1) ) {
-//                PORTAbits.RA5 = 0;
-//            }
-//            
-//            if ( (adcSum <= 4100) && (PORTAbits.RA5 == 0) ) {
-//                PORTAbits.RA5 = 1;
-//            }
-            nextMode = START_ADC7_MODE;
-            break;
-        
-        case START_ADC7_MODE:
-            startADC(7);
-            nextMode = START_TEMP_MODE;
-            break;
-            
-        case START_TEMP_MODE:
-            startADC(29);
-            nextMode = START_FVR_MODE;
-            break;
-            
-        case START_FVR_MODE:
-            startADC(31);
-            nextMode = RUN_MODE;
-            break;
+	// Write payload data
 
-        case SEND_ADC_MODE:
-            
-            switch (ADCON0bits.CHS){
-                case 3:
-                    adcSum*= 100;
-                    adcSum/= 2505;
-                    break;
-                    
-                case 7:
-                    adcSum*= 100;
-                    adcSum/= 2500;
-                    break;
-                 
-                case 31:
-                    adcSum*= 100;
-                    adcSum/= 2475;
-                    break;
-                    
-                 case 29:
-                    adcSum/= 2089;
-                    adcSum-= 40;
-                    break;
-                    
-                default:
-                    adcSum/= 255;
-                    break;
-            }
-            
-            strcpy((char *)nrf24l01.txTopic, "ADC");
-            _itoa(append((char *)nrf24l01.txTopic), ADCON0bits.CHS, 10);
-            
-            _itoa((char *)nrf24l01.txValue, adcSum, 10);
-            
-            nrf24l01SendString(0);
-            
+	strcpy(nrf24l01TXTopic, "DBG");
+	utoa(nrf24l01TXValue, counter, 10);
+	nrf24l01SendString(0);
+	sleep();
 
-            mode = nextMode;
-            break;
-            
-    }
-    
-    
+	strcpy(nrf24l01TXTopic, "ADC3");
+	utoa(nrf24l01TXValue, getADCValue(3, 2505), 10);
+	nrf24l01SendString(1);
+	sleep();
+
+	strcpy(nrf24l01TXTopic, "ADC7");
+	utoa(nrf24l01TXValue, getADCValue(7, 2500), 10);
+	nrf24l01SendString(1);
+	sleep();
+
+	strcpy(nrf24l01TXTopic, "ADC29");
+	utoa(nrf24l01TXValue, getADCValue(29, 208900) - 40, 10);
+	nrf24l01SendString(1);
+	sleep();
+
+	strcpy(nrf24l01TXTopic, "ADC31");
+	utoa(nrf24l01TXValue, getADCValue(31, 2475), 10);
+	nrf24l01SendString(1);
+	sleep();
+	
+	checkRxData();
 }
-
 
 void main(void) {
     
@@ -208,13 +140,17 @@ void main(void) {
     delayMs(10);
     
     nrf24l01Init();
+	
+	for (unsigned char i = 0; i < sizeof(nrf24l01Name); i++){
+		nrf24l01Name[i] = read_flashmem((unsigned) FLASH_OFFSET_NAME + i);
+	}
     
     OPTION_REGbits.nWPUEN = 0;
     
     /* Configure FVR */
-    FVRCONbits.FVREN = 0;
+    FVRCONbits.FVREN = 0; // Disable Voltage Reference Module
     FVRCONbits.ADFVR = 1; // 1.024V
-    FVRCONbits.FVREN = 1;
+    FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
     
     /* Configure Temp sensor*/
     FVRCONbits.TSEN = 0;
@@ -235,8 +171,6 @@ void main(void) {
     ADCON1bits.ADFM = 1;
     ADCON1bits.ADPREF = 0b00;
     
-    PIE1bits.ADIE = 1;
-    
     ADCON0bits.CHS = 3;
     ADCON0bits.ADON = 1;
     
@@ -248,7 +182,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 10 ;
+    WDTCONbits.WDTPS = 11;
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;
@@ -257,6 +191,11 @@ void main(void) {
     /* Start Interrupts */
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
+	
+	strcpy(nrf24l01TXTopic, "BOOT");
+	utoa(nrf24l01TXValue, read_flashmem(FLASH_OFFSET_BOOT_REASON), 10);
+	nrf24l01SendString(0);
+	sleep();
     
     while(1){
         loop();

@@ -2858,8 +2858,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;flash.h: 16: 0x0000,
 [; ;flash.h: 17: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 [; ;flash.h: 18: };
-[; ;flash.h: 24: unsigned int read_flashmem(unsigned int offset);
-[; ;flash.h: 25: void write_flashmem(unsigned int offset, unsigned int data);
+[; ;flash.h: 27: unsigned int read_flashmem(unsigned int offset);
+[; ;flash.h: 28: void write_flashmem(unsigned int offset, unsigned int data);
 "3 flash.c
 [v _write_flashmem `(v ~T0 @X0 1 ef2`ui`ui ]
 {

@@ -2,7 +2,6 @@
 #define	INTERFACE_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
-#include <string.h>
 
 #define _XTAL_FREQ 16000000
 
@@ -22,8 +21,6 @@ void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
 void enableInterrupts(unsigned char enable);
-
-void _itoa(char * buffer, unsigned int number, unsigned char base);
 
 #endif	/* INTERFACE_H */
 
