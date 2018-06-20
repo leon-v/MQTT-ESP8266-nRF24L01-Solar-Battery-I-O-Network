@@ -366,9 +366,6 @@ void nrf24l01CheckRecieve(void){
 		strcat(buffer1, "/ACK");
 
 		nrf24l01SendString(buffer1);
-		delayUs(50000);
-		delayUs(50000);
-		nrf24l01SendString(buffer1);
 		
 		os_free(buffer);
 		

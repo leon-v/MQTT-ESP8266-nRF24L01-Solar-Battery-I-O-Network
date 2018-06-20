@@ -1,0 +1,92 @@
+<HTML>
+<HEAD>
+<TITLE>Listing of flash.c</TITLE>
+<LINK rel=stylesheet href="udf_styles.css" type="text/css">
+</HEAD>
+<BODY>
+<table class="">
+<tr><td><code><i>     1</i> </code></td><td><code>&nbsp #include&nbsp "flash.h"</code></td></tr>
+<tr><td><code><i>     2</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>     3</i> </code></td><td><code>&nbsp void&nbsp write_flashmem(unsigned&nbsp int&nbsp offset,&nbsp unsigned&nbsp int&nbsp data)&nbsp {</code></td></tr>
+<tr><td><code><i>     4</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>     5</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp unsigned&nbsp int&nbsp address;</code></td></tr>
+<tr><td><code><i>     6</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>     7</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.GIE&nbsp =&nbsp 0;&nbsp //disable&nbsp interupts&nbsp incase&nbsp they&nbsp interfere</code></td></tr>
+<tr><td><code><i>     8</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>     9</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //ERASE&nbsp SECTION</code></td></tr>
+<tr><td><code><i>    10</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1&nbsp =&nbsp 0x00;&nbsp&nbsp&nbsp&nbsp&nbsp //not&nbsp configuration&nbsp space</code></td></tr>
+<tr><td><code><i>    11</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    12</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp address&nbsp =&nbsp NV_ADDRESS&nbsp +&nbsp offset;</code></td></tr>
+<tr><td><code><i>    13</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMADRL&nbsp =&nbsp (char)&nbsp (address&nbsp&rsaquo &rsaquo &nbsp 0);&nbsp&nbsp //least&nbsp significant&nbsp bits&nbsp of&nbsp address</code></td></tr>
+<tr><td><code><i>    14</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMADRH&nbsp =&nbsp (char)&nbsp (address&nbsp&rsaquo &rsaquo &nbsp 8);&nbsp&nbsp //most&nbsp significant&nbsp bits&nbsp of&nbsp address&nbsp </code></td></tr>
+<tr><td><code><i>    15</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    16</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.FREE&nbsp =&nbsp 1;&nbsp //specify&nbsp erase&nbsp operation</code></td></tr>
+<tr><td><code><i>    17</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.WREN&nbsp =&nbsp 1;&nbsp //allow&nbsp write</code></td></tr>
+<tr><td><code><i>    18</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    19</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON2&nbsp =&nbsp 0x55;&nbsp&nbsp //unlock&nbsp program&nbsp memory</code></td></tr>
+<tr><td><code><i>    20</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON2&nbsp =&nbsp 0xAA;&nbsp&nbsp //unlock&nbsp program&nbsp memory</code></td></tr>
+<tr><td><code><i>    21</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    22</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.WR&nbsp =&nbsp 1;&nbsp //begin&nbsp write</code></td></tr>
+<tr><td><code><i>    23</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    24</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp NOP();&nbsp&nbsp&nbsp&nbsp //to&nbsp give&nbsp time&nbsp to&nbsp write</code></td></tr>
+<tr><td><code><i>    25</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp NOP();&nbsp&nbsp&nbsp&nbsp //to&nbsp give&nbsp time&nbsp to&nbsp write</code></td></tr>
+<tr><td><code><i>    26</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    27</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.WREN&nbsp =&nbsp 0;&nbsp //disallow&nbsp write</code></td></tr>
+<tr><td><code><i>    28</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //END&nbsp OF&nbsp ERASE&nbsp SECTION</code></td></tr>
+<tr><td><code><i>    29</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    30</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //WRITE&nbsp SECTION</code></td></tr>
+<tr><td><code><i>    31</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1&nbsp =&nbsp 0x00;&nbsp&nbsp&nbsp&nbsp&nbsp //not&nbsp configuration&nbsp space</code></td></tr>
+<tr><td><code><i>    32</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    33</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMADRL&nbsp =&nbsp (char)&nbsp (address&nbsp&rsaquo &rsaquo &nbsp 0);&nbsp&nbsp //least&nbsp significant&nbsp bits&nbsp of&nbsp address</code></td></tr>
+<tr><td><code><i>    34</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMADRH&nbsp =&nbsp (char)&nbsp (address&nbsp&rsaquo &rsaquo &nbsp 8);&nbsp&nbsp //most&nbsp significant&nbsp bits&nbsp of&nbsp address&nbsp </code></td></tr>
+<tr><td><code><i>    35</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    36</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.FREE&nbsp =&nbsp 0;&nbsp&nbsp&nbsp&nbsp //selecting&nbsp write&nbsp operation</code></td></tr>
+<tr><td><code><i>    37</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.LWLO&nbsp =&nbsp 1;&nbsp&nbsp&nbsp&nbsp //load&nbsp write&nbsp latches&nbsp only</code></td></tr>
+<tr><td><code><i>    38</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.WREN&nbsp =&nbsp 1;&nbsp&nbsp&nbsp&nbsp //allow&nbsp write</code></td></tr>
+<tr><td><code><i>    39</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    40</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMDATL&nbsp =&nbsp (data&nbsp&rsaquo &rsaquo &nbsp 0);&nbsp&nbsp //write&nbsp least&nbsp significant&nbsp bits&nbsp of&nbsp data&nbsp to&nbsp latch</code></td></tr>
+<tr><td><code><i>    41</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMDATH&nbsp =&nbsp (data&nbsp&rsaquo &rsaquo &nbsp 8);&nbsp&nbsp //write&nbsp most&nbsp significant&nbsp bits&nbsp of&nbsp data&nbsp to&nbsp latch</code></td></tr>
+<tr><td><code><i>    42</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    43</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.LWLO&nbsp =&nbsp 0;&nbsp&nbsp&nbsp //write&nbsp latches&nbsp to&nbsp flash</code></td></tr>
+<tr><td><code><i>    44</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    45</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON2&nbsp =&nbsp 0x55;&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //unlock&nbsp program&nbsp memory</code></td></tr>
+<tr><td><code><i>    46</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON2&nbsp =&nbsp 0xAA;&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //unlock&nbsp program&nbsp memory</code></td></tr>
+<tr><td><code><i>    47</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    48</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.WR&nbsp =&nbsp 1;&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //begin&nbsp write</code></td></tr>
+<tr><td><code><i>    49</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    50</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp NOP();&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //to&nbsp give&nbsp time&nbsp to&nbsp write</code></td></tr>
+<tr><td><code><i>    51</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp NOP();&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //to&nbsp give&nbsp time&nbsp to&nbsp write</code></td></tr>
+<tr><td><code><i>    52</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    53</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.WREN&nbsp =&nbsp 0;&nbsp&nbsp&nbsp&nbsp //disallow&nbsp write</code></td></tr>
+<tr><td><code><i>    54</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    55</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //END&nbsp OF&nbsp WRITE&nbsp SECTION</code></td></tr>
+<tr><td><code><i>    56</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.GIE&nbsp =&nbsp 1;&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //enable&nbsp interupts&nbsp again</code></td></tr>
+<tr><td><code><i>    57</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    58</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    59</i> </code></td><td><code>&nbsp unsigned&nbsp int&nbsp read_flashmem(unsigned&nbsp int&nbsp offset)&nbsp {</code></td></tr>
+<tr><td><code><i>    60</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    61</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp unsigned&nbsp int&nbsp address;</code></td></tr>
+<tr><td><code><i>    62</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    63</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.GIE&nbsp =&nbsp 0;&nbsp //disable&nbsp interupts&nbsp incase&nbsp they&nbsp interfere</code></td></tr>
+<tr><td><code><i>    64</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    65</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1&nbsp =&nbsp 0x00;&nbsp&nbsp&nbsp&nbsp&nbsp //not&nbsp configuration&nbsp space</code></td></tr>
+<tr><td><code><i>    66</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    67</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp address&nbsp =&nbsp NV_ADDRESS&nbsp +&nbsp offset;</code></td></tr>
+<tr><td><code><i>    68</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMADRL&nbsp =&nbsp (char)&nbsp (address&nbsp&rsaquo &rsaquo &nbsp 0);&nbsp&nbsp //least&nbsp significant&nbsp bits&nbsp of&nbsp address</code></td></tr>
+<tr><td><code><i>    69</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMADRH&nbsp =&nbsp (char)&nbsp (address&nbsp&rsaquo &rsaquo &nbsp 8);&nbsp&nbsp //most&nbsp significant&nbsp bits&nbsp of&nbsp address&nbsp </code></td></tr>
+<tr><td><code><i>    70</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    71</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp PMCON1bits.RD&nbsp =&nbsp 1;&nbsp&nbsp //initiate&nbsp read&nbsp operation</code></td></tr>
+<tr><td><code><i>    72</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    73</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp NOP();&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //to&nbsp give&nbsp time&nbsp to&nbsp read</code></td></tr>
+<tr><td><code><i>    74</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp NOP();&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //to&nbsp give&nbsp time&nbsp to&nbsp read</code></td></tr>
+<tr><td><code><i>    75</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    76</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp unsigned&nbsp int&nbsp result&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    77</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp result&nbsp =&nbsp PMDATL;</code></td></tr>
+<tr><td><code><i>    78</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp result|=&nbsp (&nbsp (unsigned)&nbsp (PMDATH)&nbsp&lsaquo &lsaquo &nbsp 8);</code></td></tr>
+<tr><td><code><i>    79</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    80</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp INTCONbits.GIE&nbsp =&nbsp 1;&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //enable&nbsp interupts&nbsp again</code></td></tr>
+<tr><td><code><i>    81</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    82</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp return&nbsp result;</code></td></tr>
+<tr><td><code><i>    83</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    84</i> </code></td><td><code>&nbsp </code></code></BODY>
+</HTML>
