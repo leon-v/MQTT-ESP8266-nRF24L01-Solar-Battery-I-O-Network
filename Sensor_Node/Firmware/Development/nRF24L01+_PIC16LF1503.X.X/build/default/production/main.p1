@@ -3213,7 +3213,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 114 `ui `uc
 -> -> 101 `ui `uc
 -> -> 100 `ui `uc
--> -> 0 `i `uc
+-> -> 87 `ui `uc
 -> -> 0 `i `uc
 -> -> 0 `i `uc
 -> -> 0 `i `uc
@@ -3239,7 +3239,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ]
 [; ;flash.h: 14: const unsigned char NVMEM[32]@(0x800U-32) = {
-[; ;flash.h: 15: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,
+[; ;flash.h: 15: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 'W', 0, 0, 0,
 [; ;flash.h: 16: 0x0000,
 [; ;flash.h: 17: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 [; ;flash.h: 18: };
@@ -3543,9 +3543,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 98: sleep();
 "98
 [e ( _sleep ..  ]
-[; ;main.c: 100: checkRxData();
-"100
-[e ( _checkRxData ..  ]
 [; ;main.c: 101: }
 "101
 [e :UE 391 ]

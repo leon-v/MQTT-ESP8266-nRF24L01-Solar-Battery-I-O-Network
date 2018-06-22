@@ -97,7 +97,7 @@ void loop(){
 	nrf24l01SendString(1);
 	sleep();
 	
-	checkRxData();
+//	checkRxData();
 }
 
 void main(void) {

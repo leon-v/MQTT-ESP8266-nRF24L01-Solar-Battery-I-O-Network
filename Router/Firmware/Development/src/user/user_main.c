@@ -37,7 +37,7 @@
 #include "gpio.h"
 #include "user_interface.h"
 #include "mem.h"
-#include "nRF24L01+.h"
+#include "radio_app.h"
 
 
 MQTT_Client mqttClient;
@@ -69,9 +69,12 @@ void wifiConnectCb(uint8_t status) {
 }
 
 void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args){
+
 	MQTT_Client* client = (MQTT_Client*)args;
+
+	
 	INFO("MQTT: Connected\r\n");
-	nrf24l01Unpause();
+	// nrf24l01Unpause();
 	// MQTT_Publish(client, "/sensor/test/online", "1", 1, 1, 1);
 	// MQTT_InitLWT(client, "/sensor/test/online", "0", 1, 1);
 	
@@ -95,7 +98,7 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args){
 void ICACHE_FLASH_ATTR mqttDisconnectedCb(uint32_t *args){
 	MQTT_Client* client = (MQTT_Client*)args;
 	INFO("MQTT: Disconnected\r\n");
-	nrf24l01Pause();
+	// nrf24l01Pause();
 	//sleepSetDisable();
 	// ClientDisconnected();
 }
@@ -231,7 +234,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 		WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
 
-		nrf24l01Init(&mqttClient);
+		radioInit(&mqttClient);
 
 		INFO("\r\nSystem started ...\r\n");
 	}
