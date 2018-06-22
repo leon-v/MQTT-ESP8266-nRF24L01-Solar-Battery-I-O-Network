@@ -65,6 +65,7 @@ void wifiConnectCb(uint8_t status) {
         os_timer_arm(&sntp_timer, 1000, 1);//1s
     } else {
           MQTT_Disconnect(&mqttClient);
+          radioEnable(0);
     }
 }
 
@@ -92,15 +93,13 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args){
 
 	//sleepSetEnable();
 
-	// ClientConnected();
+	radioEnable(1);
 }
 
 void ICACHE_FLASH_ATTR mqttDisconnectedCb(uint32_t *args){
 	MQTT_Client* client = (MQTT_Client*)args;
 	INFO("MQTT: Disconnected\r\n");
-	// nrf24l01Pause();
-	//sleepSetDisable();
-	// ClientDisconnected();
+	radioEnable(0);
 }
 
 void ICACHE_FLASH_ATTR mqttPublishedCb(uint32_t *args){
@@ -205,6 +204,11 @@ void ICACHE_FLASH_ATTR user_init(void){
 	// PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO4_U, FUNC_GPIO4);
 	// GPIO_DIS_OUTPUT(4);
 	PIN_PULLUP_EN(PERIPHS_IO_MUX_GPIO4_U);
+
+	// (high, low, out, in)
+	gpio_output_set(BIT4, 0, BIT4, 0);
+	gpio_output_set(BIT4, 0, BIT4, 0);
+	os_delay_us(65535);
 	gpio_output_set(0, BIT4, 0, BIT4);// Bit 4 input
 
 

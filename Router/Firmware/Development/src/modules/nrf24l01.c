@@ -244,6 +244,15 @@ void nrf24l01SendString(i_uint8_t waitForAck){
     
 	// Re-enable interrupts
     enableInterrupts(1);
+
+    // Wait for the TXBusy to clear so we know the packet has been sent
+	i = 0xFF;
+    while (nrf24l01.TXBusy){
+        if (!--i) {
+            goto RESEND;
+        }
+        delayUs(50);
+    }
 		
 	// Wait for the transmit ACK flag to becode clear so we know we got an ACK
 	i = 0xFF;
@@ -262,10 +271,11 @@ void nrf24l01ISR(void){
     n_STATUS_t status;
     status.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
 	
+	os_printf("nrf24l01ISR: %u\r\n", status.byte);
     
     // I have had the IC lock up and return 0x00, reset it
     if (status.byte == 0x00){
-		exception(1);
+    	exception(1);
     }
     
     // Also reset if we get 0xFF since that likely means there is an SPI error
@@ -290,8 +300,7 @@ void nrf24l01ISR(void){
     // Check id there is a received packet waiting
     if (status.RX_DR){
 
-        // Get the RX data into the buffer
-        nrf24l01ReceiveString();
+    	nrf24l01.RXPending = 1;
     }
 	
 	// Clear the interrupt on the nrf24l01

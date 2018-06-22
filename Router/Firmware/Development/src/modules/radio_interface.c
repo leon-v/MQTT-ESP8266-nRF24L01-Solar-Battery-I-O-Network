@@ -48,11 +48,11 @@ i_uint8_t nrf24l01SPISend(i_uint8_t data){
 		}
 
 		// Clock Up
-		os_delay_us(20);
+		os_delay_us(200);
 		gpio_output_set(CLKPIN, 0, CLKPIN, 0);// (high, low, out, in)
 
 		// Clock Down
-		os_delay_us(20);
+		os_delay_us(200);
 		gpio_output_set(0, CLKPIN, CLKPIN, 0);// (high, low, out, in)
 
 		bit--;
@@ -64,11 +64,11 @@ i_uint8_t nrf24l01SPISend(i_uint8_t data){
 
 void nrf24l01SPIStart(void){
     nrf24l01CSLow();
-    delayUs(10);
+    delayUs(100);
 }
 
 void nrf24l01SPIEnd(void){
-    delayUs(10);
+    delayUs(100);
     nrf24l01CSHigh();
 }
 

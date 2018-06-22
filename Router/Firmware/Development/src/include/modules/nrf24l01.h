@@ -25,6 +25,7 @@ typedef struct{
     
 } nrf24l01_t;
 
+
 volatile nrf24l01_t nrf24l01;
 
 //Transmitters using e.i.r.p.s greater than 0 dBW (1 W)
