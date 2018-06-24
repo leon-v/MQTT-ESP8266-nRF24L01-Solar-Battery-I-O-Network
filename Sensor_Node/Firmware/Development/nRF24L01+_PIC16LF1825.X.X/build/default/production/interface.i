@@ -10618,12 +10618,18 @@ extern __bank0 __bit __timeout;
 # 7 "interface.h"
 extern const unsigned char NVMEM[32];
 
-# 14
+# 15
 const struct {
-char name[16] = {'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '\0'};
-} romData_t;
+char name[16];
+unsigned int bootMode;
 
-# 45
+} romData_t = {
+{"Unconfigured"},
+{0},
+
+};
+
+# 52
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);

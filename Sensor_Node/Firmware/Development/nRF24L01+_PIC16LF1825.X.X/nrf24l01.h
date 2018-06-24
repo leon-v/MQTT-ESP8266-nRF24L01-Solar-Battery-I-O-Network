@@ -8,13 +8,24 @@
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+typedef union{
+    struct{
+        unsigned byte       :8;
+    };
+    struct{
+        unsigned ACKRequest :1;
+    };
+} packetData_t;
+
 extern char nrf24l01TXName[16];
 extern char nrf24l01TXTopic[8];
 extern char nrf24l01TXValue[8];
+extern packetData_t nrf24l01TXPacketData;
 
 extern char nrf24l01RXTopic[8];
 extern char nrf24l01RXValue[8];
 extern char nrf24l01RXName[16];
+extern packetData_t nrf24l01RXPacketData;
 
 typedef struct{
     unsigned waitForTXACK       : 1;
@@ -22,7 +33,6 @@ typedef struct{
     unsigned RXPending			: 1;
     unsigned RXMode             : 1;
     unsigned Pipe             	: 3;
-    
 } nrf24l01_t;
 
 
@@ -35,7 +45,7 @@ volatile nrf24l01_t nrf24l01;
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
-void nrf24l01SendString(unsigned char waitForAck);
+void nrf24l01SendString(void);
 void nrf24l01SetRXMode(unsigned char rxMode);
 
 #endif	/* NRF24L01_H_ */

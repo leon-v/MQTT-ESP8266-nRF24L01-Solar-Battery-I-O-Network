@@ -65,8 +65,7 @@ void checkRxData(void){
 	if (!nrf24l01.RXPending){
 		return;
 	}
-	
-    if ()
+
 }
 
 void loop(){
@@ -76,27 +75,37 @@ void loop(){
 	strcpy(nrf24l01TXTopic, "DBG");
 	utoa(nrf24l01TXValue, counter, 10);
     counter = 0;
-	nrf24l01SendString(0);
+    nrf24l01TXPacketData.byte = 0x00;
+    nrf24l01TXPacketData.ACKRequest = 0;
+	nrf24l01SendString();
 	sleep();
 
 	strcpy(nrf24l01TXTopic, "ADC3");
 	utoa(nrf24l01TXValue, getADCValue(3, 2505), 10);
-	nrf24l01SendString(1);
+    nrf24l01TXPacketData.byte = 0x00;
+    nrf24l01TXPacketData.ACKRequest = 0;
+	nrf24l01SendString();
 	sleep();
 
 	strcpy(nrf24l01TXTopic, "ADC7");
 	utoa(nrf24l01TXValue, getADCValue(7, 2500), 10);
-	nrf24l01SendString(1);
+    nrf24l01TXPacketData.byte = 0x00;
+    nrf24l01TXPacketData.ACKRequest = 0;
+	nrf24l01SendString();
 	sleep();
 
 	strcpy(nrf24l01TXTopic, "ADC29");
 	utoa(nrf24l01TXValue, getADCValue(29, 208900) - 40, 10);
-	nrf24l01SendString(1);
+    nrf24l01TXPacketData.byte = 0x00;
+    nrf24l01TXPacketData.ACKRequest = 0;
+	nrf24l01SendString();
 	sleep();
 
 	strcpy(nrf24l01TXTopic, "ADC31");
 	utoa(nrf24l01TXValue, getADCValue(31, 2475), 10);
-	nrf24l01SendString(1);
+    nrf24l01TXPacketData.byte = 0x00;
+    nrf24l01TXPacketData.ACKRequest = 0;
+	nrf24l01SendString();
 	sleep();
 	
 //	checkRxData();
@@ -178,7 +187,9 @@ void main(void) {
 	
 	strcpy(nrf24l01TXTopic, "BOOT");
 	utoa(nrf24l01TXValue, read_flashmem(FLASH_OFFSET_BOOT_REASON), 10);
-	nrf24l01SendString(0);
+    nrf24l01TXPacketData.byte = 0x00;
+    nrf24l01TXPacketData.ACKRequest = 0;
+	nrf24l01SendString();
 	sleep();
     
     while(1){

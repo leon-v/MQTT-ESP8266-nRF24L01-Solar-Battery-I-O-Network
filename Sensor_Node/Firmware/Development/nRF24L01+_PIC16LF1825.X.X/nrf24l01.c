@@ -6,11 +6,12 @@ const unsigned char n_ADDRESS_MUL = 33;
 char nrf24l01TXName[16];
 char nrf24l01TXTopic[8];
 char nrf24l01TXValue[8];
+packetData_t nrf24l01TXPacketData;
 
 char nrf24l01RXTopic[8];
 char nrf24l01RXValue[8];
 char nrf24l01RXName[16];
-
+packetData_t nrf24l01RXPacketData;
 
 unsigned int counter = 0;
 
@@ -151,7 +152,7 @@ void nrf24l01ReceiveString(void){
 
     // Check for ACK
     
-    if (!nrf24l01.waitForTXACK){
+    if (!nrf24l01TXPacketData.ACKRequest){
     	return;
     }
 
@@ -167,19 +168,15 @@ void nrf24l01ReceiveString(void){
     	return;
     }
 
-	nrf24l01.waitForTXACK = 0;
+	nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01.RXPending = 0;
 	nrf24l01SetRXMode(0);
 }
 
-void nrf24l01SendString(unsigned char waitForAck){
+void nrf24l01SendString(void){
 	
 	// Initalise an iterator for the many loops
     unsigned char i;
-	
-	// If the function was called to wait for an ACK, then set the 
-	// status variable state accordingly
-	nrf24l01.waitForTXACK = waitForAck;
     
     if (counter){
         counter--;
@@ -212,6 +209,8 @@ void nrf24l01SendString(unsigned char waitForAck){
     
 	// Send the command to tell the radio we want to send data with no auto ACK.
     nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
+    
+    nrf24l01SPISend(nrf24l01TXPacketData.byte);
     
 	// Loop through each character of the name buffer and send it to the radio
     for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
@@ -256,7 +255,7 @@ void nrf24l01SendString(unsigned char waitForAck){
 		
 	// Wait for the transmit ACK flag to becode clear so we know we got an ACK
 	i = 0xFF;
-	while (nrf24l01.waitForTXACK){
+	while (nrf24l01TXPacketData.ACKRequest){
 		if (!--i) {
             counter++;
 			goto RESEND;
@@ -288,7 +287,7 @@ void nrf24l01ISR(void){
         
         // If the nrf24l01 is in PTX mode and we are waiting for an ACK
         if (!nrf24l01.RXMode){
-            if (nrf24l01.waitForTXACK){
+            if (nrf24l01TXPacketData.ACKRequest){
                 // Put the radio into receiver mode so we can get an ACK
                 nrf24l01SetRXMode(1);
             }

@@ -10732,12 +10732,18 @@ extern char * ftoa(float f, int * status);
 # 7 "interface.h"
 extern const unsigned char NVMEM[32];
 
-# 14
+# 15
 const struct {
-char name[16] = {'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '\0'};
-} romData_t;
+char name[16];
+unsigned int bootMode;
 
-# 45
+} romData_t = {
+{"Unconfigured"},
+{0},
+
+};
+
+# 52
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -10943,13 +10949,24 @@ unsigned Reserved : 5;
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+typedef union{
+struct{
+unsigned byte :8;
+};
+struct{
+unsigned ACKRequest :1;
+};
+} packetData_t;
+
 extern char nrf24l01TXName[16];
 extern char nrf24l01TXTopic[8];
 extern char nrf24l01TXValue[8];
+extern packetData_t nrf24l01TXPacketData;
 
 extern char nrf24l01RXTopic[8];
 extern char nrf24l01RXValue[8];
 extern char nrf24l01RXName[16];
+extern packetData_t nrf24l01RXPacketData;
 
 typedef struct{
 unsigned waitForTXACK : 1;
@@ -10957,17 +10974,16 @@ unsigned TXBusy : 1;
 unsigned RXPending : 1;
 unsigned RXMode : 1;
 unsigned Pipe : 3;
-
 } nrf24l01_t;
 
 
 volatile nrf24l01_t nrf24l01;
 
-# 35
+# 45
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
-void nrf24l01SendString(unsigned char waitForAck);
+void nrf24l01SendString(void);
 void nrf24l01SetRXMode(unsigned char rxMode);
 
 # 5 "flash.h"
@@ -11035,7 +11051,6 @@ if (!nrf24l01.RXPending){
 return;
 }
 
-if ()
 }
 
 void loop(){
@@ -11045,27 +11060,37 @@ void loop(){
 strcpy(nrf24l01TXTopic, "DBG");
 utoa(nrf24l01TXValue, counter, 10);
 counter = 0;
-nrf24l01SendString(0);
+nrf24l01TXPacketData.byte = 0x00;
+nrf24l01TXPacketData.ACKRequest = 0;
+nrf24l01SendString();
 sleep();
 
 strcpy(nrf24l01TXTopic, "ADC3");
 utoa(nrf24l01TXValue, getADCValue(3, 2505), 10);
-nrf24l01SendString(1);
+nrf24l01TXPacketData.byte = 0x00;
+nrf24l01TXPacketData.ACKRequest = 0;
+nrf24l01SendString();
 sleep();
 
 strcpy(nrf24l01TXTopic, "ADC7");
 utoa(nrf24l01TXValue, getADCValue(7, 2500), 10);
-nrf24l01SendString(1);
+nrf24l01TXPacketData.byte = 0x00;
+nrf24l01TXPacketData.ACKRequest = 0;
+nrf24l01SendString();
 sleep();
 
 strcpy(nrf24l01TXTopic, "ADC29");
 utoa(nrf24l01TXValue, getADCValue(29, 208900) - 40, 10);
-nrf24l01SendString(1);
+nrf24l01TXPacketData.byte = 0x00;
+nrf24l01TXPacketData.ACKRequest = 0;
+nrf24l01SendString();
 sleep();
 
 strcpy(nrf24l01TXTopic, "ADC31");
 utoa(nrf24l01TXValue, getADCValue(31, 2475), 10);
-nrf24l01SendString(1);
+nrf24l01TXPacketData.byte = 0x00;
+nrf24l01TXPacketData.ACKRequest = 0;
+nrf24l01SendString();
 sleep();
 
 
@@ -11077,7 +11102,7 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 115
+# 124
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11144,7 +11169,9 @@ INTCONbits.GIE = 1;
 
 strcpy(nrf24l01TXTopic, "BOOT");
 utoa(nrf24l01TXValue, read_flashmem(0 + 16), 10);
-nrf24l01SendString(0);
+nrf24l01TXPacketData.byte = 0x00;
+nrf24l01TXPacketData.ACKRequest = 0;
+nrf24l01SendString();
 sleep();
 
 while(1){

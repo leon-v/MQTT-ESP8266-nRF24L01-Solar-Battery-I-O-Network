@@ -11,9 +11,16 @@
  //     
  // The highest address in '1503 is 0x7FF, so...
  
+ 
  const struct {
-     char name[16] = {'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '\0'};
- } romData_t;
+    char name[16];
+    unsigned int bootMode;
+    
+ } romData_t = {
+     {"Unconfigured"},
+     {0},
+     
+ };
  #define NV_ADDRESS (0x2000U - sizeof(romData_t));
 
 // const unsigned char NVMEM[NV_MEM_SIZE]@NV_ADDRESS = {
