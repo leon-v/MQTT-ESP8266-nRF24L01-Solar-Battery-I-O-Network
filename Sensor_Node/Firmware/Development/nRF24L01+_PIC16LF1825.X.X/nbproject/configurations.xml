@@ -6,8 +6,8 @@
                    projectFiles="true">
       <itemPath>flash.h</itemPath>
       <itemPath>interface.h</itemPath>
-      <itemPath>nRF24L01+_types.h</itemPath>
       <itemPath>nrf24l01.h</itemPath>
+      <itemPath>nRF24L01_Types.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"

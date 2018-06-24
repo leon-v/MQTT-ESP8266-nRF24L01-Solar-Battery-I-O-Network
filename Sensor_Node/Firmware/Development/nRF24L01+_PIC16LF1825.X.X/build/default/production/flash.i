@@ -10615,21 +10615,29 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 6 "flash.h"
-extern const unsigned char NVMEM[32];
-
-# 14
-const unsigned char NVMEM[32]@(0x800U-32) = {
-'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 'W', 0, 0, 0,
-0x0000,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-};
-
-# 27
+# 5 "flash.h"
 unsigned int read_flashmem(unsigned int offset);
 void write_flashmem(unsigned int offset, unsigned int data);
 
-# 3 "flash.c"
+# 7 "interface.h"
+extern const unsigned char NVMEM[32];
+
+# 14
+const struct {
+char name[16] = {'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '\0'};
+} romData_t;
+
+# 45
+void nrf24l01InterfaceInit(void);
+unsigned char nrf24l01SPISend(unsigned char data);
+void nrf24l01SPIStart(void);
+void nrf24l01SPIEnd(void);
+
+void enableInterrupts(unsigned char enable);
+
+void exception(unsigned char exception);
+
+# 4 "flash.c"
 void write_flashmem(unsigned int offset, unsigned int data) {
 
 unsigned int address;
@@ -10639,7 +10647,7 @@ INTCONbits.GIE = 0;
 
 PMCON1 = 0x00;
 
-address = (0x800U-32) + offset;
+address = (0x2000U - sizeof(romData_t)); + offset;
 PMADRL = (char) (address >> 0);
 PMADRH = (char) (address >> 8);
 
@@ -10694,7 +10702,7 @@ INTCONbits.GIE = 0;
 
 PMCON1 = 0x00;
 
-address = (0x800U-32) + offset;
+address = (0x2000U - sizeof(romData_t)); + offset;
 PMADRL = (char) (address >> 0);
 PMADRH = (char) (address >> 8);
 

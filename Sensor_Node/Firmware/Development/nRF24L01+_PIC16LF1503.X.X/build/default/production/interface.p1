@@ -2839,11 +2839,60 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 193: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 194: extern __bank0 __bit __powerdown;
 [; ;pic.h: 195: extern __bank0 __bit __timeout;
-[; ;interface.h: 18: void nrf24l01InterfaceInit(void);
-[; ;interface.h: 19: unsigned char nrf24l01SPISend(unsigned char data);
-[; ;interface.h: 20: void nrf24l01SPIStart(void);
-[; ;interface.h: 21: void nrf24l01SPIEnd(void);
-[; ;interface.h: 23: void enableInterrupts(unsigned char enable);
+[; ;interface.h: 7: extern const unsigned char NVMEM[32];
+"15 interface.h
+[v _NVMEM `Cuc ~T0 @X0 -> 32 `i e@2016 ]
+[i _NVMEM
+:U ..
+"16
+-> -> 85 `ui `uc
+-> -> 110 `ui `uc
+-> -> 99 `ui `uc
+-> -> 111 `ui `uc
+-> -> 110 `ui `uc
+-> -> 102 `ui `uc
+-> -> 105 `ui `uc
+-> -> 103 `ui `uc
+-> -> 117 `ui `uc
+-> -> 114 `ui `uc
+-> -> 101 `ui `uc
+-> -> 100 `ui `uc
+-> -> 87 `ui `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+"17
+-> -> 0 `i `uc
+"18
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+"19
+-> -> 0 `i `uc
+..
+]
+[; ;interface.h: 15: const unsigned char NVMEM[32]@(0x800U-32) = {
+[; ;interface.h: 16: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 'W', 0, 0, 0,
+[; ;interface.h: 17: 0x0000,
+[; ;interface.h: 18: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+[; ;interface.h: 19: };
+[; ;interface.h: 39: void nrf24l01InterfaceInit(void);
+[; ;interface.h: 40: unsigned char nrf24l01SPISend(unsigned char data);
+[; ;interface.h: 41: void nrf24l01SPIStart(void);
+[; ;interface.h: 42: void nrf24l01SPIEnd(void);
+[; ;interface.h: 44: void enableInterrupts(unsigned char enable);
+[; ;interface.h: 45: void exception(unsigned int value);
 "7 interface.c
 [v _nrf24l01InterfaceInit `(v ~T0 @X0 1 ef ]
 {
@@ -2970,4 +3019,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.c: 51: }
 "51
 [e :UE 341 ]
+}
+"53
+[v _exception `(v ~T0 @X0 1 ef1`ui ]
+{
+[; ;interface.c: 53: void exception(unsigned int value){
+[e :U _exception ]
+[v _value `ui ~T0 @X0 1 r1 ]
+[f ]
+[; ;interface.c: 55: }
+"55
+[e :UE 342 ]
 }

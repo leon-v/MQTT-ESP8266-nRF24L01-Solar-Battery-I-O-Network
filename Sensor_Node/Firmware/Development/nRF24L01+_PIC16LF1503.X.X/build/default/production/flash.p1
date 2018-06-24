@@ -2810,12 +2810,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 193: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 194: extern __bank0 __bit __powerdown;
 [; ;pic.h: 195: extern __bank0 __bit __timeout;
-[; ;flash.h: 6: extern const unsigned char NVMEM[32];
-"14 flash.h
+[; ;flash.h: 6: unsigned int read_flashmem(unsigned int offset);
+[; ;flash.h: 7: void write_flashmem(unsigned int offset, unsigned int data);
+[; ;interface.h: 7: extern const unsigned char NVMEM[32];
+"15 interface.h
 [v _NVMEM `Cuc ~T0 @X0 -> 32 `i e@2016 ]
 [i _NVMEM
 :U ..
-"15
+"16
 -> -> 85 `ui `uc
 -> -> 110 `ui `uc
 -> -> 99 `ui `uc
@@ -2832,188 +2834,192 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 0 `i `uc
 -> -> 0 `i `uc
 -> -> 0 `i `uc
-"16
--> -> 0 `i `uc
 "17
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
--> -> 0 `i `uc
 -> -> 0 `i `uc
 "18
 -> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+"19
+-> -> 0 `i `uc
 ..
 ]
-[; ;flash.h: 14: const unsigned char NVMEM[32]@(0x800U-32) = {
-[; ;flash.h: 15: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 'W', 0, 0, 0,
-[; ;flash.h: 16: 0x0000,
-[; ;flash.h: 17: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-[; ;flash.h: 18: };
-[; ;flash.h: 27: unsigned int read_flashmem(unsigned int offset);
-[; ;flash.h: 28: void write_flashmem(unsigned int offset, unsigned int data);
-"3 flash.c
+[; ;interface.h: 15: const unsigned char NVMEM[32]@(0x800U-32) = {
+[; ;interface.h: 16: 'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 'W', 0, 0, 0,
+[; ;interface.h: 17: 0x0000,
+[; ;interface.h: 18: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+[; ;interface.h: 19: };
+[; ;interface.h: 39: void nrf24l01InterfaceInit(void);
+[; ;interface.h: 40: unsigned char nrf24l01SPISend(unsigned char data);
+[; ;interface.h: 41: void nrf24l01SPIStart(void);
+[; ;interface.h: 42: void nrf24l01SPIEnd(void);
+[; ;interface.h: 44: void enableInterrupts(unsigned char enable);
+[; ;interface.h: 45: void exception(unsigned int value);
+"4 flash.c
 [v _write_flashmem `(v ~T0 @X0 1 ef2`ui`ui ]
 {
-[; ;flash.c: 3: void write_flashmem(unsigned int offset, unsigned int data) {
+[; ;flash.c: 4: void write_flashmem(unsigned int offset, unsigned int data) {
 [e :U _write_flashmem ]
 [v _offset `ui ~T0 @X0 1 r1 ]
 [v _data `ui ~T0 @X0 1 r2 ]
 [f ]
-"5
+"6
 [v _address `ui ~T0 @X0 1 a ]
-[; ;flash.c: 5: unsigned int address;
-[; ;flash.c: 7: INTCONbits.GIE = 0;
-"7
+[; ;flash.c: 6: unsigned int address;
+[; ;flash.c: 8: INTCONbits.GIE = 0;
+"8
 [e = . . _INTCONbits 0 7 -> -> 0 `i `uc ]
-[; ;flash.c: 10: PMCON1 = 0x00;
-"10
+[; ;flash.c: 11: PMCON1 = 0x00;
+"11
 [e = _PMCON1 -> -> 0 `i `uc ]
-[; ;flash.c: 12: address = (0x800U-32) + offset;
-"12
-[e = _address + - -> 2048 `ui -> -> 32 `i `ui _offset ]
-[; ;flash.c: 13: PMADRL = (char) (address >> 0);
+[; ;flash.c: 13: address = (0x800U-32) + offset;
 "13
-[e = _PMADRL -> >> _address -> 0 `i `uc ]
-[; ;flash.c: 14: PMADRH = (char) (address >> 8);
+[e = _address + - -> 2048 `ui -> -> 32 `i `ui _offset ]
+[; ;flash.c: 14: PMADRL = (char) (address >> 0);
 "14
+[e = _PMADRL -> >> _address -> 0 `i `uc ]
+[; ;flash.c: 15: PMADRH = (char) (address >> 8);
+"15
 [e = _PMADRH -> >> _address -> 8 `i `uc ]
-[; ;flash.c: 16: PMCON1bits.FREE = 1;
-"16
-[e = . . _PMCON1bits 0 4 -> -> 1 `i `uc ]
-[; ;flash.c: 17: PMCON1bits.WREN = 1;
+[; ;flash.c: 17: PMCON1bits.FREE = 1;
 "17
+[e = . . _PMCON1bits 0 4 -> -> 1 `i `uc ]
+[; ;flash.c: 18: PMCON1bits.WREN = 1;
+"18
 [e = . . _PMCON1bits 0 2 -> -> 1 `i `uc ]
-[; ;flash.c: 19: PMCON2 = 0x55;
-"19
-[e = _PMCON2 -> -> 85 `i `uc ]
-[; ;flash.c: 20: PMCON2 = 0xAA;
+[; ;flash.c: 20: PMCON2 = 0x55;
 "20
+[e = _PMCON2 -> -> 85 `i `uc ]
+[; ;flash.c: 21: PMCON2 = 0xAA;
+"21
 [e = _PMCON2 -> -> 170 `i `uc ]
-[; ;flash.c: 22: PMCON1bits.WR = 1;
-"22
+[; ;flash.c: 23: PMCON1bits.WR = 1;
+"23
 [e = . . _PMCON1bits 0 1 -> -> 1 `i `uc ]
-[; ;flash.c: 24: __nop();
-"24
-[e ( ___nop ..  ]
 [; ;flash.c: 25: __nop();
 "25
 [e ( ___nop ..  ]
-[; ;flash.c: 27: PMCON1bits.WREN = 0;
-"27
-[e = . . _PMCON1bits 0 2 -> -> 0 `i `uc ]
-[; ;flash.c: 31: PMCON1 = 0x00;
-"31
-[e = _PMCON1 -> -> 0 `i `uc ]
-[; ;flash.c: 33: PMADRL = (char) (address >> 0);
-"33
-[e = _PMADRL -> >> _address -> 0 `i `uc ]
-[; ;flash.c: 34: PMADRH = (char) (address >> 8);
-"34
-[e = _PMADRH -> >> _address -> 8 `i `uc ]
-[; ;flash.c: 36: PMCON1bits.FREE = 0;
-"36
-[e = . . _PMCON1bits 0 4 -> -> 0 `i `uc ]
-[; ;flash.c: 37: PMCON1bits.LWLO = 1;
-"37
-[e = . . _PMCON1bits 0 5 -> -> 1 `i `uc ]
-[; ;flash.c: 38: PMCON1bits.WREN = 1;
-"38
-[e = . . _PMCON1bits 0 2 -> -> 1 `i `uc ]
-[; ;flash.c: 40: PMDATL = (data >> 0);
-"40
-[e = _PMDATL -> >> _data -> 0 `i `uc ]
-[; ;flash.c: 41: PMDATH = (data >> 8);
-"41
-[e = _PMDATH -> >> _data -> 8 `i `uc ]
-[; ;flash.c: 43: PMCON1bits.LWLO = 0;
-"43
-[e = . . _PMCON1bits 0 5 -> -> 0 `i `uc ]
-[; ;flash.c: 45: PMCON2 = 0x55;
-"45
-[e = _PMCON2 -> -> 85 `i `uc ]
-[; ;flash.c: 46: PMCON2 = 0xAA;
-"46
-[e = _PMCON2 -> -> 170 `i `uc ]
-[; ;flash.c: 48: PMCON1bits.WR = 1;
-"48
-[e = . . _PMCON1bits 0 1 -> -> 1 `i `uc ]
-[; ;flash.c: 50: __nop();
-"50
+[; ;flash.c: 26: __nop();
+"26
 [e ( ___nop ..  ]
+[; ;flash.c: 28: PMCON1bits.WREN = 0;
+"28
+[e = . . _PMCON1bits 0 2 -> -> 0 `i `uc ]
+[; ;flash.c: 32: PMCON1 = 0x00;
+"32
+[e = _PMCON1 -> -> 0 `i `uc ]
+[; ;flash.c: 34: PMADRL = (char) (address >> 0);
+"34
+[e = _PMADRL -> >> _address -> 0 `i `uc ]
+[; ;flash.c: 35: PMADRH = (char) (address >> 8);
+"35
+[e = _PMADRH -> >> _address -> 8 `i `uc ]
+[; ;flash.c: 37: PMCON1bits.FREE = 0;
+"37
+[e = . . _PMCON1bits 0 4 -> -> 0 `i `uc ]
+[; ;flash.c: 38: PMCON1bits.LWLO = 1;
+"38
+[e = . . _PMCON1bits 0 5 -> -> 1 `i `uc ]
+[; ;flash.c: 39: PMCON1bits.WREN = 1;
+"39
+[e = . . _PMCON1bits 0 2 -> -> 1 `i `uc ]
+[; ;flash.c: 41: PMDATL = (data >> 0);
+"41
+[e = _PMDATL -> >> _data -> 0 `i `uc ]
+[; ;flash.c: 42: PMDATH = (data >> 8);
+"42
+[e = _PMDATH -> >> _data -> 8 `i `uc ]
+[; ;flash.c: 44: PMCON1bits.LWLO = 0;
+"44
+[e = . . _PMCON1bits 0 5 -> -> 0 `i `uc ]
+[; ;flash.c: 46: PMCON2 = 0x55;
+"46
+[e = _PMCON2 -> -> 85 `i `uc ]
+[; ;flash.c: 47: PMCON2 = 0xAA;
+"47
+[e = _PMCON2 -> -> 170 `i `uc ]
+[; ;flash.c: 49: PMCON1bits.WR = 1;
+"49
+[e = . . _PMCON1bits 0 1 -> -> 1 `i `uc ]
 [; ;flash.c: 51: __nop();
 "51
 [e ( ___nop ..  ]
-[; ;flash.c: 53: PMCON1bits.WREN = 0;
-"53
+[; ;flash.c: 52: __nop();
+"52
+[e ( ___nop ..  ]
+[; ;flash.c: 54: PMCON1bits.WREN = 0;
+"54
 [e = . . _PMCON1bits 0 2 -> -> 0 `i `uc ]
-[; ;flash.c: 56: INTCONbits.GIE = 1;
-"56
-[e = . . _INTCONbits 0 7 -> -> 1 `i `uc ]
-[; ;flash.c: 57: }
+[; ;flash.c: 57: INTCONbits.GIE = 1;
 "57
+[e = . . _INTCONbits 0 7 -> -> 1 `i `uc ]
+[; ;flash.c: 58: }
+"58
 [e :UE 334 ]
 }
-"59
+"60
 [v _read_flashmem `(ui ~T0 @X0 1 ef1`ui ]
 {
-[; ;flash.c: 59: unsigned int read_flashmem(unsigned int offset) {
+[; ;flash.c: 60: unsigned int read_flashmem(unsigned int offset) {
 [e :U _read_flashmem ]
 [v _offset `ui ~T0 @X0 1 r1 ]
 [f ]
-"61
+"62
 [v _address `ui ~T0 @X0 1 a ]
-[; ;flash.c: 61: unsigned int address;
-[; ;flash.c: 63: INTCONbits.GIE = 0;
-"63
+[; ;flash.c: 62: unsigned int address;
+[; ;flash.c: 64: INTCONbits.GIE = 0;
+"64
 [e = . . _INTCONbits 0 7 -> -> 0 `i `uc ]
-[; ;flash.c: 65: PMCON1 = 0x00;
-"65
+[; ;flash.c: 66: PMCON1 = 0x00;
+"66
 [e = _PMCON1 -> -> 0 `i `uc ]
-[; ;flash.c: 67: address = (0x800U-32) + offset;
-"67
-[e = _address + - -> 2048 `ui -> -> 32 `i `ui _offset ]
-[; ;flash.c: 68: PMADRL = (char) (address >> 0);
+[; ;flash.c: 68: address = (0x800U-32) + offset;
 "68
-[e = _PMADRL -> >> _address -> 0 `i `uc ]
-[; ;flash.c: 69: PMADRH = (char) (address >> 8);
+[e = _address + - -> 2048 `ui -> -> 32 `i `ui _offset ]
+[; ;flash.c: 69: PMADRL = (char) (address >> 0);
 "69
+[e = _PMADRL -> >> _address -> 0 `i `uc ]
+[; ;flash.c: 70: PMADRH = (char) (address >> 8);
+"70
 [e = _PMADRH -> >> _address -> 8 `i `uc ]
-[; ;flash.c: 71: PMCON1bits.RD = 1;
-"71
+[; ;flash.c: 72: PMCON1bits.RD = 1;
+"72
 [e = . . _PMCON1bits 0 0 -> -> 1 `i `uc ]
-[; ;flash.c: 73: __nop();
-"73
-[e ( ___nop ..  ]
 [; ;flash.c: 74: __nop();
 "74
 [e ( ___nop ..  ]
-"76
-[v _result `ui ~T0 @X0 1 a ]
-[; ;flash.c: 76: unsigned int result = 0;
-[e = _result -> -> 0 `i `ui ]
-[; ;flash.c: 77: result = PMDATL;
+[; ;flash.c: 75: __nop();
+"75
+[e ( ___nop ..  ]
 "77
-[e = _result -> _PMDATL `ui ]
-[; ;flash.c: 78: result|= ( (unsigned) (PMDATH) << 8);
+[v _result `ui ~T0 @X0 1 a ]
+[; ;flash.c: 77: unsigned int result = 0;
+[e = _result -> -> 0 `i `ui ]
+[; ;flash.c: 78: result = PMDATL;
 "78
+[e = _result -> _PMDATL `ui ]
+[; ;flash.c: 79: result|= ( (unsigned) (PMDATH) << 8);
+"79
 [e =| _result << -> _PMDATH `ui -> 8 `i ]
-[; ;flash.c: 80: INTCONbits.GIE = 1;
-"80
+[; ;flash.c: 81: INTCONbits.GIE = 1;
+"81
 [e = . . _INTCONbits 0 7 -> -> 1 `i `uc ]
-[; ;flash.c: 82: return result;
-"82
+[; ;flash.c: 83: return result;
+"83
 [e ) _result ]
 [e $UE 335  ]
-[; ;flash.c: 83: }
-"83
+[; ;flash.c: 84: }
+"84
 [e :UE 335 ]
 }

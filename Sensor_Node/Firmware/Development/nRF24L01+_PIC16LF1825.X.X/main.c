@@ -7,6 +7,7 @@
 #include "interface.h"
 
 unsigned char sleepLoop = 0;
+unsigned int counter = 0;
 
 // Cahnge ISR to trigger super loop code to do its bidding
 
@@ -65,6 +66,7 @@ void checkRxData(void){
 		return;
 	}
 	
+    if ()
 }
 
 void loop(){
@@ -113,18 +115,21 @@ void main(void) {
     INTCONbits.PEIE = 0;
     INTCONbits.GIE = 0;
     
-    OSCCONbits.IRCF = 0b1111; // 16 MHz
-    OSCCONbits.SCS = 0b10; // Internal oscillator block
+    OSCCON1bits.NOSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
+    OSCCON2bits.COSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
+    
+    OSCCON1bits.NDIV = 0b000;
+    OSCCON2bits.CDIV = 0b000;
     
     delayMs(10);
     
-    nrf24l01Init();
+    nrf24l01Init(0);
 	
-	for (unsigned char i = 0; i < sizeof(nrf24l01Name); i++){
-		nrf24l01Name[i] = read_flashmem((unsigned) FLASH_OFFSET_NAME + i);
+	for (unsigned char i = 0; i < sizeof(nrf24l01TXName); i++){
+		nrf24l01TXName[i] = read_flashmem((unsigned) FLASH_OFFSET_NAME + i);
 	}
     
-    OPTION_REGbits.nWPUEN = 0;
+//    OPTION_REGbits.nWPUEN = 0;
     
     /* Configure FVR */
     FVRCONbits.FVREN = 0; // Disable Voltage Reference Module
@@ -156,8 +161,8 @@ void main(void) {
     
     /* Setup Interrupt Pin */
     TRISAbits.TRISA2 = 1;
-    INTCONbits.INTE = 1;
-    OPTION_REGbits.INTEDG = 0;
+    PIE0bits.INTE = 1;
+    INTCONbits.INTEDG = 0;
             
     
     /* Setup WDT*/

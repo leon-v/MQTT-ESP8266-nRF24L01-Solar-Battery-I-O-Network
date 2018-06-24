@@ -49,3 +49,7 @@ void nrf24l01SPIEnd(void){
 void enableInterrupts(unsigned char enable){
     PIE0bits.INTE = enable;
 }
+
+void exception(unsigned char exception){
+    
+}

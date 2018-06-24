@@ -1,11 +1,19 @@
-#include <xc.h>
-#include <string.h>
-
-#include "interface.h"
-#include "nRF24L01+_types.h"
 #include "nrf24l01.h"
 
-#pragma interrupt_level 1
+const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
+const unsigned char n_ADDRESS_MUL = 33;
+
+char nrf24l01TXName[16];
+char nrf24l01TXTopic[8];
+char nrf24l01TXValue[8];
+
+char nrf24l01RXTopic[8];
+char nrf24l01RXValue[8];
+char nrf24l01RXName[16];
+
+
+unsigned int counter = 0;
+
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
     enableInterrupts(0);
@@ -22,14 +30,14 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     return data;
 }
 
-#pragma interrupt_level 1
+
 unsigned char nrf24l01GetPipe(){
     
     unsigned char pipe;
     unsigned char i;
     
-    for (i = 0; (nrf24l01Name[i] != '\0') && (i < sizeof(nrf24l01Name)); i++){
-        pipe+= nrf24l01Name[i];
+    for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
+        pipe+= nrf24l01TXName[i];
     }
     
     pipe %= 5;
@@ -38,7 +46,7 @@ unsigned char nrf24l01GetPipe(){
     return pipe;
 }
 
-#pragma interrupt_level 1
+
 void nrf24l01SetTXAddress(){
     
     nrf24l01SPIStart();
@@ -53,7 +61,7 @@ void nrf24l01SetTXAddress(){
     nrf24l01SPISend(nrf24l01GetPipe());
 }
 
-#pragma interrupt_level 1
+
 void nrf24l01SetRXMode(unsigned char rxMode){
     n_CONFIG_t config;
     config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
@@ -77,7 +85,6 @@ void nrf24l01SetRXMode(unsigned char rxMode){
         }
     }
     nrf24l01.RXMode = rxMode;
-    
 }
 
 
@@ -96,6 +103,9 @@ void nrf24l01ReceiveString(void){
 	for (i = 0; i < sizeof(nrf24l01RXValue); i++){
 		nrf24l01RXValue[i] = '\0';
 	}
+	for (i = 0; i < sizeof(nrf24l01RXName); i++){
+		nrf24l01RXName[i] = '\0';
+	}
 	
     unsigned char width = nrf24l01Send(n_R_RX_PL_WID, 0);
     
@@ -105,7 +115,7 @@ void nrf24l01ReceiveString(void){
 
 	nrf24l01SPISend(n_R_RX_PAYLOAD);
     
-	for (i = 0; (i < sizeof(nrf24l01Name)) && (offset + i < width) ; i++){
+	for (i = 0; (i < sizeof(nrf24l01RXName)) && (offset + i < width) ; i++){
 		
 		byte = nrf24l01SPISend(0);
 		
@@ -114,9 +124,7 @@ void nrf24l01ReceiveString(void){
 			break;
 		}
 		
-		if (nrf24l01Name[i] != byte){
-			nrf24l01.RXPending = 0;
-		}
+		nrf24l01RXName[i] = byte;
 	}
 	offset+= i;
 	
@@ -138,19 +146,33 @@ void nrf24l01ReceiveString(void){
 	}
     
     nrf24l01SPIEnd();
+
+    nrf24l01CEHigh();
+
+    // Check for ACK
     
-	if (nrf24l01.waitForTXACK){
-		if (strcmp(nrf24l01RXTopic, nrf24l01TXTopic) == 0){
-			if (strcmp(nrf24l01RXValue, "ACK") == 0){
-				nrf24l01.waitForTXACK = 0;
-				nrf24l01.RXPending = 0;
-				nrf24l01SetRXMode(0);
-			}
-		}
-	}
+    if (!nrf24l01.waitForTXACK){
+    	return;
+    }
+
+    if (strcmp(nrf24l01TXName, nrf24l01RXName) != 0){
+    	return;
+    }
+
+    if (strcmp(nrf24l01RXTopic, nrf24l01TXTopic) != 0){
+    	return;
+    }
+
+    if (strcmp(nrf24l01RXValue, "ACK") != 0){
+    	return;
+    }
+
+	nrf24l01.waitForTXACK = 0;
+	nrf24l01.RXPending = 0;
+	nrf24l01SetRXMode(0);
 }
 
-void nrf24l01SendString(char waitForAck){
+void nrf24l01SendString(unsigned char waitForAck){
 	
 	// Initalise an iterator for the many loops
     unsigned char i;
@@ -192,8 +214,8 @@ void nrf24l01SendString(char waitForAck){
     nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
     
 	// Loop through each character of the name buffer and send it to the radio
-    for (i = 0; (nrf24l01Name[i] != '\0') && (i < sizeof(nrf24l01Name)); i++){
-        nrf24l01SPISend(nrf24l01Name[i]);
+    for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
+        nrf24l01SPISend(nrf24l01TXName[i]);
     }
     
 	// Send the MQTT topic delimiter.
@@ -222,6 +244,15 @@ void nrf24l01SendString(char waitForAck){
     
 	// Re-enable interrupts
     enableInterrupts(1);
+
+    // Wait for the TXBusy to clear so we know the packet has been sent
+	i = 0xFF;
+    while (nrf24l01.TXBusy){
+        if (!--i) {
+            goto RESEND;
+        }
+        delayUs(50);
+    }
 		
 	// Wait for the transmit ACK flag to becode clear so we know we got an ACK
 	i = 0xFF;
@@ -239,18 +270,15 @@ void nrf24l01ISR(void){
    
     n_STATUS_t status;
     status.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
-	
     
     // I have had the IC lock up and return 0x00, reset it
     if (status.byte == 0x00){
-//        write_flashmem(FLASH_OFFSET_BOOT_REASON, 2003);
-        RESET();
+    	exception(1);
     }
     
     // Also reset if we get 0xFF since that likely means there is an SPI error
     if (status.byte == 0xFF){
-//        write_flashmem(FLASH_OFFSET_BOOT_REASON, 2004);
-        RESET();
+		exception(2);
     }
 	
 	if (status.TX_DS){
@@ -266,11 +294,11 @@ void nrf24l01ISR(void){
             }
         }
     }
-    
+
     // Check id there is a received packet waiting
     if (status.RX_DR){
-        // Get the RX data into the buffer
-        nrf24l01ReceiveString();
+
+    	nrf24l01.RXPending = 1;
     }
 	
 	// Clear the interrupt on the nrf24l01
@@ -278,7 +306,7 @@ void nrf24l01ISR(void){
 }
 
 
-void nrf24l01InitRegisters(void){
+void nrf24l01InitRegisters(unsigned char isReciever){
     
     n_CONFIG_t config;
     
@@ -363,7 +391,7 @@ void nrf24l01InitRegisters(void){
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
 }
 
-void nrf24l01Init(void){
+void nrf24l01Init(unsigned char isReciever){
     
     
     nrf24l01InterfaceInit();
@@ -372,10 +400,12 @@ void nrf24l01Init(void){
     
     nrf24l01CELow();
     
-    delayMs(11);
+    delayUs(50000);
     
-    nrf24l01InitRegisters();
+    nrf24l01InitRegisters(isReciever);
     
-    delayMs(2);
+    delayUs(50000);
+
+    nrf24l01CEHigh();
 }
 

@@ -10615,48 +10615,15 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 4 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\__size_t.h"
-typedef unsigned size_t;
+# 7 "interface.h"
+extern const unsigned char NVMEM[32];
 
-# 14 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h"
-extern void * memcpy(void *, const void *, size_t);
-extern void * memmove(void *, const void *, size_t);
-extern void * memset(void *, int, size_t);
+# 14
+const struct {
+char name[16] = {'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '\0'};
+} romData_t;
 
-
-
-
-extern void * __builtin_memcpy(void *, const void *, size_t);
-#pragma intrinsic(__builtin_memcpy)
-
-# 36
-extern char * strcat(char *, const char *);
-extern char * strcpy(char *, const char *);
-extern char * strncat(char *, const char *, size_t);
-extern char * strncpy(char *, const char *, size_t);
-extern char * strdup(const char *);
-extern char * strtok(char *, const char *);
-
-
-extern int memcmp(const void *, const void *, size_t);
-extern int strcmp(const char *, const char *);
-extern int stricmp(const char *, const char *);
-extern int strncmp(const char *, const char *, size_t);
-extern int strnicmp(const char *, const char *, size_t);
-extern void * memchr(const void *, int, size_t);
-extern size_t strcspn(const char *, const char *);
-extern char * strpbrk(const char *, const char *);
-extern size_t strspn(const char *, const char *);
-extern char * strstr(const char *, const char *);
-extern char * stristr(const char *, const char *);
-extern char * strerror(int);
-extern size_t strlen(const char *);
-extern char * strchr(const char *, int);
-extern char * strichr(const char *, int);
-extern char * strrchr(const char *, int);
-extern char * strrichr(const char *, int);
-
-# 18 "interface.h"
+# 45
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -10664,7 +10631,9 @@ void nrf24l01SPIEnd(void);
 
 void enableInterrupts(unsigned char enable);
 
-# 15 "nRF24L01+_types.h"
+void exception(unsigned char exception);
+
+# 15 "nRF24L01_Types.h"
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10856,52 +10825,93 @@ unsigned Reserved : 5;
 };
 } n_FEATURE_t;
 
-# 6 "flash.h"
-extern const unsigned char NVMEM[32];
+# 4 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\__size_t.h"
+typedef unsigned size_t;
 
-# 14
-const unsigned char NVMEM[32]@(0x800U-32) = {
-'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 'W', 0, 0, 0,
-0x0000,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-};
+# 14 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h"
+extern void * memcpy(void *, const void *, size_t);
+extern void * memmove(void *, const void *, size_t);
+extern void * memset(void *, int, size_t);
 
-# 27
-unsigned int read_flashmem(unsigned int offset);
-void write_flashmem(unsigned int offset, unsigned int data);
+
+
+
+extern void * __builtin_memcpy(void *, const void *, size_t);
+#pragma intrinsic(__builtin_memcpy)
+
+# 36
+extern char * strcat(char *, const char *);
+extern char * strcpy(char *, const char *);
+extern char * strncat(char *, const char *, size_t);
+extern char * strncpy(char *, const char *, size_t);
+extern char * strdup(const char *);
+extern char * strtok(char *, const char *);
+
+
+extern int memcmp(const void *, const void *, size_t);
+extern int strcmp(const char *, const char *);
+extern int stricmp(const char *, const char *);
+extern int strncmp(const char *, const char *, size_t);
+extern int strnicmp(const char *, const char *, size_t);
+extern void * memchr(const void *, int, size_t);
+extern size_t strcspn(const char *, const char *);
+extern char * strpbrk(const char *, const char *);
+extern size_t strspn(const char *, const char *);
+extern char * strstr(const char *, const char *);
+extern char * stristr(const char *, const char *);
+extern char * strerror(int);
+extern size_t strlen(const char *);
+extern char * strchr(const char *, int);
+extern char * strichr(const char *, int);
+extern char * strrchr(const char *, int);
+extern char * strrichr(const char *, int);
 
 # 8 "nrf24l01.h"
-const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const unsigned char n_ADDRESS_MUL = 33;
+extern const unsigned char n_ADDRESS_P0[];
+extern const unsigned char n_ADDRESS_MUL;
 
-char nrf24l01TXTopic[8];
-char nrf24l01TXValue[8];
-char nrf24l01RXTopic[8];
-char nrf24l01RXValue[8];
-char nrf24l01Name[16];
+extern char nrf24l01TXName[16];
+extern char nrf24l01TXTopic[8];
+extern char nrf24l01TXValue[8];
 
-unsigned int counter = 0;
+extern char nrf24l01RXTopic[8];
+extern char nrf24l01RXValue[8];
+extern char nrf24l01RXName[16];
 
 typedef struct{
 unsigned waitForTXACK : 1;
 unsigned TXBusy : 1;
 unsigned RXPending : 1;
 unsigned RXMode : 1;
+unsigned Pipe : 3;
 
 } nrf24l01_t;
 
+
 volatile nrf24l01_t nrf24l01;
 
-# 33
+# 35
 void nrf24l01ISR(void);
-void nrf24l01Init(void);
+void nrf24l01Init(unsigned char isReciever);
 
-void nrf24l01SendString(char waitForAck);
+void nrf24l01SendString(unsigned char waitForAck);
 void nrf24l01SetRXMode(unsigned char rxMode);
 
+# 3 "nrf24l01.c"
+const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
+const unsigned char n_ADDRESS_MUL = 33;
 
-# 8 "nrf24l01.c"
-#pragma interrupt_level 1
+char nrf24l01TXName[16];
+char nrf24l01TXTopic[8];
+char nrf24l01TXValue[8];
+
+char nrf24l01RXTopic[8];
+char nrf24l01RXValue[8];
+char nrf24l01RXName[16];
+
+
+unsigned int counter = 0;
+
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
 
 enableInterrupts(0);
@@ -10918,14 +10928,14 @@ enableInterrupts(1);
 return data;
 }
 
-#pragma interrupt_level 1
+
 unsigned char nrf24l01GetPipe(){
 
 unsigned char pipe;
 unsigned char i;
 
-for (i = 0; (nrf24l01Name[i] != '\0') && (i < sizeof(nrf24l01Name)); i++){
-pipe+= nrf24l01Name[i];
+for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
+pipe+= nrf24l01TXName[i];
 }
 
 pipe %= 5;
@@ -10934,7 +10944,7 @@ pipe *= n_ADDRESS_MUL;
 return pipe;
 }
 
-#pragma interrupt_level 1
+
 void nrf24l01SetTXAddress(){
 
 nrf24l01SPIStart();
@@ -10949,7 +10959,7 @@ nrf24l01SPISend(n_ADDRESS_P0[i]);
 nrf24l01SPISend(nrf24l01GetPipe());
 }
 
-#pragma interrupt_level 1
+
 void nrf24l01SetRXMode(unsigned char rxMode){
 n_CONFIG_t config;
 config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
@@ -10959,7 +10969,7 @@ if (config.PRIM_RX != rxMode){
 PORTAbits.RA0 = 0;
 _delay((unsigned long)((200)*(16000000/4000000.0)));
 
-# 70
+# 78
 config.PRIM_RX = rxMode;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
 _delay((unsigned long)((200)*(16000000/4000000.0)));
@@ -10970,7 +10980,6 @@ _delay((unsigned long)((200)*(16000000/4000000.0)));
 }
 }
 nrf24l01.RXMode = rxMode;
-
 }
 
 
@@ -10989,6 +10998,9 @@ nrf24l01RXTopic[i] = '\0';
 for (i = 0; i < sizeof(nrf24l01RXValue); i++){
 nrf24l01RXValue[i] = '\0';
 }
+for (i = 0; i < sizeof(nrf24l01RXName); i++){
+nrf24l01RXName[i] = '\0';
+}
 
 unsigned char width = nrf24l01Send(0b01100000, 0);
 
@@ -10998,7 +11010,7 @@ nrf24l01SPIStart();
 
 nrf24l01SPISend(0b01100001);
 
-for (i = 0; (i < sizeof(nrf24l01Name)) && (offset + i < width) ; i++){
+for (i = 0; (i < sizeof(nrf24l01RXName)) && (offset + i < width) ; i++){
 
 byte = nrf24l01SPISend(0);
 
@@ -11007,9 +11019,7 @@ offset++;
 break;
 }
 
-if (nrf24l01Name[i] != byte){
-nrf24l01.RXPending = 0;
-}
+nrf24l01RXName[i] = byte;
 }
 offset+= i;
 
@@ -11032,18 +11042,32 @@ nrf24l01RXValue[i] = nrf24l01SPISend(0);
 
 nrf24l01SPIEnd();
 
-if (nrf24l01.waitForTXACK){
-if (strcmp(nrf24l01RXTopic, nrf24l01TXTopic) == 0){
-if (strcmp(nrf24l01RXValue, "ACK") == 0){
+PORTAbits.RA0 = 1;
+
+
+
+if (!nrf24l01.waitForTXACK){
+return;
+}
+
+if (strcmp(nrf24l01TXName, nrf24l01RXName) != 0){
+return;
+}
+
+if (strcmp(nrf24l01RXTopic, nrf24l01TXTopic) != 0){
+return;
+}
+
+if (strcmp(nrf24l01RXValue, "ACK") != 0){
+return;
+}
+
 nrf24l01.waitForTXACK = 0;
 nrf24l01.RXPending = 0;
 nrf24l01SetRXMode(0);
 }
-}
-}
-}
 
-void nrf24l01SendString(char waitForAck){
+void nrf24l01SendString(unsigned char waitForAck){
 
 
 unsigned char i;
@@ -11085,8 +11109,8 @@ nrf24l01SPIStart();
 nrf24l01SPISend(0b10110000);
 
 
-for (i = 0; (nrf24l01Name[i] != '\0') && (i < sizeof(nrf24l01Name)); i++){
-nrf24l01SPISend(nrf24l01Name[i]);
+for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
+nrf24l01SPISend(nrf24l01TXName[i]);
 }
 
 
@@ -11118,6 +11142,15 @@ enableInterrupts(1);
 
 
 i = 0xFF;
+while (nrf24l01.TXBusy){
+if (!--i) {
+goto RESEND;
+}
+_delay((unsigned long)((50)*(16000000/4000000.0)));
+}
+
+
+i = 0xFF;
 while (nrf24l01.waitForTXACK){
 if (!--i) {
 counter++;
@@ -11134,16 +11167,13 @@ n_STATUS_t status;
 status.byte = nrf24l01Send(0b00000000 | 0x07, 0);
 
 
-
 if (status.byte == 0x00){
-
-asm("reset");
+exception(1);
 }
 
 
 if (status.byte == 0xFF){
-
-asm("reset");
+exception(2);
 }
 
 if (status.TX_DS){
@@ -11163,7 +11193,7 @@ nrf24l01SetRXMode(1);
 
 if (status.RX_DR){
 
-nrf24l01ReceiveString();
+nrf24l01.RXPending = 1;
 }
 
 
@@ -11171,7 +11201,7 @@ nrf24l01Send(0b00100000 | 0x07, status.byte);
 }
 
 
-void nrf24l01InitRegisters(void){
+void nrf24l01InitRegisters(unsigned char isReciever){
 
 n_CONFIG_t config;
 
@@ -11185,7 +11215,7 @@ setupAW.byte = 0x00;
 setupAW.AW = 0b11;
 nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
 
-# 301
+# 329
 n_RF_SETUP_t rfSetup;
 rfSetup.RF_DR_LOW = 0;
 rfSetup.RF_DR_HIGH = 1;
@@ -11251,7 +11281,7 @@ config.PWR_UP = 1;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
 }
 
-void nrf24l01Init(void){
+void nrf24l01Init(unsigned char isReciever){
 
 
 nrf24l01InterfaceInit();
@@ -11260,10 +11290,12 @@ nrf24l01InterfaceInit();
 
 PORTAbits.RA0 = 0;
 
-_delay((unsigned long)((11)*(16000000/4000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
 
-nrf24l01InitRegisters();
+nrf24l01InitRegisters(isReciever);
 
-_delay((unsigned long)((2)*(16000000/4000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+
+PORTAbits.RA0 = 1;
 }
 

@@ -49,3 +49,7 @@ void nrf24l01SPIEnd(void){
 void enableInterrupts(unsigned char enable){
     INTCONbits.INTE = enable;
 }
+
+void exception(unsigned int value){
+    
+}

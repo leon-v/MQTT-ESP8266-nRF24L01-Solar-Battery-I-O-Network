@@ -10615,13 +10615,23 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 18 "interface.h"
+# 7 "interface.h"
+extern const unsigned char NVMEM[32];
+
+# 14
+const struct {
+char name[16] = {'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '\0'};
+} romData_t;
+
+# 45
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
 void enableInterrupts(unsigned char enable);
+
+void exception(unsigned char exception);
 
 # 7 "interface.c"
 void nrf24l01InterfaceInit(void){
@@ -10668,4 +10678,8 @@ PORTAbits.RA1 = 1;
 #pragma interrupt_level 1
 void enableInterrupts(unsigned char enable){
 PIE0bits.INTE = enable;
+}
+
+void exception(unsigned char exception){
+
 }

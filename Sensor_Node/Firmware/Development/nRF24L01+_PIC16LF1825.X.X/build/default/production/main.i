@@ -10729,7 +10729,25 @@ extern char * ultoa(char * buf, unsigned long val, int base);
 
 extern char * ftoa(float f, int * status);
 
-# 15 "nRF24L01+_types.h"
+# 7 "interface.h"
+extern const unsigned char NVMEM[32];
+
+# 14
+const struct {
+char name[16] = {'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', '\0'};
+} romData_t;
+
+# 45
+void nrf24l01InterfaceInit(void);
+unsigned char nrf24l01SPISend(unsigned char data);
+void nrf24l01SPIStart(void);
+void nrf24l01SPIEnd(void);
+
+void enableInterrupts(unsigned char enable);
+
+void exception(unsigned char exception);
+
+# 15 "nRF24L01_Types.h"
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10921,59 +10939,44 @@ unsigned Reserved : 5;
 };
 } n_FEATURE_t;
 
-# 6 "flash.h"
-extern const unsigned char NVMEM[32];
-
-# 14
-const unsigned char NVMEM[32]@(0x800U-32) = {
-'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 'W', 0, 0, 0,
-0x0000,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-};
-
-# 27
-unsigned int read_flashmem(unsigned int offset);
-void write_flashmem(unsigned int offset, unsigned int data);
-
 # 8 "nrf24l01.h"
-const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const unsigned char n_ADDRESS_MUL = 33;
+extern const unsigned char n_ADDRESS_P0[];
+extern const unsigned char n_ADDRESS_MUL;
 
-char nrf24l01TXTopic[8];
-char nrf24l01TXValue[8];
-char nrf24l01RXTopic[8];
-char nrf24l01RXValue[8];
-char nrf24l01Name[16];
+extern char nrf24l01TXName[16];
+extern char nrf24l01TXTopic[8];
+extern char nrf24l01TXValue[8];
 
-unsigned int counter = 0;
+extern char nrf24l01RXTopic[8];
+extern char nrf24l01RXValue[8];
+extern char nrf24l01RXName[16];
 
 typedef struct{
 unsigned waitForTXACK : 1;
 unsigned TXBusy : 1;
 unsigned RXPending : 1;
 unsigned RXMode : 1;
+unsigned Pipe : 3;
 
 } nrf24l01_t;
 
+
 volatile nrf24l01_t nrf24l01;
 
-# 33
+# 35
 void nrf24l01ISR(void);
-void nrf24l01Init(void);
+void nrf24l01Init(unsigned char isReciever);
 
-void nrf24l01SendString(char waitForAck);
+void nrf24l01SendString(unsigned char waitForAck);
 void nrf24l01SetRXMode(unsigned char rxMode);
 
-# 18 "interface.h"
-void nrf24l01InterfaceInit(void);
-unsigned char nrf24l01SPISend(unsigned char data);
-void nrf24l01SPIStart(void);
-void nrf24l01SPIEnd(void);
-
-void enableInterrupts(unsigned char enable);
+# 5 "flash.h"
+unsigned int read_flashmem(unsigned int offset);
+void write_flashmem(unsigned int offset, unsigned int data);
 
 # 9 "main.c"
 unsigned char sleepLoop = 0;
+unsigned int counter = 0;
 
 
 
@@ -11032,6 +11035,7 @@ if (!nrf24l01.RXPending){
 return;
 }
 
+if ()
 }
 
 void loop(){
@@ -11073,22 +11077,25 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 113
+# 115
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
-OSCCONbits.IRCF = 0b1111;
-OSCCONbits.SCS = 0b10;
+OSCCON1bits.NOSC = 0b000;
+OSCCON2bits.COSC = 0b000;
+
+OSCCON1bits.NDIV = 0b000;
+OSCCON2bits.CDIV = 0b000;
 
 _delay((unsigned long)((10)*(16000000/4000.0)));
 
-nrf24l01Init();
+nrf24l01Init(0);
 
-for (unsigned char i = 0; i < sizeof(nrf24l01Name); i++){
-nrf24l01Name[i] = read_flashmem((unsigned) 0 + i);
+for (unsigned char i = 0; i < sizeof(nrf24l01TXName); i++){
+nrf24l01TXName[i] = read_flashmem((unsigned) 0 + i);
 }
 
-OPTION_REGbits.nWPUEN = 0;
+
 
 
 FVRCONbits.FVREN = 0;
@@ -11120,8 +11127,8 @@ ADCON0bits.ADON = 1;
 
 
 TRISAbits.TRISA2 = 1;
-INTCONbits.INTE = 1;
-OPTION_REGbits.INTEDG = 0;
+PIE0bits.INTE = 1;
+INTCONbits.INTEDG = 0;
 
 
 

@@ -1,28 +1,30 @@
-#ifndef NRF24L01_H
-#define	NRF24L01_H
+#ifndef NRF24L01_H_
+#define	NRF24L01_H_
 
-#include <xc.h> // include processor files - each processor file is guarded.  
-#include "nRF24L01+_types.h"
-#include "flash.h"
+#include "interface.h"
+#include "nRF24L01_Types.h"
+#include <string.h>
 
-const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const unsigned char n_ADDRESS_MUL = 33;
+extern const unsigned char n_ADDRESS_P0[];
+extern const unsigned char n_ADDRESS_MUL;
 
-char nrf24l01TXTopic[8];
-char nrf24l01TXValue[8];
-char nrf24l01RXTopic[8];
-char nrf24l01RXValue[8];
-char nrf24l01Name[FLASH_OFFSET_NAME_LENGTH];
+extern char nrf24l01TXName[16];
+extern char nrf24l01TXTopic[8];
+extern char nrf24l01TXValue[8];
 
-unsigned int counter = 0;
+extern char nrf24l01RXTopic[8];
+extern char nrf24l01RXValue[8];
+extern char nrf24l01RXName[16];
 
 typedef struct{
     unsigned waitForTXACK       : 1;
     unsigned TXBusy             : 1;
     unsigned RXPending			: 1;
     unsigned RXMode             : 1;
+    unsigned Pipe             	: 3;
     
 } nrf24l01_t;
+
 
 volatile nrf24l01_t nrf24l01;
 
@@ -31,10 +33,10 @@ volatile nrf24l01_t nrf24l01;
 #define RADIO_FREQUENCY 0
 
 void nrf24l01ISR(void);
-void nrf24l01Init(void);
+void nrf24l01Init(unsigned char isReciever);
 
-void nrf24l01SendString(char waitForAck);
+void nrf24l01SendString(unsigned char waitForAck);
 void nrf24l01SetRXMode(unsigned char rxMode);
 
-#endif	/* NRF24L01_H */
+#endif	/* NRF24L01_H_ */
 

@@ -1,4 +1,5 @@
 #include "flash.h"
+#include "interface.h"
 
 void write_flashmem(unsigned int offset, unsigned int data) {
     
