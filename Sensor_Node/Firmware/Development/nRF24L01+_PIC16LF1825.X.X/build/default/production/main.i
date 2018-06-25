@@ -10729,21 +10729,23 @@ extern char * ultoa(char * buf, unsigned long val, int base);
 
 extern char * ftoa(float f, int * status);
 
-# 7 "interface.h"
-extern const unsigned char NVMEM[32];
-
-# 15
-const struct {
+# 12 "interface.h"
+typedef struct{
+unsigned char check;
 char name[16];
 unsigned int bootMode;
+} romData_t;
 
-} romData_t = {
+
+
+
+const romData_t resetRomData = {
+{0xAA},
 {"Unconfigured"},
 {0},
-
 };
 
-# 52
+# 41
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -10955,6 +10957,7 @@ unsigned byte :8;
 };
 struct{
 unsigned ACKRequest :1;
+unsigned IsACK :1;
 };
 } packetData_t;
 
@@ -10979,16 +10982,30 @@ unsigned Pipe : 3;
 
 volatile nrf24l01_t nrf24l01;
 
-# 45
+# 46
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
 void nrf24l01SendString(void);
 void nrf24l01SetRXMode(unsigned char rxMode);
 
-# 5 "flash.h"
-unsigned int read_flashmem(unsigned int offset);
-void write_flashmem(unsigned int offset, unsigned int data);
+# 6 "flash.h"
+extern romData_t romData;
+
+typedef union{
+struct{
+romData_t RomData;
+};
+struct{
+unsigned char array[32];
+};
+}romHolder_t;
+
+
+const unsigned char romArray[32]@(0x2000U - 32);
+
+void flashRealod(void);
+void flashUpdate(void);
 
 # 9 "main.c"
 unsigned char sleepLoop = 0;
@@ -11114,15 +11131,13 @@ OSCCON2bits.CDIV = 0b000;
 
 _delay((unsigned long)((10)*(16000000/4000.0)));
 
+flashRealod();
+
+strcpy(nrf24l01TXName, romData.name);
+
 nrf24l01Init(0);
 
-for (unsigned char i = 0; i < sizeof(nrf24l01TXName); i++){
-nrf24l01TXName[i] = read_flashmem((unsigned) 0 + i);
-}
-
-
-
-
+# 145
 FVRCONbits.FVREN = 0;
 FVRCONbits.ADFVR = 1;
 FVRCONbits.FVREN = 1;
@@ -11168,7 +11183,9 @@ INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 
 strcpy(nrf24l01TXTopic, "BOOT");
-utoa(nrf24l01TXValue, read_flashmem(0 + 16), 10);
+
+utoa(nrf24l01TXValue, romData.bootMode, 10);
+
 nrf24l01TXPacketData.byte = 0x00;
 nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();

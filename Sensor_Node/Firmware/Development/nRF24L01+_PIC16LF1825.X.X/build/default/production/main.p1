@@ -1,8 +1,8 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"15 interface.h
-[s S920 `uc -> 16 `i `ui 1 ]
-[n S920 . name bootMode ]
-"30 nrf24l01.h
+"12 interface.h
+[s S920 `uc 1 `uc -> 16 `i `ui 1 ]
+[n S920 . check name bootMode ]
+"31 nrf24l01.h
 [s S960 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :3 `uc 1 ]
 [n S960 . waitForTXACK TXBusy RXPending RXMode Pipe ]
 "490 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
@@ -13,7 +13,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S31 . . ]
 "497
 [v _PIR0bits `VS31 ~T0 @X0 0 e@16 ]
-"45 nrf24l01.h
+"46 nrf24l01.h
 [v _nrf24l01ISR `(v ~T0 @X0 0 ef ]
 "1987 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
 [s S100 :1 `uc 1 :1 `uc 1 :6 `uc 1 ]
@@ -51,28 +51,28 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S7 . . . ]
 "131
 [v _STATUSbits `VS7 ~T0 @X0 0 e@3 ]
-"49 nrf24l01.h
+"50 nrf24l01.h
 [v _nrf24l01SetRXMode `(v ~T0 @X0 0 ef1`uc ]
 "37 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h
 [v _strcpy `(*uc ~T0 @X0 0 ef2`*uc`*Cuc ]
-"21 nrf24l01.h
+"22 nrf24l01.h
 [v _nrf24l01TXTopic `uc ~T0 @X0 -> 0 `x e ]
 "114 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdlib.h
 [v _utoa `(*uc ~T0 @X0 0 ef3`*uc`ui`i ]
-"22 nrf24l01.h
+"23 nrf24l01.h
 [v _nrf24l01TXValue `uc ~T0 @X0 -> 0 `x e ]
 "12
 [s S958 :8 `uc 1 ]
 [n S958 . byte ]
 "15
-[s S959 :1 `uc 1 ]
-[n S959 . ACKRequest ]
+[s S959 :1 `uc 1 :1 `uc 1 ]
+[n S959 . ACKRequest IsACK ]
 "11
 [u S957 `S958 1 `S959 1 ]
 [n S957 . . . ]
-"23
+"24
 [v _nrf24l01TXPacketData `S957 ~T0 @X0 0 e ]
-"48
+"49
 [v _nrf24l01SendString `(v ~T0 @X0 0 ef ]
 [p mainexit ]
 "2779 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
@@ -109,12 +109,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S599 . . . ]
 "11996
 [v _OSCCON2bits `VS599 ~T0 @X0 0 e@2330 ]
-"46 nrf24l01.h
-[v _nrf24l01Init `(v ~T0 @X0 0 ef1`uc ]
-"20
+"20 flash.h
+[v _flashRealod `(v ~T0 @X0 0 ef ]
+"21 nrf24l01.h
 [v _nrf24l01TXName `uc ~T0 @X0 -> 0 `x e ]
-"5 flash.h
-[v _read_flashmem `(ui ~T0 @X0 0 ef1`ui ]
+"6 flash.h
+[v _romData `S920 ~T0 @X0 0 e ]
+"47 nrf24l01.h
+[v _nrf24l01Init `(v ~T0 @X0 0 ef1`uc ]
 "2601 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
 [s S128 :2 `uc 1 :2 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S128 . ADFVR CDAFVR TSRNG TSEN FVRRDY FVREN ]
@@ -7409,12 +7411,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;stdlib.h: 119: extern char * ltoa(char * buf, long val, int base);
 [; ;stdlib.h: 120: extern char * ultoa(char * buf, unsigned long val, int base);
 [; ;stdlib.h: 122: extern char * ftoa(float f, int * status);
-[; ;interface.h: 7: extern const unsigned char NVMEM[32];
-"19 interface.h
-[v _romData_t `CS920 ~T0 @X0 1 e ]
-[i _romData_t
+[; ;interface.h: 12: typedef struct{
+[; ;interface.h: 13: unsigned char check;
+[; ;interface.h: 14: char name[16];
+[; ;interface.h: 15: unsigned int bootMode;
+[; ;interface.h: 16: } romData_t;
+"21 interface.h
+[v _resetRomData `CS920 ~T0 @X0 1 e ]
+[i _resetRomData
 :U ..
 :U ..
+"22
+-> -> 170 `i `uc
 :U ..
 -> 85 `c
 -> 110 `c
@@ -7430,24 +7438,22 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> 100 `c
 -> 0 `c
 ..
-"21
+"24
 -> -> 0 `i `ui
 ..
 ..
 ]
-[; ;interface.h: 15: const struct {
-[; ;interface.h: 16: char name[16];
-[; ;interface.h: 17: unsigned int bootMode;
-[; ;interface.h: 19: } romData_t = {
-[; ;interface.h: 20: {"Unconfigured"},
-[; ;interface.h: 21: {0},
-[; ;interface.h: 23: };
-[; ;interface.h: 52: void nrf24l01InterfaceInit(void);
-[; ;interface.h: 53: unsigned char nrf24l01SPISend(unsigned char data);
-[; ;interface.h: 54: void nrf24l01SPIStart(void);
-[; ;interface.h: 55: void nrf24l01SPIEnd(void);
-[; ;interface.h: 57: void enableInterrupts(unsigned char enable);
-[; ;interface.h: 59: void exception(unsigned char exception);
+[; ;interface.h: 21: const romData_t resetRomData = {
+[; ;interface.h: 22: {0xAA},
+[; ;interface.h: 23: {"Unconfigured"},
+[; ;interface.h: 24: {0},
+[; ;interface.h: 25: };
+[; ;interface.h: 41: void nrf24l01InterfaceInit(void);
+[; ;interface.h: 42: unsigned char nrf24l01SPISend(unsigned char data);
+[; ;interface.h: 43: void nrf24l01SPIStart(void);
+[; ;interface.h: 44: void nrf24l01SPIEnd(void);
+[; ;interface.h: 46: void enableInterrupts(unsigned char enable);
+[; ;interface.h: 48: void exception(unsigned char exception);
 [; ;nRF24L01_Types.h: 15: typedef union{
 [; ;nRF24L01_Types.h: 16: struct {
 [; ;nRF24L01_Types.h: 17: unsigned byte : 8;
@@ -7616,32 +7622,81 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.h: 14: };
 [; ;nrf24l01.h: 15: struct{
 [; ;nrf24l01.h: 16: unsigned ACKRequest :1;
-[; ;nrf24l01.h: 17: };
-[; ;nrf24l01.h: 18: } packetData_t;
-[; ;nrf24l01.h: 20: extern char nrf24l01TXName[16];
-[; ;nrf24l01.h: 21: extern char nrf24l01TXTopic[8];
-[; ;nrf24l01.h: 22: extern char nrf24l01TXValue[8];
-[; ;nrf24l01.h: 23: extern packetData_t nrf24l01TXPacketData;
-[; ;nrf24l01.h: 25: extern char nrf24l01RXTopic[8];
-[; ;nrf24l01.h: 26: extern char nrf24l01RXValue[8];
-[; ;nrf24l01.h: 27: extern char nrf24l01RXName[16];
-[; ;nrf24l01.h: 28: extern packetData_t nrf24l01RXPacketData;
-[; ;nrf24l01.h: 30: typedef struct{
-[; ;nrf24l01.h: 31: unsigned waitForTXACK : 1;
-[; ;nrf24l01.h: 32: unsigned TXBusy : 1;
-[; ;nrf24l01.h: 33: unsigned RXPending : 1;
-[; ;nrf24l01.h: 34: unsigned RXMode : 1;
-[; ;nrf24l01.h: 35: unsigned Pipe : 3;
-[; ;nrf24l01.h: 36: } nrf24l01_t;
-"39 nrf24l01.h
+[; ;nrf24l01.h: 17: unsigned IsACK :1;
+[; ;nrf24l01.h: 18: };
+[; ;nrf24l01.h: 19: } packetData_t;
+[; ;nrf24l01.h: 21: extern char nrf24l01TXName[16];
+[; ;nrf24l01.h: 22: extern char nrf24l01TXTopic[8];
+[; ;nrf24l01.h: 23: extern char nrf24l01TXValue[8];
+[; ;nrf24l01.h: 24: extern packetData_t nrf24l01TXPacketData;
+[; ;nrf24l01.h: 26: extern char nrf24l01RXTopic[8];
+[; ;nrf24l01.h: 27: extern char nrf24l01RXValue[8];
+[; ;nrf24l01.h: 28: extern char nrf24l01RXName[16];
+[; ;nrf24l01.h: 29: extern packetData_t nrf24l01RXPacketData;
+[; ;nrf24l01.h: 31: typedef struct{
+[; ;nrf24l01.h: 32: unsigned waitForTXACK : 1;
+[; ;nrf24l01.h: 33: unsigned TXBusy : 1;
+[; ;nrf24l01.h: 34: unsigned RXPending : 1;
+[; ;nrf24l01.h: 35: unsigned RXMode : 1;
+[; ;nrf24l01.h: 36: unsigned Pipe : 3;
+[; ;nrf24l01.h: 37: } nrf24l01_t;
+"40 nrf24l01.h
 [v _nrf24l01 `VS960 ~T0 @X0 1 e ]
-[; ;nrf24l01.h: 39: volatile nrf24l01_t nrf24l01;
-[; ;nrf24l01.h: 45: void nrf24l01ISR(void);
-[; ;nrf24l01.h: 46: void nrf24l01Init(unsigned char isReciever);
-[; ;nrf24l01.h: 48: void nrf24l01SendString(void);
-[; ;nrf24l01.h: 49: void nrf24l01SetRXMode(unsigned char rxMode);
-[; ;flash.h: 5: unsigned int read_flashmem(unsigned int offset);
-[; ;flash.h: 6: void write_flashmem(unsigned int offset, unsigned int data);
+[; ;nrf24l01.h: 40: volatile nrf24l01_t nrf24l01;
+[; ;nrf24l01.h: 46: void nrf24l01ISR(void);
+[; ;nrf24l01.h: 47: void nrf24l01Init(unsigned char isReciever);
+[; ;nrf24l01.h: 49: void nrf24l01SendString(void);
+[; ;nrf24l01.h: 50: void nrf24l01SetRXMode(unsigned char rxMode);
+[; ;flash.h: 6: extern romData_t romData;
+[; ;flash.h: 8: typedef union{
+[; ;flash.h: 9: struct{
+[; ;flash.h: 10: romData_t RomData;
+[; ;flash.h: 11: };
+[; ;flash.h: 12: struct{
+[; ;flash.h: 13: unsigned char array[32];
+[; ;flash.h: 14: };
+[; ;flash.h: 15: }romHolder_t;
+"18 flash.h
+[v _romArray `Cuc ~T0 @X0 -> 32 `i e@8160 ]
+[i _romArray
+:U ..
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+..
+]
+[; ;flash.h: 18: const unsigned char romArray[32]@(0x2000U - 32);
+[; ;flash.h: 20: void flashRealod(void);
+[; ;flash.h: 21: void flashUpdate(void);
 "9 main.c
 [v _sleepLoop `uc ~T0 @X0 1 e ]
 [i _sleepLoop
@@ -7655,16 +7710,16 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;main.c: 10: unsigned int counter = 0;
 [v $root$_ISR `(v ~T0 @X0 0 e ]
-[v F6567 `(v ~T0 @X0 1 tf ]
+[v F6578 `(v ~T0 @X0 1 tf ]
 "14
-[v _ISR `IF6567 ~T0 @X0 1 e ]
+[v _ISR `IF6578 ~T0 @X0 1 e ]
 {
 [; ;main.c: 14: void interrupt ISR(void){
 [e :U _ISR ]
 [f ]
 [; ;main.c: 15: if (PIR0bits.INTF){
 "15
-[e $ ! != -> . . _PIR0bits 0 0 `i -> -> -> 0 `i `Vuc `i 962  ]
+[e $ ! != -> . . _PIR0bits 0 0 `i -> -> -> 0 `i `Vuc `i 965  ]
 {
 [; ;main.c: 16: nrf24l01ISR();
 "16
@@ -7674,11 +7729,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _PIR0bits 0 0 -> -> 0 `i `uc ]
 "18
 }
-[e :U 962 ]
+[e :U 965 ]
 [; ;main.c: 18: }
 [; ;main.c: 19: }
 "19
-[e :UE 961 ]
+[e :UE 964 ]
 }
 "21
 [v _getADCValue `(ul ~T0 @X0 1 ef2`uc`ul ]
@@ -7704,26 +7759,26 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( __delay (1 -> * -> -> 200 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
 [; ;main.c: 29: while (--adcLoop){
 "29
-[e $U 964  ]
-[e :U 965 ]
+[e $U 967  ]
+[e :U 968 ]
 {
 [; ;main.c: 31: ADCON0bits.ADGO = 1;
 "31
 [e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
 [; ;main.c: 32: while (ADCON0bits.ADGO){
 "32
-[e $U 967  ]
-[e :U 968 ]
+[e $U 970  ]
+[e :U 971 ]
 {
 [; ;main.c: 33: __nop();
 "33
 [e ( ___nop ..  ]
 "34
 }
-[e :U 967 ]
+[e :U 970 ]
 "32
-[e $ != -> . . _ADCON0bits 1 1 `i -> -> -> 0 `i `Vuc `i 968  ]
-[e :U 969 ]
+[e $ != -> . . _ADCON0bits 1 1 `i -> -> -> 0 `i `Vuc `i 971  ]
+[e :U 972 ]
 [; ;main.c: 34: }
 [; ;main.c: 36: adcSum+= ADRESL;
 "36
@@ -7733,10 +7788,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e =+ _adcSum -> -> << -> _ADRESH `i -> 8 `i `ui `ul ]
 "38
 }
-[e :U 964 ]
+[e :U 967 ]
 "29
-[e $ != -> =- _adcLoop -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 965  ]
-[e :U 966 ]
+[e $ != -> =- _adcLoop -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 968  ]
+[e :U 969 ]
 [; ;main.c: 38: }
 [; ;main.c: 40: adcSum*= 100;
 "40
@@ -7747,10 +7802,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 43: return adcSum;
 "43
 [e ) _adcSum ]
-[e $UE 963  ]
+[e $UE 966  ]
 [; ;main.c: 44: }
 "44
-[e :UE 963 ]
+[e :UE 966 ]
 }
 "46
 [v _sleep `(v ~T0 @X0 1 ef ]
@@ -7760,7 +7815,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [f ]
 [; ;main.c: 47: while (1){
 "47
-[e :U 972 ]
+[e :U 975 ]
 {
 [; ;main.c: 49: asm("sleep");
 "49
@@ -7773,25 +7828,25 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( ___nop ..  ]
 [; ;main.c: 53: if (!STATUSbits.nTO && !STATUSbits.nPD) {
 "53
-[e $ ! && ! != -> . . _STATUSbits 0 4 `i -> -> -> 0 `i `Vuc `i ! != -> . . _STATUSbits 0 3 `i -> -> -> 0 `i `Vuc `i 974  ]
+[e $ ! && ! != -> . . _STATUSbits 0 4 `i -> -> -> 0 `i `Vuc `i ! != -> . . _STATUSbits 0 3 `i -> -> -> 0 `i `Vuc `i 977  ]
 {
 [; ;main.c: 54: return;
 "54
-[e $UE 970  ]
+[e $UE 973  ]
 "55
 }
-[e :U 974 ]
+[e :U 977 ]
 "56
 }
-[e :U 971 ]
+[e :U 974 ]
 "47
-[e $U 972  ]
-[e :U 973 ]
+[e $U 975  ]
+[e :U 976 ]
 [; ;main.c: 55: }
 [; ;main.c: 56: }
 [; ;main.c: 57: }
 "57
-[e :UE 970 ]
+[e :UE 973 ]
 }
 "59
 [v _checkRxData `(v ~T0 @X0 1 ef ]
@@ -7807,18 +7862,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _sleep ..  ]
 [; ;main.c: 65: if (!nrf24l01.RXPending){
 "65
-[e $ ! ! != -> . _nrf24l01 2 `i -> -> -> 0 `i `Vuc `i 976  ]
+[e $ ! ! != -> . _nrf24l01 2 `i -> -> -> 0 `i `Vuc `i 979  ]
 {
 [; ;main.c: 66: return;
 "66
-[e $UE 975  ]
+[e $UE 978  ]
 "67
 }
-[e :U 976 ]
+[e :U 979 ]
 [; ;main.c: 67: }
 [; ;main.c: 69: }
 "69
-[e :UE 975 ]
+[e :UE 978 ]
 }
 "71
 [v _loop `(v ~T0 @X0 1 ef ]
@@ -7921,7 +7976,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _sleep ..  ]
 [; ;main.c: 112: }
 "112
-[e :UE 977 ]
+[e :UE 980 ]
 }
 [v $root$_main `(v ~T0 @X0 0 e ]
 "114
@@ -7957,143 +8012,128 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 133: _delay((unsigned long)((10)*(16000000/4000.0)));
 "133
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
-[; ;main.c: 135: nrf24l01Init(0);
+[; ;main.c: 135: flashRealod();
 "135
+[e ( _flashRealod ..  ]
+[; ;main.c: 137: strcpy(nrf24l01TXName, romData.name);
+"137
+[e ( _strcpy (2 , &U _nrf24l01TXName -> &U . _romData 1 `*Cuc ]
+[; ;main.c: 139: nrf24l01Init(0);
+"139
 [e ( _nrf24l01Init (1 -> -> 0 `i `uc ]
-[; ;main.c: 137: for (unsigned char i = 0; i < sizeof(nrf24l01TXName); i++){
-"137
-{
-[v _i `uc ~T0 @X0 1 a ]
-[e = _i -> -> 0 `i `uc ]
-[e $ < -> _i `ui -> * -> 16 `i # `uc `ui 979  ]
-[e $U 980  ]
-[e :U 979 ]
-{
-[; ;main.c: 138: nrf24l01TXName[i] = read_flashmem((unsigned) 0 + i);
-"138
-[e = *U + &U _nrf24l01TXName * -> _i `ux -> -> # *U &U _nrf24l01TXName `ui `ux -> ( _read_flashmem (1 + -> -> 0 `i `ui -> _i `ui `uc ]
-"139
-}
-"137
-[e ++ _i -> -> 1 `i `uc ]
-[e $ < -> _i `ui -> * -> 16 `i # `uc `ui 979  ]
-[e :U 980 ]
-"139
-}
-[; ;main.c: 139: }
-[; ;main.c: 144: FVRCONbits.FVREN = 0;
-"144
-[e = . . _FVRCONbits 0 5 -> -> 0 `i `uc ]
-[; ;main.c: 145: FVRCONbits.ADFVR = 1;
+[; ;main.c: 145: FVRCONbits.FVREN = 0;
 "145
-[e = . . _FVRCONbits 0 0 -> -> 1 `i `uc ]
-[; ;main.c: 146: FVRCONbits.FVREN = 1;
+[e = . . _FVRCONbits 0 5 -> -> 0 `i `uc ]
+[; ;main.c: 146: FVRCONbits.ADFVR = 1;
 "146
+[e = . . _FVRCONbits 0 0 -> -> 1 `i `uc ]
+[; ;main.c: 147: FVRCONbits.FVREN = 1;
+"147
 [e = . . _FVRCONbits 0 5 -> -> 1 `i `uc ]
-[; ;main.c: 149: FVRCONbits.TSEN = 0;
-"149
-[e = . . _FVRCONbits 0 3 -> -> 0 `i `uc ]
-[; ;main.c: 150: FVRCONbits.TSRNG = 0;
+[; ;main.c: 150: FVRCONbits.TSEN = 0;
 "150
-[e = . . _FVRCONbits 0 2 -> -> 0 `i `uc ]
-[; ;main.c: 151: FVRCONbits.TSEN = 1;
+[e = . . _FVRCONbits 0 3 -> -> 0 `i `uc ]
+[; ;main.c: 151: FVRCONbits.TSRNG = 0;
 "151
+[e = . . _FVRCONbits 0 2 -> -> 0 `i `uc ]
+[; ;main.c: 152: FVRCONbits.TSEN = 1;
+"152
 [e = . . _FVRCONbits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 154: ADCON0bits.ADON = 0;
-"154
+[; ;main.c: 155: ADCON0bits.ADON = 0;
+"155
 [e = . . _ADCON0bits 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 156: ANSELAbits.ANSA4 = 1;
-"156
-[e = . . _ANSELAbits 0 4 -> -> 1 `i `uc ]
-[; ;main.c: 157: TRISAbits.TRISA4 = 1;
+[; ;main.c: 157: ANSELAbits.ANSA4 = 1;
 "157
-[e = . . _TRISAbits 0 4 -> -> 1 `i `uc ]
-[; ;main.c: 158: WPUAbits.WPUA4 = 0;
+[e = . . _ANSELAbits 0 4 -> -> 1 `i `uc ]
+[; ;main.c: 158: TRISAbits.TRISA4 = 1;
 "158
+[e = . . _TRISAbits 0 4 -> -> 1 `i `uc ]
+[; ;main.c: 159: WPUAbits.WPUA4 = 0;
+"159
 [e = . . _WPUAbits 0 4 -> -> 0 `i `uc ]
-[; ;main.c: 160: ANSELCbits.ANSC3 = 1;
-"160
-[e = . . _ANSELCbits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 161: TRISCbits.TRISC3 = 1;
+[; ;main.c: 161: ANSELCbits.ANSC3 = 1;
 "161
+[e = . . _ANSELCbits 0 3 -> -> 1 `i `uc ]
+[; ;main.c: 162: TRISCbits.TRISC3 = 1;
+"162
 [e = . . _TRISCbits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 163: ADCON1bits.ADCS = 0b111;
-"163
-[e = . . _ADCON1bits 0 3 -> -> 7 `i `uc ]
-[; ;main.c: 164: ADCON1bits.ADFM = 1;
+[; ;main.c: 164: ADCON1bits.ADCS = 0b111;
 "164
-[e = . . _ADCON1bits 0 4 -> -> 1 `i `uc ]
-[; ;main.c: 165: ADCON1bits.ADPREF = 0b00;
+[e = . . _ADCON1bits 0 3 -> -> 7 `i `uc ]
+[; ;main.c: 165: ADCON1bits.ADFM = 1;
 "165
+[e = . . _ADCON1bits 0 4 -> -> 1 `i `uc ]
+[; ;main.c: 166: ADCON1bits.ADPREF = 0b00;
+"166
 [e = . . _ADCON1bits 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 167: ADCON0bits.CHS = 3;
-"167
-[e = . . _ADCON0bits 0 2 -> -> 3 `i `uc ]
-[; ;main.c: 168: ADCON0bits.ADON = 1;
+[; ;main.c: 168: ADCON0bits.CHS = 3;
 "168
+[e = . . _ADCON0bits 0 2 -> -> 3 `i `uc ]
+[; ;main.c: 169: ADCON0bits.ADON = 1;
+"169
 [e = . . _ADCON0bits 0 0 -> -> 1 `i `uc ]
-[; ;main.c: 172: TRISAbits.TRISA2 = 1;
-"172
-[e = . . _TRISAbits 0 2 -> -> 1 `i `uc ]
-[; ;main.c: 173: PIE0bits.INTE = 1;
+[; ;main.c: 173: TRISAbits.TRISA2 = 1;
 "173
-[e = . . _PIE0bits 0 0 -> -> 1 `i `uc ]
-[; ;main.c: 174: INTCONbits.INTEDG = 0;
+[e = . . _TRISAbits 0 2 -> -> 1 `i `uc ]
+[; ;main.c: 174: PIE0bits.INTE = 1;
 "174
+[e = . . _PIE0bits 0 0 -> -> 1 `i `uc ]
+[; ;main.c: 175: INTCONbits.INTEDG = 0;
+"175
 [e = . . _INTCONbits 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 178: WDTCONbits.WDTPS = 11;
-"178
+[; ;main.c: 179: WDTCONbits.WDTPS = 11;
+"179
 [e = . . _WDTCONbits 0 1 -> -> 11 `i `uc ]
-[; ;main.c: 181: TRISAbits.TRISA5 = 0;
-"181
-[e = . . _TRISAbits 0 5 -> -> 0 `i `uc ]
-[; ;main.c: 182: PORTAbits.RA5 = 0;
+[; ;main.c: 182: TRISAbits.TRISA5 = 0;
 "182
+[e = . . _TRISAbits 0 5 -> -> 0 `i `uc ]
+[; ;main.c: 183: PORTAbits.RA5 = 0;
+"183
 [e = . . _PORTAbits 0 5 -> -> 0 `i `uc ]
-[; ;main.c: 185: INTCONbits.PEIE = 1;
-"185
-[e = . . _INTCONbits 0 2 -> -> 1 `i `uc ]
-[; ;main.c: 186: INTCONbits.GIE = 1;
+[; ;main.c: 186: INTCONbits.PEIE = 1;
 "186
+[e = . . _INTCONbits 0 2 -> -> 1 `i `uc ]
+[; ;main.c: 187: INTCONbits.GIE = 1;
+"187
 [e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
-[; ;main.c: 188: strcpy(nrf24l01TXTopic, "BOOT");
-"188
-[e ( _strcpy (2 , &U _nrf24l01TXTopic :s 6C ]
-[; ;main.c: 189: utoa(nrf24l01TXValue, read_flashmem(0 + 16), 10);
+[; ;main.c: 189: strcpy(nrf24l01TXTopic, "BOOT");
 "189
-[e ( _utoa (3 , , &U _nrf24l01TXValue ( _read_flashmem (1 -> + -> 0 `i -> 16 `i `ui -> 10 `i ]
-[; ;main.c: 190: nrf24l01TXPacketData.byte = 0x00;
-"190
-[e = . . _nrf24l01TXPacketData 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 191: nrf24l01TXPacketData.ACKRequest = 0;
+[e ( _strcpy (2 , &U _nrf24l01TXTopic :s 6C ]
+[; ;main.c: 191: utoa(nrf24l01TXValue, romData.bootMode, 10);
 "191
-[e = . . _nrf24l01TXPacketData 1 0 -> -> 0 `i `uc ]
-[; ;main.c: 192: nrf24l01SendString();
-"192
-[e ( _nrf24l01SendString ..  ]
-[; ;main.c: 193: sleep();
+[e ( _utoa (3 , , &U _nrf24l01TXValue . _romData 2 -> 10 `i ]
+[; ;main.c: 193: nrf24l01TXPacketData.byte = 0x00;
 "193
-[e ( _sleep ..  ]
-[; ;main.c: 195: while(1){
+[e = . . _nrf24l01TXPacketData 0 0 -> -> 0 `i `uc ]
+[; ;main.c: 194: nrf24l01TXPacketData.ACKRequest = 0;
+"194
+[e = . . _nrf24l01TXPacketData 1 0 -> -> 0 `i `uc ]
+[; ;main.c: 195: nrf24l01SendString();
 "195
+[e ( _nrf24l01SendString ..  ]
+[; ;main.c: 196: sleep();
+"196
+[e ( _sleep ..  ]
+[; ;main.c: 198: while(1){
+"198
 [e :U 983 ]
 {
-[; ;main.c: 196: loop();
-"196
+[; ;main.c: 199: loop();
+"199
 [e ( _loop ..  ]
-"197
+"200
 }
 [e :U 982 ]
-"195
+"198
 [e $U 983  ]
 [e :U 984 ]
-[; ;main.c: 197: }
-[; ;main.c: 199: return;
-"199
-[e $UE 978  ]
 [; ;main.c: 200: }
-"200
-[e :UE 978 ]
+[; ;main.c: 202: return;
+"202
+[e $UE 981  ]
+[; ;main.c: 203: }
+"203
+[e :UE 981 ]
 }
 [a 6C 66 79 79 84 0 ]
 [a 1C 68 66 71 0 ]

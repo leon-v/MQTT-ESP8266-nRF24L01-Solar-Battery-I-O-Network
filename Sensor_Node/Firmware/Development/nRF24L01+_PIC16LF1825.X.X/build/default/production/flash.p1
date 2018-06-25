@@ -1,7 +1,16 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"15 interface.h
-[s S916 `uc -> 16 `i `ui 1 ]
-[n S916 . name bootMode ]
+"12 interface.h
+[s S916 `uc 1 `uc -> 16 `i `ui 1 ]
+[n S916 . check name bootMode ]
+"9 flash.h
+[s S918 `S916 1 ]
+[n S918 . RomData ]
+"12
+[s S919 `uc -> 32 `i ]
+[n S919 . array ]
+"8
+[u S917 `S918 1 `S919 1 ]
+[n S917 . . . ]
 "357 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
 [s S26 :1 `uc 1 :5 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S26 . INTEDG . PEIE GIE ]
@@ -7163,14 +7172,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 137: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 138: extern __bank0 __bit __powerdown;
 [; ;pic.h: 139: extern __bank0 __bit __timeout;
-[; ;flash.h: 5: unsigned int read_flashmem(unsigned int offset);
-[; ;flash.h: 6: void write_flashmem(unsigned int offset, unsigned int data);
-[; ;interface.h: 7: extern const unsigned char NVMEM[32];
-"19 interface.h
-[v _romData_t `CS916 ~T0 @X0 1 e ]
-[i _romData_t
+[; ;interface.h: 12: typedef struct{
+[; ;interface.h: 13: unsigned char check;
+[; ;interface.h: 14: char name[16];
+[; ;interface.h: 15: unsigned int bootMode;
+[; ;interface.h: 16: } romData_t;
+"21 interface.h
+[v _resetRomData `CS916 ~T0 @X0 1 e ]
+[i _resetRomData
 :U ..
 :U ..
+"22
+-> -> 170 `i `uc
 :U ..
 -> 85 `c
 -> 110 `c
@@ -7186,180 +7199,294 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> 100 `c
 -> 0 `c
 ..
-"21
+"24
 -> -> 0 `i `ui
 ..
 ..
 ]
-[; ;interface.h: 15: const struct {
-[; ;interface.h: 16: char name[16];
-[; ;interface.h: 17: unsigned int bootMode;
-[; ;interface.h: 19: } romData_t = {
-[; ;interface.h: 20: {"Unconfigured"},
-[; ;interface.h: 21: {0},
-[; ;interface.h: 23: };
-[; ;interface.h: 52: void nrf24l01InterfaceInit(void);
-[; ;interface.h: 53: unsigned char nrf24l01SPISend(unsigned char data);
-[; ;interface.h: 54: void nrf24l01SPIStart(void);
-[; ;interface.h: 55: void nrf24l01SPIEnd(void);
-[; ;interface.h: 57: void enableInterrupts(unsigned char enable);
-[; ;interface.h: 59: void exception(unsigned char exception);
+[; ;interface.h: 21: const romData_t resetRomData = {
+[; ;interface.h: 22: {0xAA},
+[; ;interface.h: 23: {"Unconfigured"},
+[; ;interface.h: 24: {0},
+[; ;interface.h: 25: };
+[; ;interface.h: 41: void nrf24l01InterfaceInit(void);
+[; ;interface.h: 42: unsigned char nrf24l01SPISend(unsigned char data);
+[; ;interface.h: 43: void nrf24l01SPIStart(void);
+[; ;interface.h: 44: void nrf24l01SPIEnd(void);
+[; ;interface.h: 46: void enableInterrupts(unsigned char enable);
+[; ;interface.h: 48: void exception(unsigned char exception);
+[; ;flash.h: 6: extern romData_t romData;
+[; ;flash.h: 8: typedef union{
+[; ;flash.h: 9: struct{
+[; ;flash.h: 10: romData_t RomData;
+[; ;flash.h: 11: };
+[; ;flash.h: 12: struct{
+[; ;flash.h: 13: unsigned char array[32];
+[; ;flash.h: 14: };
+[; ;flash.h: 15: }romHolder_t;
+"18 flash.h
+[v _romArray `Cuc ~T0 @X0 -> 32 `i e@8160 ]
+[i _romArray
+:U ..
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+..
+]
+[; ;flash.h: 18: const unsigned char romArray[32]@(0x2000U - 32);
+[; ;flash.h: 20: void flashRealod(void);
+[; ;flash.h: 21: void flashUpdate(void);
 "4 flash.c
-[v _write_flashmem `(v ~T0 @X0 1 ef2`ui`ui ]
+[v _romHolder `S917 ~T0 @X0 1 e ]
+[; ;flash.c: 4: romHolder_t romHolder;
+"5
+[v _romData `S916 ~T0 @X0 1 e ]
+[; ;flash.c: 5: romData_t romData;
+"8
+[v _flashWriteByte `(v ~T0 @X0 1 ef2`ui`ui ]
 {
-[; ;flash.c: 4: void write_flashmem(unsigned int offset, unsigned int data) {
-[e :U _write_flashmem ]
+[; ;flash.c: 8: void flashWriteByte(unsigned int offset, unsigned int data) {
+[e :U _flashWriteByte ]
 [v _offset `ui ~T0 @X0 1 r1 ]
 [v _data `ui ~T0 @X0 1 r2 ]
 [f ]
-"6
+"10
 [v _address `ui ~T0 @X0 1 a ]
-[; ;flash.c: 6: unsigned int address;
-[; ;flash.c: 8: INTCONbits.GIE = 0;
-"8
+[; ;flash.c: 10: unsigned int address;
+[; ;flash.c: 12: INTCONbits.GIE = 0;
+"12
 [e = . . _INTCONbits 0 3 -> -> 0 `i `uc ]
-[; ;flash.c: 11: PMCON1 = 0x00;
-"11
-[e = _PMCON1 -> -> 0 `i `uc ]
-[; ;flash.c: 13: address = (0x2000U - sizeof(romData_t)); + offset;
-"13
-[e = _address - -> 8192 `ui -> # _romData_t `ui ]
-[e _offset ]
-[; ;flash.c: 14: PMADRL = (char) (address >> 0);
-"14
-[e = _PMADRL -> >> _address -> 0 `i `uc ]
-[; ;flash.c: 15: PMADRH = (char) (address >> 8);
+[; ;flash.c: 15: PMCON1 = 0x00;
 "15
-[e = _PMADRH -> >> _address -> 8 `i `uc ]
-[; ;flash.c: 17: PMCON1bits.FREE = 1;
-"17
-[e = . . _PMCON1bits 0 4 -> -> 1 `i `uc ]
-[; ;flash.c: 18: PMCON1bits.WREN = 1;
-"18
-[e = . . _PMCON1bits 0 2 -> -> 1 `i `uc ]
-[; ;flash.c: 20: PMCON2 = 0x55;
-"20
-[e = _PMCON2 -> -> 85 `i `uc ]
-[; ;flash.c: 21: PMCON2 = 0xAA;
-"21
-[e = _PMCON2 -> -> 170 `i `uc ]
-[; ;flash.c: 23: PMCON1bits.WR = 1;
-"23
-[e = . . _PMCON1bits 0 1 -> -> 1 `i `uc ]
-[; ;flash.c: 25: __nop();
-"25
-[e ( ___nop ..  ]
-[; ;flash.c: 26: __nop();
-"26
-[e ( ___nop ..  ]
-[; ;flash.c: 28: PMCON1bits.WREN = 0;
-"28
-[e = . . _PMCON1bits 0 2 -> -> 0 `i `uc ]
-[; ;flash.c: 32: PMCON1 = 0x00;
-"32
 [e = _PMCON1 -> -> 0 `i `uc ]
-[; ;flash.c: 34: PMADRL = (char) (address >> 0);
-"34
+[; ;flash.c: 17: address = (0x2000U - 32) + offset;
+"17
+[e = _address + - -> 8192 `ui -> -> 32 `i `ui _offset ]
+[; ;flash.c: 18: PMADRL = (char) (address >> 0);
+"18
 [e = _PMADRL -> >> _address -> 0 `i `uc ]
-[; ;flash.c: 35: PMADRH = (char) (address >> 8);
-"35
+[; ;flash.c: 19: PMADRH = (char) (address >> 8);
+"19
 [e = _PMADRH -> >> _address -> 8 `i `uc ]
-[; ;flash.c: 37: PMCON1bits.FREE = 0;
-"37
-[e = . . _PMCON1bits 0 4 -> -> 0 `i `uc ]
-[; ;flash.c: 38: PMCON1bits.LWLO = 1;
-"38
-[e = . . _PMCON1bits 0 5 -> -> 1 `i `uc ]
-[; ;flash.c: 39: PMCON1bits.WREN = 1;
-"39
+[; ;flash.c: 21: PMCON1bits.FREE = 1;
+"21
+[e = . . _PMCON1bits 0 4 -> -> 1 `i `uc ]
+[; ;flash.c: 22: PMCON1bits.WREN = 1;
+"22
 [e = . . _PMCON1bits 0 2 -> -> 1 `i `uc ]
-[; ;flash.c: 41: PMDATL = (data >> 0);
-"41
-[e = _PMDATL -> >> _data -> 0 `i `uc ]
-[; ;flash.c: 42: PMDATH = (data >> 8);
-"42
-[e = _PMDATH -> >> _data -> 8 `i `uc ]
-[; ;flash.c: 44: PMCON1bits.LWLO = 0;
-"44
-[e = . . _PMCON1bits 0 5 -> -> 0 `i `uc ]
-[; ;flash.c: 46: PMCON2 = 0x55;
-"46
+[; ;flash.c: 24: PMCON2 = 0x55;
+"24
 [e = _PMCON2 -> -> 85 `i `uc ]
-[; ;flash.c: 47: PMCON2 = 0xAA;
-"47
+[; ;flash.c: 25: PMCON2 = 0xAA;
+"25
 [e = _PMCON2 -> -> 170 `i `uc ]
-[; ;flash.c: 49: PMCON1bits.WR = 1;
-"49
+[; ;flash.c: 27: PMCON1bits.WR = 1;
+"27
 [e = . . _PMCON1bits 0 1 -> -> 1 `i `uc ]
-[; ;flash.c: 51: __nop();
-"51
+[; ;flash.c: 29: __nop();
+"29
 [e ( ___nop ..  ]
-[; ;flash.c: 52: __nop();
-"52
+[; ;flash.c: 30: __nop();
+"30
 [e ( ___nop ..  ]
-[; ;flash.c: 54: PMCON1bits.WREN = 0;
-"54
+[; ;flash.c: 32: PMCON1bits.WREN = 0;
+"32
 [e = . . _PMCON1bits 0 2 -> -> 0 `i `uc ]
-[; ;flash.c: 57: INTCONbits.GIE = 1;
-"57
-[e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
-[; ;flash.c: 58: }
+[; ;flash.c: 36: PMCON1 = 0x00;
+"36
+[e = _PMCON1 -> -> 0 `i `uc ]
+[; ;flash.c: 38: PMADRL = (char) (address >> 0);
+"38
+[e = _PMADRL -> >> _address -> 0 `i `uc ]
+[; ;flash.c: 39: PMADRH = (char) (address >> 8);
+"39
+[e = _PMADRH -> >> _address -> 8 `i `uc ]
+[; ;flash.c: 41: PMCON1bits.FREE = 0;
+"41
+[e = . . _PMCON1bits 0 4 -> -> 0 `i `uc ]
+[; ;flash.c: 42: PMCON1bits.LWLO = 1;
+"42
+[e = . . _PMCON1bits 0 5 -> -> 1 `i `uc ]
+[; ;flash.c: 43: PMCON1bits.WREN = 1;
+"43
+[e = . . _PMCON1bits 0 2 -> -> 1 `i `uc ]
+[; ;flash.c: 45: PMDATL = (data >> 0);
+"45
+[e = _PMDATL -> >> _data -> 0 `i `uc ]
+[; ;flash.c: 46: PMDATH = (data >> 8);
+"46
+[e = _PMDATH -> >> _data -> 8 `i `uc ]
+[; ;flash.c: 48: PMCON1bits.LWLO = 0;
+"48
+[e = . . _PMCON1bits 0 5 -> -> 0 `i `uc ]
+[; ;flash.c: 50: PMCON2 = 0x55;
+"50
+[e = _PMCON2 -> -> 85 `i `uc ]
+[; ;flash.c: 51: PMCON2 = 0xAA;
+"51
+[e = _PMCON2 -> -> 170 `i `uc ]
+[; ;flash.c: 53: PMCON1bits.WR = 1;
+"53
+[e = . . _PMCON1bits 0 1 -> -> 1 `i `uc ]
+[; ;flash.c: 55: __nop();
+"55
+[e ( ___nop ..  ]
+[; ;flash.c: 56: __nop();
+"56
+[e ( ___nop ..  ]
+[; ;flash.c: 58: PMCON1bits.WREN = 0;
 "58
-[e :UE 917 ]
+[e = . . _PMCON1bits 0 2 -> -> 0 `i `uc ]
+[; ;flash.c: 61: INTCONbits.GIE = 1;
+"61
+[e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
+[; ;flash.c: 62: }
+"62
+[e :UE 920 ]
 }
-"60
-[v _read_flashmem `(ui ~T0 @X0 1 ef1`ui ]
+"64
+[v _flashReadByte `(ui ~T0 @X0 1 ef1`ui ]
 {
-[; ;flash.c: 60: unsigned int read_flashmem(unsigned int offset) {
-[e :U _read_flashmem ]
+[; ;flash.c: 64: unsigned int flashReadByte(unsigned int offset) {
+[e :U _flashReadByte ]
 [v _offset `ui ~T0 @X0 1 r1 ]
 [f ]
-"62
-[v _address `ui ~T0 @X0 1 a ]
-[; ;flash.c: 62: unsigned int address;
-[; ;flash.c: 64: INTCONbits.GIE = 0;
-"64
-[e = . . _INTCONbits 0 3 -> -> 0 `i `uc ]
-[; ;flash.c: 66: PMCON1 = 0x00;
 "66
-[e = _PMCON1 -> -> 0 `i `uc ]
-[; ;flash.c: 68: address = (0x2000U - sizeof(romData_t)); + offset;
+[v _address `ui ~T0 @X0 1 a ]
+[; ;flash.c: 66: unsigned int address;
+[; ;flash.c: 68: INTCONbits.GIE = 0;
 "68
-[e = _address - -> 8192 `ui -> # _romData_t `ui ]
-[e _offset ]
-[; ;flash.c: 69: PMADRL = (char) (address >> 0);
-"69
-[e = _PMADRL -> >> _address -> 0 `i `uc ]
-[; ;flash.c: 70: PMADRH = (char) (address >> 8);
+[e = . . _INTCONbits 0 3 -> -> 0 `i `uc ]
+[; ;flash.c: 70: PMCON1 = 0x00;
 "70
-[e = _PMADRH -> >> _address -> 8 `i `uc ]
-[; ;flash.c: 72: PMCON1bits.RD = 1;
+[e = _PMCON1 -> -> 0 `i `uc ]
+[; ;flash.c: 72: address = (0x2000U - 32) + offset;
 "72
-[e = . . _PMCON1bits 0 0 -> -> 1 `i `uc ]
-[; ;flash.c: 74: __nop();
+[e = _address + - -> 8192 `ui -> -> 32 `i `ui _offset ]
+[; ;flash.c: 73: PMADRL = (char) (address >> 0);
+"73
+[e = _PMADRL -> >> _address -> 0 `i `uc ]
+[; ;flash.c: 74: PMADRH = (char) (address >> 8);
 "74
-[e ( ___nop ..  ]
-[; ;flash.c: 75: __nop();
-"75
-[e ( ___nop ..  ]
-"77
-[v _result `ui ~T0 @X0 1 a ]
-[; ;flash.c: 77: unsigned int result = 0;
-[e = _result -> -> 0 `i `ui ]
-[; ;flash.c: 78: result = PMDATL;
+[e = _PMADRH -> >> _address -> 8 `i `uc ]
+[; ;flash.c: 76: PMCON1bits.RD = 1;
+"76
+[e = . . _PMCON1bits 0 0 -> -> 1 `i `uc ]
+[; ;flash.c: 78: __nop();
 "78
-[e = _result -> _PMDATL `ui ]
-[; ;flash.c: 79: result|= ( (unsigned) (PMDATH) << 8);
+[e ( ___nop ..  ]
+[; ;flash.c: 79: __nop();
 "79
-[e =| _result << -> _PMDATH `ui -> 8 `i ]
-[; ;flash.c: 81: INTCONbits.GIE = 1;
+[e ( ___nop ..  ]
 "81
-[e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
-[; ;flash.c: 83: return result;
+[v _result `ui ~T0 @X0 1 a ]
+[; ;flash.c: 81: unsigned int result = 0;
+[e = _result -> -> 0 `i `ui ]
+[; ;flash.c: 82: result = PMDATL;
+"82
+[e = _result -> _PMDATL `ui ]
+[; ;flash.c: 83: result|= ( (unsigned) (PMDATH) << 8);
 "83
+[e =| _result << -> _PMDATH `ui -> 8 `i ]
+[; ;flash.c: 85: INTCONbits.GIE = 1;
+"85
+[e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
+[; ;flash.c: 87: return result;
+"87
 [e ) _result ]
-[e $UE 918  ]
-[; ;flash.c: 84: }
-"84
-[e :UE 918 ]
+[e $UE 921  ]
+[; ;flash.c: 88: }
+"88
+[e :UE 921 ]
+}
+"90
+[v _flashRealod `(v ~T0 @X0 1 ef ]
+{
+[; ;flash.c: 90: void flashRealod(void){
+[e :U _flashRealod ]
+[f ]
+[; ;flash.c: 92: for (unsigned int i = 0; i < 32; i++){
+"92
+{
+[v _i `ui ~T0 @X0 1 a ]
+[e = _i -> -> 0 `i `ui ]
+[e $ < _i -> -> 32 `i `ui 923  ]
+[e $U 924  ]
+[e :U 923 ]
+{
+[; ;flash.c: 93: romHolder.array[i] = flashReadByte(i);
+"93
+[e = *U + &U . . _romHolder 1 0 * -> _i `ux -> -> # *U &U . . _romHolder 1 0 `ui `ux -> ( _flashReadByte (1 _i `uc ]
+"94
+}
+"92
+[e ++ _i -> -> 1 `i `ui ]
+[e $ < _i -> -> 32 `i `ui 923  ]
+[e :U 924 ]
+"94
+}
+[; ;flash.c: 94: };
+[; ;flash.c: 95: }
+"95
+[e :UE 922 ]
+}
+"97
+[v _flashUpdate `(v ~T0 @X0 1 ef ]
+{
+[; ;flash.c: 97: void flashUpdate(void){
+[e :U _flashUpdate ]
+[f ]
+[; ;flash.c: 98: for (unsigned int i = 0; i < 32; i++){
+"98
+{
+[v _i `ui ~T0 @X0 1 a ]
+[e = _i -> -> 0 `i `ui ]
+[e $ < _i -> -> 32 `i `ui 927  ]
+[e $U 928  ]
+[e :U 927 ]
+{
+[; ;flash.c: 99: flashWriteByte(i, romHolder.array[i]);
+"99
+[e ( _flashWriteByte (2 , _i -> *U + &U . . _romHolder 1 0 * -> _i `ux -> -> # *U &U . . _romHolder 1 0 `ui `ux `ui ]
+"100
+}
+"98
+[e ++ _i -> -> 1 `i `ui ]
+[e $ < _i -> -> 32 `i `ui 927  ]
+[e :U 928 ]
+"100
+}
+[; ;flash.c: 100: };
+[; ;flash.c: 101: }
+"101
+[e :UE 926 ]
 }

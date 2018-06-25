@@ -1,7 +1,11 @@
 #include "flash.h"
 #include "interface.h"
 
-void write_flashmem(unsigned int offset, unsigned int data) {
+romHolder_t romHolder;
+romData_t romData;
+
+
+void flashWriteByte(unsigned int offset, unsigned int data) {
     
     unsigned int address;
     
@@ -10,7 +14,7 @@ void write_flashmem(unsigned int offset, unsigned int data) {
     //ERASE SECTION
     PMCON1 = 0x00;     //not configuration space
     
-    address = NV_ADDRESS + offset;
+    address = romLocation + offset;
     PMADRL = (char) (address >> 0);  //least significant bits of address
     PMADRH = (char) (address >> 8);  //most significant bits of address 
     
@@ -57,7 +61,7 @@ void write_flashmem(unsigned int offset, unsigned int data) {
     INTCONbits.GIE = 1;        //enable interupts again
 }
 
-unsigned int read_flashmem(unsigned int offset) {
+unsigned int flashReadByte(unsigned int offset) {
     
     unsigned int address;
     
@@ -65,7 +69,7 @@ unsigned int read_flashmem(unsigned int offset) {
     
     PMCON1 = 0x00;     //not configuration space
     
-    address = NV_ADDRESS + offset;
+    address = romLocation + offset;
     PMADRL = (char) (address >> 0);  //least significant bits of address
     PMADRH = (char) (address >> 8);  //most significant bits of address 
     
@@ -83,3 +87,15 @@ unsigned int read_flashmem(unsigned int offset) {
     return result;
 }
 
+void flashRealod(void){
+    
+    for (unsigned int i = 0; i < romData_s; i++){
+        romHolder.array[i] = flashReadByte(i);
+    };
+}
+
+void flashUpdate(void){
+    for (unsigned int i = 0; i < romData_s; i++){
+        flashWriteByte(i, romHolder.array[i]);
+    };
+}

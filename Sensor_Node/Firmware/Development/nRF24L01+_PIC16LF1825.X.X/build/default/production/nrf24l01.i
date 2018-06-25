@@ -10615,21 +10615,23 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 7 "interface.h"
-extern const unsigned char NVMEM[32];
-
-# 15
-const struct {
+# 12 "interface.h"
+typedef struct{
+unsigned char check;
 char name[16];
 unsigned int bootMode;
+} romData_t;
 
-} romData_t = {
+
+
+
+const romData_t resetRomData = {
+{0xAA},
 {"Unconfigured"},
 {0},
-
 };
 
-# 52
+# 41
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -10882,6 +10884,7 @@ unsigned byte :8;
 };
 struct{
 unsigned ACKRequest :1;
+unsigned IsACK :1;
 };
 } packetData_t;
 
@@ -10906,7 +10909,7 @@ unsigned Pipe : 3;
 
 volatile nrf24l01_t nrf24l01;
 
-# 45
+# 46
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
@@ -10922,23 +10925,31 @@ char nrf24l01TXTopic[8];
 char nrf24l01TXValue[8];
 packetData_t nrf24l01TXPacketData;
 
+char nrf24l01RXName[16];
 char nrf24l01RXTopic[8];
 char nrf24l01RXValue[8];
-char nrf24l01RXName[16];
 packetData_t nrf24l01RXPacketData;
 
 unsigned int counter = 0;
 
+
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
+
 
 enableInterrupts(0);
 
+
 nrf24l01SPIStart();
 
+
 nrf24l01SPISend(command);
+
+
 data = nrf24l01SPISend(data);
 
+
 nrf24l01SPIEnd();
+
 
 enableInterrupts(1);
 
@@ -10978,110 +10989,157 @@ nrf24l01SPISend(nrf24l01GetPipe());
 
 
 void nrf24l01SetRXMode(unsigned char rxMode){
+
 n_CONFIG_t config;
+
+
 config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
 
+
 if (config.PRIM_RX != rxMode){
+
 
 PORTAbits.RA0 = 0;
 _delay((unsigned long)((200)*(16000000/4000000.0)));
 
-# 79
+# 93
 config.PRIM_RX = rxMode;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
+
+
 _delay((unsigned long)((200)*(16000000/4000000.0)));
+
 
 if (rxMode){
 PORTAbits.RA0 = 1;
 _delay((unsigned long)((200)*(16000000/4000000.0)));
 }
 }
+
+
 nrf24l01.RXMode = rxMode;
 }
 
 
-void nrf24l01ReceiveString(void){
-
+unsigned char nrf24l01ReceiveStringPart(char * string, unsigned char offset, unsigned char destLength, unsigned char sourceLength){
 
 unsigned char byte;
 unsigned char i;
-unsigned char offset = 0;
 
-nrf24l01.RXPending = 1;
 
-for (i = 0; i < sizeof(nrf24l01RXTopic); i++){
-nrf24l01RXTopic[i] = '\0';
-}
-for (i = 0; i < sizeof(nrf24l01RXValue); i++){
-nrf24l01RXValue[i] = '\0';
-}
-for (i = 0; i < sizeof(nrf24l01RXName); i++){
-nrf24l01RXName[i] = '\0';
-}
 
-unsigned char width = nrf24l01Send(0b01100000, 0);
+for (i = 0; (i < destLength) && (offset + i < sourceLength) ; i++){
 
-PORTAbits.RA0 = 0;
-
-nrf24l01SPIStart();
-
-nrf24l01SPISend(0b01100001);
-
-for (i = 0; (i < sizeof(nrf24l01RXName)) && (offset + i < width) ; i++){
 
 byte = nrf24l01SPISend(0);
 
+
 if (byte == '/'){
-offset++;
+i++;
 break;
 }
 
-nrf24l01RXName[i] = byte;
-}
-offset+= i;
 
-for (i = 0; (i < sizeof(nrf24l01RXTopic)) && (offset + i < width) ; i++){
-
-byte = nrf24l01SPISend(0);
-if (byte == '/'){
-offset++;
-break;
+string[i] = byte;
 }
 
-nrf24l01RXTopic[i] = byte;
-}
-offset+= i;
 
-
-for (i = 0; (i < sizeof(nrf24l01RXValue)) && (offset + i < width) ; i++){
-nrf24l01RXValue[i] = nrf24l01SPISend(0);
+return i;
 }
 
-nrf24l01SPIEnd();
+void nrf24l01CheckACK(void){
 
-PORTAbits.RA0 = 1;
 
+if (!nrf24l01RXPacketData.IsACK){
+return;
+}
+
+
+nrf24l01.RXPending = 0;
 
 
 if (!nrf24l01TXPacketData.ACKRequest){
 return;
 }
 
-if (strcmp(nrf24l01TXName, nrf24l01RXName) != 0){
+
+if (strcmp(nrf24l01RXTopic, nrf24l01RXTopic) != 0){
 return;
 }
 
-if (strcmp(nrf24l01RXTopic, nrf24l01TXTopic) != 0){
+
+if (strcmp(nrf24l01RXValue, nrf24l01RXValue) != 0){
 return;
 }
 
-if (strcmp(nrf24l01RXValue, "ACK") != 0){
-return;
-}
+
+
 
 nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01.RXPending = 0;
+
+
 nrf24l01SetRXMode(0);
+}
+
+
+void nrf24l01ReceiveString(void){
+
+
+unsigned char offset = 0;
+
+
+nrf24l01.RXPending = 1;
+
+
+memset(nrf24l01RXName, 0 ,strlen(nrf24l01RXName));
+memset(nrf24l01RXTopic, 0 ,strlen(nrf24l01RXTopic));
+memset(nrf24l01RXValue, 0 ,strlen(nrf24l01RXValue));
+
+
+unsigned char width = nrf24l01Send(0b01100000, 0);
+
+
+PORTAbits.RA0 = 0;
+
+
+nrf24l01SPIStart();
+
+
+nrf24l01SPISend(0b01100001);
+
+
+nrf24l01RXPacketData.byte = nrf24l01SPISend(0);
+
+
+offset+= nrf24l01ReceiveStringPart(nrf24l01RXName, offset, sizeof(nrf24l01RXName), width);
+offset+= nrf24l01ReceiveStringPart(nrf24l01RXTopic, offset, sizeof(nrf24l01RXTopic), width);
+offset+= nrf24l01ReceiveStringPart(nrf24l01RXValue, offset, sizeof(nrf24l01RXValue), width);
+
+
+nrf24l01SPIEnd();
+
+
+PORTAbits.RA0 = 1;
+
+
+if (strcmp(nrf24l01RXName, nrf24l01TXName) != 0){
+nrf24l01.RXPending = 0;
+return;
+}
+
+
+if (nrf24l01RXPacketData.ACKRequest){
+
+strcpy(nrf24l01RXName, nrf24l01TXName);
+strcpy(nrf24l01RXTopic, nrf24l01TXTopic);
+strcpy(nrf24l01RXValue, nrf24l01TXValue);
+
+nrf24l01TXPacketData.byte = nrf24l01RXPacketData.byte;
+
+nrf24l01TXPacketData.ACKRequest = 0;
+nrf24l01TXPacketData.IsACK = 1;
+nrf24l01SendString();
+}
 }
 
 void nrf24l01SendString(void){
@@ -11171,10 +11229,9 @@ if (!--i) {
 counter++;
 goto RESEND;
 }
-_delay((unsigned long)((60)*(16000000/4000000.0)));
+_delay((unsigned long)((200)*(16000000/4000000.0)));
 }
 }
-
 
 void nrf24l01ISR(void){
 
@@ -11230,7 +11287,7 @@ setupAW.byte = 0x00;
 setupAW.AW = 0b11;
 nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
 
-# 328
+# 383
 n_RF_SETUP_t rfSetup;
 rfSetup.RF_DR_LOW = 0;
 rfSetup.RF_DR_HIGH = 1;

@@ -10615,25 +10615,23 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 5 "flash.h"
-unsigned int read_flashmem(unsigned int offset);
-void write_flashmem(unsigned int offset, unsigned int data);
-
-# 7 "interface.h"
-extern const unsigned char NVMEM[32];
-
-# 15
-const struct {
+# 12 "interface.h"
+typedef struct{
+unsigned char check;
 char name[16];
 unsigned int bootMode;
+} romData_t;
 
-} romData_t = {
+
+
+
+const romData_t resetRomData = {
+{0xAA},
 {"Unconfigured"},
 {0},
-
 };
 
-# 52
+# 41
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -10643,8 +10641,30 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
+# 6 "flash.h"
+extern romData_t romData;
+
+typedef union{
+struct{
+romData_t RomData;
+};
+struct{
+unsigned char array[32];
+};
+}romHolder_t;
+
+
+const unsigned char romArray[32]@(0x2000U - 32);
+
+void flashRealod(void);
+void flashUpdate(void);
+
 # 4 "flash.c"
-void write_flashmem(unsigned int offset, unsigned int data) {
+romHolder_t romHolder;
+romData_t romData;
+
+
+void flashWriteByte(unsigned int offset, unsigned int data) {
 
 unsigned int address;
 
@@ -10653,7 +10673,7 @@ INTCONbits.GIE = 0;
 
 PMCON1 = 0x00;
 
-address = (0x2000U - sizeof(romData_t)); + offset;
+address = (0x2000U - 32) + offset;
 PMADRL = (char) (address >> 0);
 PMADRH = (char) (address >> 8);
 
@@ -10700,7 +10720,7 @@ PMCON1bits.WREN = 0;
 INTCONbits.GIE = 1;
 }
 
-unsigned int read_flashmem(unsigned int offset) {
+unsigned int flashReadByte(unsigned int offset) {
 
 unsigned int address;
 
@@ -10708,7 +10728,7 @@ INTCONbits.GIE = 0;
 
 PMCON1 = 0x00;
 
-address = (0x2000U - sizeof(romData_t)); + offset;
+address = (0x2000U - 32) + offset;
 PMADRL = (char) (address >> 0);
 PMADRH = (char) (address >> 8);
 
@@ -10726,3 +10746,15 @@ INTCONbits.GIE = 1;
 return result;
 }
 
+void flashRealod(void){
+
+for (unsigned int i = 0; i < 32; i++){
+romHolder.array[i] = flashReadByte(i);
+};
+}
+
+void flashUpdate(void){
+for (unsigned int i = 0; i < 32; i++){
+flashWriteByte(i, romHolder.array[i]);
+};
+}

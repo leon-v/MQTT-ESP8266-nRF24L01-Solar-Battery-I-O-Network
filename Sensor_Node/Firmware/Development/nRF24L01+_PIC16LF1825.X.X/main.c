@@ -132,11 +132,12 @@ void main(void) {
     
     delayMs(10);
     
+    flashRealod();
+    
+    strcpy(nrf24l01TXName, romData.name);
+    
     nrf24l01Init(0);
-	
-	for (unsigned char i = 0; i < sizeof(nrf24l01TXName); i++){
-		nrf24l01TXName[i] = read_flashmem((unsigned) FLASH_OFFSET_NAME + i);
-	}
+    
     
 //    OPTION_REGbits.nWPUEN = 0;
     
@@ -186,7 +187,9 @@ void main(void) {
     INTCONbits.GIE = 1;
 	
 	strcpy(nrf24l01TXTopic, "BOOT");
-	utoa(nrf24l01TXValue, read_flashmem(FLASH_OFFSET_BOOT_REASON), 10);
+    
+	utoa(nrf24l01TXValue, romData.bootMode, 10);
+    
     nrf24l01TXPacketData.byte = 0x00;
     nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();

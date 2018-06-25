@@ -10615,21 +10615,23 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
-# 7 "interface.h"
-extern const unsigned char NVMEM[32];
-
-# 15
-const struct {
+# 12 "interface.h"
+typedef struct{
+unsigned char check;
 char name[16];
 unsigned int bootMode;
+} romData_t;
 
-} romData_t = {
+
+
+
+const romData_t resetRomData = {
+{0xAA},
 {"Unconfigured"},
 {0},
-
 };
 
-# 52
+# 41
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -10639,7 +10641,25 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
-# 7 "interface.c"
+# 6 "flash.h"
+extern romData_t romData;
+
+typedef union{
+struct{
+romData_t RomData;
+};
+struct{
+unsigned char array[32];
+};
+}romHolder_t;
+
+
+const unsigned char romArray[32]@(0x2000U - 32);
+
+void flashRealod(void);
+void flashUpdate(void);
+
+# 8 "interface.c"
 void nrf24l01InterfaceInit(void){
 
 TRISAbits.TRISA0 = 0;
@@ -10687,5 +10707,7 @@ PIE0bits.INTE = enable;
 }
 
 void exception(unsigned char exception){
-
+romData.bootMode = exception;
+flashUpdate();
+asm("reset");
 }

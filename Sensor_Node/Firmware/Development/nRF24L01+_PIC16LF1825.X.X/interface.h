@@ -3,39 +3,28 @@
 
 #include <xc.h> // include processor files - each processor file is guarded. 
 
- #define NV_MEM_SIZE 32 // Erase block size
- extern const unsigned char NVMEM[NV_MEM_SIZE];         
-
- // NV parameters stored in highest 32 words of program memory.     
+  // NV parameters stored in highest 32 words of program memory.     
  // This is in the special "high endurance" part of Flash.     
  //     
  // The highest address in '1503 is 0x7FF, so...
- 
- 
- const struct {
+
+
+typedef struct{
+    unsigned char check;
     char name[16];
     unsigned int bootMode;
-    
- } romData_t = {
+} romData_t;
+
+//#define romData_s (sizeof(romData_t))
+#define romData_s 32
+
+const romData_t resetRomData = {
+     {0xAA},
      {"Unconfigured"},
-     {0},
-     
- };
- #define NV_ADDRESS (0x2000U - sizeof(romData_t));
+     {0},    
+};
 
-// const unsigned char NVMEM[NV_MEM_SIZE]@NV_ADDRESS = {
-//    'U', 'n', 'c', 'o', 'n', 'f', 'i', 'g', 'u', 'r', 'e', 'd', 0, 0, 0, 0,   //FLASH_OFFSET_NAME
-//    0x0000,                                                                     //FLASH_OFFSET_BOOT_COUNT
-//    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-// };
-
-#define FLASH_OFFSET_NAME_LENGTH		16
-#define FLASH_OFFSET_NAME				0
- 
-#define FLASH_OFFSET_BOOT_REASON_LENGTH	1
-#define FLASH_OFFSET_BOOT_REASON		FLASH_OFFSET_NAME + FLASH_OFFSET_NAME_LENGTH
- 
- 
+#define romSize 0x2000U
 
 #define _XTAL_FREQ 16000000
 
