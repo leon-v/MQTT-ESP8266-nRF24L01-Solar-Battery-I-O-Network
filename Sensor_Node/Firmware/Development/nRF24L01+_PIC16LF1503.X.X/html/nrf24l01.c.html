@@ -1,0 +1,234 @@
+<HTML>
+<HEAD>
+<TITLE>Listing of nrf24l01.c</TITLE>
+<LINK rel=stylesheet href="udf_styles.css" type="text/css">
+</HEAD>
+<BODY>
+<table class="">
+<tr><td><code><i>     1</i> </code></td><td><code>&nbsp #include&nbsp&lsaquo  xc.h&rsaquo  </code></td></tr>
+<tr><td><code><i>     2</i> </code></td><td><code>&nbsp #include&nbsp "nRF24L01+_types.h"</code></td></tr>
+<tr><td><code><i>     3</i> </code></td><td><code>&nbsp #include&nbsp "nrf24l01.h"</code></td></tr>
+<tr><td><code><i>     4</i> </code></td><td><code>&nbsp #include&nbsp "flash.h"</code></td></tr>
+<tr><td><code><i>     5</i> </code></td><td><code>&nbsp #include&nbsp "interface.h"</code></td></tr>
+<tr><td><code><i>     6</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>     7</i> </code></td><td><code>&nbsp n_STATUS_t&nbsp status;</code></td></tr>
+<tr><td><code><i>     8</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>     9</i> </code></td><td><code>&nbsp unsigned&nbsp char&nbsp nrf24l01Send(unsigned&nbsp char&nbsp command,unsigned&nbsp char&nbsp data)&nbsp {</code></td></tr>
+<tr><td><code><i>    10</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    11</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01SPIStart();</code></td></tr>
+<tr><td><code><i>    12</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    13</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp status.byte&nbsp =&nbsp nrf24l01SPISend(command);</code></td></tr>
+<tr><td><code><i>    14</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp data&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp =&nbsp nrf24l01SPISend(data);</code></td></tr>
+<tr><td><code><i>    15</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    16</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01SPIEnd();</code></td></tr>
+<tr><td><code><i>    17</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    18</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp return&nbsp data;</code></td></tr>
+<tr><td><code><i>    19</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    20</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    21</i> </code></td><td><code>&nbsp void&nbsp nrf24l01ISR(void){</code></td></tr>
+<tr><td><code><i>    22</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    23</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp status.byte&nbsp =&nbsp nrf24l01Send(n_R_REGISTER&nbsp |&nbsp n_STATUS,&nbsp 0);</code></td></tr>
+<tr><td><code><i>    24</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    25</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp if&nbsp (status.TX_DS){</code></td></tr>
+<tr><td><code><i>    26</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp status.TX_DS&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>    27</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_STATUS,&nbsp status.byte);</code></td></tr>
+<tr><td><code><i>    28</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    29</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    30</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    31</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    32</i> </code></td><td><code>&nbsp void&nbsp nrf24l01SetTransmitMode(void){</code></td></tr>
+<tr><td><code><i>    33</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    34</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01CELow();</code></td></tr>
+<tr><td><code><i>    35</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    36</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp delayUs(200);</code></td></tr>
+<tr><td><code><i>    37</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    38</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp n_CONFIG_t&nbsp config;</code></td></tr>
+<tr><td><code><i>    39</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp config.byte&nbsp =&nbsp nrf24l01Send(n_R_REGISTER&nbsp |&nbsp n_CONFIG,&nbsp 0);</code></td></tr>
+<tr><td><code><i>    40</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp if&nbsp (config.PRIM_RX&nbsp ==&nbsp 1){</code></td></tr>
+<tr><td><code><i>    41</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp config.PRIM_RX&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    42</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_CONFIG,&nbsp config.byte);</code></td></tr>
+<tr><td><code><i>    43</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp delayUs(200);</code></td></tr>
+<tr><td><code><i>    44</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    45</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    46</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    47</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    48</i> </code></td><td><code>&nbsp void&nbsp nrf24l01SetRecieveMode(void){</code></td></tr>
+<tr><td><code><i>    49</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    50</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01CELow();</code></td></tr>
+<tr><td><code><i>    51</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    52</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp delayUs(200);</code></td></tr>
+<tr><td><code><i>    53</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    54</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp n_CONFIG_t&nbsp config;</code></td></tr>
+<tr><td><code><i>    55</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp config.byte&nbsp =&nbsp nrf24l01Send(n_R_REGISTER&nbsp |&nbsp n_CONFIG,&nbsp 0);</code></td></tr>
+<tr><td><code><i>    56</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp if&nbsp (config.PRIM_RX&nbsp ==&nbsp 0){</code></td></tr>
+<tr><td><code><i>    57</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp config.PRIM_RX&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>    58</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_CONFIG,&nbsp config.byte);</code></td></tr>
+<tr><td><code><i>    59</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01CEHigh();</code></td></tr>
+<tr><td><code><i>    60</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp delayUs(200);</code></td></tr>
+<tr><td><code><i>    61</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    62</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    63</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    64</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    65</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    66</i> </code></td><td><code>&nbsp void&nbsp nrf24l01SendStart(void){</code></td></tr>
+<tr><td><code><i>    67</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    68</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01SetTransmitMode();</code></td></tr>
+<tr><td><code><i>    69</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    70</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01SPIStart();</code></td></tr>
+<tr><td><code><i>    71</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    72</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01SPISend(n_W_TX_PAYLOAD);</code></td></tr>
+<tr><td><code><i>    73</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    74</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01SendFlash(FLASH_OFFSET_NAME);</code></td></tr>
+<tr><td><code><i>    75</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    76</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    77</i> </code></td><td><code>&nbsp void&nbsp nrf24l01SendString(char&nbsp *&nbsp string){</code></td></tr>
+<tr><td><code><i>    78</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp unsigned&nbsp char&nbsp i;</code></td></tr>
+<tr><td><code><i>    79</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp for&nbsp (i&nbsp =&nbsp 0;&nbsp string[i]&nbsp !=&nbsp '\0';&nbsp i++){</code></td></tr>
+<tr><td><code><i>    80</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SPISend(string[i]);</code></td></tr>
+<tr><td><code><i>    81</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    82</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>    83</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>    84</i> </code></td><td><code>&nbsp void&nbsp nrf24l01SendFlash(unsigned&nbsp char&nbsp offset){</code></td></tr>
+<tr><td><code><i>    85</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    86</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp unsigned&nbsp char&nbsp btye&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>    87</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp unsigned&nbsp char&nbsp i&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>    88</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    89</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp while&nbsp (1){</code></td></tr>
+<tr><td><code><i>    90</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp btye&nbsp =&nbsp read_flashmem((unsigned)&nbsp (offset&nbsp +&nbsp i));</code></td></tr>
+<tr><td><code><i>    91</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    92</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp if&nbsp (btye&nbsp ==&nbsp '\0'){</code></td></tr>
+<tr><td><code><i>    93</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp break;</code></td></tr>
+<tr><td><code><i>    94</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    95</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>    96</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01SPISend(btye);</code></td></tr>
+<tr><td><code><i>    97</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp i++;</code></td></tr>
+<tr><td><code><i>    98</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>    99</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>   100</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   101</i> </code></td><td><code>&nbsp void&nbsp nrf24l01SendEnd(void){</code></td></tr>
+<tr><td><code><i>   102</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   103</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01SPIEnd();</code></td></tr>
+<tr><td><code><i>   104</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   105</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01CEHigh();</code></td></tr>
+<tr><td><code><i>   106</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   107</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp delayUs(100);</code></td></tr>
+<tr><td><code><i>   108</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp delayMs(100);</code></td></tr>
+<tr><td><code><i>   109</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp Wait&nbsp for&nbsp the&nbsp IC&nbsp to&nbsp trigger&nbsp INT&nbsp and&nbsp wake&nbsp up</code></td></tr>
+<tr><td><code><i>   110</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp SLEEP();</code></td></tr>
+<tr><td><code><i>   111</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp NOP();</code></td></tr>
+<tr><td><code><i>   112</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp NOP();</code></td></tr>
+<tr><td><code><i>   113</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   114</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01CELow();</code></td></tr>
+<tr><td><code><i>   115</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   116</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp if&nbsp (!STATUSbits.nTO&nbsp &&&nbsp !STATUSbits.nPD){</code></td></tr>
+<tr><td><code><i>   117</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp RESET();</code></td></tr>
+<tr><td><code><i>   118</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp }</code></td></tr>
+<tr><td><code><i>   119</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   120</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   121</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>   122</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   123</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   124</i> </code></td><td><code>&nbsp void&nbsp nrf24l01InitRegisters(void){</code></td></tr>
+<tr><td><code><i>   125</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   126</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_CONFIG,&nbsp 0x00);</code></td></tr>
+<tr><td><code><i>   127</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   128</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp delayMs(10);</code></td></tr>
+<tr><td><code><i>   129</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   130</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp n_SETUP_AW_t&nbsp setupAW;</code></td></tr>
+<tr><td><code><i>   131</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp setupAW.byte&nbsp =&nbsp 0x00;</code></td></tr>
+<tr><td><code><i>   132</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp setupAW.AW&nbsp =&nbsp 3;</code></td></tr>
+<tr><td><code><i>   133</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_SETUP_AW,&nbsp setupAW.byte);</code></td></tr>
+<tr><td><code><i>   134</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   135</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   136</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp n_SETUP_RETR_t&nbsp setupRetries;</code></td></tr>
+<tr><td><code><i>   137</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp setupRetries.ARD&nbsp =&nbsp 15;&nbsp //4000us</code></td></tr>
+<tr><td><code><i>   138</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp setupRetries.ARC&nbsp =&nbsp 15;&nbsp //15&nbsp&nbsp retries</code></td></tr>
+<tr><td><code><i>   139</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_SETUP_RETR,&nbsp setupRetries.byte);</code></td></tr>
+<tr><td><code><i>   140</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   141</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp Set&nbsp Frequency</code></td></tr>
+<tr><td><code><i>   142</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp n_RF_CH_t&nbsp channel;</code></td></tr>
+<tr><td><code><i>   143</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp channel.RF_CH&nbsp =&nbsp RADIO_FREQUENCY;</code></td></tr>
+<tr><td><code><i>   144</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_RF_CH,&nbsp channel.byte);</code></td></tr>
+<tr><td><code><i>   145</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   146</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp Set&nbsp radio&nbsp to&nbsp 2&nbsp Mbps&nbsp and&nbsp high&nbsp power.&nbsp&nbsp Leave&nbsp LNA_HCURR&nbsp at&nbsp its&nbsp default.</code></td></tr>
+<tr><td><code><i>   147</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp n_RF_SETUP_t&nbsp rfSetup;</code></td></tr>
+<tr><td><code><i>   148</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp rfSetup.RF_DR_LOW&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   149</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp rfSetup.RF_DR_HIGH&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   150</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp rfSetup.RF_PWR&nbsp =&nbsp 3;</code></td></tr>
+<tr><td><code><i>   151</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_RF_SETUP,&nbsp rfSetup.byte);</code></td></tr>
+<tr><td><code><i>   152</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   153</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp Enable&nbsp 2-byte&nbsp CRC&nbsp and&nbsp power&nbsp up&nbsp in&nbsp receive&nbsp mode.</code></td></tr>
+<tr><td><code><i>   154</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp n_CONFIG_t&nbsp config;</code></td></tr>
+<tr><td><code><i>   155</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp config.PRIM_RX&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   156</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp config.EN_CRC&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   157</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp config.CRCO&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   158</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp config.PWR_UP&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   159</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_CONFIG,&nbsp config.byte);</code></td></tr>
+<tr><td><code><i>   160</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   161</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp Enable&nbsp all&nbsp data&nbsp pipes</code></td></tr>
+<tr><td><code><i>   162</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp n_EN_RXADDR_t&nbsp enRXAddr;</code></td></tr>
+<tr><td><code><i>   163</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enRXAddr.ERX_P0&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   164</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enRXAddr.ERX_P1&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   165</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enRXAddr.ERX_P2&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   166</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enRXAddr.ERX_P3&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   167</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enRXAddr.ERX_P4&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   168</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enRXAddr.ERX_P5&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   169</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_EN_RXADDR,&nbsp enRXAddr.byte);</code></td></tr>
+<tr><td><code><i>   170</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   171</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp //&nbsp Disable&nbsp Auto&nbsp ACK&nbsp MCU&nbsp needs&nbsp to&nbsp do&nbsp this</code></td></tr>
+<tr><td><code><i>   172</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp n_EN_AA_t&nbsp enAA;</code></td></tr>
+<tr><td><code><i>   173</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enAA.byte&nbsp =&nbsp nrf24l01Send(n_R_REGISTER&nbsp |&nbsp n_EN_AA,&nbsp 0);</code></td></tr>
+<tr><td><code><i>   174</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enAA.ENAA_P0&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   175</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enAA.ENAA_P1&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   176</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enAA.ENAA_P2&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   177</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enAA.ENAA_P3&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   178</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enAA.ENAA_P4&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   179</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp enAA.ENAA_P5&nbsp =&nbsp 0;</code></td></tr>
+<tr><td><code><i>   180</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_EN_AA,&nbsp enAA.byte);</code></td></tr>
+<tr><td><code><i>   181</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   182</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   183</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp Set&nbsp dynamic&nbsp payload&nbsp length</code></td></tr>
+<tr><td><code><i>   184</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp n_FEATURE_t&nbsp feature;</code></td></tr>
+<tr><td><code><i>   185</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp feature.byte&nbsp =&nbsp nrf24l01Send(n_R_REGISTER&nbsp |&nbsp n_FEATURE,&nbsp 0);</code></td></tr>
+<tr><td><code><i>   186</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp feature.EN_DPL&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   187</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_FEATURE,&nbsp feature.byte);</code></td></tr>
+<tr><td><code><i>   188</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   189</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp n_DYNPD_t&nbsp DynPD;</code></td></tr>
+<tr><td><code><i>   190</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp DynPD.byte&nbsp =&nbsp nrf24l01Send(n_R_REGISTER&nbsp |&nbsp n_DYNPD,&nbsp 0);</code></td></tr>
+<tr><td><code><i>   191</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp DynPD.DPL_P0&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   192</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp DynPD.DPL_P1&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   193</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp DynPD.DPL_P2&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   194</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp DynPD.DPL_P3&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   195</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp DynPD.DPL_P4&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   196</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp DynPD.DPL_P5&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   197</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_DYNPD,&nbsp DynPD.byte);&nbsp </code></td></tr>
+<tr><td><code><i>   198</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   199</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp clear&nbsp the&nbsp interrupt&nbsp flags&nbsp in&nbsp case&nbsp the&nbsp radio's&nbsp still&nbsp asserting&nbsp an&nbsp old&nbsp unhandled&nbsp interrupt</code></td></tr>
+<tr><td><code><i>   200</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp status.byte&nbsp =&nbsp 0x00;</code></td></tr>
+<tr><td><code><i>   201</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp status.RX_DR&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   202</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp status.TX_DS&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   203</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp status.MAX_RT&nbsp =&nbsp 1;</code></td></tr>
+<tr><td><code><i>   204</i> </code></td><td><code>&nbsp //&nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_W_REGISTER&nbsp |&nbsp n_STATUS,&nbsp status.byte);</code></td></tr>
+<tr><td><code><i>   205</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   206</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp //&nbsp flush&nbsp the&nbsp FIFOs&nbsp in&nbsp case&nbsp there&nbsp are&nbsp old&nbsp data&nbsp in&nbsp them.</code></td></tr>
+<tr><td><code><i>   207</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_FLUSH_TX,&nbsp 0);</code></td></tr>
+<tr><td><code><i>   208</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01Send(n_FLUSH_RX,&nbsp 0);</code></td></tr>
+<tr><td><code><i>   209</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>   210</i> </code></td><td><code>&nbsp </code></td></tr>
+<tr><td><code><i>   211</i> </code></td><td><code>&nbsp void&nbsp nrf24l01Init(void){</code></td></tr>
+<tr><td><code><i>   212</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   213</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   214</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01InterfaceInit();</code></td></tr>
+<tr><td><code><i>   215</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   216</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp /*&nbsp SPI&nbsp INIT&nbsp */</code></td></tr>
+<tr><td><code><i>   217</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   218</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01CELow();</code></td></tr>
+<tr><td><code><i>   219</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   220</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp delayMs(11);</code></td></tr>
+<tr><td><code><i>   221</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   222</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp nrf24l01InitRegisters();</code></td></tr>
+<tr><td><code><i>   223</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp </code></td></tr>
+<tr><td><code><i>   224</i> </code></td><td><code>&nbsp &nbsp&nbsp&nbsp&nbsp delayMs(2);</code></td></tr>
+<tr><td><code><i>   225</i> </code></td><td><code>&nbsp }</code></td></tr>
+<tr><td><code><i>   226</i> </code></td><td><code>&nbsp </code></code></BODY>
+</HTML>
