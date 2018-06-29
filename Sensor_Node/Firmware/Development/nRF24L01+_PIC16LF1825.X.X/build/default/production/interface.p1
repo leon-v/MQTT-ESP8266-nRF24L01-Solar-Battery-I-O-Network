@@ -26,17 +26,50 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S80 . . ]
 "1559
 [v _TRISCbits `VS80 ~T0 @X0 0 e@142 ]
-"4847
-[s S233 :4 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S233 . SSPM CKP SSPEN SSPOV WCOL ]
-"4854
-[s S234 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S234 . SSPM0 SSPM1 SSPM2 SSPM3 ]
-"4846
-[u S232 `S233 1 `S234 1 ]
-[n S232 . . . ]
-"4861
-[v _SSPCON1bits `VS232 ~T0 @X0 0 e@533 ]
+"4722
+[s S227 :4 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S227 . SSPM CKP SSPEN SSPOV WCOL ]
+"4729
+[s S228 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S228 . SSPM0 SSPM1 SSPM2 SSPM3 ]
+"4721
+[u S226 `S227 1 `S228 1 ]
+[n S226 . . . ]
+"4736
+[v _SSP1CON1bits `VS226 ~T0 @X0 0 e@533 ]
+"14011
+[s S718 :5 `uc 1 ]
+[n S718 . RC1PPS ]
+"14014
+[s S719 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S719 . RC1PPS0 RC1PPS1 RC1PPS2 RC1PPS3 RC1PPS4 ]
+"14010
+[u S717 `S718 1 `S719 1 ]
+[n S717 . . . ]
+"14022
+[v _RC1PPSbits `VS717 ~T0 @X0 0 e@3745 ]
+"14063
+[s S721 :5 `uc 1 ]
+[n S721 . RC2PPS ]
+"14066
+[s S722 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S722 . RC2PPS0 RC2PPS1 RC2PPS2 RC2PPS3 RC2PPS4 ]
+"14062
+[u S720 `S721 1 `S722 1 ]
+[n S720 . . . ]
+"14074
+[v _RC2PPSbits `VS720 ~T0 @X0 0 e@3746 ]
+"13959
+[s S715 :5 `uc 1 ]
+[n S715 . RC0PPS ]
+"13962
+[s S716 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S716 . RC0PPS0 RC0PPS1 RC0PPS2 RC0PPS3 RC0PPS4 ]
+"13958
+[u S714 `S715 1 `S716 1 ]
+[n S714 . . . ]
+"13970
+[v _RC0PPSbits `VS714 ~T0 @X0 0 e@3744 ]
 "4592
 [s S223 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S223 . BF UA R_nW S P D_nA CKE SMP ]
@@ -7381,129 +7414,138 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.c: 35: TRISCbits.TRISC0 = 0;
 "35
 [e = . . _TRISCbits 0 0 -> -> 0 `i `uc ]
-[; ;interface.c: 37: SSPCON1bits.SSPEN = 0;
+[; ;interface.c: 37: SSP1CON1bits.SSPEN = 0;
 "37
-[e = . . _SSPCON1bits 0 2 -> -> 0 `i `uc ]
-[; ;interface.c: 38: SSPCON1bits.CKP = 0;
-"38
-[e = . . _SSPCON1bits 0 1 -> -> 0 `i `uc ]
-[; ;interface.c: 39: SSP1STATbits.CKE = 1;
+[e = . . _SSP1CON1bits 0 2 -> -> 0 `i `uc ]
+[; ;interface.c: 39: RC1PPSbits.RC1PPS = 0b10001;
 "39
-[e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;interface.c: 40: SSPCON1bits.SSPM = 0b0010;
+[e = . . _RC1PPSbits 0 0 -> -> 17 `i `uc ]
+[; ;interface.c: 40: RC2PPSbits.RC2PPS = 0b11001;
 "40
-[e = . . _SSPCON1bits 0 0 -> -> 2 `i `uc ]
-[; ;interface.c: 42: SSPCON1bits.SSPEN = 1;
-"42
-[e = . . _SSPCON1bits 0 2 -> -> 1 `i `uc ]
-[; ;interface.c: 44: }
+[e = . . _RC2PPSbits 0 0 -> -> 25 `i `uc ]
+[; ;interface.c: 41: RC0PPSbits.RC0PPS = 0b11000;
+"41
+[e = . . _RC0PPSbits 0 0 -> -> 24 `i `uc ]
+[; ;interface.c: 43: SSP1CON1bits.CKP = 0;
+"43
+[e = . . _SSP1CON1bits 0 1 -> -> 0 `i `uc ]
+[; ;interface.c: 44: SSP1STATbits.CKE = 1;
 "44
+[e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
+[; ;interface.c: 45: SSP1CON1bits.SSPM = 0b0010;
+"45
+[e = . . _SSP1CON1bits 0 0 -> -> 2 `i `uc ]
+[; ;interface.c: 47: SSP1CON1bits.SSPEN = 1;
+"47
+[e = . . _SSP1CON1bits 0 2 -> -> 1 `i `uc ]
+[; ;interface.c: 49: }
+"49
 [e :UE 924 ]
 }
-"46
+"51
 [p l 1 ]
-"47
+"52
 [v _nrf24l01SPISend `(uc ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 47: unsigned char nrf24l01SPISend(unsigned char data){
+[; ;interface.c: 52: unsigned char nrf24l01SPISend(unsigned char data){
 [e :U _nrf24l01SPISend ]
 [v _data `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 48: SSP1BUF = data;
-"48
+[; ;interface.c: 53: SSP1BUF = data;
+"53
 [e = _SSP1BUF _data ]
-[; ;interface.c: 50: PORTCbits.RC4 = 1;
-"50
+[; ;interface.c: 55: PORTCbits.RC4 = 1;
+"55
 [e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
-[; ;interface.c: 52: while (!SSP1STATbits.BF){
-"52
+[; ;interface.c: 57: while (!SSP1STATbits.BF){
+"57
 [e $U 926  ]
 [e :U 927 ]
 {
-[; ;interface.c: 53: __nop();
-"53
+[; ;interface.c: 58: __nop();
+"58
 [e ( ___nop ..  ]
-"54
+"59
 }
 [e :U 926 ]
-"52
+"57
 [e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 927  ]
 [e :U 928 ]
-[; ;interface.c: 54: }
-[; ;interface.c: 56: return SSP1BUF;
-"56
+[; ;interface.c: 59: }
+[; ;interface.c: 61: return SSP1BUF;
+"61
 [e ) _SSP1BUF ]
 [e $UE 925  ]
-[; ;interface.c: 57: }
-"57
+[; ;interface.c: 62: }
+"62
 [e :UE 925 ]
 }
-"59
+"64
 [p l 1 ]
-"60
+"65
 [v _nrf24l01SPIStart `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 60: void nrf24l01SPIStart(void){
+[; ;interface.c: 65: void nrf24l01SPIStart(void){
 [e :U _nrf24l01SPIStart ]
 [f ]
-[; ;interface.c: 61: nrf24l01CSLow();
-"61
-[e ( _nrf24l01CSLow ..  ]
-[; ;interface.c: 62: _delay((unsigned long)((10)*(16000000/4000000.0)));
-"62
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;interface.c: 63: }
-"63
-[e :UE 929 ]
-}
-"65
-[p l 1 ]
+[; ;interface.c: 66: nrf24l01CSLow();
 "66
-[v _nrf24l01SPIEnd `(v ~T0 @X0 1 ef ]
-{
-[; ;interface.c: 66: void nrf24l01SPIEnd(void){
-[e :U _nrf24l01SPIEnd ]
-[f ]
+[e ( _nrf24l01CSLow ..  ]
 [; ;interface.c: 67: _delay((unsigned long)((10)*(16000000/4000000.0)));
 "67
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;interface.c: 68: nrf24l01CSHigh();
+[; ;interface.c: 68: }
 "68
+[e :UE 929 ]
+}
+"70
+[p l 1 ]
+"71
+[v _nrf24l01SPIEnd `(v ~T0 @X0 1 ef ]
+{
+[; ;interface.c: 71: void nrf24l01SPIEnd(void){
+[e :U _nrf24l01SPIEnd ]
+[f ]
+[; ;interface.c: 72: _delay((unsigned long)((10)*(16000000/4000000.0)));
+"72
+[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[; ;interface.c: 73: nrf24l01CSHigh();
+"73
 [e ( _nrf24l01CSHigh ..  ]
-[; ;interface.c: 69: }
-"69
+[; ;interface.c: 74: }
+"74
 [e :UE 930 ]
 }
-"71
+"76
 [p l 1 ]
-"72
+"77
 [v _enableInterrupts `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 72: void enableInterrupts(unsigned char enable){
+[; ;interface.c: 77: void enableInterrupts(unsigned char enable){
 [e :U _enableInterrupts ]
 [v _enable `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 73: PIE0bits.INTE = enable;
-"73
+[; ;interface.c: 78: PIE0bits.INTE = enable;
+"78
 [e = . . _PIE0bits 0 0 _enable ]
-[; ;interface.c: 74: }
-"74
+[; ;interface.c: 79: }
+"79
 [e :UE 931 ]
 }
-"76
+"81
 [v _exception `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 76: void exception(unsigned char exception){
+[; ;interface.c: 81: void exception(unsigned char exception){
 [e :U _exception ]
 [v _exception `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 77: romData.bootMode = exception;
-"77
+[; ;interface.c: 82: romData.bootMode = exception;
+"82
 [e = . _romData 2 -> _exception `ui ]
-[; ;interface.c: 78: flashUpdate();
-"78
+[; ;interface.c: 83: flashUpdate();
+"83
 [e ( _flashUpdate ..  ]
-[; ;interface.c: 80: }
-"80
+[; ;interface.c: 85: }
+"85
 [e :UE 932 ]
 }

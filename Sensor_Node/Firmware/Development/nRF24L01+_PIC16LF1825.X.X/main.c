@@ -44,21 +44,16 @@ unsigned long getADCValue(unsigned char channel, unsigned long divider){
 }
 
 void sleep(){
-	//while (1){
+	while (1){
         
-    delayUs(50000);
-    delayUs(50000);
-    delayUs(50000);
-    delayUs(50000);
-    delayUs(50000);
-//		SLEEP();
-//		NOP();
-//		NOP();
-//
-//		if (!STATUSbits.nTO && !STATUSbits.nPD) {
-//			return;
-//		}
-	//}
+		SLEEP();
+		NOP();
+		NOP();
+
+		if (!STATUSbits.nTO && !STATUSbits.nPD) {
+			return;
+		}
+	}
 }
 
 void checkRxData(void){
@@ -189,12 +184,13 @@ void main(void) {
     
     /* Setup Interrupt Pin */
     TRISAbits.TRISA2 = 1;
+	RA2PPSbits.RA2PPS = 0b00010;// A2
     PIE0bits.INTE = 1;
     INTCONbits.INTEDG = 0;
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 15;
+    WDTCONbits.WDTPS = 10;
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;

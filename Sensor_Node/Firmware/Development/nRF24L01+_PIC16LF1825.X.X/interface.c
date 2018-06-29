@@ -34,12 +34,17 @@ void nrf24l01InterfaceInit(void){
     TRISCbits.TRISC2 = 0; // MOSI
     TRISCbits.TRISC0 = 0; // CLK
     
-    SSPCON1bits.SSPEN = 0; 
-    SSPCON1bits.CKP = 0;
+    SSP1CON1bits.SSPEN = 0; 
+	
+	RC1PPSbits.RC1PPS = 0b10001;
+	RC2PPSbits.RC2PPS = 0b11001;
+	RC0PPSbits.RC0PPS = 0b11000;
+	
+    SSP1CON1bits.CKP = 0;
     SSP1STATbits.CKE = 1;
-    SSPCON1bits.SSPM = 0b0010;
+    SSP1CON1bits.SSPM = 0b0010;
     
-    SSPCON1bits.SSPEN = 1;
+    SSP1CON1bits.SSPEN = 1;
     
 }
 

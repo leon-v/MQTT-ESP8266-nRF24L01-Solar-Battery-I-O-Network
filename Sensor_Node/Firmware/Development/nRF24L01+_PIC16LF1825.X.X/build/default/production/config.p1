@@ -14,7 +14,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "15
 [p x PWRTE=ON ]
 "16
-[p x WDTE=OFF ]
+[p x WDTE=ON ]
 "17
 [p x LPBOREN=OFF ]
 "18

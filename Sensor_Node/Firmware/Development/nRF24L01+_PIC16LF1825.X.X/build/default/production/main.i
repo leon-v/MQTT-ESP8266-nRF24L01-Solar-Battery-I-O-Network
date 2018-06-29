@@ -11051,15 +11051,16 @@ return adcSum;
 }
 
 void sleep(){
+while (1){
 
+asm("sleep");
+__nop();
+__nop();
 
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-
-# 62
+if (!STATUSbits.nTO && !STATUSbits.nPD) {
+return;
+}
+}
 }
 
 void checkRxData(void){
@@ -11138,7 +11139,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 145
+# 140
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11153,7 +11154,7 @@ strcpy(nrf24l01TXName, "UnconfiguredH");
 
 nrf24l01Init(0);
 
-# 163
+# 158
 FVRCONbits.FVREN = 0;
 FVRCONbits.ADFVR = 1;
 FVRCONbits.FVREN = 1;
@@ -11183,12 +11184,13 @@ ADCON0bits.ADON = 1;
 
 
 TRISAbits.TRISA2 = 1;
+RA2PPSbits.RA2PPS = 0b00010;
 PIE0bits.INTE = 1;
 INTCONbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 15;
+WDTCONbits.WDTPS = 10;
 
 
 TRISAbits.TRISA5 = 0;

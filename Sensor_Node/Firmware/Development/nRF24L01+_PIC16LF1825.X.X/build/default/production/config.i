@@ -12,7 +12,7 @@
 
 #pragma config MCLRE = ON
 #pragma config PWRTE = ON
-#pragma config WDTE = OFF
+#pragma config WDTE = ON
 #pragma config LPBOREN = OFF
 #pragma config BOREN = OFF
 #pragma config BORV = LOW
