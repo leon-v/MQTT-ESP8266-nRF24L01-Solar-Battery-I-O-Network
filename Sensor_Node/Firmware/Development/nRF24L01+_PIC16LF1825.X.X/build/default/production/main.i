@@ -10745,7 +10745,12 @@ const romData_t resetRomData = {
 {0},
 };
 
-# 41
+# 36
+void nrf24l01CELow(void);
+void nrf24l01CEHigh(void);
+void nrf24l01CSLow(void);
+void nrf24l01CSHigh(void);
+
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -11046,16 +11051,15 @@ return adcSum;
 }
 
 void sleep(){
-while (1){
 
-asm("sleep");
-__nop();
-__nop();
 
-if (!STATUSbits.nTO && !STATUSbits.nPD) {
-return;
-}
-}
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+
+# 62
 }
 
 void checkRxData(void){
@@ -11073,6 +11077,7 @@ return;
 void loop(){
 
 
+asm("clrwdt");
 
 strcpy(nrf24l01TXTopic, "DBG");
 utoa(nrf24l01TXValue, counter, 10);
@@ -11119,25 +11124,36 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 124
+ODCONA = 0x00;
+ODCONC = 0x00;
+
+SLRCONA = 0x00;
+SLRCONC = 0x00;
+
+INLVLA = 0x00;
+INLVLC = 0x00;
+
+TRISCbits.TRISC5 = 0;
+TRISCbits.TRISC4 = 0;
+
+PORTCbits.RC4 = 0;
+
+# 145
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
-OSCCON1bits.NOSC = 0b000;
-OSCCON2bits.COSC = 0b000;
 
-OSCCON1bits.NDIV = 0b000;
-OSCCON2bits.CDIV = 0b000;
+
 
 _delay((unsigned long)((10)*(16000000/4000.0)));
 
-flashRealod();
 
-strcpy(nrf24l01TXName, romData.name);
+
+strcpy(nrf24l01TXName, "UnconfiguredH");
 
 nrf24l01Init(0);
 
-# 145
+# 163
 FVRCONbits.FVREN = 0;
 FVRCONbits.ADFVR = 1;
 FVRCONbits.FVREN = 1;
@@ -11172,7 +11188,7 @@ INTCONbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 11;
+WDTCONbits.WDTPS = 15;
 
 
 TRISAbits.TRISA5 = 0;
@@ -11188,7 +11204,10 @@ utoa(nrf24l01TXValue, romData.bootMode, 10);
 
 nrf24l01TXPacketData.byte = 0x00;
 nrf24l01TXPacketData.ACKRequest = 0;
+
+
 nrf24l01SendString();
+
 sleep();
 
 while(1){

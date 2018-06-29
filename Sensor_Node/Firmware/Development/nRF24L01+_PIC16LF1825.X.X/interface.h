@@ -33,10 +33,10 @@ const romData_t resetRomData = {
 
 #define append(x) x + strlen(x)
 
-#define nrf24l01CELow() PORTAbits.RA0 = 0
-#define nrf24l01CEHigh() PORTAbits.RA0 = 1
-#define nrf24l01CSLow() PORTAbits.RA1 = 0
-#define nrf24l01CSHigh() PORTAbits.RA1 = 1
+void nrf24l01CELow(void);
+void nrf24l01CEHigh(void);
+void nrf24l01CSLow(void);
+void nrf24l01CSHigh(void);
 
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);

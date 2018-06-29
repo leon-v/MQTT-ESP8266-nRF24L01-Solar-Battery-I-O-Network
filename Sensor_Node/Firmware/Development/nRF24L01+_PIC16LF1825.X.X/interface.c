@@ -4,7 +4,27 @@
 
 
 /* nrf24l01 Interfaces */
+#pragma interrupt_level 1
+void nrf24l01CELow(void){
+    PORTAbits.RA0 = 0;
+}
 
+#pragma interrupt_level 1
+void nrf24l01CEHigh(void){
+    PORTAbits.RA0 = 1;
+}
+
+#pragma interrupt_level 1
+void nrf24l01CSLow(void){
+    PORTAbits.RA1 = 0;
+}
+
+#pragma interrupt_level 1
+void nrf24l01CSHigh(void){
+    PORTAbits.RA1 = 1;
+}
+
+#pragma interrupt_level 1
 void nrf24l01InterfaceInit(void){
     
     TRISAbits.TRISA0 = 0; // CE out
@@ -17,7 +37,7 @@ void nrf24l01InterfaceInit(void){
     SSPCON1bits.SSPEN = 0; 
     SSPCON1bits.CKP = 0;
     SSP1STATbits.CKE = 1;
-    SSPCON1bits.SSPM = 0b0000;
+    SSPCON1bits.SSPM = 0b0010;
     
     SSPCON1bits.SSPEN = 1;
     
@@ -26,6 +46,8 @@ void nrf24l01InterfaceInit(void){
 #pragma interrupt_level 1
 unsigned char nrf24l01SPISend(unsigned char data){
     SSP1BUF = data;
+    
+    PORTCbits.RC4 = 1;
     
     while (!SSP1STATbits.BF){
         NOP();
@@ -54,5 +76,5 @@ void enableInterrupts(unsigned char enable){
 void exception(unsigned char exception){
     romData.bootMode = exception;
     flashUpdate();
-    RESET();
+//    RESET();
 }

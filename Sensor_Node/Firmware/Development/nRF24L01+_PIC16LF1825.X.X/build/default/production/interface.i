@@ -10631,7 +10631,12 @@ const romData_t resetRomData = {
 {0},
 };
 
-# 41
+# 36
+void nrf24l01CELow(void);
+void nrf24l01CEHigh(void);
+void nrf24l01CSLow(void);
+void nrf24l01CSHigh(void);
+
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -10659,7 +10664,29 @@ const unsigned char romArray[32]@(0x2000U - 32);
 void flashRealod(void);
 void flashUpdate(void);
 
-# 8 "interface.c"
+
+# 7 "interface.c"
+#pragma interrupt_level 1
+void nrf24l01CELow(void){
+PORTAbits.RA0 = 0;
+}
+
+#pragma interrupt_level 1
+void nrf24l01CEHigh(void){
+PORTAbits.RA0 = 1;
+}
+
+#pragma interrupt_level 1
+void nrf24l01CSLow(void){
+PORTAbits.RA1 = 0;
+}
+
+#pragma interrupt_level 1
+void nrf24l01CSHigh(void){
+PORTAbits.RA1 = 1;
+}
+
+#pragma interrupt_level 1
 void nrf24l01InterfaceInit(void){
 
 TRISAbits.TRISA0 = 0;
@@ -10672,7 +10699,7 @@ TRISCbits.TRISC0 = 0;
 SSPCON1bits.SSPEN = 0;
 SSPCON1bits.CKP = 0;
 SSP1STATbits.CKE = 1;
-SSPCON1bits.SSPM = 0b0000;
+SSPCON1bits.SSPM = 0b0010;
 
 SSPCON1bits.SSPEN = 1;
 
@@ -10681,6 +10708,8 @@ SSPCON1bits.SSPEN = 1;
 #pragma interrupt_level 1
 unsigned char nrf24l01SPISend(unsigned char data){
 SSP1BUF = data;
+
+PORTCbits.RC4 = 1;
 
 while (!SSP1STATbits.BF){
 __nop();
@@ -10691,14 +10720,14 @@ return SSP1BUF;
 
 #pragma interrupt_level 1
 void nrf24l01SPIStart(void){
-PORTAbits.RA1 = 0;
+nrf24l01CSLow();
 _delay((unsigned long)((10)*(16000000/4000000.0)));
 }
 
 #pragma interrupt_level 1
 void nrf24l01SPIEnd(void){
 _delay((unsigned long)((10)*(16000000/4000000.0)));
-PORTAbits.RA1 = 1;
+nrf24l01CSHigh();
 }
 
 #pragma interrupt_level 1
@@ -10709,5 +10738,5 @@ PIE0bits.INTE = enable;
 void exception(unsigned char exception){
 romData.bootMode = exception;
 flashUpdate();
-asm("reset");
+
 }

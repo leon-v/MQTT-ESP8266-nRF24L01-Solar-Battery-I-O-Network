@@ -168,14 +168,8 @@ void nrf24l01SendString(char waitForAck){
 	// status variable state accordingly
 	nrf24l01.waitForTXACK = waitForAck;
 	
-	if (counter){
-		counter--;
-	}
-	
 	// Define where to re-start the send if the previous one failed
-RESEND:
-
-	counter++;
+	RESEND:
 	
 	// Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
@@ -248,6 +242,7 @@ RESEND:
 void nrf24l01InitRegisters(void){
     
     n_CONFIG_t config;
+    
 	config.PWR_UP = 0;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
     
@@ -338,10 +333,10 @@ void nrf24l01Init(void){
     
     nrf24l01CELow();
     
-    delayUs(50000);
+    delayMs(11);
     
     nrf24l01InitRegisters();
     
-    delayUs(1000);
+    delayMs(2);
 }
 

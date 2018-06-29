@@ -44,16 +44,21 @@ unsigned long getADCValue(unsigned char channel, unsigned long divider){
 }
 
 void sleep(){
-	while (1){
-		
-		SLEEP();
-		NOP();
-		NOP();
-
-		if (!STATUSbits.nTO && !STATUSbits.nPD) {
-			return;
-		}
-	}
+	//while (1){
+        
+    delayUs(50000);
+    delayUs(50000);
+    delayUs(50000);
+    delayUs(50000);
+    delayUs(50000);
+//		SLEEP();
+//		NOP();
+//		NOP();
+//
+//		if (!STATUSbits.nTO && !STATUSbits.nPD) {
+//			return;
+//		}
+	//}
 }
 
 void checkRxData(void){
@@ -71,6 +76,7 @@ void checkRxData(void){
 void loop(){
     
 	// Write payload data
+    CLRWDT();
 
 	strcpy(nrf24l01TXTopic, "DBG");
 	utoa(nrf24l01TXValue, counter, 10);
@@ -117,6 +123,21 @@ void main(void) {
     ANSELA = 0x00;
     ANSELC = 0x00;
     
+    ODCONA = 0x00;
+    ODCONC = 0x00;
+    
+    SLRCONA = 0x00;
+    SLRCONC = 0x00;
+    
+    INLVLA = 0x00;
+    INLVLC = 0x00;
+    
+    TRISCbits.TRISC5 = 0;
+    TRISCbits.TRISC4 = 0;
+    
+    PORTCbits.RC4 = 0;
+   
+    
     // Pin 11 is int
 //    RA2
     
@@ -124,17 +145,14 @@ void main(void) {
     INTCONbits.PEIE = 0;
     INTCONbits.GIE = 0;
     
-    OSCCON1bits.NOSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
-    OSCCON2bits.COSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
-    
-    OSCCON1bits.NDIV = 0b000;
-    OSCCON2bits.CDIV = 0b000;
+//    OSCCON1bits.NOSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
+//    OSCCON1bits.NDIV = 0b000;
     
     delayMs(10);
     
-    flashRealod();
+    //flashRealod();
     
-    strcpy(nrf24l01TXName, romData.name);
+    strcpy(nrf24l01TXName, "UnconfiguredH");
     
     nrf24l01Init(0);
     
@@ -176,7 +194,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 11;
+    WDTCONbits.WDTPS = 15;
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;
@@ -192,7 +210,10 @@ void main(void) {
     
     nrf24l01TXPacketData.byte = 0x00;
     nrf24l01TXPacketData.ACKRequest = 0;
+   
+    
 	nrf24l01SendString();
+//    PORTCbits.RC4 = 1;
 	sleep();
     
     while(1){

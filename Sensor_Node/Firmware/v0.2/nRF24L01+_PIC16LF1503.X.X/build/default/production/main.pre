@@ -4113,7 +4113,11 @@ void nrf24l01SPIEnd(void);
 
 void enableInterrupts(unsigned char enable);
 
-# 13 "main.c"
+# 23 "main.c"
+unsigned char nextMode = 10;
+unsigned char mode = 10;
+
+# 30
 unsigned char sleepLoop = 0;
 
 
@@ -4173,6 +4177,7 @@ if (!nrf24l01.RXPending){
 return;
 }
 
+counter++;
 }
 
 void loop(){
@@ -4213,7 +4218,7 @@ void main(void) {
 ANSELA = 0x00;
 ANSELC = 0x00;
 
-# 116
+# 134
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 

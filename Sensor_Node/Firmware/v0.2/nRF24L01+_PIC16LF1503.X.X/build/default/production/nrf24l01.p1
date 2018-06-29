@@ -3589,386 +3589,372 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.c: 169: nrf24l01.waitForTXACK = waitForAck;
 "169
 [e = . _nrf24l01 0 _waitForAck ]
-[; ;nrf24l01.c: 171: if (counter){
-"171
-[e $ ! != _counter -> -> 0 `i `ui 408  ]
-{
-[; ;nrf24l01.c: 172: counter--;
+[; ;nrf24l01.c: 172: RESEND:
 "172
-[e -- _counter -> -> 1 `i `ui ]
-"173
-}
 [e :U 408 ]
-[; ;nrf24l01.c: 173: }
-[; ;nrf24l01.c: 176: RESEND:
+[; ;nrf24l01.c: 175: i = 0xFF;
+"175
+[e = _i -> -> 255 `i `uc ]
+[; ;nrf24l01.c: 176: while (nrf24l01.TXBusy){
 "176
-[e :U 409 ]
-[; ;nrf24l01.c: 178: counter++;
-"178
-[e ++ _counter -> -> 1 `i `ui ]
-[; ;nrf24l01.c: 181: i = 0xFF;
-"181
-[e = _i -> -> 255 `i `uc ]
-[; ;nrf24l01.c: 182: while (nrf24l01.TXBusy){
-"182
-[e $U 410  ]
-[e :U 411 ]
-{
-[; ;nrf24l01.c: 183: if (!--i) {
-"183
-[e $ ! ! != -> =- _i -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 413  ]
-{
-[; ;nrf24l01.c: 184: goto RESEND;
-"184
 [e $U 409  ]
-"185
-}
-[e :U 413 ]
-[; ;nrf24l01.c: 185: }
-[; ;nrf24l01.c: 186: _delay((unsigned long)((100)*(16000000/4000000.0)));
-"186
-[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-"187
-}
 [e :U 410 ]
-"182
-[e $ != -> . _nrf24l01 1 `i -> -> -> 0 `i `Vuc `i 411  ]
+{
+[; ;nrf24l01.c: 177: if (!--i) {
+"177
+[e $ ! ! != -> =- _i -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 412  ]
+{
+[; ;nrf24l01.c: 178: goto RESEND;
+"178
+[e $U 408  ]
+"179
+}
 [e :U 412 ]
-[; ;nrf24l01.c: 187: }
-[; ;nrf24l01.c: 191: nrf24l01.TXBusy = 1;
-"191
-[e = . _nrf24l01 1 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 194: enableInterrupts(0);
-"194
-[e ( _enableInterrupts (1 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 197: nrf24l01SetRXMode(0);
-"197
-[e ( _nrf24l01SetRXMode (1 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 200: nrf24l01SPIStart();
-"200
-[e ( _nrf24l01SPIStart ..  ]
-[; ;nrf24l01.c: 203: nrf24l01SPISend(0b10110000);
-"203
-[e ( _nrf24l01SPISend (1 -> -> 176 `i `uc ]
-[; ;nrf24l01.c: 206: for (i = 0; (nrf24l01Name[i] != '\0') && (i < sizeof(nrf24l01Name)); i++){
-"206
-{
-[e = _i -> -> 0 `i `uc ]
-[e $U 417  ]
-[e :U 414 ]
-{
-[; ;nrf24l01.c: 207: nrf24l01SPISend(nrf24l01Name[i]);
-"207
-[e ( _nrf24l01SPISend (1 *U + &U _nrf24l01Name * -> _i `ux -> -> # *U &U _nrf24l01Name `ui `ux ]
-"208
-}
-"206
-[e ++ _i -> -> 1 `i `uc ]
-[e :U 417 ]
-[e $ && != -> *U + &U _nrf24l01Name * -> _i `ux -> -> # *U &U _nrf24l01Name `ui `ux `ui -> 0 `ui < -> _i `ui -> # _nrf24l01Name `ui 414  ]
-[e :U 415 ]
-"208
-}
-[; ;nrf24l01.c: 208: }
-[; ;nrf24l01.c: 211: nrf24l01SPISend('/');
-"211
-[e ( _nrf24l01SPISend (1 -> -> 47 `ui `uc ]
-[; ;nrf24l01.c: 214: for (i = 0; (nrf24l01TXTopic[i] != '\0') && (i < sizeof(nrf24l01TXTopic)); i++){
-"214
-{
-[e = _i -> -> 0 `i `uc ]
-[e $U 421  ]
-[e :U 418 ]
-{
-[; ;nrf24l01.c: 215: nrf24l01SPISend(nrf24l01TXTopic[i]);
-"215
-[e ( _nrf24l01SPISend (1 *U + &U _nrf24l01TXTopic * -> _i `ux -> -> # *U &U _nrf24l01TXTopic `ui `ux ]
-"216
-}
-"214
-[e ++ _i -> -> 1 `i `uc ]
-[e :U 421 ]
-[e $ && != -> *U + &U _nrf24l01TXTopic * -> _i `ux -> -> # *U &U _nrf24l01TXTopic `ui `ux `ui -> 0 `ui < -> _i `ui -> # _nrf24l01TXTopic `ui 418  ]
-[e :U 419 ]
-"216
-}
-[; ;nrf24l01.c: 216: }
-[; ;nrf24l01.c: 219: nrf24l01SPISend('/');
-"219
-[e ( _nrf24l01SPISend (1 -> -> 47 `ui `uc ]
-[; ;nrf24l01.c: 222: for (i = 0; (nrf24l01TXValue[i] != '\0') && (i < sizeof(nrf24l01TXValue)); i++){
-"222
-{
-[e = _i -> -> 0 `i `uc ]
-[e $U 425  ]
-[e :U 422 ]
-{
-[; ;nrf24l01.c: 223: nrf24l01SPISend(nrf24l01TXValue[i]);
-"223
-[e ( _nrf24l01SPISend (1 *U + &U _nrf24l01TXValue * -> _i `ux -> -> # *U &U _nrf24l01TXValue `ui `ux ]
-"224
-}
-"222
-[e ++ _i -> -> 1 `i `uc ]
-[e :U 425 ]
-[e $ && != -> *U + &U _nrf24l01TXValue * -> _i `ux -> -> # *U &U _nrf24l01TXValue `ui `ux `ui -> 0 `ui < -> _i `ui -> # _nrf24l01TXValue `ui 422  ]
-[e :U 423 ]
-"224
-}
-[; ;nrf24l01.c: 224: }
-[; ;nrf24l01.c: 227: nrf24l01SPIEnd();
-"227
-[e ( _nrf24l01SPIEnd ..  ]
-[; ;nrf24l01.c: 230: PORTAbits.RA0 = 1;
-"230
-[e = . . _PORTAbits 0 0 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 231: _delay((unsigned long)((20)*(16000000/4000000.0)));
-"231
-[e ( __delay (1 -> * -> -> 20 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;nrf24l01.c: 232: PORTAbits.RA0 = 0;
-"232
-[e = . . _PORTAbits 0 0 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 235: enableInterrupts(1);
-"235
-[e ( _enableInterrupts (1 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 238: i = 0xFF;
-"238
-[e = _i -> -> 255 `i `uc ]
-[; ;nrf24l01.c: 239: while (nrf24l01.waitForTXACK){
-"239
-[e $U 426  ]
-[e :U 427 ]
-{
-[; ;nrf24l01.c: 240: if (!--i) {
-"240
-[e $ ! ! != -> =- _i -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 429  ]
-{
-[; ;nrf24l01.c: 241: goto RESEND;
-"241
-[e $U 409  ]
-"242
-}
-[e :U 429 ]
-[; ;nrf24l01.c: 242: }
-[; ;nrf24l01.c: 243: _delay((unsigned long)((100)*(16000000/4000000.0)));
-"243
+[; ;nrf24l01.c: 179: }
+[; ;nrf24l01.c: 180: _delay((unsigned long)((100)*(16000000/4000000.0)));
+"180
 [e ( __delay (1 -> * -> -> 100 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-"244
+"181
 }
+[e :U 409 ]
+"176
+[e $ != -> . _nrf24l01 1 `i -> -> -> 0 `i `Vuc `i 410  ]
+[e :U 411 ]
+[; ;nrf24l01.c: 181: }
+[; ;nrf24l01.c: 185: nrf24l01.TXBusy = 1;
+"185
+[e = . _nrf24l01 1 -> -> 1 `i `uc ]
+[; ;nrf24l01.c: 188: enableInterrupts(0);
+"188
+[e ( _enableInterrupts (1 -> -> 0 `i `uc ]
+[; ;nrf24l01.c: 191: nrf24l01SetRXMode(0);
+"191
+[e ( _nrf24l01SetRXMode (1 -> -> 0 `i `uc ]
+[; ;nrf24l01.c: 194: nrf24l01SPIStart();
+"194
+[e ( _nrf24l01SPIStart ..  ]
+[; ;nrf24l01.c: 197: nrf24l01SPISend(0b10110000);
+"197
+[e ( _nrf24l01SPISend (1 -> -> 176 `i `uc ]
+[; ;nrf24l01.c: 200: for (i = 0; (nrf24l01Name[i] != '\0') && (i < sizeof(nrf24l01Name)); i++){
+"200
+{
+[e = _i -> -> 0 `i `uc ]
+[e $U 416  ]
+[e :U 413 ]
+{
+[; ;nrf24l01.c: 201: nrf24l01SPISend(nrf24l01Name[i]);
+"201
+[e ( _nrf24l01SPISend (1 *U + &U _nrf24l01Name * -> _i `ux -> -> # *U &U _nrf24l01Name `ui `ux ]
+"202
+}
+"200
+[e ++ _i -> -> 1 `i `uc ]
+[e :U 416 ]
+[e $ && != -> *U + &U _nrf24l01Name * -> _i `ux -> -> # *U &U _nrf24l01Name `ui `ux `ui -> 0 `ui < -> _i `ui -> # _nrf24l01Name `ui 413  ]
+[e :U 414 ]
+"202
+}
+[; ;nrf24l01.c: 202: }
+[; ;nrf24l01.c: 205: nrf24l01SPISend('/');
+"205
+[e ( _nrf24l01SPISend (1 -> -> 47 `ui `uc ]
+[; ;nrf24l01.c: 208: for (i = 0; (nrf24l01TXTopic[i] != '\0') && (i < sizeof(nrf24l01TXTopic)); i++){
+"208
+{
+[e = _i -> -> 0 `i `uc ]
+[e $U 420  ]
+[e :U 417 ]
+{
+[; ;nrf24l01.c: 209: nrf24l01SPISend(nrf24l01TXTopic[i]);
+"209
+[e ( _nrf24l01SPISend (1 *U + &U _nrf24l01TXTopic * -> _i `ux -> -> # *U &U _nrf24l01TXTopic `ui `ux ]
+"210
+}
+"208
+[e ++ _i -> -> 1 `i `uc ]
+[e :U 420 ]
+[e $ && != -> *U + &U _nrf24l01TXTopic * -> _i `ux -> -> # *U &U _nrf24l01TXTopic `ui `ux `ui -> 0 `ui < -> _i `ui -> # _nrf24l01TXTopic `ui 417  ]
+[e :U 418 ]
+"210
+}
+[; ;nrf24l01.c: 210: }
+[; ;nrf24l01.c: 213: nrf24l01SPISend('/');
+"213
+[e ( _nrf24l01SPISend (1 -> -> 47 `ui `uc ]
+[; ;nrf24l01.c: 216: for (i = 0; (nrf24l01TXValue[i] != '\0') && (i < sizeof(nrf24l01TXValue)); i++){
+"216
+{
+[e = _i -> -> 0 `i `uc ]
+[e $U 424  ]
+[e :U 421 ]
+{
+[; ;nrf24l01.c: 217: nrf24l01SPISend(nrf24l01TXValue[i]);
+"217
+[e ( _nrf24l01SPISend (1 *U + &U _nrf24l01TXValue * -> _i `ux -> -> # *U &U _nrf24l01TXValue `ui `ux ]
+"218
+}
+"216
+[e ++ _i -> -> 1 `i `uc ]
+[e :U 424 ]
+[e $ && != -> *U + &U _nrf24l01TXValue * -> _i `ux -> -> # *U &U _nrf24l01TXValue `ui `ux `ui -> 0 `ui < -> _i `ui -> # _nrf24l01TXValue `ui 421  ]
+[e :U 422 ]
+"218
+}
+[; ;nrf24l01.c: 218: }
+[; ;nrf24l01.c: 221: nrf24l01SPIEnd();
+"221
+[e ( _nrf24l01SPIEnd ..  ]
+[; ;nrf24l01.c: 224: PORTAbits.RA0 = 1;
+"224
+[e = . . _PORTAbits 0 0 -> -> 1 `i `uc ]
+[; ;nrf24l01.c: 225: _delay((unsigned long)((20)*(16000000/4000000.0)));
+"225
+[e ( __delay (1 -> * -> -> 20 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[; ;nrf24l01.c: 226: PORTAbits.RA0 = 0;
+"226
+[e = . . _PORTAbits 0 0 -> -> 0 `i `uc ]
+[; ;nrf24l01.c: 229: enableInterrupts(1);
+"229
+[e ( _enableInterrupts (1 -> -> 1 `i `uc ]
+[; ;nrf24l01.c: 232: i = 0xFF;
+"232
+[e = _i -> -> 255 `i `uc ]
+[; ;nrf24l01.c: 233: while (nrf24l01.waitForTXACK){
+"233
+[e $U 425  ]
 [e :U 426 ]
-"239
-[e $ != -> . _nrf24l01 0 `i -> -> -> 0 `i `Vuc `i 427  ]
+{
+[; ;nrf24l01.c: 234: if (!--i) {
+"234
+[e $ ! ! != -> =- _i -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 428  ]
+{
+[; ;nrf24l01.c: 235: goto RESEND;
+"235
+[e $U 408  ]
+"236
+}
 [e :U 428 ]
-[; ;nrf24l01.c: 244: }
-[; ;nrf24l01.c: 245: }
-"245
+[; ;nrf24l01.c: 236: }
+[; ;nrf24l01.c: 237: _delay((unsigned long)((100)*(16000000/4000000.0)));
+"237
+[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+"238
+}
+[e :U 425 ]
+"233
+[e $ != -> . _nrf24l01 0 `i -> -> -> 0 `i `Vuc `i 426  ]
+[e :U 427 ]
+[; ;nrf24l01.c: 238: }
+[; ;nrf24l01.c: 239: }
+"239
 [e :UE 407 ]
 }
-"248
+"242
 [v _nrf24l01InitRegisters `(v ~T0 @X0 1 ef ]
 {
-[; ;nrf24l01.c: 248: void nrf24l01InitRegisters(void){
+[; ;nrf24l01.c: 242: void nrf24l01InitRegisters(void){
 [e :U _nrf24l01InitRegisters ]
 [f ]
-"250
+"244
 [v _config `S334 ~T0 @X0 1 a ]
-[; ;nrf24l01.c: 250: n_CONFIG_t config;
-[; ;nrf24l01.c: 251: config.PWR_UP = 0;
-"251
+[; ;nrf24l01.c: 244: n_CONFIG_t config;
+[; ;nrf24l01.c: 246: config.PWR_UP = 0;
+"246
 [e = . . _config 1 1 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 252: nrf24l01Send(0b00100000 | 0x00, config.byte);
-"252
+[; ;nrf24l01.c: 247: nrf24l01Send(0b00100000 | 0x00, config.byte);
+"247
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 0 `i `uc . . _config 0 0 ]
-[; ;nrf24l01.c: 254: _delay((unsigned long)((10000)*(16000000/4000000.0)));
-"254
+[; ;nrf24l01.c: 249: _delay((unsigned long)((10000)*(16000000/4000000.0)));
+"249
 [e ( __delay (1 -> * -> -> 10000 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-"256
+"251
 [v _setupAW `S346 ~T0 @X0 1 a ]
-[; ;nrf24l01.c: 256: n_SETUP_AW_t setupAW;
-[; ;nrf24l01.c: 257: setupAW.byte = 0x00;
-"257
+[; ;nrf24l01.c: 251: n_SETUP_AW_t setupAW;
+[; ;nrf24l01.c: 252: setupAW.byte = 0x00;
+"252
 [e = . . _setupAW 0 0 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 258: setupAW.AW = 3;
-"258
+[; ;nrf24l01.c: 253: setupAW.AW = 3;
+"253
 [e = . . _setupAW 1 0 -> -> 3 `i `uc ]
-[; ;nrf24l01.c: 259: nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
-"259
+[; ;nrf24l01.c: 254: nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
+"254
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 2 `i `uc . . _setupAW 0 0 ]
-"267
+"262
 [v _rfSetup `S355 ~T0 @X0 1 a ]
-[; ;nrf24l01.c: 267: n_RF_SETUP_t rfSetup;
-[; ;nrf24l01.c: 268: rfSetup.RF_DR_LOW = 0;
-"268
+[; ;nrf24l01.c: 262: n_RF_SETUP_t rfSetup;
+[; ;nrf24l01.c: 263: rfSetup.RF_DR_LOW = 0;
+"263
 [e = . . _rfSetup 1 4 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 269: rfSetup.RF_DR_HIGH = 1;
-"269
+[; ;nrf24l01.c: 264: rfSetup.RF_DR_HIGH = 1;
+"264
 [e = . . _rfSetup 1 2 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 270: rfSetup.RF_PWR = 3;
-"270
+[; ;nrf24l01.c: 265: rfSetup.RF_PWR = 3;
+"265
 [e = . . _rfSetup 1 1 -> -> 3 `i `uc ]
-[; ;nrf24l01.c: 271: nrf24l01Send(0b00100000 | 0x06, rfSetup.byte);
-"271
+[; ;nrf24l01.c: 266: nrf24l01Send(0b00100000 | 0x06, rfSetup.byte);
+"266
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 6 `i `uc . . _rfSetup 0 0 ]
-"274
+"269
 [v _enRXAddr `S342 ~T0 @X0 1 a ]
-[; ;nrf24l01.c: 274: n_EN_RXADDR_t enRXAddr;
-[; ;nrf24l01.c: 275: enRXAddr.ERX_P0 = 1;
-"275
+[; ;nrf24l01.c: 269: n_EN_RXADDR_t enRXAddr;
+[; ;nrf24l01.c: 270: enRXAddr.ERX_P0 = 1;
+"270
 [e = . . _enRXAddr 1 0 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 276: enRXAddr.ERX_P1 = 1;
-"276
+[; ;nrf24l01.c: 271: enRXAddr.ERX_P1 = 1;
+"271
 [e = . . _enRXAddr 1 1 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 277: enRXAddr.ERX_P2 = 1;
-"277
+[; ;nrf24l01.c: 272: enRXAddr.ERX_P2 = 1;
+"272
 [e = . . _enRXAddr 1 2 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 278: enRXAddr.ERX_P3 = 1;
-"278
+[; ;nrf24l01.c: 273: enRXAddr.ERX_P3 = 1;
+"273
 [e = . . _enRXAddr 1 3 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 279: enRXAddr.ERX_P4 = 1;
-"279
+[; ;nrf24l01.c: 274: enRXAddr.ERX_P4 = 1;
+"274
 [e = . . _enRXAddr 1 4 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 280: enRXAddr.ERX_P5 = 1;
-"280
+[; ;nrf24l01.c: 275: enRXAddr.ERX_P5 = 1;
+"275
 [e = . . _enRXAddr 1 5 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 281: nrf24l01Send(0b00100000 | 0x02, enRXAddr.byte);
-"281
+[; ;nrf24l01.c: 276: nrf24l01Send(0b00100000 | 0x02, enRXAddr.byte);
+"276
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 2 `i `uc . . _enRXAddr 0 0 ]
-"284
+"279
 [v _enAA `S338 ~T0 @X0 1 a ]
-[; ;nrf24l01.c: 284: n_EN_AA_t enAA;
-[; ;nrf24l01.c: 285: enAA.byte = nrf24l01Send(0b00000000 | 0x01, 0);
-"285
+[; ;nrf24l01.c: 279: n_EN_AA_t enAA;
+[; ;nrf24l01.c: 280: enAA.byte = nrf24l01Send(0b00000000 | 0x01, 0);
+"280
 [e = . . _enAA 0 0 ( _nrf24l01Send (2 , -> | -> 0 `i -> 1 `i `uc -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 286: enAA.ENAA_P0 = 0;
-"286
+[; ;nrf24l01.c: 281: enAA.ENAA_P0 = 0;
+"281
 [e = . . _enAA 1 0 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 287: enAA.ENAA_P1 = 0;
-"287
+[; ;nrf24l01.c: 282: enAA.ENAA_P1 = 0;
+"282
 [e = . . _enAA 1 1 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 288: enAA.ENAA_P2 = 0;
-"288
+[; ;nrf24l01.c: 283: enAA.ENAA_P2 = 0;
+"283
 [e = . . _enAA 1 2 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 289: enAA.ENAA_P3 = 0;
-"289
+[; ;nrf24l01.c: 284: enAA.ENAA_P3 = 0;
+"284
 [e = . . _enAA 1 3 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 290: enAA.ENAA_P4 = 0;
-"290
+[; ;nrf24l01.c: 285: enAA.ENAA_P4 = 0;
+"285
 [e = . . _enAA 1 4 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 291: enAA.ENAA_P5 = 0;
-"291
+[; ;nrf24l01.c: 286: enAA.ENAA_P5 = 0;
+"286
 [e = . . _enAA 1 5 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 292: nrf24l01Send(0b00100000 | 0x01, enAA.byte);
-"292
+[; ;nrf24l01.c: 287: nrf24l01Send(0b00100000 | 0x01, enAA.byte);
+"287
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 1 `i `uc . . _enAA 0 0 ]
-"296
+"291
 [v _feature `S367 ~T0 @X0 1 a ]
-[; ;nrf24l01.c: 296: n_FEATURE_t feature;
-[; ;nrf24l01.c: 297: feature.byte = nrf24l01Send(0b00000000 | 0x1D, 0);
-"297
+[; ;nrf24l01.c: 291: n_FEATURE_t feature;
+[; ;nrf24l01.c: 292: feature.byte = nrf24l01Send(0b00000000 | 0x1D, 0);
+"292
 [e = . . _feature 0 0 ( _nrf24l01Send (2 , -> | -> 0 `i -> 29 `i `uc -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 298: feature.EN_DPL = 1;
-"298
+[; ;nrf24l01.c: 293: feature.EN_DPL = 1;
+"293
 [e = . . _feature 1 2 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 299: feature.EN_DYN_ACK = 1;
-"299
+[; ;nrf24l01.c: 294: feature.EN_DYN_ACK = 1;
+"294
 [e = . . _feature 1 0 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 300: nrf24l01Send(0b00100000 | 0x1D, feature.byte);
-"300
+[; ;nrf24l01.c: 295: nrf24l01Send(0b00100000 | 0x1D, feature.byte);
+"295
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 29 `i `uc . . _feature 0 0 ]
-"302
+"297
 [v _DynPD `S364 ~T0 @X0 1 a ]
-[; ;nrf24l01.c: 302: n_DYNPD_t DynPD;
-[; ;nrf24l01.c: 303: DynPD.byte = nrf24l01Send(0b00000000 | 0x1C, 0);
-"303
+[; ;nrf24l01.c: 297: n_DYNPD_t DynPD;
+[; ;nrf24l01.c: 298: DynPD.byte = nrf24l01Send(0b00000000 | 0x1C, 0);
+"298
 [e = . . _DynPD 0 0 ( _nrf24l01Send (2 , -> | -> 0 `i -> 28 `i `uc -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 304: DynPD.DPL_P0 = 1;
-"304
+[; ;nrf24l01.c: 299: DynPD.DPL_P0 = 1;
+"299
 [e = . . _DynPD 1 0 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 305: DynPD.DPL_P1 = 1;
-"305
+[; ;nrf24l01.c: 300: DynPD.DPL_P1 = 1;
+"300
 [e = . . _DynPD 1 1 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 306: DynPD.DPL_P2 = 1;
-"306
+[; ;nrf24l01.c: 301: DynPD.DPL_P2 = 1;
+"301
 [e = . . _DynPD 1 2 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 307: DynPD.DPL_P3 = 1;
-"307
+[; ;nrf24l01.c: 302: DynPD.DPL_P3 = 1;
+"302
 [e = . . _DynPD 1 3 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 308: DynPD.DPL_P4 = 1;
-"308
+[; ;nrf24l01.c: 303: DynPD.DPL_P4 = 1;
+"303
 [e = . . _DynPD 1 4 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 309: DynPD.DPL_P5 = 1;
-"309
+[; ;nrf24l01.c: 304: DynPD.DPL_P5 = 1;
+"304
 [e = . . _DynPD 1 5 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 310: nrf24l01Send(0b00100000 | 0x1C, DynPD.byte);
-"310
+[; ;nrf24l01.c: 305: nrf24l01Send(0b00100000 | 0x1C, DynPD.byte);
+"305
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 28 `i `uc . . _DynPD 0 0 ]
-"313
+"308
 [v _status `S358 ~T0 @X0 1 a ]
-[; ;nrf24l01.c: 313: n_STATUS_t status;
-[; ;nrf24l01.c: 314: status.byte = 0x00;
-"314
+[; ;nrf24l01.c: 308: n_STATUS_t status;
+[; ;nrf24l01.c: 309: status.byte = 0x00;
+"309
 [e = . . _status 0 0 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 315: status.RX_DR = 1;
-"315
+[; ;nrf24l01.c: 310: status.RX_DR = 1;
+"310
 [e = . . _status 1 4 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 316: status.TX_DS = 1;
-"316
+[; ;nrf24l01.c: 311: status.TX_DS = 1;
+"311
 [e = . . _status 1 3 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 317: status.MAX_RT = 1;
-"317
+[; ;nrf24l01.c: 312: status.MAX_RT = 1;
+"312
 [e = . . _status 1 2 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 318: nrf24l01Send(0b00100000 | 0x07, status.byte);
-"318
+[; ;nrf24l01.c: 313: nrf24l01Send(0b00100000 | 0x07, status.byte);
+"313
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 7 `i `uc . . _status 0 0 ]
-[; ;nrf24l01.c: 321: nrf24l01Send(0b11100001, 0);
-"321
+[; ;nrf24l01.c: 316: nrf24l01Send(0b11100001, 0);
+"316
 [e ( _nrf24l01Send (2 , -> -> 225 `i `uc -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 322: nrf24l01Send(0b11100010, 0);
-"322
+[; ;nrf24l01.c: 317: nrf24l01Send(0b11100010, 0);
+"317
 [e ( _nrf24l01Send (2 , -> -> 226 `i `uc -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 325: config.PRIM_RX = 1;
-"325
+[; ;nrf24l01.c: 320: config.PRIM_RX = 1;
+"320
 [e = . . _config 1 0 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 326: config.EN_CRC = 1;
-"326
+[; ;nrf24l01.c: 321: config.EN_CRC = 1;
+"321
 [e = . . _config 1 3 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 327: config.CRCO = 1;
-"327
+[; ;nrf24l01.c: 322: config.CRCO = 1;
+"322
 [e = . . _config 1 2 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 328: config.PWR_UP = 1;
-"328
+[; ;nrf24l01.c: 323: config.PWR_UP = 1;
+"323
 [e = . . _config 1 1 -> -> 1 `i `uc ]
-[; ;nrf24l01.c: 329: nrf24l01Send(0b00100000 | 0x00, config.byte);
-"329
+[; ;nrf24l01.c: 324: nrf24l01Send(0b00100000 | 0x00, config.byte);
+"324
 [e ( _nrf24l01Send (2 , -> | -> 32 `i -> 0 `i `uc . . _config 0 0 ]
-[; ;nrf24l01.c: 330: }
-"330
-[e :UE 430 ]
+[; ;nrf24l01.c: 325: }
+"325
+[e :UE 429 ]
 }
-"332
+"327
 [v _nrf24l01Init `(v ~T0 @X0 1 ef ]
 {
-[; ;nrf24l01.c: 332: void nrf24l01Init(void){
+[; ;nrf24l01.c: 327: void nrf24l01Init(void){
 [e :U _nrf24l01Init ]
 [f ]
-[; ;nrf24l01.c: 335: nrf24l01InterfaceInit();
-"335
+[; ;nrf24l01.c: 330: nrf24l01InterfaceInit();
+"330
 [e ( _nrf24l01InterfaceInit ..  ]
-[; ;nrf24l01.c: 339: PORTAbits.RA0 = 0;
-"339
+[; ;nrf24l01.c: 334: PORTAbits.RA0 = 0;
+"334
 [e = . . _PORTAbits 0 0 -> -> 0 `i `uc ]
-[; ;nrf24l01.c: 341: _delay((unsigned long)((50000)*(16000000/4000000.0)));
-"341
-[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;nrf24l01.c: 343: nrf24l01InitRegisters();
-"343
+[; ;nrf24l01.c: 336: _delay((unsigned long)((11)*(16000000/4000.0)));
+"336
+[e ( __delay (1 -> * -> -> 11 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
+[; ;nrf24l01.c: 338: nrf24l01InitRegisters();
+"338
 [e ( _nrf24l01InitRegisters ..  ]
-[; ;nrf24l01.c: 345: _delay((unsigned long)((1000)*(16000000/4000000.0)));
-"345
-[e ( __delay (1 -> * -> -> 1000 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;nrf24l01.c: 346: }
-"346
-[e :UE 431 ]
+[; ;nrf24l01.c: 340: _delay((unsigned long)((2)*(16000000/4000.0)));
+"340
+[e ( __delay (1 -> * -> -> 2 `i `d / -> -> 16000000 `l `d .4000.0 `ul ]
+[; ;nrf24l01.c: 341: }
+"341
+[e :UE 430 ]
 }
 [a 1C 65 67 75 0 ]
 

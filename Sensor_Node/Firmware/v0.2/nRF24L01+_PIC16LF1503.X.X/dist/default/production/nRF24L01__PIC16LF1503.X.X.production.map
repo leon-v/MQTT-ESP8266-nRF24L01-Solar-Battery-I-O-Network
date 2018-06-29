@@ -6,12 +6,16 @@ Linker command line:
   -h+dist/default/production\nRF24L01__PIC16LF1503.X.X.production.sym \
   --cmf=dist/default/production\nRF24L01__PIC16LF1503.X.X.production.cmf -z \
 <<<<<<< HEAD
+<<<<<<< HEAD
   -Q16LF1503 -oC:\Users\Leon\AppData\Local\Temp\s524.2 \
 =======
   -Q16LF1503 -oC:\Users\Leon\AppData\Local\Temp\sfl0.2 \
 >>>>>>> d3b061564ec233887182288815f9c857f16f8cdf
+=======
+  -Q16LF1503 -oC:\Users\Leon\AppData\Local\Temp\s2h4.2 \
+>>>>>>> parent of b709a45... old
   -Mdist/default/production/nRF24L01__PIC16LF1503.X.X.production.map -E1 \
-  -ver=XC8 -ASTACK=02063h-0206fh -pstack=STACK -p_NVMEM_text=7E0h \
+  -ver=XC8 -ASTACK=02068h-0206fh -pstack=STACK -p_NVMEM_text=7E0h \
   -ACODE=00h-07FFh -ASTRCODE=00h-07FFh -ASTRING=00h-0FFhx8 \
   -ACONST=00h-0FFhx8 -AENTRY=00h-0FFhx8 -ACOMMON=070h-07Fh \
   -ABANK0=020h-06Fh -ABANK1=0A0h-0BFh -ABIGRAM=02000h-0206Fh \
@@ -31,10 +35,14 @@ Linker command line:
   -AIDLOC=08000h-08003h -pidloc=IDLOC -DIDLOC=2 -DCODE=2 -DSTRCODE=2 \
   -DSTRING=2 -DCONST=2 -DENTRY=2 -k \
 <<<<<<< HEAD
+<<<<<<< HEAD
   C:\Users\Leon\AppData\Local\Temp\s524.obj \
 =======
   C:\Users\Leon\AppData\Local\Temp\sfl0.obj \
 >>>>>>> d3b061564ec233887182288815f9c857f16f8cdf
+=======
+  C:\Users\Leon\AppData\Local\Temp\s2h4.obj \
+>>>>>>> parent of b709a45... old
   dist/default/production\nRF24L01__PIC16LF1503.X.X.production.obj 
 
 Object code version is 3.11
@@ -45,104 +53,110 @@ Machine type is 16LF1503
 
                 Name                               Link     Load   Length Selector   Space Scale
 <<<<<<< HEAD
+<<<<<<< HEAD
 C:\Users\Leon\AppData\Local\Temp\s524.obj
 =======
 C:\Users\Leon\AppData\Local\Temp\sfl0.obj
 >>>>>>> d3b061564ec233887182288815f9c857f16f8cdf
+=======
+C:\Users\Leon\AppData\Local\Temp\s2h4.obj
+>>>>>>> parent of b709a45... old
                 end_init                             12       12        1        8       0
                 reset_vec                             0        0        1        0       0
                 config                             8007     8007        2    1000E       0
 dist/default/production\nRF24L01__PIC16LF1503.X.X.production.obj
-                cinit                                13       13        F        8       0
+                cinit                                13       13       13        8       0
                 intentry                              4        4        E        8       0
-                text25                              635      635        7        8       0
-                text24                              62E      62E        7        8       0
-                text23                              613      613        B        8       0
-                text22                              627      627        7        8       0
-                text21                              5F2      5F2       13        8       0
-                text20                              474      474       39        8       0
-                text19                              571      571       27        8       0
-                text18                               22       22       DE        8       0
-                text17                              598      598       24        8       0
-                text15                              61E      61E        9        8       0
-                text14                              66A      66A        4      CD4       0
-                text13                              421      421       53        8       0
-                text12                              514      514       30        8       0
-                text11                              340      340       85        8       0
-                text10                              199      199       96        8       0
-                text9                               5D7      5D7       1B        8       0
-                text8                               4AD      4AD       35        8       0
-                text7                               544      544       2D        8       0
-                text6                               3C5      3C5       5C        8       0
-                text5                               100      100       99        8       0
-                text4                               22F      22F       8A        8       0
-                text3                               605      605        E        8       0
-                text2                               5BC      5BC       1B        8       0
-                text1                               4E2      4E2       32        8       0
-                maintext                            2B9      2B9       87        8       0
-                cstackBANK0                          20       20       29       20       1
+                text25                              62B      62B        7        8       0
+                text24                              624      624        7        8       0
+                text23                              609      609        B        8       0
+                text22                              61D      61D        7        8       0
+                text21                              5DD      5DD       13        8       0
+                text20                              464      464       39        8       0
+                text19                              561      561       27        8       0
+                text18                               26       26       DE        8       0
+                text17                              588      588       24        8       0
+                text15                              614      614        9        8       0
+                text14                              5FE      5FE        B        8       0
+                text13                              411      411       53        8       0
+                text12                              504      504       30        8       0
+                text11                              2B1      2B1       85        8       0
+                text10                              227      227       8A        8       0
+                text9                               5AC      5AC       1B        8       0
+                text8                               49D      49D       35        8       0
+                text7                               534      534       2D        8       0
+                text6                               3B5      3B5       5C        8       0
+                text5                               104      104       99        8       0
+                text4                               19D      19D       8A        8       0
+                text3                               5F0      5F0        E        8       0
+                text2                               5C7      5C7       16        8       0
+                text1                               4D2      4D2       32        8       0
+                maintext                            336      336       7F        8       0
+                cstackBANK0                          20       20       2C       20       1
                 cstackCOMMON                         70       70        E       70       1
-                cstackBANK1                          B0       B0        3       A0       1
-                clrtext                             648      648        6      C90       0
-                bssBANK1                             A0       A0       10       A0       1
-                bssBANK0                             49       49       24       20       1
-                stringtext9                         666      666        4      C9C       0
-                stringtext8                         662      662        4      C9C       0
-                stringtext7                         65D      65D        5      C9C       0
-                stringtext6                         658      658        5      C9C       0
-                stringtext5                         653      653        5      C9C       0
-                stringtext4                         642      642        6      C78       0
-                stringtext3                         63C      63C        6      C78       0
+                clrtext                             63E      63E        6      C7C       0
+                bssBANK1                             A0       A0       18       A0       1
+                dataBANK0                            68       68        2       20       1
+                bssBANK0                             4C       4C       1C       20       1
+                stringtext9                         65C      65C        4      C88       0
+                stringtext8                         658      658        4      C88       0
+                stringtext7                         653      653        5      C88       0
+                stringtext6                         64E      64E        5      C88       0
+                stringtext5                         649      649        5      C88       0
+                stringtext4                         638      638        6      C64       0
+                stringtext3                         632      632        6      C64       0
                 _NVMEM_text                         7E0      7E0       20      FC0       0
-                stringtext2                         66E      66E        1      CDC       0
-                stringtext1                         64E      64E        5      C9C       0
+                stringtext2                         662      662        1      CC4       0
+                stringtext1                         644      644        5      C88       0
+                idataBANK0                          660      660        2      CC0       0
 
 TOTAL           Name                               Link     Load   Length     Space
         CLASS   STACK          
 
         CLASS   CODE           
                 end_init                             12       12        1         0
-                cinit                                13       13        F         0
+                cinit                                13       13       13         0
                 intentry                              4        4        E         0
                 reset_vec                             0        0        1         0
-                text25                              635      635        7         0
-                text24                              62E      62E        7         0
-                text23                              613      613        B         0
-                text22                              627      627        7         0
-                text21                              5F2      5F2       13         0
-                text20                              474      474       39         0
-                text19                              571      571       27         0
-                text18                               22       22       DE         0
-                text17                              598      598       24         0
-                text15                              61E      61E        9         0
-                text14                              66A      66A        4         0
-                text13                              421      421       53         0
-                text12                              514      514       30         0
-                text11                              340      340       85         0
-                text10                              199      199       96         0
-                text9                               5D7      5D7       1B         0
-                text8                               4AD      4AD       35         0
-                text7                               544      544       2D         0
-                text6                               3C5      3C5       5C         0
-                text5                               100      100       99         0
-                text4                               22F      22F       8A         0
-                text3                               605      605        E         0
-                text2                               5BC      5BC       1B         0
-                text1                               4E2      4E2       32         0
-                maintext                            2B9      2B9       87         0
-                clrtext                             648      648        6         0
+                text25                              62B      62B        7         0
+                text24                              624      624        7         0
+                text23                              609      609        B         0
+                text22                              61D      61D        7         0
+                text21                              5DD      5DD       13         0
+                text20                              464      464       39         0
+                text19                              561      561       27         0
+                text18                               26       26       DE         0
+                text17                              588      588       24         0
+                text15                              614      614        9         0
+                text14                              5FE      5FE        B         0
+                text13                              411      411       53         0
+                text12                              504      504       30         0
+                text11                              2B1      2B1       85         0
+                text10                              227      227       8A         0
+                text9                               5AC      5AC       1B         0
+                text8                               49D      49D       35         0
+                text7                               534      534       2D         0
+                text6                               3B5      3B5       5C         0
+                text5                               104      104       99         0
+                text4                               19D      19D       8A         0
+                text3                               5F0      5F0        E         0
+                text2                               5C7      5C7       16         0
+                text1                               4D2      4D2       32         0
+                maintext                            336      336       7F         0
+                clrtext                             63E      63E        6         0
                 _NVMEM_text                         7E0      7E0       20         0
+                idataBANK0                          660      660        2         0
 
         CLASS   STRCODE        
-                stringtext9                         666      666        4         0
-                stringtext8                         662      662        4         0
-                stringtext7                         65D      65D        5         0
-                stringtext6                         658      658        5         0
-                stringtext5                         653      653        5         0
-                stringtext4                         642      642        6         0
-                stringtext3                         63C      63C        6         0
-                stringtext2                         66E      66E        1         0
-                stringtext1                         64E      64E        5         0
+                stringtext9                         65C      65C        4         0
+                stringtext8                         658      658        4         0
+                stringtext7                         653      653        5         0
+                stringtext6                         64E      64E        5         0
+                stringtext5                         649      649        5         0
+                stringtext4                         638      638        6         0
+                stringtext3                         632      632        6         0
+                stringtext2                         662      662        1         0
+                stringtext1                         644      644        5         0
 
         CLASS   STRING         
 
@@ -154,12 +168,12 @@ TOTAL           Name                               Link     Load   Length     Sp
                 cstackCOMMON                         70       70        E         1
 
         CLASS   BANK0          
-                cstackBANK0                          20       20       29         1
-                bssBANK0                             49       49       24         1
+                cstackBANK0                          20       20       2C         1
+                dataBANK0                            68       68        2         1
+                bssBANK0                             4C       4C       1C         1
 
         CLASS   BANK1          
-                cstackBANK1                          B0       B0        3         1
-                bssBANK1                             A0       A0       10         1
+                bssBANK1                             A0       A0       18         1
 
         CLASS   BIGRAM         
 
@@ -304,15 +318,15 @@ TOTAL           Name                               Link     Load   Length     Sp
 SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class     Delta
 
                 reset_vec                      000000  000001  000001         0       0  CODE        2
-                intentry                       000004  000638  00063C         8       0  CODE        2
-                cstackBANK0                    000020  00004D  00006D        20       1  BANK0       1
+                intentry                       000004  00062E  000632         8       0  CODE        2
+                cstackBANK0                    000020  00004A  00006A        20       1  BANK0       1
                 cstackCOMMON                   000070  00000E  00007E        70       1  COMMON      1
-                bssBANK1                       0000A0  000013  0000B3        A0       1  BANK1       1
-                stringtext3                    00063C  00000C  000648       C78       0  STRCODE     2
-                clrtext                        000648  000006  00064E       C90       0  CODE        2
-                stringtext1                    00064E  00001C  00066A       C9C       0  STRCODE     2
-                text14                         00066A  000004  00066E       CD4       0  CODE        2
-                stringtext2                    00066E  000001  00066F       CDC       0  STRCODE     2
+                bssBANK1                       0000A0  000018  0000B8        A0       1  BANK1       1
+                stringtext3                    000632  00000C  00063E       C64       0  STRCODE     2
+                clrtext                        00063E  000006  000644       C7C       0  CODE        2
+                stringtext1                    000644  00001C  000660       C88       0  STRCODE     2
+                idataBANK0                     000660  000002  000662       CC0       0  CODE        2
+                stringtext2                    000662  000001  000663       CC4       0  STRCODE     2
                 _NVMEM_text                    0007E0  000020  000800       FC0       0  CODE        2
                 config                         008007  000002  008009     1000E       0  CONFIG      2
 
@@ -320,18 +334,18 @@ SEGMENTS        Name                           Load    Length   Top    Selector 
 UNUSED ADDRESS RANGES
 
         Name                Unused          Largest block    Delta
-        BANK0            0006D-0006F               3           1
-        BANK1            000B3-000BF               D           1
+        BANK0            0006A-0006F               6           1
+        BANK1            000B8-000BF               8           1
         BIGRAM           02000-0206F              70           1
         CODE             00001-00003               3           2
-                         0066F-007DF             171
+                         00663-007DF             17D
         CONST            00001-00003               3           2
-                         0066F-007DF              91
+                         00663-007DF              9D
         ENTRY            00001-00003               3           2
-                         0066F-007DF              91
+                         00663-007DF              9D
         IDLOC            08000-08003               4           2
-        RAM              0006D-0006F               3           1
-                         000B3-000BF               D
+        RAM              0006A-0006F               6           1
+                         000B8-000BF               8
         SFR0             00000-0001F              20           1
         SFR1             00080-0009F              20           1
         SFR10            00500-0056F              70           1
@@ -364,11 +378,11 @@ UNUSED ADDRESS RANGES
         SFR7             00380-003EF              70           1
         SFR8             00400-0046F              70           1
         SFR9             00480-004EF              70           1
-        STACK            02063-0206F               D           1
+        STACK            02068-0206F               8           1
         STRCODE          00001-00003               3           2
-                         0066F-007DF             171
+                         00663-007DF             17D
         STRING           00001-00003               3           2
-                         0066F-007DF              91
+                         00663-007DF              9D
 
                                   Symbol Table
 
@@ -459,17 +473,18 @@ __Hbank9                        bank9        00000
 __Hbigram                       bigram       00000
 __HbssBANK0                     bssBANK0     00000
 __HbssBANK1                     bssBANK1     00000
-__Hcinit                        cinit        00022
+__Hcinit                        cinit        00026
 __Hclrtext                      clrtext      00000
 __Hcode                         code         00000
 __Hcommon                       common       00000
 __Hconfig                       config       08009
 __HcstackBANK0                  cstackBANK0  00000
-__HcstackBANK1                  cstackBANK1  00000
 __HcstackCOMMON                 cstackCOMMON 00000
+__HdataBANK0                    dataBANK0    00000
 __Heeprom_data                  eeprom_data  00000
 __Hend_init                     end_init     00013
 __Hfunctab                      functab      00000
+__HidataBANK0                   idataBANK0   00000
 __Hidloc                        idloc        00000
 __Hinit                         init         00012
 __Hintentry                     intentry     00012
@@ -510,7 +525,7 @@ __Hsfr7                         sfr7         00000
 __Hsfr8                         sfr8         00000
 __Hsfr9                         sfr9         00000
 __Hspace_0                      (abs)        08009
-__Hspace_1                      (abs)        000B3
+__Hspace_1                      (abs)        000B8
 __Hspace_2                      (abs)        00000
 __Hspace_3                      (abs)        00000
 __Hstack                        stack        00000
@@ -569,11 +584,12 @@ __Lcode                         code         00000
 __Lcommon                       common       00000
 __Lconfig                       config       08007
 __LcstackBANK0                  cstackBANK0  00000
-__LcstackBANK1                  cstackBANK1  00000
 __LcstackCOMMON                 cstackCOMMON 00000
+__LdataBANK0                    dataBANK0    00000
 __Leeprom_data                  eeprom_data  00000
 __Lend_init                     end_init     00012
 __Lfunctab                      functab      00000
+__LidataBANK0                   idataBANK0   00000
 __Lidloc                        idloc        00000
 __Linit                         init         00012
 __Lintentry                     intentry     00004
@@ -631,102 +647,103 @@ __Lstringtext8                  stringtext8  00000
 __Lstringtext9                  stringtext9  00000
 __Ltext                         text         00000
 __S0                            (abs)        08009
-__S1                            (abs)        000B3
+__S1                            (abs)        000B8
 __S2                            (abs)        00000
 ___int_sp                       stack        00000
 ___latbits                      (abs)        00000
-___lldiv                        text13       00421
+___lldiv                        text13       00411
 ___lldiv@counter                cstackBANK0  00030
 ___lldiv@dividend               cstackBANK0  00027
 ___lldiv@divisor                cstackBANK0  00023
 ___lldiv@quotient               cstackBANK0  0002C
-___lmul                         text12       00514
+___lmul                         text12       00504
 ___lmul@multiplicand            cstackBANK0  00027
 ___lmul@multiplier              cstackBANK0  00023
 ___lmul@product                 cstackBANK0  0002B
-___lwdiv                        text8        004AD
+___lwdiv                        text8        0049D
 ___lwdiv@counter                cstackBANK0  0002A
 ___lwdiv@dividend               cstackBANK0  00025
 ___lwdiv@divisor                cstackBANK0  00023
 ___lwdiv@quotient               cstackBANK0  00028
-___lwmod                        text7        00544
+___lwmod                        text7        00534
 ___lwmod@counter                cstackBANK0  00028
 ___lwmod@dividend               cstackBANK0  00025
 ___lwmod@divisor                cstackBANK0  00023
 ___sp                           stack        00000
 __end_of_ISR                    intentry     00012
 __end_of_NVMEM                  _NVMEM_text  00800
-__end_of___lldiv                text13       00474
-__end_of___lmul                 text12       00544
-__end_of___lwdiv                text8        004E2
-__end_of___lwmod                text7        00571
-__end_of__initialization        cinit        0001F
-__end_of_checkRxData            text14       0066E
-__end_of_enableInterrupts       text25       0063C
-__end_of_getADCValue            text11       003C5
-__end_of_loop                   text5        00199
-__end_of_main                   maintext     00340
-__end_of_n_ADDRESS_MUL          stringtext2  0066F
-__end_of_n_ADDRESS_P0           stringtext1  00653
-__end_of_nrf24l01HandleRX       text18       00100
-__end_of_nrf24l01ISR            text17       005BC
-__end_of_nrf24l01Init           text2        005D7
-__end_of_nrf24l01InitRegisters  text4        002B9
-__end_of_nrf24l01InterfaceInit  text3        00613
-__end_of_nrf24l01SPIEnd         text24       00635
-__end_of_nrf24l01SPISend        text23       0061E
-__end_of_nrf24l01SPIStart       text22       0062E
-__end_of_nrf24l01Send           text21       00605
-__end_of_nrf24l01SendString     text10       0022F
-__end_of_nrf24l01SetRXMode      text20       004AD
-__end_of_read_flashmem          text1        00514
-__end_of_sleep                  text15       00627
-__end_of_strcmp                 text19       00598
-__end_of_strcpy                 text9        005F2
-__end_of_utoa                   text6        00421
+__end_of___lldiv                text13       00464
+__end_of___lmul                 text12       00534
+__end_of___lwdiv                text8        004D2
+__end_of___lwmod                text7        00561
+__end_of__initialization        cinit        00023
+__end_of_checkRxData            text14       00609
+__end_of_enableInterrupts       text25       00632
+__end_of_getADCValue            text11       00336
+__end_of_loop                   text5        0019D
+__end_of_main                   maintext     003B5
+__end_of_n_ADDRESS_MUL          stringtext2  00663
+__end_of_n_ADDRESS_P0           stringtext1  00649
+__end_of_nrf24l01HandleRX       text18       00104
+__end_of_nrf24l01ISR            text17       005AC
+__end_of_nrf24l01Init           text2        005DD
+__end_of_nrf24l01InitRegisters  text4        00227
+__end_of_nrf24l01InterfaceInit  text3        005FE
+__end_of_nrf24l01SPIEnd         text24       0062B
+__end_of_nrf24l01SPISend        text23       00614
+__end_of_nrf24l01SPIStart       text22       00624
+__end_of_nrf24l01Send           text21       005F0
+__end_of_nrf24l01SendString     text10       002B1
+__end_of_nrf24l01SetRXMode      text20       0049D
+__end_of_read_flashmem          text1        00504
+__end_of_sleep                  text15       0061D
+__end_of_strcmp                 text19       00588
+__end_of_strcpy                 text9        005C7
+__end_of_utoa                   text6        00411
 __initialization                cinit        00013
 __p_NVMEM_text                  _NVMEM_text  007E0
-__pbssBANK0                     bssBANK0     00049
+__pbssBANK0                     bssBANK0     0004C
 __pbssBANK1                     bssBANK1     000A0
 __pcstackBANK0                  cstackBANK0  00020
-__pcstackBANK1                  cstackBANK1  000B0
 __pcstackCOMMON                 cstackCOMMON 00070
+__pdataBANK0                    dataBANK0    00068
+__pidataBANK0                   idataBANK0   00660
 __pintentry                     intentry     00004
-__pmaintext                     maintext     002B9
-__pstringtext1                  stringtext1  0064E
+__pmaintext                     maintext     00336
+__pstringtext1                  stringtext1  00644
 __pstringtext10                 stringtext10 00000
-__pstringtext2                  stringtext2  0066E
-__pstringtext3                  stringtext3  0063C
-__pstringtext4                  stringtext4  00642
-__pstringtext5                  stringtext5  00653
-__pstringtext6                  stringtext6  00658
-__pstringtext7                  stringtext7  0065D
-__pstringtext8                  stringtext8  00662
-__pstringtext9                  stringtext9  00666
-__ptext1                        text1        004E2
-__ptext10                       text10       00199
-__ptext11                       text11       00340
-__ptext12                       text12       00514
-__ptext13                       text13       00421
-__ptext14                       text14       0066A
-__ptext15                       text15       0061E
-__ptext17                       text17       00598
-__ptext18                       text18       00022
-__ptext19                       text19       00571
-__ptext2                        text2        005BC
-__ptext20                       text20       00474
-__ptext21                       text21       005F2
-__ptext22                       text22       00627
-__ptext23                       text23       00613
-__ptext24                       text24       0062E
-__ptext25                       text25       00635
-__ptext3                        text3        00605
-__ptext4                        text4        0022F
-__ptext5                        text5        00100
-__ptext6                        text6        003C5
-__ptext7                        text7        00544
-__ptext8                        text8        004AD
-__ptext9                        text9        005D7
+__pstringtext2                  stringtext2  00662
+__pstringtext3                  stringtext3  00632
+__pstringtext4                  stringtext4  00638
+__pstringtext5                  stringtext5  00649
+__pstringtext6                  stringtext6  0064E
+__pstringtext7                  stringtext7  00653
+__pstringtext8                  stringtext8  00658
+__pstringtext9                  stringtext9  0065C
+__ptext1                        text1        004D2
+__ptext10                       text10       00227
+__ptext11                       text11       002B1
+__ptext12                       text12       00504
+__ptext13                       text13       00411
+__ptext14                       text14       005FE
+__ptext15                       text15       00614
+__ptext17                       text17       00588
+__ptext18                       text18       00026
+__ptext19                       text19       00561
+__ptext2                        text2        005C7
+__ptext20                       text20       00464
+__ptext21                       text21       005DD
+__ptext22                       text22       0061D
+__ptext23                       text23       00609
+__ptext24                       text24       00624
+__ptext25                       text25       0062B
+__ptext3                        text3        005F0
+__ptext4                        text4        0019D
+__ptext5                        text5        00104
+__ptext6                        text6        003B5
+__ptext7                        text7        00534
+__ptext8                        text8        0049D
+__ptext9                        text9        005AC
 __size_of_ISR                   (abs)        00000
 __size_of___lldiv               (abs)        00000
 __size_of___lmul                (abs)        00000
@@ -753,38 +770,38 @@ __size_of_sleep                 (abs)        00000
 __size_of_strcmp                (abs)        00000
 __size_of_strcpy                (abs)        00000
 __size_of_utoa                  (abs)        00000
-_checkRxData                    text14       0066A
-_counter                        bssBANK0     00049
-_enableInterrupts               text25       00635
-_getADCValue                    text11       00340
-_loop                           text5        00100
-_main                           maintext     002B9
-_nrf24l01                       bssBANK0     0004C
-_nrf24l01HandleRX               text18       00022
-_nrf24l01ISR                    text17       00598
-_nrf24l01Init                   text2        005BC
-_nrf24l01InitRegisters          text4        0022F
-_nrf24l01InterfaceInit          text3        00605
+_checkRxData                    text14       005FE
+_counter                        bssBANK0     0004C
+_enableInterrupts               text25       0062B
+_getADCValue                    text11       002B1
+_loop                           text5        00104
+_main                           maintext     00336
+_nrf24l01                       bssBANK0     0004F
+_nrf24l01HandleRX               text18       00026
+_nrf24l01ISR                    text17       00588
+_nrf24l01Init                   text2        005C7
+_nrf24l01InitRegisters          text4        0019D
+_nrf24l01InterfaceInit          text3        005F0
 _nrf24l01Name                   bssBANK1     000A0
-_nrf24l01RXTopic                bssBANK0     00055
-_nrf24l01RXValue                bssBANK0     0004D
-_nrf24l01SPIEnd                 text24       0062E
-_nrf24l01SPISend                text23       00613
-_nrf24l01SPIStart               text22       00627
-_nrf24l01Send                   text21       005F2
-_nrf24l01SendString             text10       00199
-_nrf24l01SetRXMode              text20       00474
-_nrf24l01TXTopic                bssBANK0     00065
-_nrf24l01TXValue                bssBANK0     0005D
-_read_flashmem                  text1        004E2
-_sleep                          text15       0061E
-_strcmp                         text19       00571
-_strcpy                         text9        005D7
-_utoa                           text6        003C5
+_nrf24l01RXTopic                bssBANK0     00050
+_nrf24l01RXValue                bssBANK1     000B0
+_nrf24l01SPIEnd                 text24       00624
+_nrf24l01SPISend                text23       00609
+_nrf24l01SPIStart               text22       0061D
+_nrf24l01Send                   text21       005DD
+_nrf24l01SendString             text10       00227
+_nrf24l01SetRXMode              text20       00464
+_nrf24l01TXTopic                bssBANK0     00060
+_nrf24l01TXValue                bssBANK0     00058
+_read_flashmem                  text1        004D2
+_sleep                          text15       00614
+_strcmp                         text19       00561
+_strcpy                         text9        005AC
+_utoa                           text6        003B5
 btemp                           (abs)        0007E
-clear_ram0                      clrtext      00648
+clear_ram0                      clrtext      0063E
 enableInterrupts@enable         cstackCOMMON 00070
-end_of_initialization           cinit        0001F
+end_of_initialization           cinit        00023
 getADCValue@adcLoop             cstackBANK0  0003A
 getADCValue@adcSum              cstackBANK0  0003B
 getADCValue@channel             cstackBANK0  00039
@@ -796,7 +813,7 @@ intlevel2                       functab      00000
 intlevel3                       functab      00000
 intlevel4                       functab      00000
 intlevel5                       functab      00000
-main@i                          cstackBANK0  00048
+main@i                          cstackBANK0  0004B
 nrf24l01HandleRX@byte           cstackCOMMON 0007B
 nrf24l01HandleRX@i              cstackCOMMON 0007C
 nrf24l01HandleRX@offset         cstackCOMMON 0007A
@@ -822,7 +839,7 @@ read_flashmem@offset            cstackBANK0  00023
 read_flashmem@result            cstackBANK0  00028
 reset_vec                       reset_vec    00000
 stackhi                         (abs)        0206F
-stacklo                         (abs)        02063
+stacklo                         (abs)        02068
 start                           init         00012
 start_initialization            cinit        00013
 strcmp@r                        cstackCOMMON 00073
@@ -843,11 +860,11 @@ FUNCTION INFORMATION:
 
  *************** function _main *****************
  Defined at:
-		line 106 in file "main.c"
+		line 124 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
-  i               1   40[BANK0 ] unsigned char 
+  i               1   43[BANK0 ] unsigned char 
  Return value:  Size  Location     Type
                   1    wreg      void 
  Registers used:
@@ -859,8 +876,8 @@ FUNCTION INFORMATION:
  Data sizes:     COMMON   BANK0   BANK1
       Params:         0       0       0
       Locals:         0       1       0
-      Temps:          0       0       3
-      Totals:         0       1       3
+      Temps:          0       3       0
+      Totals:         0       4       0
 Total ram usage:        4 bytes
  Hardware stack levels required when called:   11
  This function calls:
@@ -909,7 +926,7 @@ Total ram usage:        9 bytes
 
  *************** function _nrf24l01Init *****************
  Defined at:
-		line 332 in file "nrf24l01.c"
+		line 327 in file "nrf24l01.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -925,9 +942,9 @@ Total ram usage:        9 bytes
  Data sizes:     COMMON   BANK0   BANK1
       Params:         0       0       0
       Locals:         0       0       0
-      Temps:          0       2       0
-      Totals:         0       2       0
-Total ram usage:        2 bytes
+      Temps:          0       1       0
+      Totals:         0       1       0
+Total ram usage:        1 bytes
  Hardware stack levels used:    1
  Hardware stack levels required when called:    9
  This function calls:
@@ -970,7 +987,7 @@ Total ram usage:        0 bytes
 
  *************** function _nrf24l01InitRegisters *****************
  Defined at:
-		line 248 in file "nrf24l01.c"
+		line 242 in file "nrf24l01.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1007,7 +1024,7 @@ Total ram usage:        9 bytes
 
  *************** function _loop *****************
  Defined at:
-		line 74 in file "main.c"
+		line 92 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1217,7 +1234,7 @@ Total ram usage:        3 bytes
 
  *************** function _getADCValue *****************
  Defined at:
-		line 24 in file "main.c"
+		line 41 in file "main.c"
  Parameters:    Size  Location     Type
   channel         1    wreg     unsigned char 
   divider         4   17[BANK0 ] unsigned long 
@@ -1314,7 +1331,7 @@ Total ram usage:       14 bytes
 
  *************** function _checkRxData *****************
  Defined at:
-		line 62 in file "main.c"
+		line 79 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1345,7 +1362,7 @@ Total ram usage:        0 bytes
 
  *************** function _sleep *****************
  Defined at:
-		line 49 in file "main.c"
+		line 66 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1377,7 +1394,7 @@ Total ram usage:        0 bytes
 
  *************** function _ISR *****************
  Defined at:
-		line 17 in file "main.c"
+		line 34 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1712,12 +1729,12 @@ MODULE INFORMATION
 
 Module		Function		Class		Link	Load	Size
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\lwmod.c
-		___lwmod       		CODE           	0544	0000	46
+		___lwmod       		CODE           	0534	0000	46
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\lwmod.c estimated size: 46
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\Umul32.c
-		___lmul        		CODE           	0514	0000	49
+		___lmul        		CODE           	0504	0000	49
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\Umul32.c estimated size: 49
 
@@ -1725,67 +1742,67 @@ shared
 		_NVMEM         		CODE           	07E0	0000	33
 		_n_ADDRESS_P0  		STRCODE        	0000	0000	0
 		_n_ADDRESS_MUL 		STRCODE        	0000	0000	0
-		__initialization		CODE           	0013	0000	13
+		__initialization		CODE           	0013	0000	17
 
-shared estimated size: 46
+shared estimated size: 50
 
 flash.c
-		_read_flashmem 		CODE           	04E2	0000	51
+		_read_flashmem 		CODE           	04D2	0000	51
 
 flash.c estimated size: 51
 
 interface.c
-		_nrf24l01SPISend		CODE           	0613	0000	12
-		_nrf24l01SPIStart		CODE           	0627	0000	8
-		_nrf24l01SPIEnd		CODE           	062E	0000	8
-		_enableInterrupts		CODE           	0635	0000	8
-		_nrf24l01InterfaceInit		CODE           	0605	0000	15
+		_nrf24l01SPISend		CODE           	0609	0000	12
+		_nrf24l01SPIStart		CODE           	061D	0000	8
+		_nrf24l01SPIEnd		CODE           	0624	0000	8
+		_enableInterrupts		CODE           	062B	0000	8
+		_nrf24l01InterfaceInit		CODE           	05F0	0000	15
 
 interface.c estimated size: 51
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\lwdiv.c
-		___lwdiv       		CODE           	04AD	0000	54
+		___lwdiv       		CODE           	049D	0000	54
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\lwdiv.c estimated size: 54
 
 nrf24l01.c
-		_nrf24l01SendString		CODE           	0199	0000	151
-		_nrf24l01InitRegisters		CODE           	022F	0000	139
-		_nrf24l01HandleRX		CODE           	0022	0000	223
-		_nrf24l01ISR   		CODE           	0598	0000	37
-		_nrf24l01Send  		CODE           	05F2	0000	20
-		_nrf24l01Init  		CODE           	05BC	0000	28
-		_nrf24l01SetRXMode		CODE           	0474	0000	58
+		_nrf24l01SendString		CODE           	0227	0000	139
+		_nrf24l01InitRegisters		CODE           	019D	0000	139
+		_nrf24l01HandleRX		CODE           	0026	0000	223
+		_nrf24l01ISR   		CODE           	0588	0000	37
+		_nrf24l01Send  		CODE           	05DD	0000	20
+		_nrf24l01Init  		CODE           	05C7	0000	23
+		_nrf24l01SetRXMode		CODE           	0464	0000	58
 
-nrf24l01.c estimated size: 656
+nrf24l01.c estimated size: 639
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\lldiv.c
-		___lldiv       		CODE           	0421	0000	84
+		___lldiv       		CODE           	0411	0000	84
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\lldiv.c estimated size: 84
 
 main.c
-		_loop          		CODE           	0100	0000	154
+		_loop          		CODE           	0104	0000	154
 		_ISR           		CODE           	0004	0000	15
-		_main          		CODE           	02B9	0000	136
-		_checkRxData   		CODE           	066A	0000	5
-		_getADCValue   		CODE           	0340	0000	134
-		_sleep         		CODE           	061E	0000	10
+		_main          		CODE           	0336	0000	128
+		_checkRxData   		CODE           	05FE	0000	12
+		_getADCValue   		CODE           	02B1	0000	134
+		_sleep         		CODE           	0614	0000	10
 
-main.c estimated size: 454
+main.c estimated size: 453
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\itoa.c
-		_utoa          		CODE           	03C5	0000	93
+		_utoa          		CODE           	03B5	0000	93
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\itoa.c estimated size: 93
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\strcmp.c
-		_strcmp        		CODE           	0571	0000	40
+		_strcmp        		CODE           	0561	0000	40
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\strcmp.c estimated size: 40
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\strcpy.c
-		_strcpy        		CODE           	05D7	0000	28
+		_strcpy        		CODE           	05AC	0000	28
 
 C:\Program Files (x86)\Microchip\xc8\v1.45\sources\common\strcpy.c estimated size: 28
 

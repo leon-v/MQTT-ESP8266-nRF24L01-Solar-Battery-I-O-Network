@@ -10631,7 +10631,12 @@ const romData_t resetRomData = {
 {0},
 };
 
-# 41
+# 36
+void nrf24l01CELow(void);
+void nrf24l01CEHigh(void);
+void nrf24l01CSLow(void);
+void nrf24l01CSHigh(void);
+
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);

@@ -242,14 +242,19 @@ void nrf24l01SendString(void){
 RESEND:
 	
 	// Wait for the TXBusy to clear so we know the packet has been sent
-	i = 0xFF;
-    while (nrf24l01.TXBusy){
-        if (!--i) {
-            goto RESEND;
-        }
-        delayUs(50);
-    }
+//	i = 0xFF;
+//    while (nrf24l01.TXBusy){
+//        if (!--i) {
+//            goto RESEND;
+//        }
+//        delayUs(50);
+//    }
 
+    delayUs(50000);
+    delayUs(50000);
+    delayUs(50000);
+    
+//    PORTCbits.RC4 = (unsigned) !PORTCbits.RC4;
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
 	nrf24l01.TXBusy = 1;
@@ -266,7 +271,7 @@ RESEND:
 	// Send the command to tell the radio we want to send data with no auto ACK.
     nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
     
-    nrf24l01SPISend(nrf24l01TXPacketData.byte);
+    //nrf24l01SPISend(nrf24l01TXPacketData.byte);
     
 	// Loop through each character of the name buffer and send it to the radio
     for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
@@ -301,23 +306,23 @@ RESEND:
     enableInterrupts(1);
 
     // Wait for the TXBusy to clear so we know the packet has been sent
-	i = 0xFF;
-    while (nrf24l01.TXBusy){
-        if (!--i) {
-            goto RESEND;
-        }
-        delayUs(50);
-    }
+//	i = 0xFF;
+//    while (nrf24l01.TXBusy){
+//        if (!--i) {
+//            goto RESEND;
+//        }
+//        delayUs(50);
+//    }
 		
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
-	i = 0xFF;
-	while (nrf24l01TXPacketData.ACKRequest){
-		if (!--i) {
-            counter++;
-			goto RESEND;
-		}
-		delayUs(200);
-	}
+//	i = 0xFF;
+//	while (nrf24l01TXPacketData.ACKRequest){
+//		if (!--i) {
+//            counter++;
+//			goto RESEND;
+//		}
+//		delayUs(200);
+//	}
 }
 
 void nrf24l01ISR(void){
@@ -366,8 +371,6 @@ void nrf24l01InitRegisters(unsigned char isReciever){
     
 	config.PWR_UP = 0;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
-    
-    delayUs(10000);
     
     n_SETUP_AW_t setupAW;
     setupAW.byte = 0x00;
@@ -443,6 +446,7 @@ void nrf24l01InitRegisters(unsigned char isReciever){
     config.CRCO = 1;
 	config.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
+    
 }
 
 void nrf24l01Init(unsigned char isReciever){
@@ -450,16 +454,19 @@ void nrf24l01Init(unsigned char isReciever){
     
     nrf24l01InterfaceInit();
     
+    
     /* SPI INIT */
     
     nrf24l01CELow();
     
     delayUs(50000);
     
-    nrf24l01InitRegisters(isReciever);
+    nrf24l01InitRegisters(isReciever);    
     
     delayUs(50000);
 
     nrf24l01CEHigh();
+    
+    
 }
 

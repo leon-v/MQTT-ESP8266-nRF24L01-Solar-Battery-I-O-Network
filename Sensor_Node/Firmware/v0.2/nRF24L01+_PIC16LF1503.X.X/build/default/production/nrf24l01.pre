@@ -4208,14 +4208,8 @@ unsigned char i;
 
 nrf24l01.waitForTXACK = waitForAck;
 
-if (counter){
-counter--;
-}
-
 
 RESEND:
-
-counter++;
 
 
 i = 0xFF;
@@ -4288,6 +4282,7 @@ _delay((unsigned long)((100)*(16000000/4000000.0)));
 void nrf24l01InitRegisters(void){
 
 n_CONFIG_t config;
+
 config.PWR_UP = 0;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
 
@@ -4298,7 +4293,7 @@ setupAW.byte = 0x00;
 setupAW.AW = 3;
 nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
 
-# 267
+# 262
 n_RF_SETUP_t rfSetup;
 rfSetup.RF_DR_LOW = 0;
 rfSetup.RF_DR_HIGH = 1;
@@ -4373,10 +4368,10 @@ nrf24l01InterfaceInit();
 
 PORTAbits.RA0 = 0;
 
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((11)*(16000000/4000.0)));
 
 nrf24l01InitRegisters();
 
-_delay((unsigned long)((1000)*(16000000/4000000.0)));
+_delay((unsigned long)((2)*(16000000/4000.0)));
 }
 

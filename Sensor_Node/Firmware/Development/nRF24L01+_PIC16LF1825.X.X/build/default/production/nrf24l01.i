@@ -10631,7 +10631,12 @@ const romData_t resetRomData = {
 {0},
 };
 
-# 41
+# 36
+void nrf24l01CELow(void);
+void nrf24l01CEHigh(void);
+void nrf24l01CSLow(void);
+void nrf24l01CSHigh(void);
+
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
@@ -10999,7 +11004,7 @@ config.byte = nrf24l01Send(0b00000000 | 0x00, 0);
 if (config.PRIM_RX != rxMode){
 
 
-PORTAbits.RA0 = 0;
+nrf24l01CELow();
 _delay((unsigned long)((200)*(16000000/4000000.0)));
 
 # 93
@@ -11011,7 +11016,7 @@ _delay((unsigned long)((200)*(16000000/4000000.0)));
 
 
 if (rxMode){
-PORTAbits.RA0 = 1;
+nrf24l01CEHigh();
 _delay((unsigned long)((200)*(16000000/4000000.0)));
 }
 }
@@ -11099,7 +11104,7 @@ memset(nrf24l01RXValue, 0 ,strlen(nrf24l01RXValue));
 unsigned char width = nrf24l01Send(0b01100000, 0);
 
 
-PORTAbits.RA0 = 0;
+nrf24l01CELow();
 
 
 nrf24l01SPIStart();
@@ -11119,7 +11124,7 @@ offset+= nrf24l01ReceiveStringPart(nrf24l01RXValue, offset, sizeof(nrf24l01RXVal
 nrf24l01SPIEnd();
 
 
-PORTAbits.RA0 = 1;
+nrf24l01CEHigh();
 
 
 if (strcmp(nrf24l01RXName, nrf24l01TXName) != 0){
@@ -11154,14 +11159,11 @@ counter--;
 
 RESEND:
 
+# 253
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
 
-i = 0xFF;
-while (nrf24l01.TXBusy){
-if (!--i) {
-goto RESEND;
-}
-_delay((unsigned long)((50)*(16000000/4000000.0)));
-}
 
 
 
@@ -11179,7 +11181,7 @@ nrf24l01SPIStart();
 
 nrf24l01SPISend(0b10110000);
 
-nrf24l01SPISend(nrf24l01TXPacketData.byte);
+
 
 
 for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
@@ -11206,31 +11208,14 @@ nrf24l01SPISend(nrf24l01TXValue[i]);
 nrf24l01SPIEnd();
 
 
-PORTAbits.RA0 = 1;
+nrf24l01CEHigh();
 _delay((unsigned long)((20)*(16000000/4000000.0)));
-PORTAbits.RA0 = 0;
+nrf24l01CELow();
 
 
 enableInterrupts(1);
 
-
-i = 0xFF;
-while (nrf24l01.TXBusy){
-if (!--i) {
-goto RESEND;
-}
-_delay((unsigned long)((50)*(16000000/4000000.0)));
-}
-
-
-i = 0xFF;
-while (nrf24l01TXPacketData.ACKRequest){
-if (!--i) {
-counter++;
-goto RESEND;
-}
-_delay((unsigned long)((200)*(16000000/4000000.0)));
-}
+# 326
 }
 
 void nrf24l01ISR(void){
@@ -11280,14 +11265,12 @@ n_CONFIG_t config;
 config.PWR_UP = 0;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
 
-_delay((unsigned long)((10000)*(16000000/4000000.0)));
-
 n_SETUP_AW_t setupAW;
 setupAW.byte = 0x00;
 setupAW.AW = 0b11;
 nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
 
-# 383
+# 386
 n_RF_SETUP_t rfSetup;
 rfSetup.RF_DR_LOW = 0;
 rfSetup.RF_DR_HIGH = 1;
@@ -11351,6 +11334,7 @@ config.EN_CRC = 1;
 config.CRCO = 1;
 config.PWR_UP = 1;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
+
 }
 
 void nrf24l01Init(unsigned char isReciever){
@@ -11360,7 +11344,8 @@ nrf24l01InterfaceInit();
 
 
 
-PORTAbits.RA0 = 0;
+
+nrf24l01CELow();
 
 _delay((unsigned long)((50000)*(16000000/4000000.0)));
 
@@ -11368,6 +11353,8 @@ nrf24l01InitRegisters(isReciever);
 
 _delay((unsigned long)((50000)*(16000000/4000000.0)));
 
-PORTAbits.RA0 = 1;
+nrf24l01CEHigh();
+
+
 }
 

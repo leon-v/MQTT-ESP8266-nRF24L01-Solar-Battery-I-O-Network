@@ -6,6 +6,23 @@
 #include "flash.h"
 #include "interface.h"
 
+
+#define SLEEP_MODE          1
+#define SUM_ADC_MODE        2
+#define SEND_ADC_MODE       3
+#define SEND_COUNTER_MODE   4
+
+#define SEND_BOOT_MODE      10
+#define RUN_MODE            11
+#define START_ADC3_MODE     12
+#define START_ADC7_MODE     13
+#define START_ADC31_MODE    14
+#define START_ADC29_MODE    15
+#define SEND_INT_MODE       16
+
+unsigned char nextMode = SEND_BOOT_MODE;
+unsigned char mode = SEND_BOOT_MODE;
+
 #define ADC_OVERSAMPLE_COUNT 255
 
 
@@ -24,7 +41,7 @@ void interrupt ISR(void){
 unsigned long getADCValue(unsigned char channel, unsigned long divider){
 	
 	unsigned long adcSum = 0;
-	unsigned char adcLoop = ADC_OVERSAMPLE_COUNT;
+	unsigned char adcLoop = 255;
 	
 	ADCON0bits.CHS = channel;
 	delayUs(200);
@@ -69,6 +86,7 @@ void checkRxData(void){
 		return;
 	}
 	
+	counter++;
 }
 
 void loop(){
