@@ -7539,12 +7539,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U _exception ]
 [v _exception `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 82: romData.bootMode = exception;
+[; ;interface.c: 82: romData.bootMode = exception * 10;
 "82
-[e = . _romData 2 -> _exception `ui ]
+[e = . _romData 2 -> * -> _exception `i -> 10 `i `ui ]
 [; ;interface.c: 83: flashUpdate();
 "83
 [e ( _flashUpdate ..  ]
+[; ;interface.c: 84: asm("reset");
+"84
+[; <" reset ;# ">
 [; ;interface.c: 85: }
 "85
 [e :UE 932 ]

@@ -145,9 +145,17 @@ void main(void) {
     
     delayMs(10);
     
-    //flashRealod();
+    flashRealod();
+	
+	#define ROM_DATA_VERSION 0x01
+	if (romData.check != ROM_DATA_VERSION){
+		romData.check = ROM_DATA_VERSION;
+		strcpy(romData.name, "UnconfiguredH1");
+		romData.bootMode = 0x01;
+		flashUpdate();
+	}
     
-    strcpy(nrf24l01TXName, "UnconfiguredH");
+    strcpy(nrf24l01TXName, romData.name);
     
     nrf24l01Init(0);
     

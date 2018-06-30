@@ -10741,7 +10741,7 @@ PIE0bits.INTE = enable;
 }
 
 void exception(unsigned char exception){
-romData.bootMode = exception;
+romData.bootMode = exception * 10;
 flashUpdate();
-
+asm("reset");
 }

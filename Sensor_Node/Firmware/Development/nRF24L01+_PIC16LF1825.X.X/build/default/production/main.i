@@ -11148,13 +11148,21 @@ INTCONbits.GIE = 0;
 
 _delay((unsigned long)((10)*(16000000/4000.0)));
 
+flashRealod();
 
 
-strcpy(nrf24l01TXName, "UnconfiguredH");
+if (romData.check != 0x01){
+romData.check = 0x01;
+strcpy(romData.name, "UnconfiguredH1");
+romData.bootMode = 0x01;
+flashUpdate();
+}
+
+strcpy(nrf24l01TXName, romData.name);
 
 nrf24l01Init(0);
 
-# 158
+# 166
 FVRCONbits.FVREN = 0;
 FVRCONbits.ADFVR = 1;
 FVRCONbits.FVREN = 1;

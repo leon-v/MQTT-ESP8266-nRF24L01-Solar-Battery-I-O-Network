@@ -79,7 +79,7 @@ void enableInterrupts(unsigned char enable){
 }
 
 void exception(unsigned char exception){
-    romData.bootMode = exception;
+    romData.bootMode = exception * 10;
     flashUpdate();
-//    RESET();
+    RESET();
 }
