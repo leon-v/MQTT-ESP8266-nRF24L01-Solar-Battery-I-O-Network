@@ -241,20 +241,14 @@ void nrf24l01SendString(void){
 // Define where to re-start the send if the previous one failed
 RESEND:
 	
-	// Wait for the TXBusy to clear so we know the packet has been sent
-//	i = 0xFF;
-//    while (nrf24l01.TXBusy){
-//        if (!--i) {
-//            goto RESEND;
-//        }
-//        delayUs(50);
-//    }
-
-    delayUs(50000);
-    delayUs(50000);
-    delayUs(50000);
-    
-//    PORTCbits.RC4 = (unsigned) !PORTCbits.RC4;
+//	 Wait for the TXBusy to clear so we know the packet has been sent
+	i = 0xFF;
+    while (nrf24l01.TXBusy){
+        if (!--i) {
+            goto RESEND;
+        }
+        delayUs(50);
+    }
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
 	nrf24l01.TXBusy = 1;
@@ -306,23 +300,23 @@ RESEND:
     enableInterrupts(1);
 
     // Wait for the TXBusy to clear so we know the packet has been sent
-//	i = 0xFF;
-//    while (nrf24l01.TXBusy){
-//        if (!--i) {
-//            goto RESEND;
-//        }
-//        delayUs(50);
-//    }
+	i = 0xFF;
+    while (nrf24l01.TXBusy){
+        if (!--i) {
+            goto RESEND;
+        }
+        delayUs(50);
+    }
 		
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
-//	i = 0xFF;
-//	while (nrf24l01TXPacketData.ACKRequest){
-//		if (!--i) {
-//            counter++;
-//			goto RESEND;
-//		}
-//		delayUs(200);
-//	}
+	i = 0xFF;
+	while (nrf24l01TXPacketData.ACKRequest){
+		if (!--i) {
+            counter++;
+			goto RESEND;
+		}
+		delayUs(200);
+	}
 }
 
 void nrf24l01ISR(void){

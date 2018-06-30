@@ -11159,12 +11159,14 @@ counter--;
 
 RESEND:
 
-# 253
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
 
-
+i = 0xFF;
+while (nrf24l01.TXBusy){
+if (!--i) {
+goto RESEND;
+}
+_delay((unsigned long)((50)*(16000000/4000000.0)));
+}
 
 
 nrf24l01.TXBusy = 1;
@@ -11215,7 +11217,24 @@ nrf24l01CELow();
 
 enableInterrupts(1);
 
-# 326
+
+i = 0xFF;
+while (nrf24l01.TXBusy){
+if (!--i) {
+goto RESEND;
+}
+_delay((unsigned long)((50)*(16000000/4000000.0)));
+}
+
+
+i = 0xFF;
+while (nrf24l01TXPacketData.ACKRequest){
+if (!--i) {
+counter++;
+goto RESEND;
+}
+_delay((unsigned long)((200)*(16000000/4000000.0)));
+}
 }
 
 void nrf24l01ISR(void){
@@ -11270,7 +11289,7 @@ setupAW.byte = 0x00;
 setupAW.AW = 0b11;
 nrf24l01Send(0b00100000 | 0x02, setupAW.byte);
 
-# 386
+# 380
 n_RF_SETUP_t rfSetup;
 rfSetup.RF_DR_LOW = 0;
 rfSetup.RF_DR_HIGH = 1;
