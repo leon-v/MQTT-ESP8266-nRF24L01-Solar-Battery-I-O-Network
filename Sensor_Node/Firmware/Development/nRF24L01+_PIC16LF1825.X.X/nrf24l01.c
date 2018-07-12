@@ -3,14 +3,10 @@
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-char nrf24l01TXName[16];
-char nrf24l01TXTopic[8];
-char nrf24l01TXValue[8];
+char nrf24l01TXBuffer[64];
 packetData_t nrf24l01TXPacketData;
 
-char nrf24l01RXName[16];
-char nrf24l01RXTopic[8];
-char nrf24l01RXValue[8];
+char nrf24l01RXBuffer[64];
 packetData_t nrf24l01RXPacketData;
 
 unsigned int counter = 0;
@@ -40,35 +36,6 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
 }
 
 
-unsigned char nrf24l01GetPipe(){
-    
-    unsigned char pipe;
-    unsigned char i;
-    
-    for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
-        pipe+= nrf24l01TXName[i];
-    }
-    
-    pipe %= 5;
-    pipe *= n_ADDRESS_MUL;
-    
-    return pipe;
-}
-
-
-void nrf24l01SetTXAddress(){
-    
-    nrf24l01SPIStart();
-
-	nrf24l01SPISend(n_TX_ADDR);
-    
-    unsigned char i;
-    for (i = 0; i < sizeof(n_ADDRESS_P0) - 1; i++){
-        nrf24l01SPISend(n_ADDRESS_P0[i]);
-    }
-    
-    nrf24l01SPISend(nrf24l01GetPipe());
-}
 
 
 void nrf24l01SetRXMode(unsigned char rxMode){
@@ -107,33 +74,6 @@ void nrf24l01SetRXMode(unsigned char rxMode){
     nrf24l01.RXMode = rxMode;
 }
 
-
-unsigned char nrf24l01ReceiveStringPart(char * string, unsigned char offset, unsigned char destLength, unsigned char sourceLength){
-    
-    unsigned char byte;
-    unsigned char i;
-    
-    // Loop though each received character and put it in the string while making 
-    // sure that we don't overrun the array or the RX data 
-    for (i = 0; (i < destLength) && (offset + i < sourceLength) ; i++){
-        
-        // Get the byte from the radio IC
-		byte = nrf24l01SPISend(0);
-		
-        // If the current character id a '/' This string is complete
-		if (byte == '/'){
-			i++;
-			break;
-		}
-		
-        // Set the current position of the string to this byte
-		string[i] = byte;
-	}
-    
-    // Return the processed characters
-    return i;
-}
-
 void nrf24l01CheckACK(void){
     
     // If the current RX packet is not an ACK, skip
@@ -149,18 +89,8 @@ void nrf24l01CheckACK(void){
         return;
     }
     
-    // If the TX and RX topics do not match, skip.
-    if (strcmp(nrf24l01RXName, nrf24l01RXName) != 0){
-        return;
-    }
-    
-    // If the TX and RX topics do not match, skip.
-    if (strcmp(nrf24l01RXTopic, nrf24l01RXTopic) != 0){
-        return;
-    }
-    
-    // If the TX and RX values do not match, skip.
-    if (strcmp(nrf24l01RXValue, nrf24l01RXValue) != 0){
+    // If the TX and RX do not match, skip.
+    if (strcmp(nrf24l01TXBuffer, nrf24l01RXBuffer) != 0){
         return;
     }
     
@@ -180,12 +110,11 @@ void nrf24l01ReceiveString(void){
     unsigned char offset = 0;
 	
     // Clear all the current RX buffers
-    memset(nrf24l01RXName, 0 ,strlen(nrf24l01RXName));
-    memset(nrf24l01RXTopic, 0 ,strlen(nrf24l01RXTopic));
-    memset(nrf24l01RXValue, 0 ,strlen(nrf24l01RXValue));
+    memset(nrf24l01RXBuffer, 0 ,strlen(nrf24l01RXBuffer));
     
 	// Get the with of the data waiting in the RX buffer
     unsigned char width = nrf24l01Send(n_R_RX_PL_WID, 0);
+    unsigned char i = 0;
     
     // Disable the radio IC
     nrf24l01CELow();
@@ -200,10 +129,10 @@ void nrf24l01ReceiveString(void){
     nrf24l01RXPacketData.byte = nrf24l01SPISend(0);
     width--;
     
-    // The next 3 strings are the data
-    offset+= nrf24l01ReceiveStringPart(nrf24l01RXName, offset, sizeof(nrf24l01RXName), width);
-    offset+= nrf24l01ReceiveStringPart(nrf24l01RXTopic, offset, sizeof(nrf24l01RXTopic), width);
-    offset+= nrf24l01ReceiveStringPart(nrf24l01RXValue, offset, sizeof(nrf24l01RXValue), width);
+    for (i = 0; (i < width) && (i < sizeof(nrf24l01RXBuffer)); i++){
+        // Get the byte from the radio IC
+		nrf24l01RXBuffer[i] = nrf24l01SPISend(0);
+	}
     
     // End the SPI transaction and release the radio IC
     nrf24l01SPIEnd();
@@ -239,23 +168,18 @@ void nrf24l01SendString(void){
 	// Initalise an iterator for the many loops
     unsigned char i;
     
-    if (counter){
-        counter--;
-    }
-    
 	
 // Define where to re-start the send if the previous one failed
 RESEND:
 	
-    counter++;
 //	 Wait for the TXBusy to clear so we know the packet has been sent
-//	i = 0xFF;
-//    while (nrf24l01.TXBusy){
-//        if (!--i) {
-//            goto RESEND;
-//        }
-//        delayUs(50);
-//    }
+	i = 0xFF;
+    while (nrf24l01.TXBusy){
+        if (!--i) {
+            goto RESEND;
+        }
+        delayUs(50);
+    }
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
 	nrf24l01.TXBusy = 1;
@@ -275,24 +199,8 @@ RESEND:
     nrf24l01SPISend(nrf24l01TXPacketData.byte);
     
 	// Loop through each character of the name buffer and send it to the radio
-    for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
-        nrf24l01SPISend(nrf24l01TXName[i]);
-    }
-    
-	// Send the MQTT topic delimiter.
-    nrf24l01SPISend('/');
-    
-	// Loop through each character of the topic buffer and send it to the radio
-    for (i = 0; (nrf24l01TXTopic[i] != '\0') && (i < sizeof(nrf24l01TXTopic)); i++){
-        nrf24l01SPISend(nrf24l01TXTopic[i]);
-    }
-    
-	// Send the MQTT topic delimiter.
-    nrf24l01SPISend('/');
-    
-	// Loop through each character of the value buffer and send it to the radio
-    for (i = 0; (nrf24l01TXValue[i] != '\0') && (i < sizeof(nrf24l01TXValue)); i++){
-        nrf24l01SPISend(nrf24l01TXValue[i]);
+    for (i = 0; (i  < strlen(nrf24l01TXBuffer)) && (i < sizeof(nrf24l01TXBuffer)); i++){
+        nrf24l01SPISend(nrf24l01TXBuffer[i]);
     }
     
 	// Release the SPI bus from the radio
@@ -322,7 +230,8 @@ RESEND:
 		if (!--i) {
 			goto RESEND;
 		}
-		delayUs(5000);
+        counter++;
+		delayUs(500);
 	}
 }
 

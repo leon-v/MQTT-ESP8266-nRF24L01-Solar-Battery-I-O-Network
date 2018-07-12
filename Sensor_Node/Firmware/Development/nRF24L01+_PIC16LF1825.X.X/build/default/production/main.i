@@ -10967,16 +10967,6 @@ unsigned Always1 :1;
 };
 } packetData_t;
 
-extern char nrf24l01TXName[16];
-extern char nrf24l01TXTopic[8];
-extern char nrf24l01TXValue[8];
-extern packetData_t nrf24l01TXPacketData;
-
-extern char nrf24l01RXTopic[8];
-extern char nrf24l01RXValue[8];
-extern char nrf24l01RXName[16];
-extern packetData_t nrf24l01RXPacketData;
-
 typedef struct{
 unsigned waitForTXACK : 1;
 unsigned TXBusy : 1;
@@ -10985,10 +10975,18 @@ unsigned RXMode : 1;
 unsigned Pipe : 3;
 } nrf24l01_t;
 
+extern char nrf24l01TXBuffer[64];
+extern packetData_t nrf24l01TXPacketData;
+
+extern char nrf24l01RXBuffer[64];
+extern packetData_t nrf24l01RXPacketData;
+
+
+
 
 volatile nrf24l01_t nrf24l01;
 
-# 47
+# 45
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
@@ -11016,6 +11014,7 @@ void flashUpdate(void);
 # 9 "main.c"
 unsigned char sleepLoop = 0;
 unsigned int counter = 0;
+char tempString[16];
 
 
 
@@ -11079,42 +11078,57 @@ return;
 
 }
 
+void setName(void){
+memset(nrf24l01TXBuffer, 0, sizeof(nrf24l01TXBuffer));
+strcat(nrf24l01TXBuffer, romData.name);
+strcat(nrf24l01TXBuffer, "/");
+}
 void loop(){
 
 
 asm("clrwdt");
 
-strcpy(nrf24l01TXTopic, "DBG");
-utoa(nrf24l01TXValue, counter, 10);
+setName();
+utoa(tempString, counter, 10);
+strcat(nrf24l01TXBuffer, "DBG/");
+strcat(nrf24l01TXBuffer, tempString);
 counter = 0;
 nrf24l01TXPacketData.byte = 0;
-
+nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();
 sleep();
 
-strcpy(nrf24l01TXTopic, "VBAT");
-utoa(nrf24l01TXValue, getADCValue(0b000100, 2505), 10);
+setName();
+utoa(tempString, getADCValue(0b000100, 2505), 10);
+strcat(nrf24l01TXBuffer, "VBAT/");
+strcat(nrf24l01TXBuffer, tempString);
 nrf24l01TXPacketData.byte = 0;
 nrf24l01TXPacketData.ACKRequest = 1;
 nrf24l01SendString();
 sleep();
 
-strcpy(nrf24l01TXTopic, "ANC3");
-utoa(nrf24l01TXValue, getADCValue(0b010011, 2500), 10);
+setName();
+utoa(tempString, getADCValue(0b010011, 2500), 10);
+strcat(nrf24l01TXBuffer, "ANC3/");
+strcat(nrf24l01TXBuffer, tempString);
 nrf24l01TXPacketData.byte = 0;
 nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();
 sleep();
 
-strcpy(nrf24l01TXTopic, "FVR");
-utoa(nrf24l01TXValue, getADCValue(0b111111, 208900) - 40, 10);
+setName();
+utoa(tempString, getADCValue(0b111111, 208900) - 40, 10);
+strcat(nrf24l01TXBuffer, "FVR/");
+strcat(nrf24l01TXBuffer, tempString);
 nrf24l01TXPacketData.byte = 0;
 nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();
 sleep();
 
-strcpy(nrf24l01TXTopic, "TEMP");
-utoa(nrf24l01TXValue, getADCValue(0b111101, 2475), 10);
+setName();
+utoa(tempString, getADCValue(0b111101, 2475), 10);
+strcat(nrf24l01TXBuffer, "TEMP/");
+strcat(nrf24l01TXBuffer, tempString);
 nrf24l01TXPacketData.byte = 0;
 nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();
@@ -11146,7 +11160,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 146
+# 162
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11159,18 +11173,16 @@ flashRealod();
 
 
 
-if (romData.check != 0x03){
-romData.check = 0x03;
+if (romData.check != 0x05){
+romData.check = 0x05;
 strcpy(romData.name, "UW1");
-romData.bootMode = 0x01;
+romData.bootMode = 0x00;
 flashUpdate();
 }
 
-strcpy(nrf24l01TXName, romData.name);
-
 nrf24l01Init(0);
 
-# 174
+# 188
 ADCON0bits.ADON = 0;
 
 
@@ -11208,7 +11220,7 @@ INTCONbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 12;
+WDTCONbits.WDTPS = 10;
 
 
 TRISAbits.TRISA5 = 0;
@@ -11218,12 +11230,13 @@ PORTAbits.RA5 = 0;
 INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 
-strcpy(nrf24l01TXTopic, "BOOT");
-utoa(nrf24l01TXValue, romData.bootMode, 10);
-nrf24l01TXPacketData.byte = 0x00;
+setName();
+utoa(tempString, romData.bootMode, 10);
+strcat(nrf24l01TXBuffer, "BOOT/");
+strcat(nrf24l01TXBuffer, tempString);
+nrf24l01TXPacketData.byte = 0;
 nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();
-
 sleep();
 
 while(1){

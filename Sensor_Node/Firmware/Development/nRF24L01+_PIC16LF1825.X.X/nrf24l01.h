@@ -19,16 +19,6 @@ typedef union{
     };
 } packetData_t;
 
-extern char nrf24l01TXName[16];
-extern char nrf24l01TXTopic[8];
-extern char nrf24l01TXValue[8];
-extern packetData_t nrf24l01TXPacketData;
-
-extern char nrf24l01RXTopic[8];
-extern char nrf24l01RXValue[8];
-extern char nrf24l01RXName[16];
-extern packetData_t nrf24l01RXPacketData;
-
 typedef struct{
     unsigned waitForTXACK       : 1;
     unsigned TXBusy             : 1;
@@ -36,6 +26,14 @@ typedef struct{
     unsigned RXMode             : 1;
     unsigned Pipe             	: 3;
 } nrf24l01_t;
+
+extern char nrf24l01TXBuffer[64];
+extern packetData_t nrf24l01TXPacketData;
+
+extern char nrf24l01RXBuffer[64];
+extern packetData_t nrf24l01RXPacketData;
+
+
 
 
 volatile nrf24l01_t nrf24l01;

@@ -51,6 +51,9 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 	    	strcpy(nrf24l01TXValue, nrf24l01RXValue);
 
 	    	nrf24l01SendString(0);
+
+	    	os_printf("Sent ACK\r\n");
+
 	    	nrf24l01SetRXMode(1);
 		}
 		

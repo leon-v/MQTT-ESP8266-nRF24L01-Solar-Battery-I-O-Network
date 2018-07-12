@@ -8,6 +8,7 @@
 
 unsigned char sleepLoop = 0;
 unsigned int counter = 0;
+char tempString[16];
 
 // Cahnge ISR to trigger super loop code to do its bidding
 
@@ -71,42 +72,57 @@ void checkRxData(void){
 
 }
 
+void setName(void){
+    memset(nrf24l01TXBuffer, 0, sizeof(nrf24l01TXBuffer));
+    strcat(nrf24l01TXBuffer, romData.name);
+    strcat(nrf24l01TXBuffer, "/");
+}
 void loop(){
     
 	// Write payload data
     CLRWDT();
-
-	strcpy(nrf24l01TXTopic, "DBG");
-	utoa(nrf24l01TXValue, counter, 10);
+    
+    setName();
+    utoa(tempString, counter, 10);
+    strcat(nrf24l01TXBuffer, "DBG/");
+    strcat(nrf24l01TXBuffer, tempString);
     counter = 0;
     nrf24l01TXPacketData.byte = 0;
-//    nrf24l01TXPacketData.ACKRequest = 0;
+    nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();
 	sleep();
-
-	strcpy(nrf24l01TXTopic, "VBAT");
-	utoa(nrf24l01TXValue, getADCValue(0b000100, 2505), 10);
+    
+    setName();
+    utoa(tempString, getADCValue(0b000100, 2505), 10);
+    strcat(nrf24l01TXBuffer, "VBAT/");
+    strcat(nrf24l01TXBuffer, tempString);
     nrf24l01TXPacketData.byte = 0;
     nrf24l01TXPacketData.ACKRequest = 1;
 	nrf24l01SendString();
 	sleep();
-
-	strcpy(nrf24l01TXTopic, "ANC3");
-	utoa(nrf24l01TXValue, getADCValue(0b010011, 2500), 10);
+    
+    setName();
+    utoa(tempString, getADCValue(0b010011, 2500), 10);
+    strcat(nrf24l01TXBuffer, "ANC3/");
+    strcat(nrf24l01TXBuffer, tempString);
     nrf24l01TXPacketData.byte = 0;
     nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();
 	sleep();
-
-	strcpy(nrf24l01TXTopic, "FVR");
-	utoa(nrf24l01TXValue, getADCValue(0b111111, 208900) - 40, 10);
+    
+    setName();
+    utoa(tempString, getADCValue(0b111111, 208900) - 40, 10);
+    strcat(nrf24l01TXBuffer, "FVR/");
+    strcat(nrf24l01TXBuffer, tempString);
     nrf24l01TXPacketData.byte = 0;
     nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();
 	sleep();
-
-	strcpy(nrf24l01TXTopic, "TEMP");
-	utoa(nrf24l01TXValue, getADCValue(0b111101, 2475), 10);
+    
+    setName();
+    utoa(tempString, getADCValue(0b111101, 2475), 10);
+    strcat(nrf24l01TXBuffer, "TEMP/");
+    strcat(nrf24l01TXBuffer, tempString);
     nrf24l01TXPacketData.byte = 0;
     nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();
@@ -153,16 +169,14 @@ void main(void) {
     
     flashRealod();
 	
-	#define ROM_DATA_VERSION 0x03
+	#define ROM_DATA_VERSION 0x05
 
 	if (romData.check != ROM_DATA_VERSION){
 		romData.check = ROM_DATA_VERSION;
 		strcpy(romData.name, "UW1");
-		romData.bootMode = 0x01;
+		romData.bootMode = 0x00;
 		flashUpdate();
 	}
-    
-    strcpy(nrf24l01TXName, romData.name);
     
     nrf24l01Init(0);
     
@@ -208,7 +222,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 12; //10=1S, 11=2S, 12=4S
+    WDTCONbits.WDTPS = 10; //10=1S, 11=2S, 12=4S
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;
@@ -218,12 +232,13 @@ void main(void) {
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
 	
-	strcpy(nrf24l01TXTopic, "BOOT");
-	utoa(nrf24l01TXValue, romData.bootMode, 10);
-    nrf24l01TXPacketData.byte = 0x00;
+    setName();
+    utoa(tempString, romData.bootMode, 10);
+    strcat(nrf24l01TXBuffer, "BOOT/");
+    strcat(nrf24l01TXBuffer, tempString);
+    nrf24l01TXPacketData.byte = 0;
     nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();
-//    PORTCbits.RC4 = 1;
 	sleep();
     
     while(1){
