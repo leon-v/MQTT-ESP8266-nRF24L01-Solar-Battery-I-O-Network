@@ -8,13 +8,25 @@
 extern const i_uint8_t n_ADDRESS_P0[];
 extern const i_uint8_t n_ADDRESS_MUL;
 
-extern i_int8_t nrf24l01TXName[16];
-extern i_int8_t nrf24l01TXTopic[8];
-extern i_int8_t nrf24l01TXValue[8];
+typedef union{
+    struct{
+        unsigned byte       :8;
+    };
+    struct{
+        unsigned ACKRequest :1;
+        unsigned IsACK      :1;
+    };
+} packetData_t;
 
-extern i_int8_t nrf24l01RXTopic[8];
-extern i_int8_t nrf24l01RXValue[8];
-extern i_int8_t nrf24l01RXName[16];
+extern i_int8_t nrf24l01TXName[17];
+extern i_int8_t nrf24l01TXTopic[9];
+extern i_int8_t nrf24l01TXValue[9];
+extern packetData_t nrf24l01TXPacketData;
+
+extern i_int8_t nrf24l01RXName[17];
+extern i_int8_t nrf24l01RXTopic[9];
+extern i_int8_t nrf24l01RXValue[9];
+extern packetData_t nrf24l01RXPacketData;
 
 typedef struct{
     unsigned waitForTXACK       : 1;

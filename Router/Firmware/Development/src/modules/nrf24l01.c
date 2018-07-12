@@ -3,13 +3,15 @@
 const i_uint8_t n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const i_uint8_t n_ADDRESS_MUL = 33;
 
-i_int8_t nrf24l01TXName[16];
-i_int8_t nrf24l01TXTopic[8];
-i_int8_t nrf24l01TXValue[8];
+i_int8_t nrf24l01TXName[17];
+i_int8_t nrf24l01TXTopic[9];
+i_int8_t nrf24l01TXValue[9];
+packetData_t nrf24l01TXPacketData;
 
-i_int8_t nrf24l01RXTopic[8];
-i_int8_t nrf24l01RXValue[8];
-i_int8_t nrf24l01RXName[16];
+i_int8_t nrf24l01RXName[17];
+i_int8_t nrf24l01RXTopic[9];
+i_int8_t nrf24l01RXValue[9];
+packetData_t nrf24l01RXPacketData;
 
 
 unsigned int counter = 0;
@@ -95,25 +97,22 @@ void nrf24l01ReceiveString(void){
     i_uint8_t i;
     i_uint8_t offset = 0;
 	
-	nrf24l01.RXPending = 1;
-	
-	for (i = 0; i < sizeof(nrf24l01RXTopic); i++){
-		nrf24l01RXTopic[i] = '\0';
-	}
-	for (i = 0; i < sizeof(nrf24l01RXValue); i++){
-		nrf24l01RXValue[i] = '\0';
-	}
-	for (i = 0; i < sizeof(nrf24l01RXName); i++){
-		nrf24l01RXName[i] = '\0';
-	}
-	
     i_uint8_t width = nrf24l01Send(n_R_RX_PL_WID, 0);
+
+    
+
+    memset(nrf24l01RXName, 0, sizeof(nrf24l01RXName));
+    memset(nrf24l01RXTopic, 0, sizeof(nrf24l01RXTopic));
+    memset(nrf24l01RXValue, 0, sizeof(nrf24l01RXValue));
     
     nrf24l01CELow();
     
 	nrf24l01SPIStart();
 
 	nrf24l01SPISend(n_R_RX_PAYLOAD);
+
+	nrf24l01RXPacketData.byte = nrf24l01SPISend(0);
+	width--;
     
 	for (i = 0; (i < sizeof(nrf24l01RXName)) && (offset + i < width) ; i++){
 		
@@ -126,7 +125,9 @@ void nrf24l01ReceiveString(void){
 		
 		nrf24l01RXName[i] = byte;
 	}
+	// nrf24l01RXName[i++] = 0;
 	offset+= i;
+	
 	
 	for (i = 0; (i < sizeof(nrf24l01RXTopic)) && (offset + i < width) ; i++){
 		
@@ -138,38 +139,42 @@ void nrf24l01ReceiveString(void){
 		
 		nrf24l01RXTopic[i] = byte;
 	}
+	// nrf24l01RXTopic[i++] = 0;
 	offset+= i;
 	
 	
     for (i = 0; (i < sizeof(nrf24l01RXValue)) && (offset + i < width) ; i++){
 		nrf24l01RXValue[i] = nrf24l01SPISend(0);
 	}
+	// nrf24l01RXValue[i++] = 0;
     
     nrf24l01SPIEnd();
 
     nrf24l01CEHigh();
 
+    nrf24l01SetRXMode(1);
+
     // Check for ACK
     
-    if (!nrf24l01.waitForTXACK){
-    	return;
-    }
+ //    if (!nrf24l01.waitForTXACK){
+ //    	return;
+ //    }
 
-    if (strcmp(nrf24l01TXName, nrf24l01RXName) != 0){
-    	return;
-    }
+ //    if (strcmp(nrf24l01TXName, nrf24l01RXName) != 0){
+ //    	return;
+ //    }
 
-    if (strcmp(nrf24l01RXTopic, nrf24l01TXTopic) != 0){
-    	return;
-    }
+ //    if (strcmp(nrf24l01RXTopic, nrf24l01TXTopic) != 0){
+ //    	return;
+ //    }
 
-    if (strcmp(nrf24l01RXValue, "ACK") != 0){
-    	return;
-    }
+ //    if (strcmp(nrf24l01RXValue, "ACK") != 0){
+ //    	return;
+ //    }
 
-	nrf24l01.waitForTXACK = 0;
-	nrf24l01.RXPending = 0;
-	nrf24l01SetRXMode(0);
+	// nrf24l01.waitForTXACK = 0;
+	// nrf24l01.RXPending = 0;
+	// nrf24l01SetRXMode(0);
 }
 
 void nrf24l01SendString(i_uint8_t waitForAck){
@@ -212,6 +217,8 @@ void nrf24l01SendString(i_uint8_t waitForAck){
     
 	// Send the command to tell the radio we want to send data with no auto ACK.
     nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
+
+    nrf24l01SPISend(nrf24l01TXPacketData.byte);
     
 	// Loop through each character of the name buffer and send it to the radio
     for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
@@ -323,12 +330,13 @@ void nrf24l01InitRegisters(i_uint8_t isReciever){
     nrf24l01Send(n_W_REGISTER | n_SETUP_AW, setupAW.byte);
     
     // Set Frequency
-//     n_RF_CH_t channel;
-//     channel.RF_CH = RADIO_FREQUENCY;
-//     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
+     n_RF_CH_t channel;
+     channel.RF_CH = 2;
+     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
     
     // Set radio to 2 Mbps and high power.  Leave LNA_HCURR at its default.
      n_RF_SETUP_t rfSetup;
+     rfSetup.byte = 0x00;
      rfSetup.RF_DR_LOW = 0;
      rfSetup.RF_DR_HIGH = 1;
      rfSetup.RF_PWR = 3;

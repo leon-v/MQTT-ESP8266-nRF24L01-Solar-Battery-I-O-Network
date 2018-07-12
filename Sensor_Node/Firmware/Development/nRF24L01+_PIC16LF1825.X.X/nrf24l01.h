@@ -15,6 +15,7 @@ typedef union{
     struct{
         unsigned ACKRequest :1;
         unsigned IsACK      :1;
+        unsigned Always1    :1;
     };
 } packetData_t;
 

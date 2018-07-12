@@ -12,6 +12,7 @@ unsigned int counter = 0;
 // Cahnge ISR to trigger super loop code to do its bidding
 
 void interrupt ISR(void){    
+    
     if (PIR0bits.INTF){
         nrf24l01ISR();
         PIR0bits.INTF = 0;
@@ -29,6 +30,7 @@ unsigned long getADCValue(unsigned char channel, unsigned long divider){
 	while (--adcLoop){
 		
 		ADCON0bits.ADGO = 1;
+        
 		while (ADCON0bits.ADGO){
 			NOP();
 		}
@@ -36,7 +38,8 @@ unsigned long getADCValue(unsigned char channel, unsigned long divider){
 		adcSum+= ADRESL;
 		adcSum+= (unsigned) (ADRESH << 8);
 	}
-	
+//	adcSum*= adcLoop;
+    
 	adcSum*= 100;
 	adcSum/= divider;
 	
@@ -76,35 +79,35 @@ void loop(){
 	strcpy(nrf24l01TXTopic, "DBG");
 	utoa(nrf24l01TXValue, counter, 10);
     counter = 0;
-    nrf24l01TXPacketData.byte = 0x00;
+    nrf24l01TXPacketData.byte = 0;
+//    nrf24l01TXPacketData.ACKRequest = 0;
+	nrf24l01SendString();
+	sleep();
+
+	strcpy(nrf24l01TXTopic, "VBAT");
+	utoa(nrf24l01TXValue, getADCValue(0b000100, 2505), 10);
+    nrf24l01TXPacketData.byte = 0;
+    nrf24l01TXPacketData.ACKRequest = 1;
+	nrf24l01SendString();
+	sleep();
+
+	strcpy(nrf24l01TXTopic, "ANC3");
+	utoa(nrf24l01TXValue, getADCValue(0b010011, 2500), 10);
+    nrf24l01TXPacketData.byte = 0;
     nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();
 	sleep();
 
-	strcpy(nrf24l01TXTopic, "ADC3");
-	utoa(nrf24l01TXValue, getADCValue(3, 2505), 10);
-    nrf24l01TXPacketData.byte = 0x00;
+	strcpy(nrf24l01TXTopic, "FVR");
+	utoa(nrf24l01TXValue, getADCValue(0b111111, 208900) - 40, 10);
+    nrf24l01TXPacketData.byte = 0;
     nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();
 	sleep();
 
-	strcpy(nrf24l01TXTopic, "ADC7");
-	utoa(nrf24l01TXValue, getADCValue(7, 2500), 10);
-    nrf24l01TXPacketData.byte = 0x00;
-    nrf24l01TXPacketData.ACKRequest = 0;
-	nrf24l01SendString();
-	sleep();
-
-	strcpy(nrf24l01TXTopic, "ADC29");
-	utoa(nrf24l01TXValue, getADCValue(29, 208900) - 40, 10);
-    nrf24l01TXPacketData.byte = 0x00;
-    nrf24l01TXPacketData.ACKRequest = 0;
-	nrf24l01SendString();
-	sleep();
-
-	strcpy(nrf24l01TXTopic, "ADC31");
-	utoa(nrf24l01TXValue, getADCValue(31, 2475), 10);
-    nrf24l01TXPacketData.byte = 0x00;
+	strcpy(nrf24l01TXTopic, "TEMP");
+	utoa(nrf24l01TXValue, getADCValue(0b111101, 2475), 10);
+    nrf24l01TXPacketData.byte = 0;
     nrf24l01TXPacketData.ACKRequest = 0;
 	nrf24l01SendString();
 	sleep();
@@ -121,11 +124,14 @@ void main(void) {
     ODCONA = 0x00;
     ODCONC = 0x00;
     
-    SLRCONA = 0x00;
-    SLRCONC = 0x00;
+//    SLRCONA = 0x00;
+//    SLRCONC = 0x00;
     
     INLVLA = 0x00;
     INLVLC = 0x00;
+    
+    WPUA = 0x00;
+    WPUC = 0x00;
     
     TRISCbits.TRISC5 = 0;
     TRISCbits.TRISC4 = 0;
@@ -140,17 +146,18 @@ void main(void) {
     INTCONbits.PEIE = 0;
     INTCONbits.GIE = 0;
     
-//    OSCCON1bits.NOSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
-//    OSCCON1bits.NDIV = 0b000;
+    OSCCON1bits.NOSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
+    OSCCON1bits.NDIV = 0b000;
     
     delayMs(10);
     
     flashRealod();
 	
-	#define ROM_DATA_VERSION 0x01
+	#define ROM_DATA_VERSION 0x03
+
 	if (romData.check != ROM_DATA_VERSION){
 		romData.check = ROM_DATA_VERSION;
-		strcpy(romData.name, "UnconfiguredH1");
+		strcpy(romData.name, "UW1");
 		romData.bootMode = 0x01;
 		flashUpdate();
 	}
@@ -162,25 +169,28 @@ void main(void) {
     
 //    OPTION_REGbits.nWPUEN = 0;
     
-    /* Configure FVR */
-    FVRCONbits.FVREN = 0; // Disable Voltage Reference Module
-    FVRCONbits.ADFVR = 1; // 1.024V
-    FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
+
+    /* Setup ADC */
+    ADCON0bits.ADON = 0;
+   
+    //ANA4
+    ANSELAbits.ANSA4 = 1;
+    TRISAbits.TRISA4 = 1;
+    WPUAbits.WPUA4 = 0;
+    
+    //ANC3
+    ANSELCbits.ANSC3 = 1;
+    TRISCbits.TRISC3 = 1;
     
     /* Configure Temp sensor*/
     FVRCONbits.TSEN = 0;
     FVRCONbits.TSRNG = 0; // 2V Low Range
     FVRCONbits.TSEN = 1;
-
-    /* Setup ADC */
-    ADCON0bits.ADON = 0;
-   
-    ANSELAbits.ANSA4 = 1;
-    TRISAbits.TRISA4 = 1;
-    WPUAbits.WPUA4 = 0;
     
-    ANSELCbits.ANSC3 = 1;
-    TRISCbits.TRISC3 = 1;
+    /* Configure FVR */
+    FVRCONbits.FVREN = 0; // Disable Voltage Reference Module
+    FVRCONbits.ADFVR = 1; // 1.024V
+    FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
     
     ADCON1bits.ADCS = 0b111;
     ADCON1bits.ADFM = 1;
@@ -191,14 +201,14 @@ void main(void) {
     
     
     /* Setup Interrupt Pin */
+//	RA2PPSbits.RA2PPS = 0b00010;// A2
     TRISAbits.TRISA2 = 1;
-	RA2PPSbits.RA2PPS = 0b00010;// A2
     PIE0bits.INTE = 1;
     INTCONbits.INTEDG = 0;
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 10;
+    WDTCONbits.WDTPS = 12; //10=1S, 11=2S, 12=4S
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;
@@ -209,13 +219,9 @@ void main(void) {
     INTCONbits.GIE = 1;
 	
 	strcpy(nrf24l01TXTopic, "BOOT");
-    
 	utoa(nrf24l01TXValue, romData.bootMode, 10);
-    
     nrf24l01TXPacketData.byte = 0x00;
     nrf24l01TXPacketData.ACKRequest = 0;
-   
-    
 	nrf24l01SendString();
 //    PORTCbits.RC4 = 1;
 	sleep();

@@ -10963,6 +10963,7 @@ unsigned byte :8;
 struct{
 unsigned ACKRequest :1;
 unsigned IsACK :1;
+unsigned Always1 :1;
 };
 } packetData_t;
 
@@ -10987,7 +10988,7 @@ unsigned Pipe : 3;
 
 volatile nrf24l01_t nrf24l01;
 
-# 46
+# 47
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
@@ -11019,6 +11020,7 @@ unsigned int counter = 0;
 
 
 void interrupt ISR(void){
+
 if (PIR0bits.INTF){
 nrf24l01ISR();
 PIR0bits.INTF = 0;
@@ -11036,6 +11038,7 @@ _delay((unsigned long)((200)*(16000000/4000000.0)));
 while (--adcLoop){
 
 ADCON0bits.ADGO = 1;
+
 while (ADCON0bits.ADGO){
 __nop();
 }
@@ -11043,6 +11046,7 @@ __nop();
 adcSum+= ADRESL;
 adcSum+= (unsigned) (ADRESH << 8);
 }
+
 
 adcSum*= 100;
 adcSum/= divider;
@@ -11083,35 +11087,35 @@ asm("clrwdt");
 strcpy(nrf24l01TXTopic, "DBG");
 utoa(nrf24l01TXValue, counter, 10);
 counter = 0;
-nrf24l01TXPacketData.byte = 0x00;
+nrf24l01TXPacketData.byte = 0;
+
+nrf24l01SendString();
+sleep();
+
+strcpy(nrf24l01TXTopic, "VBAT");
+utoa(nrf24l01TXValue, getADCValue(0b000100, 2505), 10);
+nrf24l01TXPacketData.byte = 0;
+nrf24l01TXPacketData.ACKRequest = 1;
+nrf24l01SendString();
+sleep();
+
+strcpy(nrf24l01TXTopic, "ANC3");
+utoa(nrf24l01TXValue, getADCValue(0b010011, 2500), 10);
+nrf24l01TXPacketData.byte = 0;
 nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();
 sleep();
 
-strcpy(nrf24l01TXTopic, "ADC3");
-utoa(nrf24l01TXValue, getADCValue(3, 2505), 10);
-nrf24l01TXPacketData.byte = 0x00;
+strcpy(nrf24l01TXTopic, "FVR");
+utoa(nrf24l01TXValue, getADCValue(0b111111, 208900) - 40, 10);
+nrf24l01TXPacketData.byte = 0;
 nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();
 sleep();
 
-strcpy(nrf24l01TXTopic, "ADC7");
-utoa(nrf24l01TXValue, getADCValue(7, 2500), 10);
-nrf24l01TXPacketData.byte = 0x00;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
-sleep();
-
-strcpy(nrf24l01TXTopic, "ADC29");
-utoa(nrf24l01TXValue, getADCValue(29, 208900) - 40, 10);
-nrf24l01TXPacketData.byte = 0x00;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
-sleep();
-
-strcpy(nrf24l01TXTopic, "ADC31");
-utoa(nrf24l01TXValue, getADCValue(31, 2475), 10);
-nrf24l01TXPacketData.byte = 0x00;
+strcpy(nrf24l01TXTopic, "TEMP");
+utoa(nrf24l01TXValue, getADCValue(0b111101, 2475), 10);
+nrf24l01TXPacketData.byte = 0;
 nrf24l01TXPacketData.ACKRequest = 0;
 nrf24l01SendString();
 sleep();
@@ -11128,32 +11132,36 @@ ANSELC = 0x00;
 ODCONA = 0x00;
 ODCONC = 0x00;
 
-SLRCONA = 0x00;
-SLRCONC = 0x00;
+
+
 
 INLVLA = 0x00;
 INLVLC = 0x00;
+
+WPUA = 0x00;
+WPUC = 0x00;
 
 TRISCbits.TRISC5 = 0;
 TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 140
+# 146
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
-
-
+OSCCON1bits.NOSC = 0b000;
+OSCCON1bits.NDIV = 0b000;
 
 _delay((unsigned long)((10)*(16000000/4000.0)));
 
 flashRealod();
 
 
-if (romData.check != 0x01){
-romData.check = 0x01;
-strcpy(romData.name, "UnconfiguredH1");
+
+if (romData.check != 0x03){
+romData.check = 0x03;
+strcpy(romData.name, "UW1");
 romData.bootMode = 0x01;
 flashUpdate();
 }
@@ -11162,10 +11170,17 @@ strcpy(nrf24l01TXName, romData.name);
 
 nrf24l01Init(0);
 
-# 166
-FVRCONbits.FVREN = 0;
-FVRCONbits.ADFVR = 1;
-FVRCONbits.FVREN = 1;
+# 174
+ADCON0bits.ADON = 0;
+
+
+ANSELAbits.ANSA4 = 1;
+TRISAbits.TRISA4 = 1;
+WPUAbits.WPUA4 = 0;
+
+
+ANSELCbits.ANSC3 = 1;
+TRISCbits.TRISC3 = 1;
 
 
 FVRCONbits.TSEN = 0;
@@ -11173,14 +11188,9 @@ FVRCONbits.TSRNG = 0;
 FVRCONbits.TSEN = 1;
 
 
-ADCON0bits.ADON = 0;
-
-ANSELAbits.ANSA4 = 1;
-TRISAbits.TRISA4 = 1;
-WPUAbits.WPUA4 = 0;
-
-ANSELCbits.ANSC3 = 1;
-TRISCbits.TRISC3 = 1;
+FVRCONbits.FVREN = 0;
+FVRCONbits.ADFVR = 1;
+FVRCONbits.FVREN = 1;
 
 ADCON1bits.ADCS = 0b111;
 ADCON1bits.ADFM = 1;
@@ -11191,14 +11201,14 @@ ADCON0bits.ADON = 1;
 
 
 
+
 TRISAbits.TRISA2 = 1;
-RA2PPSbits.RA2PPS = 0b00010;
 PIE0bits.INTE = 1;
 INTCONbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 10;
+WDTCONbits.WDTPS = 12;
 
 
 TRISAbits.TRISA5 = 0;
@@ -11209,13 +11219,9 @@ INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 
 strcpy(nrf24l01TXTopic, "BOOT");
-
 utoa(nrf24l01TXValue, romData.bootMode, 10);
-
 nrf24l01TXPacketData.byte = 0x00;
 nrf24l01TXPacketData.ACKRequest = 0;
-
-
 nrf24l01SendString();
 
 sleep();

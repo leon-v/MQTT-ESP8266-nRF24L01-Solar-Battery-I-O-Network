@@ -150,6 +150,11 @@ void nrf24l01CheckACK(void){
     }
     
     // If the TX and RX topics do not match, skip.
+    if (strcmp(nrf24l01RXName, nrf24l01RXName) != 0){
+        return;
+    }
+    
+    // If the TX and RX topics do not match, skip.
     if (strcmp(nrf24l01RXTopic, nrf24l01RXTopic) != 0){
         return;
     }
@@ -174,9 +179,6 @@ void nrf24l01ReceiveString(void){
     // Check the packet matches this name
     unsigned char offset = 0;
 	
-    // Flag the global as we have a valid packet
-	nrf24l01.RXPending = 1;
-	
     // Clear all the current RX buffers
     memset(nrf24l01RXName, 0 ,strlen(nrf24l01RXName));
     memset(nrf24l01RXTopic, 0 ,strlen(nrf24l01RXTopic));
@@ -196,6 +198,7 @@ void nrf24l01ReceiveString(void){
     
     // Get the packet data byte as the first byte
     nrf24l01RXPacketData.byte = nrf24l01SPISend(0);
+    width--;
     
     // The next 3 strings are the data
     offset+= nrf24l01ReceiveStringPart(nrf24l01RXName, offset, sizeof(nrf24l01RXName), width);
@@ -209,24 +212,26 @@ void nrf24l01ReceiveString(void){
     nrf24l01CEHigh();
     
     // If the TX and RX names do not match this packet was not meant for this node
-    if (strcmp(nrf24l01RXName, nrf24l01TXName) != 0){
-        nrf24l01.RXPending = 0;
-        return;
-    }
+//    if (strcmp(nrf24l01RXName, nrf24l01TXName) != 0){
+//        nrf24l01.RXPending = 0;
+//        return;
+//    }
+    
+
     
     // If this received packet requires an ACK to be sent, send the ACK
-    if (nrf24l01RXPacketData.ACKRequest){
-        
-        strcpy(nrf24l01RXName, nrf24l01TXName);
-        strcpy(nrf24l01RXTopic, nrf24l01TXTopic);
-        strcpy(nrf24l01RXValue, nrf24l01TXValue);
-        
-        nrf24l01TXPacketData.byte = nrf24l01RXPacketData.byte;
-        
-        nrf24l01TXPacketData.ACKRequest = 0;
-        nrf24l01TXPacketData.IsACK = 1;
-        nrf24l01SendString();
-    }
+//    if (nrf24l01RXPacketData.ACKRequest){
+//        
+//        strcpy(nrf24l01RXName, nrf24l01TXName);
+//        strcpy(nrf24l01RXTopic, nrf24l01TXTopic);
+//        strcpy(nrf24l01RXValue, nrf24l01TXValue);
+//        
+//        nrf24l01TXPacketData.byte = nrf24l01RXPacketData.byte;
+//        
+//        nrf24l01TXPacketData.ACKRequest = 0;
+//        nrf24l01TXPacketData.IsACK = 1;
+//        nrf24l01SendString();
+//    }
 }
 
 void nrf24l01SendString(void){
@@ -237,18 +242,20 @@ void nrf24l01SendString(void){
     if (counter){
         counter--;
     }
+    
 	
 // Define where to re-start the send if the previous one failed
 RESEND:
 	
+    counter++;
 //	 Wait for the TXBusy to clear so we know the packet has been sent
-	i = 0xFF;
-    while (nrf24l01.TXBusy){
-        if (!--i) {
-            goto RESEND;
-        }
-        delayUs(50);
-    }
+//	i = 0xFF;
+//    while (nrf24l01.TXBusy){
+//        if (!--i) {
+//            goto RESEND;
+//        }
+//        delayUs(50);
+//    }
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
 	nrf24l01.TXBusy = 1;
@@ -265,7 +272,7 @@ RESEND:
 	// Send the command to tell the radio we want to send data with no auto ACK.
     nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
     
-    //nrf24l01SPISend(nrf24l01TXPacketData.byte);
+    nrf24l01SPISend(nrf24l01TXPacketData.byte);
     
 	// Loop through each character of the name buffer and send it to the radio
     for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
@@ -305,17 +312,17 @@ RESEND:
         if (!--i) {
             goto RESEND;
         }
-        delayUs(50);
+        delayUs(20);
     }
+    
 		
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
 	i = 0xFF;
 	while (nrf24l01TXPacketData.ACKRequest){
 		if (!--i) {
-            counter++;
 			goto RESEND;
 		}
-		delayUs(200);
+		delayUs(5000);
 	}
 }
 
@@ -326,7 +333,7 @@ void nrf24l01ISR(void){
     
     // I have had the IC lock up and return 0x00, reset it
     if (status.byte == 0x00){
-    	exception(1);
+//    	exception(1);
     }
     
     // Also reset if we get 0xFF since that likely means there is an SPI error
@@ -350,8 +357,11 @@ void nrf24l01ISR(void){
 
     // Check id there is a received packet waiting
     if (status.RX_DR){
-
-    	nrf24l01.RXPending = 1;
+        
+        nrf24l01.RXPending = 1;
+        
+        nrf24l01ReceiveString();
+        nrf24l01CheckACK();
     }
 	
 	// Clear the interrupt on the nrf24l01
@@ -372,12 +382,13 @@ void nrf24l01InitRegisters(unsigned char isReciever){
     nrf24l01Send(n_W_REGISTER | n_SETUP_AW, setupAW.byte);
     
     // Set Frequency
-//     n_RF_CH_t channel;
-//     channel.RF_CH = RADIO_FREQUENCY;
-//     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
+     n_RF_CH_t channel;
+     channel.RF_CH = 2;
+     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
     
     // Set radio to 2 Mbps and high power.  Leave LNA_HCURR at its default.
      n_RF_SETUP_t rfSetup;
+     rfSetup.byte = 0x00;
      rfSetup.RF_DR_LOW = 0;
      rfSetup.RF_DR_HIGH = 1;
      rfSetup.RF_PWR = 3;
