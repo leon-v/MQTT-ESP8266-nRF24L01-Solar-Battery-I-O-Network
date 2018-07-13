@@ -7,7 +7,7 @@
 #include "interface.h"
 
 unsigned char sleepLoop = 0;
-unsigned int counter = 0;
+unsigned long counter = 0;
 
 // Cahnge ISR to trigger super loop code to do its bidding
 
@@ -38,7 +38,6 @@ unsigned long getADCValue(unsigned char channel, unsigned long divider){
 		adcSum+= ADRESL;
 		adcSum+= (unsigned) (ADRESH << 8);
 	}
-//	adcSum*= adcLoop;
     
 	adcSum*= 100;
 	adcSum/= divider;
@@ -48,6 +47,8 @@ unsigned long getADCValue(unsigned char channel, unsigned long divider){
 
 void sleep(){
 	while (1){
+        
+        counter++;
         
 		SLEEP();
 		NOP();
@@ -98,10 +99,9 @@ void loop(){
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
-    counter+=100;
 	sleep();
     
-    setMessage(&packet, "VBAT", getADCValue(0b000100, 2505));
+    setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
@@ -114,14 +114,13 @@ void loop(){
 	nrf24l01SendPacket(&packet);
 	sleep();
     
-    setMessage(&packet, "FVR", getADCValue(0b111111, 25600));
+    setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
 	sleep();
     
-//    setMessage(Packet.Message, "TEMP", getADCValue(0b111101, 2475));
-    setMessage(&packet, "TEMP", getADCValue(0b111101, 208900) - 40);
+    setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
@@ -168,11 +167,11 @@ void main(void) {
     
     flashRealod();
 	
-	#define ROM_DATA_VERSION 0x05
+	#define ROM_DATA_VERSION 0x06
 
 	if (romData.check != ROM_DATA_VERSION){
 		romData.check = ROM_DATA_VERSION;
-		strcpy(romData.name, "UW1");
+		strcpy(romData.name, "UW2");
 		romData.bootMode = 0x00;
 		flashUpdate();
 	}
@@ -222,7 +221,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 10; //10=1S, 11=2S, 12=4S
+    WDTCONbits.WDTPS = 9; //10=1S, 11=2S, 12=4S
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;

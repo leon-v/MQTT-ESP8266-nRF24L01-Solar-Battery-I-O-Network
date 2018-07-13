@@ -11009,7 +11009,7 @@ void flashUpdate(void);
 
 # 9 "main.c"
 unsigned char sleepLoop = 0;
-unsigned int counter = 0;
+unsigned long counter = 0;
 
 
 
@@ -11041,7 +11041,6 @@ adcSum+= ADRESL;
 adcSum+= (unsigned) (ADRESH << 8);
 }
 
-
 adcSum*= 100;
 adcSum/= divider;
 
@@ -11050,6 +11049,8 @@ return adcSum;
 
 void sleep(){
 while (1){
+
+counter++;
 
 asm("sleep");
 __nop();
@@ -11100,10 +11101,9 @@ setMessage(&packet, "DBG", counter);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
-counter+=100;
 sleep();
 
-setMessage(&packet, "VBAT", getADCValue(0b000100, 2505));
+setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
@@ -11116,14 +11116,13 @@ packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 sleep();
 
-setMessage(&packet, "FVR", getADCValue(0b111111, 25600));
+setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 sleep();
 
-
-setMessage(&packet, "TEMP", getADCValue(0b111101, 208900) - 40);
+setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
@@ -11155,7 +11154,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 161
+# 160
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11168,16 +11167,16 @@ flashRealod();
 
 
 
-if (romData.check != 0x05){
-romData.check = 0x05;
-strcpy(romData.name, "UW1");
+if (romData.check != 0x06){
+romData.check = 0x06;
+strcpy(romData.name, "UW2");
 romData.bootMode = 0x00;
 flashUpdate();
 }
 
 nrf24l01Init(0);
 
-# 187
+# 186
 ADCON0bits.ADON = 0;
 
 
@@ -11216,7 +11215,7 @@ INTCONbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 10;
+WDTCONbits.WDTPS = 9;
 
 
 TRISAbits.TRISA5 = 0;
