@@ -26,32 +26,22 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 			nrf24l01SendACK(RXPacket);
 		}
 
-		os_printf("%s\r\n", RXPacket->Message);
-
-
 		char* strings = strtok(RXPacket->Message, "/");
 
 
-		char *name = NULL;
-		name = (char *) os_malloc(strlen(strings) * sizeof(char));
+		char *name = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(name, strings);
-		os_printf("%s\r\n", name);
 		strings = strtok(NULL, "/");
 
-		char *topic = NULL;
-		topic = (char *) os_malloc(strlen(strings) * sizeof(char));
+		char *topic = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(topic, strings);
-		os_printf("%s\r\n", topic);
 		strings = strtok(NULL, "/");
 
-		char *value = NULL;
-		value = (char *) os_malloc(strlen(strings) * sizeof(char));
+		char *value = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(value, strings);
-		os_printf("%s\r\n", value);
-		strings = strtok(NULL, "/");
 
 		char *buffer = NULL;
-		buffer = (char *) os_malloc(128 * sizeof(char));
+		buffer = (char *) os_zalloc(128 * sizeof(char));
 
 		os_sprintf(buffer, "/radio/in/%u/%s/%s", system_get_chip_id(), name, topic);
 

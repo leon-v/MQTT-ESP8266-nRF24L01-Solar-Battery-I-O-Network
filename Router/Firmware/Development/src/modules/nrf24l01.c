@@ -48,10 +48,6 @@ void nrf24l01SetRXMode(unsigned char rxMode){
         nrf24l01CELow();
         delayUs(200);
         
-//        if (!rxMode){
-//            nrf24l01SetTXAddress();
-//        }
-        
         // Change the mode of the IC to the mode requested
         config.PRIM_RX = rxMode;
         nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
@@ -71,7 +67,7 @@ void nrf24l01SetRXMode(unsigned char rxMode){
 }
 
 void nrf24l01SendACK(nrf24l01Packet_t * packet){
-	
+
 	packet->packetData.ACKRequest = 0;
 	packet->packetData.IsACK = 1;
 
@@ -116,7 +112,7 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 void nrf24l01ReceivePacket(void){
 	
     // Clear all the current RX buffers
-    memset(RXPacket.Message, 0 ,strlen(RXPacket.Message));
+    memset(RXPacket.Message, 0 ,sizeof(RXPacket.Message));
     RXPacket.packetData.byte = 0x00;
     
 	// Get the with of the data waiting in the RX buffer
@@ -163,7 +159,6 @@ RESEND:
 	i = 0xFF;
     while (nrf24l01.TXBusy){
         if (!--i) {
-        	os_printf("TXB1\r\n");
             goto RESEND;
         }
         delayUs(50);
@@ -206,7 +201,6 @@ RESEND:
 	i = 0xFF;
     while (nrf24l01.TXBusy){
         if (!--i) {
-        	os_printf("TXB2\r\n");
             goto RESEND;
         }
         delayUs(20);
@@ -217,7 +211,6 @@ RESEND:
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
 		if (!--i) {
-			os_printf("ACXB2\r\n");
 			goto RESEND;
 		}
         counter++;
@@ -248,6 +241,7 @@ void nrf24l01ISR(void){
         // If the nrf24l01 is in PTX mode and we are waiting for an ACK
         if (!nrf24l01.RXMode){
             if (TXPacket->packetData.ACKRequest){
+
                 // Put the radio into receiver mode so we can get an ACK
                 nrf24l01SetRXMode(1);
             }
@@ -257,9 +251,22 @@ void nrf24l01ISR(void){
     // Check id there is a received packet waiting
     if (status.RX_DR){
         
-        nrf24l01.RXPending = 1;
-        nrf24l01ReceivePacket();
-        nrf24l01CheckACK();
+        // If the previous RX packet has been delt with
+        if (!nrf24l01.RXPending){
+
+        	// Flag the radio state as having a RX packet ready
+        	nrf24l01.RXPending = 1;
+	        nrf24l01ReceivePacket();
+	        nrf24l01CheckACK();
+        }
+
+        // If the MCU has not processed the last packet
+        else{
+
+        	// We don't want to clear the interrupt so we can pick it up next time
+        	status.RX_DR = 0;
+        }
+        
     }
 	
 	// Clear the interrupt on the nrf24l01

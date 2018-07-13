@@ -71,19 +71,20 @@ void checkRxData(void){
 
 }
 
-void setMessage(char * message, const char * topic, unsigned long value){
-    memset(message, 0, sizeof(message));
+void setMessage(nrf24l01Packet_t * packet, const char * topic, unsigned long value){
+    memset(packet->Message, 0, sizeof(packet->Message));
     
-    strcat(message, romData.name);
+    strcat(packet->Message, romData.name);
     
-    strcat(message, "/");
-    strcat(message, topic);
-    
+    strcat(packet->Message, "/");
+    strcat(packet->Message, topic);
+            
     char tempString[16];
-    utoa(tempString, value, 10);
     
-    strcat(message, "/");
-    strcat(message, tempString);
+    ultoa(tempString, value, 10);
+    
+    strcat(packet->Message, "/");
+    strcat(packet->Message, tempString);
 }
 
 void loop(){
@@ -91,38 +92,39 @@ void loop(){
 	// Write payload data
     CLRWDT();
     
-    nrf24l01Packet_t Packet;
+    nrf24l01Packet_t packet;
     
-    setMessage(Packet.Message, "DBG", counter);
-    Packet.packetData.byte = 0;
-    Packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&Packet);
-    counter = 0;
+    setMessage(&packet, "DBG", counter);
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&packet);
+    counter+=100;
 	sleep();
     
-    setMessage(Packet.Message, "VBAT", getADCValue(0b000100, 2505));
-    Packet.packetData.byte = 0;
-    Packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&Packet);
+    setMessage(&packet, "VBAT", getADCValue(0b000100, 2505));
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 1;
+	nrf24l01SendPacket(&packet);
 	sleep();
     
     
-    setMessage(Packet.Message, "ANC3", getADCValue(0b010011, 2500));
-    Packet.packetData.byte = 0;
-    Packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&Packet);
+    setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&packet);
 	sleep();
     
-    setMessage(Packet.Message, "FVR", getADCValue(0b111111, 208900) - 40);
-    Packet.packetData.byte = 0;
-    Packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&Packet);
+    setMessage(&packet, "FVR", getADCValue(0b111111, 25600));
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&packet);
 	sleep();
     
-    setMessage(Packet.Message, "TEMP", getADCValue(0b111101, 2475));
-    Packet.packetData.byte = 0;
-    Packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&Packet);
+//    setMessage(Packet.Message, "TEMP", getADCValue(0b111101, 2475));
+    setMessage(&packet, "TEMP", getADCValue(0b111101, 208900) - 40);
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&packet);
 	sleep();
 	
 //	checkRxData();
@@ -195,7 +197,7 @@ void main(void) {
     
     /* Configure Temp sensor*/
     FVRCONbits.TSEN = 0;
-    FVRCONbits.TSRNG = 0; // 2V Low Range
+    FVRCONbits.TSRNG = 0; // 1.8V Low Range
     FVRCONbits.TSEN = 1;
     
     /* Configure FVR */
@@ -205,6 +207,7 @@ void main(void) {
     
     ADCON1bits.ADCS = 0b111;
     ADCON1bits.ADFM = 1;
+    ADCON1bits.ADNREF = 0b0;
     ADCON1bits.ADPREF = 0b00;
     
     ADCON0bits.CHS = 3;
@@ -229,12 +232,12 @@ void main(void) {
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
     
-        nrf24l01Packet_t Packet;
+    nrf24l01Packet_t packet;
         
-    setMessage(Packet.Message, "BOOT", romData.bootMode);
-    Packet.packetData.byte = 0;
-    Packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&Packet);
+    setMessage(&packet, "BOOT", romData.bootMode);
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&packet);
 	sleep();
     
     while(1){

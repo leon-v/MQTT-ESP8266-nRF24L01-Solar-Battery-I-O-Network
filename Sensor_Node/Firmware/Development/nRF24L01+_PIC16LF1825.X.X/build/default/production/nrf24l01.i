@@ -10894,9 +10894,9 @@ struct{
 unsigned int byte :8;
 };
 struct{
+unsigned TooLoud :1;
 unsigned ACKRequest :1;
 unsigned IsACK :1;
-unsigned TooLoud :1;
 };
 } packetData_t;
 
@@ -10913,12 +10913,12 @@ void nrf24l01Init(unsigned char isReciever);
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
+nrf24l01Packet_t *nrf24l01GetRXPacket(void);
+void nrf24l01SendACK(nrf24l01Packet_t * packet);
 
 # 3 "nrf24l01.c"
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
-
-unsigned int counter = 0;
 
 nrf24l01Packet_t * TXPacket;
 nrf24l01Packet_t RXPacket;
@@ -10963,7 +10963,7 @@ if (config.PRIM_RX != rxMode){
 nrf24l01CELow();
 _delay((unsigned long)((200)*(16000000/4000000.0)));
 
-# 56
+# 54
 config.PRIM_RX = rxMode;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
 
@@ -10981,7 +10981,16 @@ _delay((unsigned long)((200)*(16000000/4000000.0)));
 nrf24l01.RXMode = rxMode;
 }
 
+void nrf24l01SendACK(nrf24l01Packet_t * packet){
+
+packet->packetData.ACKRequest = 0;
+packet->packetData.IsACK = 1;
+
+nrf24l01SendPacket(packet);
+}
+
 void nrf24l01CheckACK(void){
+
 
 
 if (!RXPacket.packetData.IsACK){
@@ -11011,10 +11020,14 @@ nrf24l01SetRXMode(0);
 }
 
 
+nrf24l01Packet_t *nrf24l01GetRXPacket(void){
+return &RXPacket;
+}
+
 void nrf24l01ReceivePacket(void){
 
 
-memset(RXPacket.Message, 0 ,strlen(RXPacket.Message));
+memset(RXPacket.Message, 0, sizeof(RXPacket.Message));
 RXPacket.packetData.byte = 0x00;
 
 
@@ -11044,8 +11057,6 @@ nrf24l01SPIEnd();
 
 
 nrf24l01CEHigh();
-
-# 158
 }
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
@@ -11117,7 +11128,6 @@ while (TXPacket->packetData.ACKRequest){
 if (!--i) {
 goto RESEND;
 }
-counter++;
 _delay((unsigned long)((500)*(16000000/4000000.0)));
 }
 }
@@ -11146,6 +11156,7 @@ nrf24l01.TXBusy = 0;
 if (!nrf24l01.RXMode){
 if (TXPacket->packetData.ACKRequest){
 
+
 nrf24l01SetRXMode(1);
 }
 }
@@ -11154,9 +11165,22 @@ nrf24l01SetRXMode(1);
 
 if (status.RX_DR){
 
+
+if (!nrf24l01.RXPending){
+
+
 nrf24l01.RXPending = 1;
 nrf24l01ReceivePacket();
 nrf24l01CheckACK();
+}
+
+
+else{
+
+
+status.RX_DR = 0;
+}
+
 }
 
 
@@ -11269,4 +11293,3 @@ nrf24l01CEHigh();
 
 
 }
-

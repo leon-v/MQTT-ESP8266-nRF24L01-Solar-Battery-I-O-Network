@@ -19,9 +19,9 @@ typedef union{
         unsigned int byte       :8;
     };
     struct{
+		unsigned TooLoud    :1;
         unsigned ACKRequest :1;
         unsigned IsACK      :1;
-        unsigned TooLoud    :1;
     };
 } packetData_t;
 

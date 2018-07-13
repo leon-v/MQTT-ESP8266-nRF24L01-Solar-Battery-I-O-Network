@@ -19,9 +19,9 @@ typedef union{
         unsigned int byte       :8;
     };
     struct{
+		unsigned TooLoud    :1;
         unsigned ACKRequest :1;
         unsigned IsACK      :1;
-        unsigned TooLoud    :1;
     };
 } packetData_t;
 
@@ -41,6 +41,8 @@ void nrf24l01Init(unsigned char isReciever);
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
+nrf24l01Packet_t *nrf24l01GetRXPacket(void);
+void nrf24l01SendACK(nrf24l01Packet_t * packet);
 
 #endif	/* NRF24L01_H_ */
 

@@ -48,11 +48,11 @@ i_uint8_t nrf24l01SPISend(i_uint8_t data){
 		}
 
 		// Clock Up
-		os_delay_us(1);
+		os_delay_us(5);
 		gpio_output_set(CLKPIN, 0, CLKPIN, 0);// (high, low, out, in)
 
 		// Clock Down
-		os_delay_us(1);
+		os_delay_us(5);
 		gpio_output_set(0, CLKPIN, CLKPIN, 0);// (high, low, out, in)
 
 		bit--;

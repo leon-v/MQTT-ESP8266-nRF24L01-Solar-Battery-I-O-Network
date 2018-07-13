@@ -3,8 +3,6 @@
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-unsigned int counter = 0;
-
 nrf24l01Packet_t * TXPacket;
 nrf24l01Packet_t RXPacket;
 
@@ -70,7 +68,16 @@ void nrf24l01SetRXMode(unsigned char rxMode){
     nrf24l01.RXMode = rxMode;
 }
 
+void nrf24l01SendACK(nrf24l01Packet_t * packet){
+	
+	packet->packetData.ACKRequest = 0;
+	packet->packetData.IsACK = 1;
+
+	nrf24l01SendPacket(packet);
+}
+
 void nrf24l01CheckACK(void){
+    /* Check if the RX packet is an ACK */
     
     // If the current RX packet is not an ACK, skip
     if (!RXPacket.packetData.IsACK){
@@ -100,10 +107,14 @@ void nrf24l01CheckACK(void){
 }
 
 
+nrf24l01Packet_t *nrf24l01GetRXPacket(void){
+	return &RXPacket;
+}
+
 void nrf24l01ReceivePacket(void){
 	
     // Clear all the current RX buffers
-    memset(RXPacket.Message, 0 ,strlen(RXPacket.Message));
+    memset(RXPacket.Message, 0, sizeof(RXPacket.Message));
     RXPacket.packetData.byte = 0x00;
     
 	// Get the with of the data waiting in the RX buffer
@@ -133,28 +144,6 @@ void nrf24l01ReceivePacket(void){
 
     // Re-enable the radio IO to continue receiving
     nrf24l01CEHigh();
-    
-    // If the TX and RX names do not match this packet was not meant for this node
-//    if (strcmp(nrf24l01RXName, nrf24l01TXName) != 0){
-//        nrf24l01.RXPending = 0;
-//        return;
-//    }
-    
-
-    
-    // If this received packet requires an ACK to be sent, send the ACK
-//    if (nrf24l01RXPacketData.ACKRequest){
-//        
-//        strcpy(nrf24l01RXName, nrf24l01TXName);
-//        strcpy(nrf24l01RXTopic, nrf24l01TXTopic);
-//        strcpy(nrf24l01RXValue, nrf24l01TXValue);
-//        
-//        nrf24l01TXPacketData.byte = nrf24l01RXPacketData.byte;
-//        
-//        nrf24l01TXPacketData.ACKRequest = 0;
-//        nrf24l01TXPacketData.IsACK = 1;
-//        nrf24l01SendString();
-//    }
 }
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
@@ -226,7 +215,6 @@ RESEND:
 		if (!--i) {
 			goto RESEND;
 		}
-        counter++;
 		delayUs(500);
 	}
 }
@@ -254,6 +242,7 @@ void nrf24l01ISR(void){
         // If the nrf24l01 is in PTX mode and we are waiting for an ACK
         if (!nrf24l01.RXMode){
             if (TXPacket->packetData.ACKRequest){
+
                 // Put the radio into receiver mode so we can get an ACK
                 nrf24l01SetRXMode(1);
             }
@@ -263,9 +252,22 @@ void nrf24l01ISR(void){
     // Check id there is a received packet waiting
     if (status.RX_DR){
         
-        nrf24l01.RXPending = 1;
-        nrf24l01ReceivePacket();
-        nrf24l01CheckACK();
+        // If the previous RX packet has been delt with
+        if (!nrf24l01.RXPending){
+
+        	// Flag the radio state as having a RX packet ready
+        	nrf24l01.RXPending = 1;
+	        nrf24l01ReceivePacket();
+	        nrf24l01CheckACK();
+        }
+
+        // If the MCU has not processed the last packet
+        else{
+
+        	// We don't want to clear the interrupt so we can pick it up next time
+        	status.RX_DR = 0;
+        }
+        
     }
 	
 	// Clear the interrupt on the nrf24l01
@@ -274,7 +276,7 @@ void nrf24l01ISR(void){
 
 
 void nrf24l01InitRegisters(unsigned char isReciever){
-    
+
     n_CONFIG_t config;
     
 	config.PWR_UP = 0;
@@ -378,4 +380,3 @@ void nrf24l01Init(unsigned char isReciever){
     
     
 }
-
