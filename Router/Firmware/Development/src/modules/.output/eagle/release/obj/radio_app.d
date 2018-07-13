@@ -1,5 +1,5 @@
 .output/eagle/release/obj/radio_app.o .output/eagle/release/obj/radio_app.d : radio_app.c ../include/modules/radio_app.h \
- ../include/modules/nrf24l01.h ../include/modules/radio_interface.h \
+ ../include/modules/nrf24l01.h ../include/modules/interface.h \
  ../../include/osapi.h \
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/string.h \
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/_ansi.h \

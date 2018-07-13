@@ -10883,55 +10883,45 @@ extern char * strrichr(const char *, int);
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+typedef struct{
+unsigned TXBusy : 1;
+unsigned RXPending : 1;
+unsigned RXMode : 1;
+} nrf24l01_t;
+
 typedef union{
 struct{
-unsigned byte :8;
+unsigned int byte :8;
 };
 struct{
 unsigned ACKRequest :1;
 unsigned IsACK :1;
-unsigned Always1 :1;
+unsigned TooLoud :1;
 };
 } packetData_t;
 
 typedef struct{
-unsigned waitForTXACK : 1;
-unsigned TXBusy : 1;
-unsigned RXPending : 1;
-unsigned RXMode : 1;
-unsigned Pipe : 3;
-} nrf24l01_t;
-
-extern char nrf24l01TXBuffer[64];
-extern packetData_t nrf24l01TXPacketData;
-
-extern char nrf24l01RXBuffer[64];
-extern packetData_t nrf24l01RXPacketData;
-
-
-
+packetData_t packetData;
+char Message[32];
+} nrf24l01Packet_t;
 
 volatile nrf24l01_t nrf24l01;
 
-# 45
+# 39
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
-void nrf24l01SendString(void);
+void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
 
 # 3 "nrf24l01.c"
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-char nrf24l01TXBuffer[64];
-packetData_t nrf24l01TXPacketData;
-
-char nrf24l01RXBuffer[64];
-packetData_t nrf24l01RXPacketData;
-
 unsigned int counter = 0;
 
+nrf24l01Packet_t * TXPacket;
+nrf24l01Packet_t RXPacket;
 
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
 
@@ -10973,7 +10963,7 @@ if (config.PRIM_RX != rxMode){
 nrf24l01CELow();
 _delay((unsigned long)((200)*(16000000/4000000.0)));
 
-# 60
+# 56
 config.PRIM_RX = rxMode;
 nrf24l01Send(0b00100000 | 0x00, config.byte);
 
@@ -10994,7 +10984,7 @@ nrf24l01.RXMode = rxMode;
 void nrf24l01CheckACK(void){
 
 
-if (!nrf24l01RXPacketData.IsACK){
+if (!RXPacket.packetData.IsACK){
 return;
 }
 
@@ -11002,32 +10992,30 @@ return;
 nrf24l01.RXPending = 0;
 
 
-if (!nrf24l01TXPacketData.ACKRequest){
+if (!TXPacket->packetData.ACKRequest){
 return;
 }
 
 
-if (strcmp(nrf24l01TXBuffer, nrf24l01RXBuffer) != 0){
+if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
 return;
 }
 
 
 
 
-nrf24l01TXPacketData.ACKRequest = 0;
+TXPacket->packetData.ACKRequest = 0;
 
 
 nrf24l01SetRXMode(0);
 }
 
 
-void nrf24l01ReceiveString(void){
+void nrf24l01ReceivePacket(void){
 
 
-unsigned char offset = 0;
-
-
-memset(nrf24l01RXBuffer, 0 ,strlen(nrf24l01RXBuffer));
+memset(RXPacket.Message, 0 ,strlen(RXPacket.Message));
+RXPacket.packetData.byte = 0x00;
 
 
 unsigned char width = nrf24l01Send(0b01100000, 0);
@@ -11043,12 +11031,12 @@ nrf24l01SPIStart();
 nrf24l01SPISend(0b01100001);
 
 
-nrf24l01RXPacketData.byte = nrf24l01SPISend(0);
+RXPacket.packetData.byte = nrf24l01SPISend(0);
 width--;
 
-for (i = 0; (i < width) && (i < sizeof(nrf24l01RXBuffer)); i++){
+for (i = 0; (i < width) && (i < sizeof(RXPacket.Message)); i++){
 
-nrf24l01RXBuffer[i] = nrf24l01SPISend(0);
+RXPacket.Message[i] = nrf24l01SPISend(0);
 }
 
 
@@ -11057,10 +11045,12 @@ nrf24l01SPIEnd();
 
 nrf24l01CEHigh();
 
-# 164
+# 158
 }
 
-void nrf24l01SendString(void){
+void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
+
+TXPacket = Packet;
 
 
 unsigned char i;
@@ -11093,11 +11083,11 @@ nrf24l01SPIStart();
 
 nrf24l01SPISend(0b10110000);
 
-nrf24l01SPISend(nrf24l01TXPacketData.byte);
+nrf24l01SPISend(TXPacket->packetData.byte);
 
 
-for (i = 0; (i < strlen(nrf24l01TXBuffer)) && (i < sizeof(nrf24l01TXBuffer)); i++){
-nrf24l01SPISend(nrf24l01TXBuffer[i]);
+for (i = 0; (i < strlen(TXPacket->Message)) && (i < sizeof(TXPacket->Message)); i++){
+nrf24l01SPISend(TXPacket->Message[i]);
 }
 
 
@@ -11123,7 +11113,7 @@ _delay((unsigned long)((20)*(16000000/4000000.0)));
 
 
 i = 0xFF;
-while (nrf24l01TXPacketData.ACKRequest){
+while (TXPacket->packetData.ACKRequest){
 if (!--i) {
 goto RESEND;
 }
@@ -11154,7 +11144,7 @@ nrf24l01.TXBusy = 0;
 
 
 if (!nrf24l01.RXMode){
-if (nrf24l01TXPacketData.ACKRequest){
+if (TXPacket->packetData.ACKRequest){
 
 nrf24l01SetRXMode(1);
 }
@@ -11165,8 +11155,7 @@ nrf24l01SetRXMode(1);
 if (status.RX_DR){
 
 nrf24l01.RXPending = 1;
-
-nrf24l01ReceiveString();
+nrf24l01ReceivePacket();
 nrf24l01CheckACK();
 }
 

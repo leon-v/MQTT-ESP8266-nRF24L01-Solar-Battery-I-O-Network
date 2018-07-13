@@ -18,52 +18,58 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 	// os_printf("radio_Task \r\n");
     
 	if (nrf24l01.RXPending){
-		nrf24l01.RXPending = 0;
+		
+		nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
-		n_STATUS_t status;
-	    status.byte = 0x00;
-	    status.RX_DR = 1;
-    	nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
+		// If we are the primary hub / reciever, we need to send back ACKs
+		if (RXPacket->packetData.ACKRequest){
+			nrf24l01SendACK(RXPacket);
+		}
 
-    	nrf24l01ReceiveString();
+		os_printf("%s\r\n", RXPacket->Message);
 
-    	// os_printf("Radio: RX Name: %s \r\n", nrf24l01RXName);
-    	// os_printf("Radio: RX Topic: %s \r\n", nrf24l01RXTopic);
-    	// os_printf("Radio: RX Name: %s \r\n", nrf24l01RXValue);
-    	// os_printf("Radio: RX Data: %u \r\n", nrf24l01RXPacketData.byte);
 
-    	// 1UnconfiguredW1/ADC3/644
-    	char *buffer = NULL;
+		char* strings = strtok(RXPacket->Message, "/");
+
+
+		char *name = NULL;
+		name = (char *) os_malloc(strlen(strings) * sizeof(char));
+		strcpy(name, strings);
+		os_printf("%s\r\n", name);
+		strings = strtok(NULL, "/");
+
+		char *topic = NULL;
+		topic = (char *) os_malloc(strlen(strings) * sizeof(char));
+		strcpy(topic, strings);
+		os_printf("%s\r\n", topic);
+		strings = strtok(NULL, "/");
+
+		char *value = NULL;
+		value = (char *) os_malloc(strlen(strings) * sizeof(char));
+		strcpy(value, strings);
+		os_printf("%s\r\n", value);
+		strings = strtok(NULL, "/");
+
+		char *buffer = NULL;
 		buffer = (char *) os_malloc(128 * sizeof(char));
 
-		os_sprintf(buffer, "/radio/in/%u/%s/%s", system_get_chip_id(), nrf24l01RXName, nrf24l01RXTopic);
-		os_printf("%s = %s\r\n", buffer, nrf24l01RXValue);
-		os_printf("Data Byte = %u\r\n", nrf24l01RXPacketData.byte);
+		os_sprintf(buffer, "/radio/in/%u/%s/%s", system_get_chip_id(), name, topic);
 
-		if (nrf24l01RXPacketData.ACKRequest){
+		os_printf("%s = %s\r\n", buffer, value);
+		os_printf("Data Byte = %u\r\n", RXPacket->packetData.byte);
 
-			nrf24l01TXPacketData.byte = nrf24l01RXPacketData.byte;
-			nrf24l01TXPacketData.ACKRequest = 0;
-			nrf24l01TXPacketData.IsACK		= 1;
-
-			strcpy(nrf24l01TXName, nrf24l01RXName);
-	    	strcpy(nrf24l01TXTopic, nrf24l01RXTopic);
-	    	strcpy(nrf24l01TXValue, nrf24l01RXValue);
-
-	    	nrf24l01SendString(0);
-
-	    	os_printf("Sent ACK\r\n");
-
-	    	nrf24l01SetRXMode(1);
-		}
-		
-		
 		if (enabled){
-			MQTT_Publish(mqttClient, buffer, nrf24l01RXValue, strlen(nrf24l01RXValue), 1, 1);
+			MQTT_Publish(mqttClient, buffer, value, strlen(value), 1, 1);
 		}
 
+    	os_free(name);
+    	os_free(topic);
+    	os_free(value);
     	os_free(buffer);
 
+    	nrf24l01.RXPending = 0;
+
+		nrf24l01SetRXMode(1);
 	}
 }
 

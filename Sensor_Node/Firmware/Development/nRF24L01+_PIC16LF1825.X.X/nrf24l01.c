@@ -3,14 +3,10 @@
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-char nrf24l01TXBuffer[64];
-packetData_t nrf24l01TXPacketData;
-
-char nrf24l01RXBuffer[64];
-packetData_t nrf24l01RXPacketData;
-
 unsigned int counter = 0;
 
+nrf24l01Packet_t * TXPacket;
+nrf24l01Packet_t RXPacket;
 
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
@@ -77,7 +73,7 @@ void nrf24l01SetRXMode(unsigned char rxMode){
 void nrf24l01CheckACK(void){
     
     // If the current RX packet is not an ACK, skip
-    if (!nrf24l01RXPacketData.IsACK){
+    if (!RXPacket.packetData.IsACK){
         return;
     }
     
@@ -85,32 +81,30 @@ void nrf24l01CheckACK(void){
 	nrf24l01.RXPending = 0;
     
     // If the current TX packet doesn't require an ACK, skip
-    if (!nrf24l01TXPacketData.ACKRequest){
+    if (!TXPacket->packetData.ACKRequest){
         return;
     }
     
     // If the TX and RX do not match, skip.
-    if (strcmp(nrf24l01TXBuffer, nrf24l01RXBuffer) != 0){
+    if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
         return;
     }
     
     // We have a valid ACK packet
     
     // Clear the ACKRequest to signal that we no longer need to wait
-	nrf24l01TXPacketData.ACKRequest = 0;
+	TXPacket->packetData.ACKRequest = 0;
 
     // Switch the radio back to TX mode so we don't sit there receiving.
 	nrf24l01SetRXMode(0);
 }
 
 
-void nrf24l01ReceiveString(void){
-    
-    // Check the packet matches this name
-    unsigned char offset = 0;
+void nrf24l01ReceivePacket(void){
 	
     // Clear all the current RX buffers
-    memset(nrf24l01RXBuffer, 0 ,strlen(nrf24l01RXBuffer));
+    memset(RXPacket.Message, 0 ,strlen(RXPacket.Message));
+    RXPacket.packetData.byte = 0x00;
     
 	// Get the with of the data waiting in the RX buffer
     unsigned char width = nrf24l01Send(n_R_RX_PL_WID, 0);
@@ -126,12 +120,12 @@ void nrf24l01ReceiveString(void){
 	nrf24l01SPISend(n_R_RX_PAYLOAD);
     
     // Get the packet data byte as the first byte
-    nrf24l01RXPacketData.byte = nrf24l01SPISend(0);
+    RXPacket.packetData.byte = nrf24l01SPISend(0);
     width--;
     
-    for (i = 0; (i < width) && (i < sizeof(nrf24l01RXBuffer)); i++){
+    for (i = 0; (i < width) && (i < sizeof(RXPacket.Message)); i++){
         // Get the byte from the radio IC
-		nrf24l01RXBuffer[i] = nrf24l01SPISend(0);
+		RXPacket.Message[i] = nrf24l01SPISend(0);
 	}
     
     // End the SPI transaction and release the radio IC
@@ -163,7 +157,9 @@ void nrf24l01ReceiveString(void){
 //    }
 }
 
-void nrf24l01SendString(void){
+void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
+    
+    TXPacket = Packet;
 	
 	// Initalise an iterator for the many loops
     unsigned char i;
@@ -196,11 +192,11 @@ RESEND:
 	// Send the command to tell the radio we want to send data with no auto ACK.
     nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
     
-    nrf24l01SPISend(nrf24l01TXPacketData.byte);
+    nrf24l01SPISend(TXPacket->packetData.byte);
     
 	// Loop through each character of the name buffer and send it to the radio
-    for (i = 0; (i  < strlen(nrf24l01TXBuffer)) && (i < sizeof(nrf24l01TXBuffer)); i++){
-        nrf24l01SPISend(nrf24l01TXBuffer[i]);
+    for (i = 0; (i  < strlen(TXPacket->Message)) && (i < sizeof(TXPacket->Message)); i++){
+        nrf24l01SPISend(TXPacket->Message[i]);
     }
     
 	// Release the SPI bus from the radio
@@ -226,7 +222,7 @@ RESEND:
 		
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
 	i = 0xFF;
-	while (nrf24l01TXPacketData.ACKRequest){
+	while (TXPacket->packetData.ACKRequest){
 		if (!--i) {
 			goto RESEND;
 		}
@@ -257,7 +253,7 @@ void nrf24l01ISR(void){
         
         // If the nrf24l01 is in PTX mode and we are waiting for an ACK
         if (!nrf24l01.RXMode){
-            if (nrf24l01TXPacketData.ACKRequest){
+            if (TXPacket->packetData.ACKRequest){
                 // Put the radio into receiver mode so we can get an ACK
                 nrf24l01SetRXMode(1);
             }
@@ -268,8 +264,7 @@ void nrf24l01ISR(void){
     if (status.RX_DR){
         
         nrf24l01.RXPending = 1;
-        
-        nrf24l01ReceiveString();
+        nrf24l01ReceivePacket();
         nrf24l01CheckACK();
     }
 	

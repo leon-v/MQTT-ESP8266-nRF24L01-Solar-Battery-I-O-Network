@@ -10956,41 +10956,35 @@ unsigned Reserved : 5;
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+typedef struct{
+unsigned TXBusy : 1;
+unsigned RXPending : 1;
+unsigned RXMode : 1;
+} nrf24l01_t;
+
 typedef union{
 struct{
-unsigned byte :8;
+unsigned int byte :8;
 };
 struct{
 unsigned ACKRequest :1;
 unsigned IsACK :1;
-unsigned Always1 :1;
+unsigned TooLoud :1;
 };
 } packetData_t;
 
 typedef struct{
-unsigned waitForTXACK : 1;
-unsigned TXBusy : 1;
-unsigned RXPending : 1;
-unsigned RXMode : 1;
-unsigned Pipe : 3;
-} nrf24l01_t;
-
-extern char nrf24l01TXBuffer[64];
-extern packetData_t nrf24l01TXPacketData;
-
-extern char nrf24l01RXBuffer[64];
-extern packetData_t nrf24l01RXPacketData;
-
-
-
+packetData_t packetData;
+char Message[32];
+} nrf24l01Packet_t;
 
 volatile nrf24l01_t nrf24l01;
 
-# 45
+# 39
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
-void nrf24l01SendString(void);
+void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
 
 # 6 "flash.h"
@@ -11014,7 +11008,6 @@ void flashUpdate(void);
 # 9 "main.c"
 unsigned char sleepLoop = 0;
 unsigned int counter = 0;
-char tempString[16];
 
 
 
@@ -11078,60 +11071,58 @@ return;
 
 }
 
-void setName(void){
-memset(nrf24l01TXBuffer, 0, sizeof(nrf24l01TXBuffer));
-strcat(nrf24l01TXBuffer, romData.name);
-strcat(nrf24l01TXBuffer, "/");
+void setMessage(char * message, const char * topic, unsigned long value){
+memset(message, 0, sizeof(message));
+
+strcat(message, romData.name);
+
+strcat(message, "/");
+strcat(message, topic);
+
+char tempString[16];
+utoa(tempString, value, 10);
+
+strcat(message, "/");
+strcat(message, tempString);
 }
+
 void loop(){
 
 
 asm("clrwdt");
 
-setName();
-utoa(tempString, counter, 10);
-strcat(nrf24l01TXBuffer, "DBG/");
-strcat(nrf24l01TXBuffer, tempString);
+nrf24l01Packet_t Packet;
+
+setMessage(Packet.Message, "DBG", counter);
+Packet.packetData.byte = 0;
+Packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&Packet);
 counter = 0;
-nrf24l01TXPacketData.byte = 0;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
 sleep();
 
-setName();
-utoa(tempString, getADCValue(0b000100, 2505), 10);
-strcat(nrf24l01TXBuffer, "VBAT/");
-strcat(nrf24l01TXBuffer, tempString);
-nrf24l01TXPacketData.byte = 0;
-nrf24l01TXPacketData.ACKRequest = 1;
-nrf24l01SendString();
+setMessage(Packet.Message, "VBAT", getADCValue(0b000100, 2505));
+Packet.packetData.byte = 0;
+Packet.packetData.ACKRequest = 1;
+nrf24l01SendPacket(&Packet);
 sleep();
 
-setName();
-utoa(tempString, getADCValue(0b010011, 2500), 10);
-strcat(nrf24l01TXBuffer, "ANC3/");
-strcat(nrf24l01TXBuffer, tempString);
-nrf24l01TXPacketData.byte = 0;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+
+setMessage(Packet.Message, "ANC3", getADCValue(0b010011, 2500));
+Packet.packetData.byte = 0;
+Packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&Packet);
 sleep();
 
-setName();
-utoa(tempString, getADCValue(0b111111, 208900) - 40, 10);
-strcat(nrf24l01TXBuffer, "FVR/");
-strcat(nrf24l01TXBuffer, tempString);
-nrf24l01TXPacketData.byte = 0;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+setMessage(Packet.Message, "FVR", getADCValue(0b111111, 208900) - 40);
+Packet.packetData.byte = 0;
+Packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&Packet);
 sleep();
 
-setName();
-utoa(tempString, getADCValue(0b111101, 2475), 10);
-strcat(nrf24l01TXBuffer, "TEMP/");
-strcat(nrf24l01TXBuffer, tempString);
-nrf24l01TXPacketData.byte = 0;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+setMessage(Packet.Message, "TEMP", getADCValue(0b111101, 2475));
+Packet.packetData.byte = 0;
+Packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&Packet);
 sleep();
 
 
@@ -11160,7 +11151,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 162
+# 159
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11182,7 +11173,7 @@ flashUpdate();
 
 nrf24l01Init(0);
 
-# 188
+# 185
 ADCON0bits.ADON = 0;
 
 
@@ -11230,13 +11221,12 @@ PORTAbits.RA5 = 0;
 INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 
-setName();
-utoa(tempString, romData.bootMode, 10);
-strcat(nrf24l01TXBuffer, "BOOT/");
-strcat(nrf24l01TXBuffer, tempString);
-nrf24l01TXPacketData.byte = 0;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+nrf24l01Packet_t Packet;
+
+setMessage(Packet.Message, "BOOT", romData.bootMode);
+Packet.packetData.byte = 0;
+Packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&Packet);
 sleep();
 
 while(1){

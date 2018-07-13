@@ -8,7 +8,6 @@
 
 unsigned char sleepLoop = 0;
 unsigned int counter = 0;
-char tempString[16];
 
 // Cahnge ISR to trigger super loop code to do its bidding
 
@@ -72,60 +71,58 @@ void checkRxData(void){
 
 }
 
-void setName(void){
-    memset(nrf24l01TXBuffer, 0, sizeof(nrf24l01TXBuffer));
-    strcat(nrf24l01TXBuffer, romData.name);
-    strcat(nrf24l01TXBuffer, "/");
+void setMessage(char * message, const char * topic, unsigned long value){
+    memset(message, 0, sizeof(message));
+    
+    strcat(message, romData.name);
+    
+    strcat(message, "/");
+    strcat(message, topic);
+    
+    char tempString[16];
+    utoa(tempString, value, 10);
+    
+    strcat(message, "/");
+    strcat(message, tempString);
 }
+
 void loop(){
     
 	// Write payload data
     CLRWDT();
     
-    setName();
-    utoa(tempString, counter, 10);
-    strcat(nrf24l01TXBuffer, "DBG/");
-    strcat(nrf24l01TXBuffer, tempString);
+    nrf24l01Packet_t Packet;
+    
+    setMessage(Packet.Message, "DBG", counter);
+    Packet.packetData.byte = 0;
+    Packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&Packet);
     counter = 0;
-    nrf24l01TXPacketData.byte = 0;
-    nrf24l01TXPacketData.ACKRequest = 0;
-	nrf24l01SendString();
 	sleep();
     
-    setName();
-    utoa(tempString, getADCValue(0b000100, 2505), 10);
-    strcat(nrf24l01TXBuffer, "VBAT/");
-    strcat(nrf24l01TXBuffer, tempString);
-    nrf24l01TXPacketData.byte = 0;
-    nrf24l01TXPacketData.ACKRequest = 1;
-	nrf24l01SendString();
+    setMessage(Packet.Message, "VBAT", getADCValue(0b000100, 2505));
+    Packet.packetData.byte = 0;
+    Packet.packetData.ACKRequest = 1;
+	nrf24l01SendPacket(&Packet);
 	sleep();
     
-    setName();
-    utoa(tempString, getADCValue(0b010011, 2500), 10);
-    strcat(nrf24l01TXBuffer, "ANC3/");
-    strcat(nrf24l01TXBuffer, tempString);
-    nrf24l01TXPacketData.byte = 0;
-    nrf24l01TXPacketData.ACKRequest = 0;
-	nrf24l01SendString();
+    
+    setMessage(Packet.Message, "ANC3", getADCValue(0b010011, 2500));
+    Packet.packetData.byte = 0;
+    Packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&Packet);
 	sleep();
     
-    setName();
-    utoa(tempString, getADCValue(0b111111, 208900) - 40, 10);
-    strcat(nrf24l01TXBuffer, "FVR/");
-    strcat(nrf24l01TXBuffer, tempString);
-    nrf24l01TXPacketData.byte = 0;
-    nrf24l01TXPacketData.ACKRequest = 0;
-	nrf24l01SendString();
+    setMessage(Packet.Message, "FVR", getADCValue(0b111111, 208900) - 40);
+    Packet.packetData.byte = 0;
+    Packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&Packet);
 	sleep();
     
-    setName();
-    utoa(tempString, getADCValue(0b111101, 2475), 10);
-    strcat(nrf24l01TXBuffer, "TEMP/");
-    strcat(nrf24l01TXBuffer, tempString);
-    nrf24l01TXPacketData.byte = 0;
-    nrf24l01TXPacketData.ACKRequest = 0;
-	nrf24l01SendString();
+    setMessage(Packet.Message, "TEMP", getADCValue(0b111101, 2475));
+    Packet.packetData.byte = 0;
+    Packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&Packet);
 	sleep();
 	
 //	checkRxData();
@@ -231,14 +228,13 @@ void main(void) {
     /* Start Interrupts */
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
-	
-    setName();
-    utoa(tempString, romData.bootMode, 10);
-    strcat(nrf24l01TXBuffer, "BOOT/");
-    strcat(nrf24l01TXBuffer, tempString);
-    nrf24l01TXPacketData.byte = 0;
-    nrf24l01TXPacketData.ACKRequest = 0;
-	nrf24l01SendString();
+    
+        nrf24l01Packet_t Packet;
+        
+    setMessage(Packet.Message, "BOOT", romData.bootMode);
+    Packet.packetData.byte = 0;
+    Packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&Packet);
 	sleep();
     
     while(1){

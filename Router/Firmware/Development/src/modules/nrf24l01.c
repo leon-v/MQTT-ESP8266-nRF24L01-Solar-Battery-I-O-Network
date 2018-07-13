@@ -1,207 +1,173 @@
 #include "nrf24l01.h"
 
-const i_uint8_t n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const i_uint8_t n_ADDRESS_MUL = 33;
-
-i_int8_t nrf24l01TXName[17];
-i_int8_t nrf24l01TXTopic[9];
-i_int8_t nrf24l01TXValue[9];
-packetData_t nrf24l01TXPacketData;
-
-i_int8_t nrf24l01RXName[17];
-i_int8_t nrf24l01RXTopic[9];
-i_int8_t nrf24l01RXValue[9];
-packetData_t nrf24l01RXPacketData;
-
+const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
+const unsigned char n_ADDRESS_MUL = 33;
 
 unsigned int counter = 0;
 
-i_uint8_t nrf24l01Send(i_uint8_t command,i_uint8_t data) {
+nrf24l01Packet_t * TXPacket;
+nrf24l01Packet_t RXPacket;
+
+unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
+    // Disable interrupts to ensure we are not interrupted
     enableInterrupts(0);
     
+    // Start the SPI transaction and select the chip
     nrf24l01SPIStart();
     
+    // Send the command
     nrf24l01SPISend(command);
+    
+    // Receive the data
     data        = nrf24l01SPISend(data);
     
+    // End the SPI Transaction and release the IC
     nrf24l01SPIEnd();
     
+    // Re-enable interrupts
     enableInterrupts(1);
     
     return data;
 }
 
 
-i_uint8_t nrf24l01GetPipe(){
-    
-    i_uint8_t pipe;
-    i_uint8_t i;
-    
-    for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
-        pipe+= nrf24l01TXName[i];
-    }
-    
-    pipe %= 5;
-    pipe *= n_ADDRESS_MUL;
-    
-    return pipe;
-}
 
 
-void nrf24l01SetTXAddress(){
+void nrf24l01SetRXMode(unsigned char rxMode){
     
-    nrf24l01SPIStart();
-
-	nrf24l01SPISend(n_TX_ADDR);
-    
-    i_uint8_t i;
-    for (i = 0; i < sizeof(n_ADDRESS_P0) - 1; i++){
-        nrf24l01SPISend(n_ADDRESS_P0[i]);
-    }
-    
-    nrf24l01SPISend(nrf24l01GetPipe());
-}
-
-
-void nrf24l01SetRXMode(i_uint8_t rxMode){
     n_CONFIG_t config;
+    
+    // Get the current IC configuration
     config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
-            
+    
+    // If the IC is not in the same mode as requested, change it.
     if (config.PRIM_RX != rxMode){
         
+        // Disable the IC and wait for the IC to disable
         nrf24l01CELow();
         delayUs(200);
         
 //        if (!rxMode){
 //            nrf24l01SetTXAddress();
 //        }
-
+        
+        // Change the mode of the IC to the mode requested
         config.PRIM_RX = rxMode;
         nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
+        
+        // Wait for the IC to update
         delayUs(200);
 
+        // If we changed to receiver mode, re-enable the IC to start listening
         if (rxMode){
         	nrf24l01CEHigh();
             delayUs(200);
         }
     }
+    
+    // Update the global with the current state
     nrf24l01.RXMode = rxMode;
 }
 
-
-void nrf24l01ReceiveString(void){
-    
-    // Check the packet matches this name
-    i_uint8_t byte;
-    i_uint8_t i;
-    i_uint8_t offset = 0;
+void nrf24l01SendACK(nrf24l01Packet_t * packet){
 	
-    i_uint8_t width = nrf24l01Send(n_R_RX_PL_WID, 0);
+	packet->packetData.ACKRequest = 0;
+	packet->packetData.IsACK = 1;
 
-    
-
-    memset(nrf24l01RXName, 0, sizeof(nrf24l01RXName));
-    memset(nrf24l01RXTopic, 0, sizeof(nrf24l01RXTopic));
-    memset(nrf24l01RXValue, 0, sizeof(nrf24l01RXValue));
-    
-    nrf24l01CELow();
-    
-	nrf24l01SPIStart();
-
-	nrf24l01SPISend(n_R_RX_PAYLOAD);
-
-	nrf24l01RXPacketData.byte = nrf24l01SPISend(0);
-	width--;
-    
-	for (i = 0; (i < sizeof(nrf24l01RXName)) && (offset + i < width) ; i++){
-		
-		byte = nrf24l01SPISend(0);
-		
-		if (byte == '/'){
-			offset++;
-			break;
-		}
-		
-		nrf24l01RXName[i] = byte;
-	}
-	// nrf24l01RXName[i++] = 0;
-	offset+= i;
-	
-	
-	for (i = 0; (i < sizeof(nrf24l01RXTopic)) && (offset + i < width) ; i++){
-		
-		byte = nrf24l01SPISend(0);
-		if (byte == '/'){
-			offset++;
-			break;
-		}
-		
-		nrf24l01RXTopic[i] = byte;
-	}
-	// nrf24l01RXTopic[i++] = 0;
-	offset+= i;
-	
-	
-    for (i = 0; (i < sizeof(nrf24l01RXValue)) && (offset + i < width) ; i++){
-		nrf24l01RXValue[i] = nrf24l01SPISend(0);
-	}
-	// nrf24l01RXValue[i++] = 0;
-    
-    nrf24l01SPIEnd();
-
-    nrf24l01CEHigh();
-
-    nrf24l01SetRXMode(1);
-
-    // Check for ACK
-    
- //    if (!nrf24l01.waitForTXACK){
- //    	return;
- //    }
-
- //    if (strcmp(nrf24l01TXName, nrf24l01RXName) != 0){
- //    	return;
- //    }
-
- //    if (strcmp(nrf24l01RXTopic, nrf24l01TXTopic) != 0){
- //    	return;
- //    }
-
- //    if (strcmp(nrf24l01RXValue, "ACK") != 0){
- //    	return;
- //    }
-
-	// nrf24l01.waitForTXACK = 0;
-	// nrf24l01.RXPending = 0;
-	// nrf24l01SetRXMode(0);
+	nrf24l01SendPacket(packet);
 }
 
-void nrf24l01SendString(i_uint8_t waitForAck){
+void nrf24l01CheckACK(void){
+    /* Check if the RX packet is an ACK */
+    
+    // If the current RX packet is not an ACK, skip
+    if (!RXPacket.packetData.IsACK){
+        return;
+    }
+    
+    // Clear RX Pending flag so we don't try process this packet as a real one
+	nrf24l01.RXPending = 0;
+    
+    // If the current TX packet doesn't require an ACK, skip
+    if (!TXPacket->packetData.ACKRequest){
+        return;
+    }
+    
+    // If the TX and RX do not match, skip.
+    if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
+        return;
+    }
+    
+    // We have a valid ACK packet
+    
+    // Clear the ACKRequest to signal that we no longer need to wait
+	TXPacket->packetData.ACKRequest = 0;
+
+    // Switch the radio back to TX mode so we don't sit there receiving.
+	nrf24l01SetRXMode(0);
+}
+
+
+nrf24l01Packet_t *nrf24l01GetRXPacket(void){
+	return &RXPacket;
+}
+
+void nrf24l01ReceivePacket(void){
+	
+    // Clear all the current RX buffers
+    memset(RXPacket.Message, 0 ,strlen(RXPacket.Message));
+    RXPacket.packetData.byte = 0x00;
+    
+	// Get the with of the data waiting in the RX buffer
+    unsigned char width = nrf24l01Send(n_R_RX_PL_WID, 0);
+    unsigned char i = 0;
+    
+    // Disable the radio IC
+    nrf24l01CELow();
+    
+    // Start the SPI transaction and select the radio IC
+	nrf24l01SPIStart();
+
+    // Send the command to tell the radio IC that we want the received data buffer
+	nrf24l01SPISend(n_R_RX_PAYLOAD);
+    
+    // Get the packet data byte as the first byte
+    RXPacket.packetData.byte = nrf24l01SPISend(0);
+    width--;
+    
+    for (i = 0; (i < width) && (i < sizeof(RXPacket.Message)); i++){
+        // Get the byte from the radio IC
+		RXPacket.Message[i] = nrf24l01SPISend(0);
+	}
+    
+    // End the SPI transaction and release the radio IC
+    nrf24l01SPIEnd();
+
+    // Re-enable the radio IO to continue receiving
+    nrf24l01CEHigh();
+}
+
+void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
+    
+    TXPacket = Packet;
 	
 	// Initalise an iterator for the many loops
-    i_uint8_t i;
-	
-	// If the function was called to wait for an ACK, then set the 
-	// status variable state accordingly
-	nrf24l01.waitForTXACK = waitForAck;
+    unsigned char i;
     
-    if (counter){
-        counter--;
-    }
 	
-	// Define where to re-start the send if the previous one failed
-	RESEND:
+// Define where to re-start the send if the previous one failed
+RESEND:
 	
-	// Wait for the TXBusy to clear so we know the packet has been sent
+//	 Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
         if (!--i) {
+        	os_printf("TXB1\r\n");
             goto RESEND;
         }
         delayUs(50);
     }
-
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
 	nrf24l01.TXBusy = 1;
@@ -217,28 +183,12 @@ void nrf24l01SendString(i_uint8_t waitForAck){
     
 	// Send the command to tell the radio we want to send data with no auto ACK.
     nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
-
-    nrf24l01SPISend(nrf24l01TXPacketData.byte);
+    
+    nrf24l01SPISend(TXPacket->packetData.byte);
     
 	// Loop through each character of the name buffer and send it to the radio
-    for (i = 0; (nrf24l01TXName[i] != '\0') && (i < sizeof(nrf24l01TXName)); i++){
-        nrf24l01SPISend(nrf24l01TXName[i]);
-    }
-    
-	// Send the MQTT topic delimiter.
-    nrf24l01SPISend('/');
-    
-	// Loop through each character of the topic buffer and send it to the radio
-    for (i = 0; (nrf24l01TXTopic[i] != '\0') && (i < sizeof(nrf24l01TXTopic)); i++){
-        nrf24l01SPISend(nrf24l01TXTopic[i]);
-    }
-    
-	// Send the MQTT topic delimiter.
-    nrf24l01SPISend('/');
-    
-	// Loop through each character of the value buffer and send it to the radio
-    for (i = 0; (nrf24l01TXValue[i] != '\0') && (i < sizeof(nrf24l01TXValue)); i++){
-        nrf24l01SPISend(nrf24l01TXValue[i]);
+    for (i = 0; (i  < strlen(TXPacket->Message)) && (i < sizeof(TXPacket->Message)); i++){
+        nrf24l01SPISend(TXPacket->Message[i]);
     }
     
 	// Release the SPI bus from the radio
@@ -256,33 +206,33 @@ void nrf24l01SendString(i_uint8_t waitForAck){
 	i = 0xFF;
     while (nrf24l01.TXBusy){
         if (!--i) {
+        	os_printf("TXB2\r\n");
             goto RESEND;
         }
-        delayUs(50);
+        delayUs(20);
     }
+    
 		
-	// Wait for the transmit ACK flag to becode clear so we know we got an ACK
+	// Wait for the transmit ACK flag to become clear so we know we got an ACK
 	i = 0xFF;
-	while (nrf24l01.waitForTXACK){
+	while (TXPacket->packetData.ACKRequest){
 		if (!--i) {
-            counter++;
+			os_printf("ACXB2\r\n");
 			goto RESEND;
 		}
-		delayUs(60);
+        counter++;
+		delayUs(500);
 	}
 }
-
 
 void nrf24l01ISR(void){
    
     n_STATUS_t status;
     status.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
-	
-	os_printf("nrf24l01ISR: %u\r\n", status.byte);
     
     // I have had the IC lock up and return 0x00, reset it
     if (status.byte == 0x00){
-    	exception(1);
+//    	exception(1);
     }
     
     // Also reset if we get 0xFF since that likely means there is an SPI error
@@ -297,7 +247,7 @@ void nrf24l01ISR(void){
         
         // If the nrf24l01 is in PTX mode and we are waiting for an ACK
         if (!nrf24l01.RXMode){
-            if (nrf24l01.waitForTXACK){
+            if (TXPacket->packetData.ACKRequest){
                 // Put the radio into receiver mode so we can get an ACK
                 nrf24l01SetRXMode(1);
             }
@@ -306,8 +256,10 @@ void nrf24l01ISR(void){
 
     // Check id there is a received packet waiting
     if (status.RX_DR){
-
-    	nrf24l01.RXPending = 1;
+        
+        nrf24l01.RXPending = 1;
+        nrf24l01ReceivePacket();
+        nrf24l01CheckACK();
     }
 	
 	// Clear the interrupt on the nrf24l01
@@ -315,14 +267,12 @@ void nrf24l01ISR(void){
 }
 
 
-void nrf24l01InitRegisters(i_uint8_t isReciever){
-    
+void nrf24l01InitRegisters(unsigned char isReciever){
+
     n_CONFIG_t config;
     
 	config.PWR_UP = 0;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
-    
-    delayUs(10000);
     
     n_SETUP_AW_t setupAW;
     setupAW.byte = 0x00;
@@ -399,12 +349,14 @@ void nrf24l01InitRegisters(i_uint8_t isReciever){
     config.CRCO = 1;
 	config.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
+    
 }
 
-void nrf24l01Init(i_uint8_t isReciever){
+void nrf24l01Init(unsigned char isReciever){
     
     
     nrf24l01InterfaceInit();
+    
     
     /* SPI INIT */
     
@@ -412,10 +364,12 @@ void nrf24l01Init(i_uint8_t isReciever){
     
     delayUs(50000);
     
-    nrf24l01InitRegisters(isReciever);
+    nrf24l01InitRegisters(isReciever);    
     
     delayUs(50000);
 
     nrf24l01CEHigh();
+    
+    
 }
 
