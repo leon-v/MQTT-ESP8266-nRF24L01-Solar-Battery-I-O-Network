@@ -1,5 +1,5 @@
 .output/eagle/release/obj/nrf24l01.o .output/eagle/release/obj/nrf24l01.d : nrf24l01.c ../include/modules/nrf24l01.h \
- ../include/modules/radio_interface.h ../../include/osapi.h \
+ ../include/modules/interface.h ../../include/osapi.h \
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/string.h \
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/_ansi.h \
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/newlib.h \

@@ -10956,43 +10956,38 @@ unsigned Reserved : 5;
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+typedef struct{
+unsigned TXBusy : 1;
+unsigned RXPending : 1;
+unsigned RXMode : 1;
+} nrf24l01_t;
+
 typedef union{
 struct{
-unsigned byte :8;
+unsigned int byte :8;
 };
 struct{
+unsigned TooLoud :1;
 unsigned ACKRequest :1;
 unsigned IsACK :1;
 };
 } packetData_t;
 
-extern char nrf24l01TXName[16];
-extern char nrf24l01TXTopic[8];
-extern char nrf24l01TXValue[8];
-extern packetData_t nrf24l01TXPacketData;
-
-extern char nrf24l01RXTopic[8];
-extern char nrf24l01RXValue[8];
-extern char nrf24l01RXName[16];
-extern packetData_t nrf24l01RXPacketData;
-
 typedef struct{
-unsigned waitForTXACK : 1;
-unsigned TXBusy : 1;
-unsigned RXPending : 1;
-unsigned RXMode : 1;
-unsigned Pipe : 3;
-} nrf24l01_t;
-
+packetData_t packetData;
+char Message[32];
+} nrf24l01Packet_t;
 
 volatile nrf24l01_t nrf24l01;
 
-# 46
+# 39
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
-void nrf24l01SendString(void);
+void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
+nrf24l01Packet_t *nrf24l01GetRXPacket(void);
+void nrf24l01SendACK(nrf24l01Packet_t * packet);
 
 # 6 "flash.h"
 extern romData_t romData;
@@ -11014,11 +11009,12 @@ void flashUpdate(void);
 
 # 9 "main.c"
 unsigned char sleepLoop = 0;
-unsigned int counter = 0;
+unsigned long counter = 0;
 
 
 
 void interrupt ISR(void){
+
 if (PIR0bits.INTF){
 nrf24l01ISR();
 PIR0bits.INTF = 0;
@@ -11036,6 +11032,7 @@ _delay((unsigned long)((200)*(16000000/4000000.0)));
 while (--adcLoop){
 
 ADCON0bits.ADGO = 1;
+
 while (ADCON0bits.ADGO){
 __nop();
 }
@@ -11052,6 +11049,8 @@ return adcSum;
 
 void sleep(){
 while (1){
+
+counter++;
 
 asm("sleep");
 __nop();
@@ -11075,45 +11074,58 @@ return;
 
 }
 
+void setMessage(nrf24l01Packet_t * packet, const char * topic, unsigned long value){
+memset(packet->Message, 0, sizeof(packet->Message));
+
+strcat(packet->Message, romData.name);
+
+strcat(packet->Message, "/");
+strcat(packet->Message, topic);
+
+char tempString[16];
+
+ultoa(tempString, value, 10);
+
+strcat(packet->Message, "/");
+strcat(packet->Message, tempString);
+}
+
 void loop(){
 
 
 asm("clrwdt");
 
-strcpy(nrf24l01TXTopic, "DBG");
-utoa(nrf24l01TXValue, counter, 10);
-counter = 0;
-nrf24l01TXPacketData.byte = 0x00;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+nrf24l01Packet_t packet;
+
+setMessage(&packet, "DBG", counter);
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&packet);
 sleep();
 
-strcpy(nrf24l01TXTopic, "ADC3");
-utoa(nrf24l01TXValue, getADCValue(3, 2505), 10);
-nrf24l01TXPacketData.byte = 0x00;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 1;
+nrf24l01SendPacket(&packet);
 sleep();
 
-strcpy(nrf24l01TXTopic, "ADC7");
-utoa(nrf24l01TXValue, getADCValue(7, 2500), 10);
-nrf24l01TXPacketData.byte = 0x00;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+
+setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&packet);
 sleep();
 
-strcpy(nrf24l01TXTopic, "ADC29");
-utoa(nrf24l01TXValue, getADCValue(29, 208900) - 40, 10);
-nrf24l01TXPacketData.byte = 0x00;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&packet);
 sleep();
 
-strcpy(nrf24l01TXTopic, "ADC31");
-utoa(nrf24l01TXValue, getADCValue(31, 2475), 10);
-nrf24l01TXPacketData.byte = 0x00;
-nrf24l01TXPacketData.ACKRequest = 0;
-nrf24l01SendString();
+setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&packet);
 sleep();
 
 
@@ -11128,44 +11140,53 @@ ANSELC = 0x00;
 ODCONA = 0x00;
 ODCONC = 0x00;
 
-SLRCONA = 0x00;
-SLRCONC = 0x00;
+
+
 
 INLVLA = 0x00;
 INLVLC = 0x00;
+
+WPUA = 0x00;
+WPUC = 0x00;
 
 TRISCbits.TRISC5 = 0;
 TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 140
+# 160
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
-
-
+OSCCON1bits.NOSC = 0b000;
+OSCCON1bits.NDIV = 0b000;
 
 _delay((unsigned long)((10)*(16000000/4000.0)));
 
 flashRealod();
 
 
-if (romData.check != 0x01){
-romData.check = 0x01;
-strcpy(romData.name, "UnconfiguredH1");
-romData.bootMode = 0x01;
+
+if (romData.check != 0x06){
+romData.check = 0x06;
+strcpy(romData.name, "UW2");
+romData.bootMode = 0x00;
 flashUpdate();
 }
 
-strcpy(nrf24l01TXName, romData.name);
-
 nrf24l01Init(0);
 
-# 166
-FVRCONbits.FVREN = 0;
-FVRCONbits.ADFVR = 1;
-FVRCONbits.FVREN = 1;
+# 186
+ADCON0bits.ADON = 0;
+
+
+ANSELAbits.ANSA4 = 1;
+TRISAbits.TRISA4 = 1;
+WPUAbits.WPUA4 = 0;
+
+
+ANSELCbits.ANSC3 = 1;
+TRISCbits.TRISC3 = 1;
 
 
 FVRCONbits.TSEN = 0;
@@ -11173,17 +11194,13 @@ FVRCONbits.TSRNG = 0;
 FVRCONbits.TSEN = 1;
 
 
-ADCON0bits.ADON = 0;
-
-ANSELAbits.ANSA4 = 1;
-TRISAbits.TRISA4 = 1;
-WPUAbits.WPUA4 = 0;
-
-ANSELCbits.ANSC3 = 1;
-TRISCbits.TRISC3 = 1;
+FVRCONbits.FVREN = 0;
+FVRCONbits.ADFVR = 1;
+FVRCONbits.FVREN = 1;
 
 ADCON1bits.ADCS = 0b111;
 ADCON1bits.ADFM = 1;
+ADCON1bits.ADNREF = 0b0;
 ADCON1bits.ADPREF = 0b00;
 
 ADCON0bits.CHS = 3;
@@ -11191,14 +11208,14 @@ ADCON0bits.ADON = 1;
 
 
 
+
 TRISAbits.TRISA2 = 1;
-RA2PPSbits.RA2PPS = 0b00010;
 PIE0bits.INTE = 1;
 INTCONbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 10;
+WDTCONbits.WDTPS = 9;
 
 
 TRISAbits.TRISA5 = 0;
@@ -11208,16 +11225,12 @@ PORTAbits.RA5 = 0;
 INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 
-strcpy(nrf24l01TXTopic, "BOOT");
+nrf24l01Packet_t packet;
 
-utoa(nrf24l01TXValue, romData.bootMode, 10);
-
-nrf24l01TXPacketData.byte = 0x00;
-nrf24l01TXPacketData.ACKRequest = 0;
-
-
-nrf24l01SendString();
-
+setMessage(&packet, "BOOT", romData.bootMode);
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&packet);
 sleep();
 
 while(1){

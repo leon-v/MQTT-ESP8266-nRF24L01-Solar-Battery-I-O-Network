@@ -7432,9 +7432,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.c: 44: SSP1STATbits.CKE = 1;
 "44
 [e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;interface.c: 45: SSP1CON1bits.SSPM = 0b0010;
+[; ;interface.c: 45: SSP1CON1bits.SSPM = 0b0000;
 "45
-[e = . . _SSP1CON1bits 0 0 -> -> 2 `i `uc ]
+[e = . . _SSP1CON1bits 0 0 -> -> 0 `i `uc ]
 [; ;interface.c: 47: SSP1CON1bits.SSPEN = 1;
 "47
 [e = . . _SSP1CON1bits 0 2 -> -> 1 `i `uc ]
@@ -7539,7 +7539,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U _exception ]
 [v _exception `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 82: romData.bootMode = exception * 10;
+[; ;interface.c: 82: romData.bootMode = (unsigned) (exception * 10);
 "82
 [e = . _romData 2 -> * -> _exception `i -> 10 `i `ui ]
 [; ;interface.c: 83: flashUpdate();

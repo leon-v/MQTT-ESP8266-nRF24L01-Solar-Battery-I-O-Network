@@ -18,37 +18,48 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 	// os_printf("radio_Task \r\n");
     
 	if (nrf24l01.RXPending){
-		n_STATUS_t status;
-	    status.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
+		
+		nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
-	    while (status.RX_P_NO != 0b111){
+		// If we are the primary hub / reciever, we need to send back ACKs
+		if (RXPacket->packetData.ACKRequest){
+			nrf24l01SendACK(RXPacket);
+		}
 
-	    	nrf24l01ReceiveString();
+		char* strings = strtok(RXPacket->Message, "/");
 
-	    	char *buffer = NULL;
-			buffer = (char *) os_malloc(128 * sizeof(char));
 
-			os_sprintf(buffer, "/radio/in/%u/%s/%s", system_get_chip_id(), nrf24l01RXName, nrf24l01RXTopic);
+		char *name = (char *) os_zalloc(strlen(strings) * sizeof(char));
+		strcpy(name, strings);
+		strings = strtok(NULL, "/");
 
-			strcpy(nrf24l01TXName, nrf24l01RXName);
-	    	strcpy(nrf24l01TXTopic, nrf24l01RXTopic);
-	    	strcpy(nrf24l01TXValue, "ACK");
+		char *topic = (char *) os_zalloc(strlen(strings) * sizeof(char));
+		strcpy(topic, strings);
+		strings = strtok(NULL, "/");
 
-	    	os_printf("Radio: Send ACK\r\n");
-	    	nrf24l01SendString(0);
-			
-			if (enabled){
-				MQTT_Publish(mqttClient, buffer, nrf24l01RXValue, strlen(nrf24l01RXValue), 1, 1);
-			}
+		char *value = (char *) os_zalloc(strlen(strings) * sizeof(char));
+		strcpy(value, strings);
 
-	    	os_free(buffer);
+		char *buffer = NULL;
+		buffer = (char *) os_zalloc(128 * sizeof(char));
 
-	    	nrf24l01SetRXMode(1);
+		os_sprintf(buffer, "/radio/in/%u/%s/%s", system_get_chip_id(), name, topic);
 
-	    	status.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
-	    }
+		os_printf("%s = %s\r\n", buffer, value);
+		os_printf("Data Byte = %u\r\n", RXPacket->packetData.byte);
 
-	    nrf24l01.RXPending = 0;
+		if (enabled){
+			MQTT_Publish(mqttClient, buffer, value, strlen(value), 1, 1);
+		}
+
+    	os_free(name);
+    	os_free(topic);
+    	os_free(value);
+    	os_free(buffer);
+
+    	nrf24l01.RXPending = 0;
+
+		nrf24l01SetRXMode(1);
 	}
 }
 
@@ -70,7 +81,7 @@ void radioInterrupt(int * arg){
 
 	uint32 gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
 
-	os_printf("Radio: Interrupt\r\n");
+	// os_printf("Radio: Interrupt\r\n");
 	radoCheckStatus();
 
 	GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);
@@ -100,7 +111,7 @@ void ICACHE_FLASH_ATTR radioInit(MQTT_Client* p_mqttClient){
 
 	os_timer_disarm(&spiTestTimer);
 	os_timer_setfn(&spiTestTimer, (os_timer_func_t *)spiTestTimerFunction, NULL);
-	os_timer_arm(&spiTestTimer, 2000, 1);
+	os_timer_arm(&spiTestTimer, 20000, 1);
 
 	system_os_task(radio_Task, RADIO_TASK_PRIO, nrf24l01procTaskQueue, RADIO_TASK_QUEUE_SIZE);
 
