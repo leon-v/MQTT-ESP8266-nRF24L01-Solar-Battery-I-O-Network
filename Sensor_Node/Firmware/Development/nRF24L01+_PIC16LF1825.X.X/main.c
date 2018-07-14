@@ -171,7 +171,7 @@ void main(void) {
 
 	if (romData.check != ROM_DATA_VERSION){
 		romData.check = ROM_DATA_VERSION;
-		strcpy(romData.name, "UW2");
+		strcpy(romData.name, "UH1");
 		romData.bootMode = 0x00;
 		flashUpdate();
 	}

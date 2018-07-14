@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC LITE Macro Assembler V2.00 build -1524193055 
-                                                                                               Fri Jul 13 18:11:51 2018
+                                                                                               Fri Jul 13 21:43:31 2018
 
 Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 20180527130849
      1                           	processor	16LF18325
@@ -2284,8 +2284,8 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   2270  102C                     __pstringtext8:	
   2271  102C                     STR_8:	
   2272  102C  3455               	retlw	85	;'U'
-  2273  102D  3457               	retlw	87	;'W'
-  2274  102E  3432               	retlw	50	;'2'
+  2273  102D  3448               	retlw	72	;'H'
+  2274  102E  3431               	retlw	49	;'1'
   2275  102F  3400               	retlw	0
   2276                           
   2277                           	psect	stringtext9
@@ -3091,7 +3091,7 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   3072  0262  0858               	movf	??_main,w
   3073  0263  00DC               	movwf	_romData
   3074                           
-  3075                           ;main.c: 174: strcpy(romData.name, "UW2");
+  3075                           ;main.c: 174: strcpy(romData.name, "UH1");
   3076  0264  302C               	movlw	low (STR_8| (0+32768))
   3077  0265  00A1               	movwf	strcpy@from
   3078  0266  3090               	movlw	high (STR_8| (0+32768))
@@ -8607,7 +8607,7 @@ SFR31                0      0       0      32        0.0%
 
 
 Microchip Technology PIC Macro Assembler V2.00 build -1524193055 
-Symbol Table                                                                                   Fri Jul 13 18:11:51 2018
+Symbol Table                                                                                   Fri Jul 13 21:43:31 2018
 
             flashReadByte@result 0026                     flashRealod@i 002B                      __CFG_CP$OFF 0000  
             ___wmul@multiplicand 0072              nrf24l01Send@command 0023  nrf24l01InitRegisters@isReciever 0070  

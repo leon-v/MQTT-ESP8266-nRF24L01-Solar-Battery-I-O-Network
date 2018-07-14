@@ -8082,7 +8082,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 173: romData.check = 0x06;
 "173
 [e = . _romData 0 -> -> 6 `i `uc ]
-[; ;main.c: 174: strcpy(romData.name, "UW2");
+[; ;main.c: 174: strcpy(romData.name, "UH1");
 "174
 [e ( _strcpy (2 , &U . _romData 1 :s 8C ]
 [; ;main.c: 175: romData.bootMode = 0x00;
@@ -8221,6 +8221,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [a 7C 84 69 77 80 0 ]
 [a 3C 68 66 71 0 ]
 [a 5C 65 78 67 51 0 ]
-[a 8C 85 87 50 0 ]
+[a 8C 85 72 49 0 ]
 [a 1C 47 0 ]
 [a 2C 47 0 ]

@@ -11169,7 +11169,7 @@ flashRealod();
 
 if (romData.check != 0x06){
 romData.check = 0x06;
-strcpy(romData.name, "UW2");
+strcpy(romData.name, "UH1");
 romData.bootMode = 0x00;
 flashUpdate();
 }
