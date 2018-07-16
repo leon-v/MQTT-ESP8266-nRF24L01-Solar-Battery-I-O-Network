@@ -7989,6 +7989,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "229
 [e $ ! > -> _i `i -> 128 `i 995  ]
 {
+[; ;nrf24l01.c: 230: nrf24l01ChangeTXPower(1);
+"230
+[e ( _nrf24l01ChangeTXPower (1 -> 1 `i ]
 "231
 }
 [e :U 995 ]

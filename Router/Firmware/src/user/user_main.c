@@ -92,7 +92,7 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args){
 	// MQTT_Publish(client, "/mqtt/topic/2", "hello2", 6, 2, 0);
 
 	//sleepSetEnable();
-
+	radioInit(&mqttClient);
 	radioEnable(1);
 }
 
@@ -209,6 +209,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 	gpio_output_set(BIT4, 0, BIT4, 0);
 	gpio_output_set(BIT4, 0, BIT4, 0);
 	os_delay_us(65535);
+	os_delay_us(65535);
 	gpio_output_set(0, BIT4, 0, BIT4);// Bit 4 input
 
 
@@ -238,11 +239,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 		WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
 
-		radioInit(&mqttClient);
-
-		INFO("\r\nSystem started ...\r\n");
-
-		radioEnable(0);
+		INFO("\r\nSystem started ...\r\n");	
 	}
 }
 

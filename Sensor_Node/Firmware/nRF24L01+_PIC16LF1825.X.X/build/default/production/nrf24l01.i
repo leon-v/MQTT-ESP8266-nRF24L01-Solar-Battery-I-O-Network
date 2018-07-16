@@ -11154,7 +11154,7 @@ if (!--i) {
 goto RESEND;
 }
 if (i > 128){
-
+nrf24l01ChangeTXPower(1);
 }
 _delay((unsigned long)((100)*(16000000/4000000.0)));
 }

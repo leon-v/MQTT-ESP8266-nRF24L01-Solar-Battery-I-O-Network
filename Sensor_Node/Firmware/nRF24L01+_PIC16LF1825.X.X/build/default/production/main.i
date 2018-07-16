@@ -11021,7 +11021,7 @@ const unsigned char romArray[32]@(0x2000U - 32);
 void flashRealod(void);
 void flashUpdate(void);
 
-# 9 "main.c"
+# 10 "main.c"
 unsigned char sleepLoop = 0;
 unsigned long counter = 0;
 
@@ -11192,7 +11192,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 184
+# 185
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11203,18 +11203,16 @@ _delay((unsigned long)((10)*(16000000/4000.0)));
 
 flashRealod();
 
-
-
-if (romData.check != 0x06){
-romData.check = 0x06;
-strcpy(romData.name, "UH1");
+if (romData.check != 0x07){
+romData.check = 0x07;
+strcpy(romData.name, "UW2");
 romData.bootMode = 0x00;
 flashUpdate();
 }
 
 nrf24l01Init(0);
 
-# 210
+# 209
 ADCON0bits.ADON = 0;
 
 

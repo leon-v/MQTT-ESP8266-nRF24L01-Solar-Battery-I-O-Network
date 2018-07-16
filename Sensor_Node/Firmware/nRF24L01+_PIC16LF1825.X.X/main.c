@@ -5,6 +5,7 @@
 #include "nrf24l01.h"
 #include "flash.h"
 #include "interface.h"
+#include "../../../../shared.h"
 
 unsigned char sleepLoop = 0;
 unsigned long counter = 0;
@@ -190,12 +191,10 @@ void main(void) {
     delayMs(10);
     
     flashRealod();
-	
-	#define ROM_DATA_VERSION 0x06
 
-	if (romData.check != ROM_DATA_VERSION){
-		romData.check = ROM_DATA_VERSION;
-		strcpy(romData.name, "UH1");
+	if (romData.check != ENV_FLASH_VERSION){
+		romData.check = ENV_FLASH_VERSION;
+		strcpy(romData.name, ENV_DEVICE_NAME);
 		romData.bootMode = 0x00;
 		flashUpdate();
 	}
