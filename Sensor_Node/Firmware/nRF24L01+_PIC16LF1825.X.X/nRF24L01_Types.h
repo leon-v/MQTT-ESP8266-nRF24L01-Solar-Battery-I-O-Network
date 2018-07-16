@@ -160,6 +160,18 @@ typedef union{
 	};
 } n_STATUS_t;
 
+#define n_RPD			0x09
+typedef union{
+	struct {
+		unsigned byte	: 8;
+	};
+	struct {
+		unsigned RPD	: 1;
+
+	};
+} n_RPD_t;
+
+
 #define n_TX_ADDR       0x10
 
 #define n_RX_PW_P0		0x11

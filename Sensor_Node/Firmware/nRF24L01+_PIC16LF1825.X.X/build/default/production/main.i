@@ -10909,7 +10909,18 @@ unsigned Reserved : 1;
 };
 } n_STATUS_t;
 
-# 171
+
+typedef union{
+struct {
+unsigned byte : 8;
+};
+struct {
+unsigned RPD : 1;
+
+};
+} n_RPD_t;
+
+# 183
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10921,7 +10932,7 @@ unsigned Reserved : 2;
 };
 } n_RX_PW_t;
 
-# 191
+# 203
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10967,7 +10978,8 @@ struct{
 unsigned int byte :8;
 };
 struct{
-unsigned TooLoud :1;
+unsigned RPD :1;
+unsigned ACKRPD :1;
 unsigned ACKRequest :1;
 unsigned IsACK :1;
 };
@@ -10980,7 +10992,7 @@ char Message[32];
 
 volatile nrf24l01_t nrf24l01;
 
-# 39
+# 40
 void nrf24l01ISR(void);
 void nrf24l01Init(unsigned char isReciever);
 
@@ -10988,6 +11000,8 @@ void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
 nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 void nrf24l01SendACK(nrf24l01Packet_t * packet);
+void nrf24l01ChangeTXPower(int addPower);
+unsigned char nrf24l01Send(unsigned char command, unsigned char data);
 
 # 6 "flash.h"
 extern romData_t romData;
@@ -11090,6 +11104,14 @@ strcat(packet->Message, "/");
 strcat(packet->Message, tempString);
 }
 
+void checkTXPower(){
+nrf24l01Packet_t * rxPacket = nrf24l01GetRXPacket();
+
+if (rxPacket->packetData.ACKRPD){
+nrf24l01ChangeTXPower(-1);
+}
+}
+
 void loop(){
 
 
@@ -11101,32 +11123,48 @@ setMessage(&packet, "DBG", counter);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
+checkTXPower();
 sleep();
 
 setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
+checkTXPower();
 sleep();
 
 
 setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
+packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
+checkTXPower();
 sleep();
 
 setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
+packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
+checkTXPower();
 sleep();
 
 setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
+packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
+checkTXPower();
 sleep();
+
+n_RF_SETUP_t rfSetup;
+rfSetup.byte = nrf24l01Send(0b00000000 | 0x06, 0);
+
+setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 1;
+nrf24l01SendPacket(&packet);
+checkTXPower();
+sleep();
+
 
 
 }
@@ -11154,7 +11192,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 160
+# 184
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11176,7 +11214,7 @@ flashUpdate();
 
 nrf24l01Init(0);
 
-# 186
+# 210
 ADCON0bits.ADON = 0;
 
 
@@ -11215,7 +11253,7 @@ INTCONbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 9;
+WDTCONbits.WDTPS = 10;
 
 
 TRISAbits.TRISA5 = 0;

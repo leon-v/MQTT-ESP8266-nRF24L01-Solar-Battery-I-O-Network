@@ -88,6 +88,14 @@ void setMessage(nrf24l01Packet_t * packet, const char * topic, unsigned long val
     strcat(packet->Message, tempString);
 }
 
+void checkTXPower(){
+    nrf24l01Packet_t * rxPacket = nrf24l01GetRXPacket();
+    
+    if (rxPacket->packetData.ACKRPD){
+        nrf24l01ChangeTXPower(-1);
+    }
+}
+
 void loop(){
     
 	// Write payload data
@@ -99,32 +107,48 @@ void loop(){
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
+    checkTXPower();
 	sleep();
     
     setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
+    checkTXPower();
 	sleep();
     
     
     setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
+    checkTXPower();
 	sleep();
     
     setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
+    checkTXPower();
 	sleep();
     
     setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
+    checkTXPower();
 	sleep();
+    
+    n_RF_SETUP_t rfSetup;
+    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+    
+    setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 1;
+	nrf24l01SendPacket(&packet);
+    checkTXPower();
+	sleep();
+    
 	
 //	checkRxData();
 }
@@ -221,7 +245,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 9; //10=1S, 11=2S, 12=4S
+    WDTCONbits.WDTPS = 10; //10=1S, 11=2S, 12=4S
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;

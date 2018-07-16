@@ -241,6 +241,8 @@ void ICACHE_FLASH_ATTR user_init(void){
 		radioInit(&mqttClient);
 
 		INFO("\r\nSystem started ...\r\n");
+
+		radioEnable(0);
 	}
 }
 

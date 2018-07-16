@@ -3,8 +3,6 @@
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-unsigned int counter = 0;
-
 nrf24l01Packet_t * TXPacket;
 nrf24l01Packet_t RXPacket;
 
@@ -32,7 +30,26 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
 }
 
 
-
+void nrf24l01ChangeTXPower(int addPower){
+    
+    n_RF_SETUP_t rfSetup;
+    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+    
+    if (addPower > 0){
+        if (rfSetup.RF_PWR < 3){
+            rfSetup.RF_PWR++;
+        }
+    }
+    
+    if (addPower < 0){
+        if (rfSetup.RF_PWR > 0){
+            rfSetup.RF_PWR--;
+        }
+    }
+    
+    nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
+    
+}
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
@@ -70,6 +87,8 @@ void nrf24l01SendACK(nrf24l01Packet_t * packet){
 
 	packet->packetData.ACKRequest = 0;
 	packet->packetData.IsACK = 1;
+	packet->packetData.ACKRPD = packet->packetData.RPD;
+	
 
 	nrf24l01SendPacket(packet);
 }
@@ -96,6 +115,8 @@ void nrf24l01CheckACK(void){
     }
     
     // We have a valid ACK packet
+    
+    
     
     // Clear the ACKRequest to signal that we no longer need to wait
 	TXPacket->packetData.ACKRequest = 0;
@@ -140,6 +161,8 @@ void nrf24l01ReceivePacket(void){
     // End the SPI transaction and release the radio IC
     nrf24l01SPIEnd();
 
+    RXPacket.packetData.RPD = nrf24l01Send(n_R_REGISTER | n_RPD, 0);
+
     // Re-enable the radio IO to continue receiving
     nrf24l01CEHigh();
 }
@@ -161,7 +184,7 @@ RESEND:
         if (!--i) {
             goto RESEND;
         }
-        delayUs(50);
+        delayUs(100);
     }
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
@@ -203,7 +226,10 @@ RESEND:
         if (!--i) {
             goto RESEND;
         }
-        delayUs(20);
+        if (i  > 128){
+            nrf24l01ChangeTXPower(1);
+        }
+        delayUs(100);
     }
     
 		
@@ -213,8 +239,7 @@ RESEND:
 		if (!--i) {
 			goto RESEND;
 		}
-        counter++;
-		delayUs(500);
+		delayUs(40);
 	}
 }
 

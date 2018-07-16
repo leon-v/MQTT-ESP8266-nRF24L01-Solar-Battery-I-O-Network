@@ -12,6 +12,7 @@ uint8 enabled = 0;
 
 void radioEnable(uint8 enable){
 	enabled = enable;
+	enableInterrupts(enabled);
 }
 
 void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
