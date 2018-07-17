@@ -10920,7 +10920,7 @@ unsigned RPD : 1;
 };
 } n_RPD_t;
 
-# 183
+# 189
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10932,7 +10932,7 @@ unsigned Reserved : 2;
 };
 } n_RX_PW_t;
 
-# 203
+# 209
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10971,7 +10971,9 @@ typedef struct{
 unsigned TXBusy : 1;
 unsigned RXPending : 1;
 unsigned RXMode : 1;
+unsigned Pipe : 3;
 } nrf24l01_t;
+
 
 typedef union{
 struct{
@@ -10992,9 +10994,9 @@ char Message[32];
 
 volatile nrf24l01_t nrf24l01;
 
-# 40
+# 42
 void nrf24l01ISR(void);
-void nrf24l01Init(unsigned char isReciever);
+void nrf24l01Init(void);
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -11002,6 +11004,8 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 void nrf24l01SendACK(nrf24l01Packet_t * packet);
 void nrf24l01ChangeTXPower(int addPower);
 unsigned char nrf24l01Send(unsigned char command, unsigned char data);
+void nrf24l01SetTXPipe(char * name);
+void nrf24l01SetRXPipe(char * name);
 
 # 6 "flash.h"
 extern romData_t romData;
@@ -11210,9 +11214,9 @@ romData.bootMode = 0x00;
 flashUpdate();
 }
 
-nrf24l01Init(0);
+nrf24l01Init();
 
-# 209
+# 211
 ADCON0bits.ADON = 0;
 
 

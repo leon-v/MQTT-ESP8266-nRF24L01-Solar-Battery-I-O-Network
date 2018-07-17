@@ -171,6 +171,12 @@ typedef union{
 	};
 } n_RPD_t;
 
+#define n_RX_ADDR_P0    0x0A
+#define n_RX_ADDR_P1    0x0B
+#define n_RX_ADDR_P2    0x0C
+#define n_RX_ADDR_P3    0x0D
+#define n_RX_ADDR_P4    0x0E
+#define n_RX_ADDR_P5    0x0F
 
 #define n_TX_ADDR       0x10
 

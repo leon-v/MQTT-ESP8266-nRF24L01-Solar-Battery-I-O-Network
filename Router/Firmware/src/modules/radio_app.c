@@ -21,13 +21,7 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		
 		nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
-		// If we are the primary hub / reciever, we need to send back ACKs
-		if (RXPacket->packetData.ACKRequest){
-			nrf24l01SendACK(RXPacket);
-		}
-
 		char* strings = strtok(RXPacket->Message, "/");
-
 
 		char *name = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(name, strings);
@@ -39,6 +33,12 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 
 		char *value = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(value, strings);
+
+		// If we are the primary hub / reciever, we need to send back ACKs
+		if (RXPacket->packetData.ACKRequest){
+			// nrf24l01SetTXPipe(name);
+			nrf24l01SendACK(RXPacket);
+		}
 
 		char *buffer = NULL;
 		buffer = (char *) os_zalloc(128 * sizeof(char));
@@ -105,7 +105,7 @@ void ICACHE_FLASH_ATTR radioInit(MQTT_Client* p_mqttClient){
 	ets_isr_attach(ETS_GPIO_INUM, (ets_isr_t) radioInterrupt, NULL);
 	ETS_GPIO_INTR_ENABLE();// Enable interrupts
 
-	nrf24l01Init(1);
+	nrf24l01Init();
 
 	nrf24l01SetRXMode(1);
 

@@ -298,8 +298,61 @@ void nrf24l01ISR(void){
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
 }
 
+unsigned char nrf24l01GetPipe(char * name){
+    unsigned long pipe = 0;
+    unsigned char i = 0;
+    
+    // Calculate a pipe from the name passed
+    for (i = 0; i < strlen(name); i++){
+        pipe+= name[i];
+    }
+    pipe%= 6;
+    return pipe;
+}
+void nrf24l01SetTXPipe(char * name){
+    
+    unsigned char pipe;
+    if (name == NULL){
+        pipe = 0;
+    }
+    else{
+        pipe = nrf24l01GetPipe(name);
+    }
+    
+    
+    // Set the pipe address into the 
+    nrf24l01SPIStart();
+    nrf24l01SPISend(n_W_REGISTER | n_TX_ADDR);
+    nrf24l01SPISend(n_ADDRESS_P0[0]);
+    nrf24l01SPISend(n_ADDRESS_P0[1]);
+    nrf24l01SPISend(n_ADDRESS_P0[2]);
+    nrf24l01SPISend(n_ADDRESS_P0[3]);
+    nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+    nrf24l01SPIEnd();
+}
 
-void nrf24l01InitRegisters(unsigned char isReciever){
+void nrf24l01SetRXPipe(char * name){
+    
+    n_EN_RXADDR_t enRXAddr;
+    
+    if (name == NULL){
+        enRXAddr.ERX_P0 = 1;
+        enRXAddr.ERX_P1 = 1;
+        enRXAddr.ERX_P2 = 1;
+        enRXAddr.ERX_P3 = 1;
+        enRXAddr.ERX_P4 = 1;
+        enRXAddr.ERX_P5 = 1;
+    }
+    else{
+        unsigned char pipe = nrf24l01GetPipe(name);
+        enRXAddr.ERX_P0 = 1;
+        enRXAddr.byte = (unsigned) enRXAddr.byte << pipe;
+    }
+    
+    nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
+}
+
+void nrf24l01InitRegisters(void){
 
     n_CONFIG_t config;
     
@@ -324,19 +377,26 @@ void nrf24l01InitRegisters(unsigned char isReciever){
      rfSetup.RF_PWR = 3;
      nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
     
-    // Enable all data pipes
-	n_EN_RXADDR_t enRXAddr;
-	enRXAddr.ERX_P0 = 1;
-	enRXAddr.ERX_P1 = 1;
-	enRXAddr.ERX_P2 = 1;
-	enRXAddr.ERX_P3 = 1;
-	enRXAddr.ERX_P4 = 1;
-	enRXAddr.ERX_P5 = 1;
-	nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
+    // Setup all data pipes with our custom address
+    unsigned char i;
+    for (i = 0; i < 6; i++){
+        nrf24l01SPIStart();
+        nrf24l01SPISend(n_W_REGISTER | (unsigned) (n_RX_ADDR_P0 + i));
+        
+        if (i < 2){
+            nrf24l01SPISend(n_ADDRESS_P0[0]);
+            nrf24l01SPISend(n_ADDRESS_P0[1]);
+            nrf24l01SPISend(n_ADDRESS_P0[2]);
+            nrf24l01SPISend(n_ADDRESS_P0[3]);
+        }
+        
+        nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (i * n_ADDRESS_MUL));
+        
+        nrf24l01SPIEnd();
+    }
 
 	// Disable Auto ACK MCU needs to do this
 	n_EN_AA_t enAA;
-	enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0);
 	enAA.ENAA_P0 = 0;
 	enAA.ENAA_P1 = 0;
 	enAA.ENAA_P2 = 0;
@@ -345,6 +405,8 @@ void nrf24l01InitRegisters(unsigned char isReciever){
 	enAA.ENAA_P5 = 0;
 	nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte);
     
+    // Setup all pipes
+    nrf24l01SetRXPipe(NULL);
     
     // Set dynamic payload length
 	n_FEATURE_t feature;
@@ -384,7 +446,7 @@ void nrf24l01InitRegisters(unsigned char isReciever){
     
 }
 
-void nrf24l01Init(unsigned char isReciever){
+void nrf24l01Init(void){
     
     
     nrf24l01InterfaceInit();
@@ -396,7 +458,7 @@ void nrf24l01Init(unsigned char isReciever){
     
     delayUs(50000);
     
-    nrf24l01InitRegisters(isReciever);    
+    nrf24l01InitRegisters();    
     
     delayUs(50000);
 

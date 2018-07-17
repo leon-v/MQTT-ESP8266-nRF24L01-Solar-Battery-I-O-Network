@@ -199,10 +199,9 @@ void main(void) {
 		flashUpdate();
 	}
     
-    nrf24l01Init(0);
-    
-    
-//    OPTION_REGbits.nWPUEN = 0;
+    nrf24l01Init();
+    nrf24l01SetTXPipe(romData.name);
+    nrf24l01SetRXPipe(romData.name);
     
 
     /* Setup ADC */

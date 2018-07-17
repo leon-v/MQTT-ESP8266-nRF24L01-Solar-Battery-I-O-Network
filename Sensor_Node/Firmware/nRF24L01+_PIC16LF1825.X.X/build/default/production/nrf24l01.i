@@ -10806,7 +10806,7 @@ unsigned RPD : 1;
 };
 } n_RPD_t;
 
-# 183
+# 189
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10818,7 +10818,7 @@ unsigned Reserved : 2;
 };
 } n_RX_PW_t;
 
-# 203
+# 209
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10898,7 +10898,9 @@ typedef struct{
 unsigned TXBusy : 1;
 unsigned RXPending : 1;
 unsigned RXMode : 1;
+unsigned Pipe : 3;
 } nrf24l01_t;
+
 
 typedef union{
 struct{
@@ -10919,9 +10921,9 @@ char Message[32];
 
 volatile nrf24l01_t nrf24l01;
 
-# 40
+# 42
 void nrf24l01ISR(void);
-void nrf24l01Init(unsigned char isReciever);
+void nrf24l01Init(void);
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -10929,6 +10931,8 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 void nrf24l01SendACK(nrf24l01Packet_t * packet);
 void nrf24l01ChangeTXPower(int addPower);
 unsigned char nrf24l01Send(unsigned char command, unsigned char data);
+void nrf24l01SetTXPipe(char * name);
+void nrf24l01SetRXPipe(char * name);
 
 # 3 "nrf24l01.c"
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
@@ -11225,8 +11229,61 @@ status.RX_DR = 0;
 nrf24l01Send(0b00100000 | 0x07, status.byte);
 }
 
+unsigned char nrf24l01GetPipe(char * name){
+unsigned long pipe = 0;
+unsigned char i = 0;
 
-void nrf24l01InitRegisters(unsigned char isReciever){
+
+for (i = 0; i < strlen(name); i++){
+pipe+= name[i];
+}
+pipe%= 6;
+return pipe;
+}
+void nrf24l01SetTXPipe(char * name){
+
+unsigned char pipe;
+if (name == (0)){
+pipe = 0;
+}
+else{
+pipe = nrf24l01GetPipe(name);
+}
+
+
+
+nrf24l01SPIStart();
+nrf24l01SPISend(0b00100000 | 0x10);
+nrf24l01SPISend(n_ADDRESS_P0[0]);
+nrf24l01SPISend(n_ADDRESS_P0[1]);
+nrf24l01SPISend(n_ADDRESS_P0[2]);
+nrf24l01SPISend(n_ADDRESS_P0[3]);
+nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+nrf24l01SPIEnd();
+}
+
+void nrf24l01SetRXPipe(char * name){
+
+n_EN_RXADDR_t enRXAddr;
+
+if (name == (0)){
+enRXAddr.ERX_P0 = 1;
+enRXAddr.ERX_P1 = 1;
+enRXAddr.ERX_P2 = 1;
+enRXAddr.ERX_P3 = 1;
+enRXAddr.ERX_P4 = 1;
+enRXAddr.ERX_P5 = 1;
+}
+else{
+unsigned char pipe = nrf24l01GetPipe(name);
+enRXAddr.ERX_P0 = 1;
+enRXAddr.byte = (unsigned) enRXAddr.byte << pipe;
+}
+
+nrf24l01Send(0b00100000 | 0x02, enRXAddr.byte);
+}
+
+void nrf24l01InitRegisters(void){
 
 n_CONFIG_t config;
 
@@ -11251,17 +11308,7 @@ rfSetup.RF_DR_HIGH = 1;
 rfSetup.RF_PWR = 3;
 nrf24l01Send(0b00100000 | 0x06, rfSetup.byte);
 
-
-n_EN_RXADDR_t enRXAddr;
-enRXAddr.ERX_P0 = 1;
-enRXAddr.ERX_P1 = 1;
-enRXAddr.ERX_P2 = 1;
-enRXAddr.ERX_P3 = 1;
-enRXAddr.ERX_P4 = 1;
-enRXAddr.ERX_P5 = 1;
-nrf24l01Send(0b00100000 | 0x02, enRXAddr.byte);
-
-
+# 399
 n_EN_AA_t enAA;
 enAA.byte = nrf24l01Send(0b00000000 | 0x01, 0);
 enAA.ENAA_P0 = 0;
@@ -11272,6 +11319,8 @@ enAA.ENAA_P4 = 0;
 enAA.ENAA_P5 = 0;
 nrf24l01Send(0b00100000 | 0x01, enAA.byte);
 
+
+nrf24l01SetRXPipe((0));
 
 
 n_FEATURE_t feature;
@@ -11311,7 +11360,7 @@ nrf24l01Send(0b00100000 | 0x00, config.byte);
 
 }
 
-void nrf24l01Init(unsigned char isReciever){
+void nrf24l01Init(void){
 
 
 nrf24l01InterfaceInit();
@@ -11323,7 +11372,7 @@ nrf24l01CELow();
 
 _delay((unsigned long)((50000)*(16000000/4000000.0)));
 
-nrf24l01InitRegisters(isReciever);
+nrf24l01InitRegisters();
 
 _delay((unsigned long)((50000)*(16000000/4000000.0)));
 
