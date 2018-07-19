@@ -11086,7 +11086,7 @@ while (nrf24l01.TXBusy){
 if (!--i) {
 goto RESEND;
 }
-_delay((unsigned long)((10000)*(16000000/4000000.0)));
+_delay((unsigned long)((100)*(16000000/4000000.0)));
 }
 
 
@@ -11125,12 +11125,10 @@ enableInterrupts(1);
 
 i = 0xFF;
 while (nrf24l01.TXBusy){
-
 if (!--i) {
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
+nrf24l01ChangeTXPower(1);
 goto RESEND;
 }
-
 _delay((unsigned long)((100)*(16000000/4000000.0)));
 }
 
@@ -11140,7 +11138,7 @@ i = 0xFF;
 while (TXPacket->packetData.ACKRequest){
 if (!--i) {
 _delay((unsigned long)((50000)*(16000000/4000000.0)));
-nrf24l01ChangeTXPower(1);
+_delay((unsigned long)((50000)*(16000000/4000000.0)));
 goto RESEND;
 }
 _delay((unsigned long)((1000)*(16000000/4000000.0)));
@@ -11185,6 +11183,9 @@ if (!nrf24l01.RXPending){
 
 
 nrf24l01.RXPending = 1;
+
+
+
 nrf24l01ReceivePacket();
 nrf24l01CheckACK();
 }
@@ -11202,34 +11203,34 @@ status.RX_DR = 0;
 nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x07, status.byte);
 }
 
-# 357
-void nrf24l01InitRegisters(void){
-
+# 358
+void nrf24l01InitRegisters(){
 
 n_CONFIG_t config;
-config.PRIM_RX = 0;
-config.PWR_UP = 1;
-config.CRCO = 1;
-config.EN_CRC = 1;
-config.MASK_MAX_RT = 0;
-config.MASK_TX_DS = 0;
-config.MASK_RX_DR = 0;
-config.Reserved = 0;
+
+config.PWR_UP = 0;
 nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x00, config.byte);
 
+n_SETUP_AW_t setupAW;
+setupAW.byte = 0x00;
+setupAW.AW = 0b11;
+nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x02, setupAW.byte);
 
 
-n_EN_AA_t enAA;
-enAA.ENAA_P0 = 0;
-enAA.ENAA_P1 = 0;
-enAA.ENAA_P2 = 0;
-enAA.ENAA_P3 = 0;
-enAA.ENAA_P4 = 0;
-enAA.ENAA_P5 = 0;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x01, enAA.byte);
+n_RF_CH_t channel;
+channel.RF_CH = 2;
+nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x05, channel.byte);
+
+
+n_RF_SETUP_t rfSetup;
+rfSetup.byte = 0x00;
+rfSetup.RF_DR_LOW = 0;
+rfSetup.RF_DR_HIGH = 1;
+rfSetup.RF_PWR = 3;
+nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x06, rfSetup.byte);
+
 
 n_EN_RXADDR_t enRXAddr;
-enRXAddr.Reserved = 0;
 enRXAddr.ERX_P0 = 1;
 enRXAddr.ERX_P1 = 1;
 enRXAddr.ERX_P2 = 1;
@@ -11239,45 +11240,76 @@ enRXAddr.ERX_P5 = 1;
 nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x02, enRXAddr.byte);
 
 
-n_SETUP_AW_t setupAW;
-setupAW.Reserved = 0;
-setupAW.AW = 0b11;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x02, setupAW.byte);
+n_EN_AA_t enAA;
+enAA.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x01, 0);
+enAA.ENAA_P0 = 0;
+enAA.ENAA_P1 = 0;
+enAA.ENAA_P2 = 0;
+enAA.ENAA_P3 = 0;
+enAA.ENAA_P4 = 0;
+enAA.ENAA_P5 = 0;
+nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x01, enAA.byte);
 
 
-n_RF_CH_t channel;
-channel.Reserved = 0;
-channel.RF_CH = 2;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x05, channel.byte);
 
+n_FEATURE_t feature;
+feature.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x1D, 0);
+feature.EN_DPL = 1;
+feature.EN_DYN_ACK = 1;
+nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x1D, feature.byte);
 
-n_RF_SETUP_t rfSetup;
-rfSetup.CONT_WAVE = 0;
-rfSetup.Reserved = 0;
-rfSetup.RF_DR_LOW = 0;
-rfSetup.RF_DR_HIGH = 1;
-rfSetup.RF_PWR = 3;
-rfSetup.Obsolete = 0;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x06, rfSetup.byte);
-
-# 457
 n_DYNPD_t DynPD;
+DynPD.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x1C, 0);
 DynPD.DPL_P0 = 1;
 DynPD.DPL_P1 = 1;
 DynPD.DPL_P2 = 1;
 DynPD.DPL_P3 = 1;
 DynPD.DPL_P4 = 1;
 DynPD.DPL_P5 = 1;
-DynPD.Reserved = 0;
 nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x1C, DynPD.byte);
 
 
-n_FEATURE_t feature;
-feature.EN_DYN_ACK = 1;
-feature.EN_ACK_PAY = 0;
-feature.EN_DPL = 0;
-feature.Reserved = 0;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x1D, feature.byte);
+
+unsigned int i;
+unsigned char addressRegister;
+unsigned char lastAddressByte;
+for (i = 0; i < 6; i++){
+
+addressRegister = (unsigned) 0x0A + i;
+
+lastAddressByte = n_ADDRESS_P0[4];
+lastAddressByte+= n_ADDRESS_MUL * i;
+
+nrf24l01SPIStart();
+nrf24l01SPISend((unsigned) 0b00100000 | addressRegister);
+
+nrf24l01SPISend(lastAddressByte);
+
+if (i < 2){
+nrf24l01SPISend(n_ADDRESS_P0[3]);
+nrf24l01SPISend(n_ADDRESS_P0[2]);
+nrf24l01SPISend(n_ADDRESS_P0[1]);
+nrf24l01SPISend(n_ADDRESS_P0[0]);
+}
+
+nrf24l01SPIEnd();
+
+# 452
+}
+
+lastAddressByte = n_ADDRESS_P0[4];
+lastAddressByte+= n_ADDRESS_MUL * 2;
+
+nrf24l01SPIStart();
+nrf24l01SPISend((unsigned) 0b00100000 | (unsigned) 0x10);
+nrf24l01SPISend(lastAddressByte);
+nrf24l01SPISend(n_ADDRESS_P0[3]);
+nrf24l01SPISend(n_ADDRESS_P0[2]);
+nrf24l01SPISend(n_ADDRESS_P0[1]);
+nrf24l01SPISend(n_ADDRESS_P0[0]);
+
+nrf24l01SPIEnd();
+
 
 
 n_STATUS_t status;
@@ -11290,7 +11322,16 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x07, status.byte);
 
 nrf24l01Send((unsigned) 0b11100001, 0);
 nrf24l01Send((unsigned) 0b11100010, 0);
+
+
+config.PRIM_RX = 1;
+config.EN_CRC = 1;
+config.CRCO = 1;
+config.PWR_UP = 1;
+nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x00, config.byte);
+
 }
+
 
 void nrf24l01Init(void){
 

@@ -145,7 +145,7 @@ void loop(){
     
     setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
+    packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep();
@@ -243,7 +243,7 @@ void main(void) {
             
     
     /* Setup WDT*/
-    WDTCONbits.WDTPS = 10; //10=1S, 11=2S, 12=4S
+    WDTCONbits.WDTPS = 11; //10=1S, 11=2S, 12=4S
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;

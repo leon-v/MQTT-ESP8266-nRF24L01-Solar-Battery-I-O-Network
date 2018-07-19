@@ -10760,7 +10760,7 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
-# 15 "nRF24L01_Types.h"
+# 42 "nRF24L01_Types.h"
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10775,16 +10775,6 @@ unsigned MASK_TX_DS : 1;
 unsigned MASK_RX_DR : 1;
 unsigned Reserved : 1;
 
-};
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
 };
 } n_CONFIG_t;
 
@@ -10803,16 +10793,6 @@ unsigned ENAA_P5 : 1;
 unsigned Reserved : 2;
 
 };
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
-};
 } n_EN_AA_t;
 
 
@@ -10829,16 +10809,6 @@ unsigned ERX_P4 : 1;
 unsigned ERX_P5 : 1;
 unsigned Reserved : 2;
 
-};
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
 };
 } n_EN_RXADDR_t;
 
@@ -10873,6 +10843,7 @@ unsigned byte : 8;
 };
 struct {
 unsigned RF_CH : 7;
+unsigned Reserved : 1;
 };
 } n_RF_CH_t;
 
@@ -10920,7 +10891,7 @@ unsigned RPD : 1;
 };
 } n_RPD_t;
 
-# 189
+# 187
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10932,7 +10903,7 @@ unsigned Reserved : 2;
 };
 } n_RX_PW_t;
 
-# 209
+# 207
 typedef union{
 struct {
 unsigned byte : 8;
@@ -11164,7 +11135,7 @@ rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 
 setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
@@ -11255,7 +11226,7 @@ INTCONbits.INTEDG = 0;
 
 
 
-WDTCONbits.WDTPS = 10;
+WDTCONbits.WDTPS = 11;
 
 
 TRISAbits.TRISA5 = 0;

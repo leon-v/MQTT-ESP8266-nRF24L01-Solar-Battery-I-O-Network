@@ -3,8 +3,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [s S920 `uc 1 `uc -> 16 `i `ui 1 ]
 [n S920 . check name bootMode ]
 "11 nrf24l01.h
-[s S960 :1 `uc 1 :1 `uc 1 :1 `uc 1 :3 `uc 1 ]
-[n S960 . TXBusy RXPending RXMode Pipe ]
+[s S957 :1 `uc 1 :1 `uc 1 :1 `uc 1 :3 `uc 1 ]
+[n S957 . TXBusy RXPending RXMode Pipe ]
 "490 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
 [s S32 :1 `uc 1 :3 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S32 . INTF . IOCIF TMR0IF ]
@@ -54,17 +54,17 @@ Version 3.2 HI-TECH Software Intermediate Code
 "46 nrf24l01.h
 [v _nrf24l01SetRXMode `(v ~T0 @X0 0 ef1`uc ]
 "20
-[s S962 :8 `uc 1 ]
-[n S962 . byte ]
+[s S959 :8 `uc 1 ]
+[n S959 . byte ]
 "23
-[s S963 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S963 . RPD ACKRPD ACKRequest IsACK ]
+[s S960 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S960 . RPD ACKRPD ACKRequest IsACK ]
 "19
-[u S961 `S962 1 `S963 1 ]
-[n S961 . . . ]
+[u S958 `S959 1 `S960 1 ]
+[n S958 . . . ]
 "31
-[s S964 `S961 1 `uc -> 32 `i ]
-[n S964 . packetData Message ]
+[s S961 `S958 1 `uc -> 32 `i ]
+[n S961 . packetData Message ]
 "16 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h
 [v _memset `(*v ~T0 @X0 0 ef3`*v`i`ui ]
 "36
@@ -74,20 +74,20 @@ Version 3.2 HI-TECH Software Intermediate Code
 "120 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdlib.h
 [v _ultoa `(*uc ~T0 @X0 0 ef3`*uc`ul`i ]
 "47 nrf24l01.h
-[v _nrf24l01GetRXPacket `(*S964 ~T0 @X0 0 ef ]
+[v _nrf24l01GetRXPacket `(*S961 ~T0 @X0 0 ef ]
 "49
 [v _nrf24l01ChangeTXPower `(v ~T0 @X0 0 ef1`i ]
 "45
-[v _nrf24l01SendPacket `(v ~T0 @X0 0 ef1`*S964 ]
-"132 nRF24L01_Types.h
-[s S943 :8 `uc 1 ]
-[n S943 . byte ]
-"135
-[s S944 :1 `uc 1 :2 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S944 . Obsolete RF_PWR RF_DR_HIGH PLL_LOCK RF_DR_LOW Reserved CONT_WAVE ]
-"131
-[u S942 `S943 1 `S944 1 ]
-[n S942 . . . ]
+[v _nrf24l01SendPacket `(v ~T0 @X0 0 ef1`*S961 ]
+"130 nRF24L01_Types.h
+[s S940 :8 `uc 1 ]
+[n S940 . byte ]
+"133
+[s S941 :1 `uc 1 :2 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S941 . Obsolete RF_PWR RF_DR_HIGH PLL_LOCK RF_DR_LOW Reserved CONT_WAVE ]
+"129
+[u S939 `S940 1 `S941 1 ]
+[n S939 . . . ]
 "50 nrf24l01.h
 [v _nrf24l01Send `(uc ~T0 @X0 0 ef2`uc`uc ]
 [p mainexit ]
@@ -7483,174 +7483,145 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.h: 44: void nrf24l01SPIEnd(void);
 [; ;interface.h: 46: void enableInterrupts(unsigned char enable);
 [; ;interface.h: 48: void exception(unsigned char exception);
-[; ;nRF24L01_Types.h: 15: typedef union{
-[; ;nRF24L01_Types.h: 16: struct {
-[; ;nRF24L01_Types.h: 17: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 18: };
-[; ;nRF24L01_Types.h: 19: struct {
-[; ;nRF24L01_Types.h: 20: unsigned PRIM_RX : 1;
-[; ;nRF24L01_Types.h: 21: unsigned PWR_UP : 1;
-[; ;nRF24L01_Types.h: 22: unsigned CRCO : 1;
-[; ;nRF24L01_Types.h: 23: unsigned EN_CRC : 1;
-[; ;nRF24L01_Types.h: 24: unsigned MASK_MAX_RT: 1;
-[; ;nRF24L01_Types.h: 25: unsigned MASK_TX_DS : 1;
-[; ;nRF24L01_Types.h: 26: unsigned MASK_RX_DR : 1;
-[; ;nRF24L01_Types.h: 27: unsigned Reserved : 1;
-[; ;nRF24L01_Types.h: 29: };
-[; ;nRF24L01_Types.h: 30: struct {
-[; ;nRF24L01_Types.h: 31: unsigned bit0 : 1;
-[; ;nRF24L01_Types.h: 32: unsigned bit1 : 1;
-[; ;nRF24L01_Types.h: 33: unsigned bit2 : 1;
-[; ;nRF24L01_Types.h: 34: unsigned bit3 : 1;
-[; ;nRF24L01_Types.h: 35: unsigned bit4 : 1;
-[; ;nRF24L01_Types.h: 36: unsigned bit5 : 1;
-[; ;nRF24L01_Types.h: 37: unsigned bit6 : 1;
-[; ;nRF24L01_Types.h: 38: unsigned bit7 : 1;
-[; ;nRF24L01_Types.h: 39: };
-[; ;nRF24L01_Types.h: 40: } n_CONFIG_t;
-[; ;nRF24L01_Types.h: 43: typedef union{
-[; ;nRF24L01_Types.h: 44: struct {
-[; ;nRF24L01_Types.h: 45: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 46: };
-[; ;nRF24L01_Types.h: 47: struct {
-[; ;nRF24L01_Types.h: 48: unsigned ENAA_P0 : 1;
-[; ;nRF24L01_Types.h: 49: unsigned ENAA_P1 : 1;
-[; ;nRF24L01_Types.h: 50: unsigned ENAA_P2 : 1;
-[; ;nRF24L01_Types.h: 51: unsigned ENAA_P3 : 1;
-[; ;nRF24L01_Types.h: 52: unsigned ENAA_P4 : 1;
-[; ;nRF24L01_Types.h: 53: unsigned ENAA_P5 : 1;
-[; ;nRF24L01_Types.h: 54: unsigned Reserved : 2;
+[; ;nRF24L01_Types.h: 42: typedef union{
+[; ;nRF24L01_Types.h: 43: struct {
+[; ;nRF24L01_Types.h: 44: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 45: };
+[; ;nRF24L01_Types.h: 46: struct {
+[; ;nRF24L01_Types.h: 47: unsigned PRIM_RX : 1;
+[; ;nRF24L01_Types.h: 48: unsigned PWR_UP : 1;
+[; ;nRF24L01_Types.h: 49: unsigned CRCO : 1;
+[; ;nRF24L01_Types.h: 50: unsigned EN_CRC : 1;
+[; ;nRF24L01_Types.h: 51: unsigned MASK_MAX_RT: 1;
+[; ;nRF24L01_Types.h: 52: unsigned MASK_TX_DS : 1;
+[; ;nRF24L01_Types.h: 53: unsigned MASK_RX_DR : 1;
+[; ;nRF24L01_Types.h: 54: unsigned Reserved : 1;
 [; ;nRF24L01_Types.h: 56: };
-[; ;nRF24L01_Types.h: 57: struct {
-[; ;nRF24L01_Types.h: 58: unsigned bit0 : 1;
-[; ;nRF24L01_Types.h: 59: unsigned bit1 : 1;
-[; ;nRF24L01_Types.h: 60: unsigned bit2 : 1;
-[; ;nRF24L01_Types.h: 61: unsigned bit3 : 1;
-[; ;nRF24L01_Types.h: 62: unsigned bit4 : 1;
-[; ;nRF24L01_Types.h: 63: unsigned bit5 : 1;
-[; ;nRF24L01_Types.h: 64: unsigned bit6 : 1;
-[; ;nRF24L01_Types.h: 65: unsigned bit7 : 1;
-[; ;nRF24L01_Types.h: 66: };
-[; ;nRF24L01_Types.h: 67: } n_EN_AA_t;
-[; ;nRF24L01_Types.h: 70: typedef union{
-[; ;nRF24L01_Types.h: 71: struct {
-[; ;nRF24L01_Types.h: 72: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 57: } n_CONFIG_t;
+[; ;nRF24L01_Types.h: 60: typedef union{
+[; ;nRF24L01_Types.h: 61: struct {
+[; ;nRF24L01_Types.h: 62: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 63: };
+[; ;nRF24L01_Types.h: 64: struct {
+[; ;nRF24L01_Types.h: 65: unsigned ENAA_P0 : 1;
+[; ;nRF24L01_Types.h: 66: unsigned ENAA_P1 : 1;
+[; ;nRF24L01_Types.h: 67: unsigned ENAA_P2 : 1;
+[; ;nRF24L01_Types.h: 68: unsigned ENAA_P3 : 1;
+[; ;nRF24L01_Types.h: 69: unsigned ENAA_P4 : 1;
+[; ;nRF24L01_Types.h: 70: unsigned ENAA_P5 : 1;
+[; ;nRF24L01_Types.h: 71: unsigned Reserved : 2;
 [; ;nRF24L01_Types.h: 73: };
-[; ;nRF24L01_Types.h: 74: struct {
-[; ;nRF24L01_Types.h: 75: unsigned ERX_P0 : 1;
-[; ;nRF24L01_Types.h: 76: unsigned ERX_P1 : 1;
-[; ;nRF24L01_Types.h: 77: unsigned ERX_P2 : 1;
-[; ;nRF24L01_Types.h: 78: unsigned ERX_P3 : 1;
-[; ;nRF24L01_Types.h: 79: unsigned ERX_P4 : 1;
-[; ;nRF24L01_Types.h: 80: unsigned ERX_P5 : 1;
-[; ;nRF24L01_Types.h: 81: unsigned Reserved : 2;
-[; ;nRF24L01_Types.h: 83: };
-[; ;nRF24L01_Types.h: 84: struct {
-[; ;nRF24L01_Types.h: 85: unsigned bit0 : 1;
-[; ;nRF24L01_Types.h: 86: unsigned bit1 : 1;
-[; ;nRF24L01_Types.h: 87: unsigned bit2 : 1;
-[; ;nRF24L01_Types.h: 88: unsigned bit3 : 1;
-[; ;nRF24L01_Types.h: 89: unsigned bit4 : 1;
-[; ;nRF24L01_Types.h: 90: unsigned bit5 : 1;
-[; ;nRF24L01_Types.h: 91: unsigned bit6 : 1;
-[; ;nRF24L01_Types.h: 92: unsigned bit7 : 1;
-[; ;nRF24L01_Types.h: 93: };
-[; ;nRF24L01_Types.h: 94: } n_EN_RXADDR_t;
-[; ;nRF24L01_Types.h: 97: typedef union{
+[; ;nRF24L01_Types.h: 74: } n_EN_AA_t;
+[; ;nRF24L01_Types.h: 77: typedef union{
+[; ;nRF24L01_Types.h: 78: struct {
+[; ;nRF24L01_Types.h: 79: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 80: };
+[; ;nRF24L01_Types.h: 81: struct {
+[; ;nRF24L01_Types.h: 82: unsigned ERX_P0 : 1;
+[; ;nRF24L01_Types.h: 83: unsigned ERX_P1 : 1;
+[; ;nRF24L01_Types.h: 84: unsigned ERX_P2 : 1;
+[; ;nRF24L01_Types.h: 85: unsigned ERX_P3 : 1;
+[; ;nRF24L01_Types.h: 86: unsigned ERX_P4 : 1;
+[; ;nRF24L01_Types.h: 87: unsigned ERX_P5 : 1;
+[; ;nRF24L01_Types.h: 88: unsigned Reserved : 2;
+[; ;nRF24L01_Types.h: 90: };
+[; ;nRF24L01_Types.h: 91: } n_EN_RXADDR_t;
+[; ;nRF24L01_Types.h: 94: typedef union{
+[; ;nRF24L01_Types.h: 95: struct {
+[; ;nRF24L01_Types.h: 96: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 97: };
 [; ;nRF24L01_Types.h: 98: struct {
-[; ;nRF24L01_Types.h: 99: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 100: };
-[; ;nRF24L01_Types.h: 101: struct {
-[; ;nRF24L01_Types.h: 102: unsigned AW : 2;
-[; ;nRF24L01_Types.h: 103: unsigned Reserved : 6;
-[; ;nRF24L01_Types.h: 104: };
-[; ;nRF24L01_Types.h: 105: } n_SETUP_AW_t;
-[; ;nRF24L01_Types.h: 109: typedef union{
+[; ;nRF24L01_Types.h: 99: unsigned AW : 2;
+[; ;nRF24L01_Types.h: 100: unsigned Reserved : 6;
+[; ;nRF24L01_Types.h: 101: };
+[; ;nRF24L01_Types.h: 102: } n_SETUP_AW_t;
+[; ;nRF24L01_Types.h: 106: typedef union{
+[; ;nRF24L01_Types.h: 107: struct {
+[; ;nRF24L01_Types.h: 108: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 109: };
 [; ;nRF24L01_Types.h: 110: struct {
-[; ;nRF24L01_Types.h: 111: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 112: };
-[; ;nRF24L01_Types.h: 113: struct {
-[; ;nRF24L01_Types.h: 114: unsigned ARC : 4;
-[; ;nRF24L01_Types.h: 115: unsigned ARD : 4;
-[; ;nRF24L01_Types.h: 117: };
-[; ;nRF24L01_Types.h: 118: } n_SETUP_RETR_t;
-[; ;nRF24L01_Types.h: 121: typedef union {
+[; ;nRF24L01_Types.h: 111: unsigned ARC : 4;
+[; ;nRF24L01_Types.h: 112: unsigned ARD : 4;
+[; ;nRF24L01_Types.h: 114: };
+[; ;nRF24L01_Types.h: 115: } n_SETUP_RETR_t;
+[; ;nRF24L01_Types.h: 118: typedef union {
+[; ;nRF24L01_Types.h: 119: struct {
+[; ;nRF24L01_Types.h: 120: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 121: };
 [; ;nRF24L01_Types.h: 122: struct {
-[; ;nRF24L01_Types.h: 123: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 124: };
-[; ;nRF24L01_Types.h: 125: struct {
-[; ;nRF24L01_Types.h: 126: unsigned RF_CH : 7;
-[; ;nRF24L01_Types.h: 127: };
-[; ;nRF24L01_Types.h: 128: } n_RF_CH_t;
-[; ;nRF24L01_Types.h: 131: typedef union {
-[; ;nRF24L01_Types.h: 132: struct {
-[; ;nRF24L01_Types.h: 133: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 134: };
-[; ;nRF24L01_Types.h: 135: struct {
-[; ;nRF24L01_Types.h: 136: unsigned Obsolete : 1;
-[; ;nRF24L01_Types.h: 137: unsigned RF_PWR : 2;
-[; ;nRF24L01_Types.h: 138: unsigned RF_DR_HIGH : 1;
-[; ;nRF24L01_Types.h: 139: unsigned PLL_LOCK : 1;
-[; ;nRF24L01_Types.h: 140: unsigned RF_DR_LOW : 1;
-[; ;nRF24L01_Types.h: 141: unsigned Reserved : 1;
-[; ;nRF24L01_Types.h: 142: unsigned CONT_WAVE : 1;
-[; ;nRF24L01_Types.h: 143: };
-[; ;nRF24L01_Types.h: 144: } n_RF_SETUP_t;
-[; ;nRF24L01_Types.h: 148: typedef union{
-[; ;nRF24L01_Types.h: 149: struct {
-[; ;nRF24L01_Types.h: 150: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 151: };
-[; ;nRF24L01_Types.h: 152: struct {
-[; ;nRF24L01_Types.h: 153: unsigned TX_FULL : 1;
-[; ;nRF24L01_Types.h: 154: unsigned RX_P_NO : 3;
-[; ;nRF24L01_Types.h: 155: unsigned MAX_RT : 1;
-[; ;nRF24L01_Types.h: 156: unsigned TX_DS : 1;
-[; ;nRF24L01_Types.h: 157: unsigned RX_DR : 1;
-[; ;nRF24L01_Types.h: 158: unsigned Reserved : 1;
-[; ;nRF24L01_Types.h: 160: };
-[; ;nRF24L01_Types.h: 161: } n_STATUS_t;
-[; ;nRF24L01_Types.h: 164: typedef union{
-[; ;nRF24L01_Types.h: 165: struct {
-[; ;nRF24L01_Types.h: 166: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 167: };
-[; ;nRF24L01_Types.h: 168: struct {
-[; ;nRF24L01_Types.h: 169: unsigned RPD : 1;
-[; ;nRF24L01_Types.h: 171: };
-[; ;nRF24L01_Types.h: 172: } n_RPD_t;
-[; ;nRF24L01_Types.h: 189: typedef union{
-[; ;nRF24L01_Types.h: 190: struct {
-[; ;nRF24L01_Types.h: 191: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 192: };
-[; ;nRF24L01_Types.h: 193: struct {
-[; ;nRF24L01_Types.h: 194: unsigned RX_PW : 6;
-[; ;nRF24L01_Types.h: 195: unsigned Reserved : 2;
-[; ;nRF24L01_Types.h: 197: };
-[; ;nRF24L01_Types.h: 198: } n_RX_PW_t;
-[; ;nRF24L01_Types.h: 209: typedef union{
-[; ;nRF24L01_Types.h: 210: struct {
-[; ;nRF24L01_Types.h: 211: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 212: };
-[; ;nRF24L01_Types.h: 213: struct {
-[; ;nRF24L01_Types.h: 214: unsigned DPL_P0 : 1;
-[; ;nRF24L01_Types.h: 215: unsigned DPL_P1 : 1;
-[; ;nRF24L01_Types.h: 216: unsigned DPL_P2 : 1;
-[; ;nRF24L01_Types.h: 217: unsigned DPL_P3 : 1;
-[; ;nRF24L01_Types.h: 218: unsigned DPL_P4 : 1;
-[; ;nRF24L01_Types.h: 219: unsigned DPL_P5 : 1;
-[; ;nRF24L01_Types.h: 220: unsigned Reserved : 2;
-[; ;nRF24L01_Types.h: 222: };
-[; ;nRF24L01_Types.h: 223: } n_DYNPD_t;
-[; ;nRF24L01_Types.h: 227: typedef union{
-[; ;nRF24L01_Types.h: 228: struct {
-[; ;nRF24L01_Types.h: 229: unsigned byte : 8;
-[; ;nRF24L01_Types.h: 230: };
-[; ;nRF24L01_Types.h: 231: struct {
-[; ;nRF24L01_Types.h: 232: unsigned EN_DYN_ACK : 1;
-[; ;nRF24L01_Types.h: 233: unsigned EN_ACK_PAY : 1;
-[; ;nRF24L01_Types.h: 234: unsigned EN_DPL : 1;
-[; ;nRF24L01_Types.h: 235: unsigned Reserved : 5;
-[; ;nRF24L01_Types.h: 236: };
-[; ;nRF24L01_Types.h: 237: } n_FEATURE_t;
+[; ;nRF24L01_Types.h: 123: unsigned RF_CH : 7;
+[; ;nRF24L01_Types.h: 124: unsigned Reserved : 1;
+[; ;nRF24L01_Types.h: 125: };
+[; ;nRF24L01_Types.h: 126: } n_RF_CH_t;
+[; ;nRF24L01_Types.h: 129: typedef union {
+[; ;nRF24L01_Types.h: 130: struct {
+[; ;nRF24L01_Types.h: 131: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 132: };
+[; ;nRF24L01_Types.h: 133: struct {
+[; ;nRF24L01_Types.h: 134: unsigned Obsolete : 1;
+[; ;nRF24L01_Types.h: 135: unsigned RF_PWR : 2;
+[; ;nRF24L01_Types.h: 136: unsigned RF_DR_HIGH : 1;
+[; ;nRF24L01_Types.h: 137: unsigned PLL_LOCK : 1;
+[; ;nRF24L01_Types.h: 138: unsigned RF_DR_LOW : 1;
+[; ;nRF24L01_Types.h: 139: unsigned Reserved : 1;
+[; ;nRF24L01_Types.h: 140: unsigned CONT_WAVE : 1;
+[; ;nRF24L01_Types.h: 141: };
+[; ;nRF24L01_Types.h: 142: } n_RF_SETUP_t;
+[; ;nRF24L01_Types.h: 146: typedef union{
+[; ;nRF24L01_Types.h: 147: struct {
+[; ;nRF24L01_Types.h: 148: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 149: };
+[; ;nRF24L01_Types.h: 150: struct {
+[; ;nRF24L01_Types.h: 151: unsigned TX_FULL : 1;
+[; ;nRF24L01_Types.h: 152: unsigned RX_P_NO : 3;
+[; ;nRF24L01_Types.h: 153: unsigned MAX_RT : 1;
+[; ;nRF24L01_Types.h: 154: unsigned TX_DS : 1;
+[; ;nRF24L01_Types.h: 155: unsigned RX_DR : 1;
+[; ;nRF24L01_Types.h: 156: unsigned Reserved : 1;
+[; ;nRF24L01_Types.h: 158: };
+[; ;nRF24L01_Types.h: 159: } n_STATUS_t;
+[; ;nRF24L01_Types.h: 162: typedef union{
+[; ;nRF24L01_Types.h: 163: struct {
+[; ;nRF24L01_Types.h: 164: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 165: };
+[; ;nRF24L01_Types.h: 166: struct {
+[; ;nRF24L01_Types.h: 167: unsigned RPD : 1;
+[; ;nRF24L01_Types.h: 169: };
+[; ;nRF24L01_Types.h: 170: } n_RPD_t;
+[; ;nRF24L01_Types.h: 187: typedef union{
+[; ;nRF24L01_Types.h: 188: struct {
+[; ;nRF24L01_Types.h: 189: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 190: };
+[; ;nRF24L01_Types.h: 191: struct {
+[; ;nRF24L01_Types.h: 192: unsigned RX_PW : 6;
+[; ;nRF24L01_Types.h: 193: unsigned Reserved : 2;
+[; ;nRF24L01_Types.h: 195: };
+[; ;nRF24L01_Types.h: 196: } n_RX_PW_t;
+[; ;nRF24L01_Types.h: 207: typedef union{
+[; ;nRF24L01_Types.h: 208: struct {
+[; ;nRF24L01_Types.h: 209: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 210: };
+[; ;nRF24L01_Types.h: 211: struct {
+[; ;nRF24L01_Types.h: 212: unsigned DPL_P0 : 1;
+[; ;nRF24L01_Types.h: 213: unsigned DPL_P1 : 1;
+[; ;nRF24L01_Types.h: 214: unsigned DPL_P2 : 1;
+[; ;nRF24L01_Types.h: 215: unsigned DPL_P3 : 1;
+[; ;nRF24L01_Types.h: 216: unsigned DPL_P4 : 1;
+[; ;nRF24L01_Types.h: 217: unsigned DPL_P5 : 1;
+[; ;nRF24L01_Types.h: 218: unsigned Reserved : 2;
+[; ;nRF24L01_Types.h: 220: };
+[; ;nRF24L01_Types.h: 221: } n_DYNPD_t;
+[; ;nRF24L01_Types.h: 225: typedef union{
+[; ;nRF24L01_Types.h: 226: struct {
+[; ;nRF24L01_Types.h: 227: unsigned byte : 8;
+[; ;nRF24L01_Types.h: 228: };
+[; ;nRF24L01_Types.h: 229: struct {
+[; ;nRF24L01_Types.h: 230: unsigned EN_DYN_ACK : 1;
+[; ;nRF24L01_Types.h: 231: unsigned EN_ACK_PAY : 1;
+[; ;nRF24L01_Types.h: 232: unsigned EN_DPL : 1;
+[; ;nRF24L01_Types.h: 233: unsigned Reserved : 5;
+[; ;nRF24L01_Types.h: 234: };
+[; ;nRF24L01_Types.h: 235: } n_FEATURE_t;
 [; ;nrf24l01.h: 8: extern const unsigned char n_ADDRESS_P0[];
 [; ;nrf24l01.h: 9: extern const unsigned char n_ADDRESS_MUL;
 [; ;nrf24l01.h: 11: typedef struct{
@@ -7675,7 +7646,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.h: 33: char Message[32];
 [; ;nrf24l01.h: 34: } nrf24l01Packet_t;
 "36 nrf24l01.h
-[v _nrf24l01 `VS960 ~T0 @X0 1 e ]
+[v _nrf24l01 `VS957 ~T0 @X0 1 e ]
 [; ;nrf24l01.h: 36: volatile nrf24l01_t nrf24l01;
 [; ;nrf24l01.h: 42: void nrf24l01ISR(void);
 [; ;nrf24l01.h: 43: void nrf24l01Init(void);
@@ -7750,16 +7721,16 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;main.c: 11: unsigned long counter = 0;
 [v $root$_ISR `(v ~T0 @X0 0 e ]
-[v F6604 `(v ~T0 @X0 1 tf ]
+[v F6575 `(v ~T0 @X0 1 tf ]
 "15
-[v _ISR `IF6604 ~T0 @X0 1 e ]
+[v _ISR `IF6575 ~T0 @X0 1 e ]
 {
 [; ;main.c: 15: void interrupt ISR(void){
 [e :U _ISR ]
 [f ]
 [; ;main.c: 17: if (PIR0bits.INTF){
 "17
-[e $ ! != -> . . _PIR0bits 0 0 `i -> -> -> 0 `i `Vuc `i 969  ]
+[e $ ! != -> . . _PIR0bits 0 0 `i -> -> -> 0 `i `Vuc `i 966  ]
 {
 [; ;main.c: 18: nrf24l01ISR();
 "18
@@ -7769,11 +7740,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _PIR0bits 0 0 -> -> 0 `i `uc ]
 "20
 }
-[e :U 969 ]
+[e :U 966 ]
 [; ;main.c: 20: }
 [; ;main.c: 21: }
 "21
-[e :UE 968 ]
+[e :UE 965 ]
 }
 "23
 [v _getADCValue `(ul ~T0 @X0 1 ef2`uc`ul ]
@@ -7799,26 +7770,26 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( __delay (1 -> * -> -> 200 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
 [; ;main.c: 31: while (--adcLoop){
 "31
-[e $U 971  ]
-[e :U 972 ]
+[e $U 968  ]
+[e :U 969 ]
 {
 [; ;main.c: 33: ADCON0bits.ADGO = 1;
 "33
 [e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
 [; ;main.c: 35: while (ADCON0bits.ADGO){
 "35
-[e $U 974  ]
-[e :U 975 ]
+[e $U 971  ]
+[e :U 972 ]
 {
 [; ;main.c: 36: __nop();
 "36
 [e ( ___nop ..  ]
 "37
 }
-[e :U 974 ]
+[e :U 971 ]
 "35
-[e $ != -> . . _ADCON0bits 1 1 `i -> -> -> 0 `i `Vuc `i 975  ]
-[e :U 976 ]
+[e $ != -> . . _ADCON0bits 1 1 `i -> -> -> 0 `i `Vuc `i 972  ]
+[e :U 973 ]
 [; ;main.c: 37: }
 [; ;main.c: 39: adcSum+= ADRESL;
 "39
@@ -7828,10 +7799,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e =+ _adcSum -> -> << -> _ADRESH `i -> 8 `i `ui `ul ]
 "41
 }
-[e :U 971 ]
+[e :U 968 ]
 "31
-[e $ != -> =- _adcLoop -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 972  ]
-[e :U 973 ]
+[e $ != -> =- _adcLoop -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 969  ]
+[e :U 970 ]
 [; ;main.c: 41: }
 [; ;main.c: 43: adcSum*= 100;
 "43
@@ -7842,10 +7813,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 46: return adcSum;
 "46
 [e ) _adcSum ]
-[e $UE 970  ]
+[e $UE 967  ]
 [; ;main.c: 47: }
 "47
-[e :UE 970 ]
+[e :UE 967 ]
 }
 "49
 [v _sleep `(v ~T0 @X0 1 ef ]
@@ -7855,7 +7826,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [f ]
 [; ;main.c: 50: while (1){
 "50
-[e :U 979 ]
+[e :U 976 ]
 {
 [; ;main.c: 52: counter++;
 "52
@@ -7871,25 +7842,25 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( ___nop ..  ]
 [; ;main.c: 58: if (!STATUSbits.nTO && !STATUSbits.nPD) {
 "58
-[e $ ! && ! != -> . . _STATUSbits 0 4 `i -> -> -> 0 `i `Vuc `i ! != -> . . _STATUSbits 0 3 `i -> -> -> 0 `i `Vuc `i 981  ]
+[e $ ! && ! != -> . . _STATUSbits 0 4 `i -> -> -> 0 `i `Vuc `i ! != -> . . _STATUSbits 0 3 `i -> -> -> 0 `i `Vuc `i 978  ]
 {
 [; ;main.c: 59: return;
 "59
-[e $UE 977  ]
+[e $UE 974  ]
 "60
 }
-[e :U 981 ]
+[e :U 978 ]
 "61
 }
-[e :U 978 ]
+[e :U 975 ]
 "50
-[e $U 979  ]
-[e :U 980 ]
+[e $U 976  ]
+[e :U 977 ]
 [; ;main.c: 60: }
 [; ;main.c: 61: }
 [; ;main.c: 62: }
 "62
-[e :UE 977 ]
+[e :UE 974 ]
 }
 "64
 [v _checkRxData `(v ~T0 @X0 1 ef ]
@@ -7905,25 +7876,25 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _sleep ..  ]
 [; ;main.c: 70: if (!nrf24l01.RXPending){
 "70
-[e $ ! ! != -> . _nrf24l01 1 `i -> -> -> 0 `i `Vuc `i 983  ]
+[e $ ! ! != -> . _nrf24l01 1 `i -> -> -> 0 `i `Vuc `i 980  ]
 {
 [; ;main.c: 71: return;
 "71
-[e $UE 982  ]
+[e $UE 979  ]
 "72
 }
-[e :U 983 ]
+[e :U 980 ]
 [; ;main.c: 72: }
 [; ;main.c: 74: }
 "74
-[e :UE 982 ]
+[e :UE 979 ]
 }
 "76
-[v _setMessage `(v ~T0 @X0 1 ef3`*S964`*Cuc`ul ]
+[v _setMessage `(v ~T0 @X0 1 ef3`*S961`*Cuc`ul ]
 {
 [; ;main.c: 76: void setMessage(nrf24l01Packet_t * packet, const char * topic, unsigned long value){
 [e :U _setMessage ]
-[v _packet `*S964 ~T0 @X0 1 r1 ]
+[v _packet `*S961 ~T0 @X0 1 r1 ]
 [v _topic `*Cuc ~T0 @X0 1 r2 ]
 [v _value `ul ~T0 @X0 1 r3 ]
 [f ]
@@ -7953,7 +7924,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _strcat (2 , &U . *U _packet 1 -> &U _tempString `*Cuc ]
 [; ;main.c: 90: }
 "90
-[e :UE 984 ]
+[e :UE 981 ]
 }
 "92
 [v _checkTXPower `(v ~T0 @X0 1 ef ]
@@ -7962,23 +7933,23 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U _checkTXPower ]
 [f ]
 "93
-[v _rxPacket `*S964 ~T0 @X0 1 a ]
+[v _rxPacket `*S961 ~T0 @X0 1 a ]
 [; ;main.c: 93: nrf24l01Packet_t * rxPacket = nrf24l01GetRXPacket();
 [e = _rxPacket ( _nrf24l01GetRXPacket ..  ]
 [; ;main.c: 95: if (rxPacket->packetData.ACKRPD){
 "95
-[e $ ! != -> . . . *U _rxPacket 0 1 1 `i -> -> -> 0 `i `uc `i 986  ]
+[e $ ! != -> . . . *U _rxPacket 0 1 1 `i -> -> -> 0 `i `uc `i 983  ]
 {
 [; ;main.c: 96: nrf24l01ChangeTXPower(-1);
 "96
 [e ( _nrf24l01ChangeTXPower (1 -U -> 1 `i ]
 "97
 }
-[e :U 986 ]
+[e :U 983 ]
 [; ;main.c: 97: }
 [; ;main.c: 98: }
 "98
-[e :UE 985 ]
+[e :UE 982 ]
 }
 "100
 [v _loop `(v ~T0 @X0 1 ef ]
@@ -7990,7 +7961,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "103
 [; <" clrwdt ;# ">
 "105
-[v _packet `S964 ~T0 @X0 1 a ]
+[v _packet `S961 ~T0 @X0 1 a ]
 [; ;main.c: 105: nrf24l01Packet_t packet;
 [; ;main.c: 107: setMessage(&packet, "DBG", counter);
 "107
@@ -8083,7 +8054,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "141
 [e ( _sleep ..  ]
 "143
-[v _rfSetup `S942 ~T0 @X0 1 a ]
+[v _rfSetup `S939 ~T0 @X0 1 a ]
 [; ;main.c: 143: n_RF_SETUP_t rfSetup;
 [; ;main.c: 144: rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 "144
@@ -8094,9 +8065,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 147: packet.packetData.byte = 0;
 "147
 [e = . . . _packet 0 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 148: packet.packetData.ACKRequest = 1;
+[; ;main.c: 148: packet.packetData.ACKRequest = 0;
 "148
-[e = . . . _packet 0 1 2 -> -> 1 `i `uc ]
+[e = . . . _packet 0 1 2 -> -> 0 `i `uc ]
 [; ;main.c: 149: nrf24l01SendPacket(&packet);
 "149
 [e ( _nrf24l01SendPacket (1 &U _packet ]
@@ -8108,7 +8079,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _sleep ..  ]
 [; ;main.c: 155: }
 "155
-[e :UE 987 ]
+[e :UE 984 ]
 }
 [v $root$_main `(v ~T0 @X0 0 e ]
 "157
@@ -8170,7 +8141,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _flashRealod ..  ]
 [; ;main.c: 195: if (romData.check != 0x07){
 "195
-[e $ ! != -> . _romData 0 `i -> 7 `i 989  ]
+[e $ ! != -> . _romData 0 `i -> 7 `i 986  ]
 {
 [; ;main.c: 196: romData.check = 0x07;
 "196
@@ -8186,7 +8157,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _flashUpdate ..  ]
 "200
 }
-[e :U 989 ]
+[e :U 986 ]
 [; ;main.c: 200: }
 [; ;main.c: 202: nrf24l01Init();
 "202
@@ -8254,9 +8225,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 242: INTCONbits.INTEDG = 0;
 "242
 [e = . . _INTCONbits 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 246: WDTCONbits.WDTPS = 10;
+[; ;main.c: 246: WDTCONbits.WDTPS = 11;
 "246
-[e = . . _WDTCONbits 0 1 -> -> 10 `i `uc ]
+[e = . . _WDTCONbits 0 1 -> -> 11 `i `uc ]
 [; ;main.c: 249: TRISAbits.TRISA5 = 0;
 "249
 [e = . . _TRISAbits 0 5 -> -> 0 `i `uc ]
@@ -8270,7 +8241,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "254
 [e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
 "256
-[v _packet `S964 ~T0 @X0 1 a ]
+[v _packet `S961 ~T0 @X0 1 a ]
 [; ;main.c: 256: nrf24l01Packet_t packet;
 [; ;main.c: 258: setMessage(&packet, "BOOT", romData.bootMode);
 "258
@@ -8289,24 +8260,24 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _sleep ..  ]
 [; ;main.c: 264: while(1){
 "264
-[e :U 991 ]
+[e :U 988 ]
 {
 [; ;main.c: 265: loop();
 "265
 [e ( _loop ..  ]
 "266
 }
-[e :U 990 ]
+[e :U 987 ]
 "264
-[e $U 991  ]
-[e :U 992 ]
+[e $U 988  ]
+[e :U 989 ]
 [; ;main.c: 266: }
 [; ;main.c: 268: return;
 "268
-[e $UE 988  ]
+[e $UE 985  ]
 [; ;main.c: 269: }
 "269
-[e :UE 988 ]
+[e :UE 985 ]
 }
 [a 10C 66 79 79 84 0 ]
 [a 4C 86 66 65 84 0 ]
