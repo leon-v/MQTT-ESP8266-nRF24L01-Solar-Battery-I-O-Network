@@ -11132,7 +11132,7 @@ sleep();
 
 setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
@@ -11140,27 +11140,27 @@ sleep();
 
 setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
 
 setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
 
 setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
 
 n_RF_SETUP_t rfSetup;
-rfSetup.byte = nrf24l01Send(0b00000000 | 0x06, 0);
+rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 
 setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 packet.packetData.byte = 0;
@@ -11216,7 +11216,7 @@ flashUpdate();
 
 nrf24l01Init();
 
-# 211
+# 208
 ADCON0bits.ADON = 0;
 
 

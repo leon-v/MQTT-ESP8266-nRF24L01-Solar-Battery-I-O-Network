@@ -281,6 +281,9 @@ void nrf24l01ISR(void){
 
         	// Flag the radio state as having a RX packet ready
         	nrf24l01.RXPending = 1;
+
+        	os_printf("RX_P_NO: %u\r\n", status.RX_P_NO);
+
 	        nrf24l01ReceivePacket();
 	        nrf24l01CheckACK();
         }
@@ -298,106 +301,77 @@ void nrf24l01ISR(void){
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
 }
 
-unsigned char nrf24l01GetPipe(char * name){
-    unsigned long pipe = 0;
-    unsigned char i = 0;
+// unsigned char nrf24l01GetPipe(char * name){
+//     unsigned long pipe = 0;
+//     unsigned char i = 0;
     
-    // Calculate a pipe from the name passed
-    for (i = 0; i < strlen(name); i++){
-        pipe+= name[i];
-    }
-    pipe%= 6;
-    return pipe;
-}
-void nrf24l01SetTXPipe(char * name){
+//     // Calculate a pipe from the name passed
+//     for (i = 0; i < strlen(name); i++){
+//         pipe+= name[i];
+//     }
+//     pipe%= 6;
+//     return pipe;
+// }
+// void nrf24l01SetTXPipe(char * name){
     
-    unsigned char pipe;
-    if (name == NULL){
-        pipe = 0;
-    }
-    else{
-        pipe = nrf24l01GetPipe(name);
-    }
+//     unsigned char pipe;
+//     if (name == NULL){
+//         pipe = 0;
+//     }
+//     else{
+//         pipe = nrf24l01GetPipe(name);
+//     }
     
     
-    // Set the pipe address into the 
-    nrf24l01SPIStart();
-    nrf24l01SPISend(n_W_REGISTER | n_TX_ADDR);
-    nrf24l01SPISend(n_ADDRESS_P0[0]);
-    nrf24l01SPISend(n_ADDRESS_P0[1]);
-    nrf24l01SPISend(n_ADDRESS_P0[2]);
-    nrf24l01SPISend(n_ADDRESS_P0[3]);
-    nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
-    nrf24l01SPIEnd();
-}
+//     // Set the pipe address into the 
+//     nrf24l01SPIStart();
+//     nrf24l01SPISend(n_W_REGISTER | n_TX_ADDR);
+//     nrf24l01SPISend(n_ADDRESS_P0[0]);
+//     nrf24l01SPISend(n_ADDRESS_P0[1]);
+//     nrf24l01SPISend(n_ADDRESS_P0[2]);
+//     nrf24l01SPISend(n_ADDRESS_P0[3]);
+//     nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+//     nrf24l01SPIEnd();
+// }
 
-void nrf24l01SetRXPipe(char * name){
+// void nrf24l01SetRXPipe(char * name){
     
-    n_EN_RXADDR_t enRXAddr;
+//     n_EN_RXADDR_t enRXAddr;
     
-    if (name == NULL){
-        enRXAddr.ERX_P0 = 1;
-        enRXAddr.ERX_P1 = 1;
-        enRXAddr.ERX_P2 = 1;
-        enRXAddr.ERX_P3 = 1;
-        enRXAddr.ERX_P4 = 1;
-        enRXAddr.ERX_P5 = 1;
-    }
-    else{
-        unsigned char pipe = nrf24l01GetPipe(name);
-        enRXAddr.ERX_P0 = 1;
-        enRXAddr.byte = (unsigned) enRXAddr.byte << pipe;
-    }
+//     if (name == NULL){
+//         enRXAddr.ERX_P0 = 1;
+//         enRXAddr.ERX_P1 = 1;
+//         enRXAddr.ERX_P2 = 1;
+//         enRXAddr.ERX_P3 = 1;
+//         enRXAddr.ERX_P4 = 1;
+//         enRXAddr.ERX_P5 = 1;
+//     }
+//     else{
+//         unsigned char pipe = nrf24l01GetPipe(name);
+//         enRXAddr.ERX_P0 = 1;
+//         enRXAddr.byte = (unsigned) enRXAddr.byte << pipe;
+//     }
     
-    nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
-}
+//     nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
+// }
 
 void nrf24l01InitRegisters(void){
 
+    // Enable 2-byte CRC and power up in receive mode.
     n_CONFIG_t config;
-    
-	config.PWR_UP = 0;
+    config.PRIM_RX = 0;
+	config.PWR_UP = 1;
+    config.CRCO = 1;
+    config.EN_CRC = 1;
+    config.MASK_MAX_RT = 0;
+    config.MASK_TX_DS = 0;
+    config.MASK_RX_DR = 0;
+	config.Reserved = 0;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
-    
-    n_SETUP_AW_t setupAW;
-    setupAW.byte = 0x00;
-    setupAW.AW = 0b11;
-    nrf24l01Send(n_W_REGISTER | n_SETUP_AW, setupAW.byte);
-    
-    // Set Frequency
-     n_RF_CH_t channel;
-     channel.RF_CH = 2;
-     nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
-    
-    // Set radio to 2 Mbps and high power.  Leave LNA_HCURR at its default.
-     n_RF_SETUP_t rfSetup;
-     rfSetup.byte = 0x00;
-     rfSetup.RF_DR_LOW = 0;
-     rfSetup.RF_DR_HIGH = 1;
-     rfSetup.RF_PWR = 3;
-     nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
-    
-    // Setup all data pipes with our custom address
-    // unsigned char i;
-    // for (i = 0; i < 6; i++){
-    //     nrf24l01SPIStart();
-    //     nrf24l01SPISend(n_W_REGISTER | (unsigned) (n_RX_ADDR_P0 + i));
-        
-    //     if (i < 2){
-    //         nrf24l01SPISend(n_ADDRESS_P0[0]);
-    //         nrf24l01SPISend(n_ADDRESS_P0[1]);
-    //         nrf24l01SPISend(n_ADDRESS_P0[2]);
-    //         nrf24l01SPISend(n_ADDRESS_P0[3]);
-    //     }
-        
-    //     nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (i * n_ADDRESS_MUL));
-        
-    //     nrf24l01SPIEnd();
-    // }
 
-	// Disable Auto ACK MCU needs to do this
+
+	// Disable Auto ACK. This drive uses custom ACK
 	n_EN_AA_t enAA;
-	enAA.byte = nrf24l01Send(n_R_REGISTER | n_EN_AA, 0);
 	enAA.ENAA_P0 = 0;
 	enAA.ENAA_P1 = 0;
 	enAA.ENAA_P2 = 0;
@@ -405,26 +379,100 @@ void nrf24l01InitRegisters(void){
 	enAA.ENAA_P4 = 0;
 	enAA.ENAA_P5 = 0;
 	nrf24l01Send(n_W_REGISTER | n_EN_AA, enAA.byte);
+
+	n_EN_RXADDR_t enRXAddr;
+    enRXAddr.Reserved = 0;
+    enRXAddr.ERX_P0 = 1;
+    enRXAddr.ERX_P1 = 1;
+    enRXAddr.ERX_P2 = 1;
+    enRXAddr.ERX_P3 = 1;
+    enRXAddr.ERX_P4 = 1;
+    enRXAddr.ERX_P5 = 1;
+    nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
     
-    // Setup all pipes
-    nrf24l01SetRXPipe(NULL);
+    // Setup address width to 5 bytes
+    n_SETUP_AW_t setupAW;
+    setupAW.Reserved = 0;
+    setupAW.AW = 0b11;
+    nrf24l01Send(n_W_REGISTER | n_SETUP_AW, setupAW.byte);
+
+	// Set Frequency
+	n_RF_CH_t channel;
+	channel.Reserved = 0;
+	channel.RF_CH = 2;
+	nrf24l01Send(n_W_REGISTER | n_RF_CH, channel.byte);
     
+	// Set radio to 2 Mbps and high power.  Leave LNA_HCURR at its default.
+	n_RF_SETUP_t rfSetup;
+	rfSetup.CONT_WAVE = 0;
+	rfSetup.Reserved = 0;
+	rfSetup.RF_DR_LOW = 0;
+	rfSetup.RF_DR_HIGH = 1;
+	rfSetup.RF_PWR = 3;
+	rfSetup.Obsolete = 0;
+	nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
+    
+    // Setup all data pipes with our custom address
+    /*
+    unsigned int i;
+    unsigned char addressRegister;
+    unsigned char lastAddressByte;
+    for (i = 0; i < 6; i++){
+
+    	addressRegister = n_RX_ADDR_P0 + i;
+
+    	lastAddressByte = n_ADDRESS_P0[4];
+        lastAddressByte+= n_ADDRESS_MUL * 0;
+
+        nrf24l01SPIStart();
+        nrf24l01SPISend(n_W_REGISTER | addressRegister);
+        if (i < 2){
+            nrf24l01SPISend(n_ADDRESS_P0[0]);
+            nrf24l01SPISend(n_ADDRESS_P0[1]);
+            nrf24l01SPISend(n_ADDRESS_P0[2]);
+            nrf24l01SPISend(n_ADDRESS_P0[3]);
+        }
+        nrf24l01SPISend(lastAddressByte);
+        nrf24l01SPIEnd();
+        
+        
+       os_printf("ADDR = %u\r\n", n_W_REGISTER | addressRegister);
+       os_printf("SUFF = %u\r\n", lastAddressByte);
+
+    }
+
+    lastAddressByte = n_ADDRESS_P0[4];
+    lastAddressByte+= n_ADDRESS_MUL * 0;
+    
+    nrf24l01SPIStart();
+    nrf24l01SPISend(n_W_REGISTER | n_TX_ADDR);
+    nrf24l01SPISend(n_ADDRESS_P0[0]);
+    nrf24l01SPISend(n_ADDRESS_P0[1]);
+    nrf24l01SPISend(n_ADDRESS_P0[2]);
+    nrf24l01SPISend(n_ADDRESS_P0[3]);
+    nrf24l01SPISend(lastAddressByte);
+    nrf24l01SPIEnd();
+	*/
+
+
     // Set dynamic payload length
-	n_FEATURE_t feature;
-	feature.byte = nrf24l01Send(n_R_REGISTER | n_FEATURE, 0);
-	feature.EN_DPL = 1;
-    feature.EN_DYN_ACK = 1;
-	nrf24l01Send(n_W_REGISTER | n_FEATURE, feature.byte);
-    
     n_DYNPD_t DynPD;
-	DynPD.byte = nrf24l01Send(n_R_REGISTER | n_DYNPD, 0);
 	DynPD.DPL_P0 = 1;
 	DynPD.DPL_P1 = 1;
 	DynPD.DPL_P2 = 1;
 	DynPD.DPL_P3 = 1;
 	DynPD.DPL_P4 = 1;
 	DynPD.DPL_P5 = 1;
+	DynPD.Reserved = 0;
 	nrf24l01Send(n_W_REGISTER | n_DYNPD, DynPD.byte);
+
+
+	n_FEATURE_t feature;
+    feature.EN_DYN_ACK = 1;
+    feature.EN_ACK_PAY = 0;
+    feature.EN_DPL = 0;
+    feature.Reserved = 0;
+	nrf24l01Send(n_W_REGISTER | n_FEATURE, feature.byte);
     
     // clear the interrupt flags in case the radio's still asserting an old unhandled interrupt
     n_STATUS_t status;

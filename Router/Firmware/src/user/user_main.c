@@ -92,7 +92,9 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args){
 	// MQTT_Publish(client, "/mqtt/topic/2", "hello2", 6, 2, 0);
 
 	//sleepSetEnable();
+
 	radioInit(&mqttClient);
+	
 	radioEnable(1);
 }
 
