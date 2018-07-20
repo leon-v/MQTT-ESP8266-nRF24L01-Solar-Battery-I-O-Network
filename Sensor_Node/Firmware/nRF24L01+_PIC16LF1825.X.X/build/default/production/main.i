@@ -10942,7 +10942,6 @@ typedef struct{
 unsigned TXBusy : 1;
 unsigned RXPending : 1;
 unsigned RXMode : 1;
-unsigned Pipe : 3;
 } nrf24l01_t;
 
 
@@ -10951,10 +10950,11 @@ struct{
 unsigned int byte :8;
 };
 struct{
-unsigned RPD :1;
-unsigned ACKRPD :1;
-unsigned ACKRequest :1;
-unsigned IsACK :1;
+unsigned RPD : 1;
+unsigned ACKRPD : 1;
+unsigned ACKRequest : 1;
+unsigned IsACK : 1;
+unsigned Pipe : 3;
 };
 } packetData_t;
 
@@ -10975,8 +10975,8 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 void nrf24l01SendACK(nrf24l01Packet_t * packet);
 void nrf24l01ChangeTXPower(int addPower);
 unsigned char nrf24l01Send(unsigned char command, unsigned char data);
-void nrf24l01SetTXPipe(char * name);
-void nrf24l01SetRXPipe(char * name);
+void nrf24l01SetTXPipe(unsigned char pipe);
+void nrf24l01SetRXPipe(unsigned char pipe);
 
 # 6 "flash.h"
 extern romData_t romData;
@@ -11103,7 +11103,7 @@ sleep();
 
 setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
+packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
@@ -11111,21 +11111,21 @@ sleep();
 
 setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
+packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
 
 setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
+packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
 
 setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
+packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
@@ -11135,13 +11135,26 @@ rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 
 setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
+packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep();
 
 
 
+}
+
+unsigned char nrf24l01GetPipe(char * name){
+unsigned long pipe = 0;
+unsigned char i = 0;
+
+
+for (i = 0; i < strlen(name); i++){
+pipe+= name[i];
+}
+
+pipe%= 6;
+return pipe;
 }
 
 void main(void) {
@@ -11167,7 +11180,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 185
+# 198
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11178,16 +11191,25 @@ _delay((unsigned long)((10)*(16000000/4000.0)));
 
 flashRealod();
 
-if (romData.check != 0x07){
-romData.check = 0x07;
-strcpy(romData.name, "UW2");
+if (romData.check != 0x09){
+romData.check = 0x09;
+strcpy(romData.name, "UW0");
 romData.bootMode = 0x00;
 flashUpdate();
 }
 
+strcpy(romData.name, "UW2");
+
+flashRealod();
+
 nrf24l01Init();
 
-# 208
+unsigned char pipe = nrf24l01GetPipe(romData.name);
+nrf24l01SetTXPipe(4);
+nrf24l01SetRXPipe(4);
+
+
+
 ADCON0bits.ADON = 0;
 
 

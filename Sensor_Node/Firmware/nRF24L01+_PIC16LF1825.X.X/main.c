@@ -113,7 +113,7 @@ void loop(){
     
     setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep();
@@ -121,21 +121,21 @@ void loop(){
     
     setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep();
     
     setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep();
     
     setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep();
@@ -145,7 +145,7 @@ void loop(){
     
     setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep();
@@ -153,6 +153,19 @@ void loop(){
 	
 //	checkRxData();
 }
+
+ unsigned char nrf24l01GetPipe(char * name){
+     unsigned long pipe = 0;
+     unsigned char i = 0;
+    
+     // Calculate a pipe from the name passed
+     for (i = 0; i < strlen(name); i++){
+         pipe+= name[i];
+     }
+     
+     pipe%= 6;
+     return pipe;
+ }
 
 void main(void) {
     
@@ -199,9 +212,15 @@ void main(void) {
 		flashUpdate();
 	}
     
+    strcpy(romData.name, "UW2");
+    
+    flashRealod();
+    
     nrf24l01Init();
-//    nrf24l01SetTXPipe(romData.name);
-//    nrf24l01SetRXPipe(romData.name);lis
+    
+    unsigned char pipe = nrf24l01GetPipe(romData.name);
+    nrf24l01SetTXPipe(4);
+    nrf24l01SetRXPipe(4);
     
 
     /* Setup ADC */

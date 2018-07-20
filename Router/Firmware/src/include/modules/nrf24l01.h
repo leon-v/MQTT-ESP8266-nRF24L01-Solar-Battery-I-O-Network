@@ -12,7 +12,6 @@ typedef struct{
     unsigned TXBusy             : 1;
     unsigned RXPending			: 1;
     unsigned RXMode             : 1;
-    unsigned Pipe               : 3;
 } nrf24l01_t;
 
 
@@ -21,10 +20,11 @@ typedef union{
         unsigned int byte       :8;
     };
     struct{
-    	unsigned RPD    	:1;
-		unsigned ACKRPD    	:1;
-        unsigned ACKRequest :1;
-        unsigned IsACK      :1;
+    	unsigned RPD    	: 1;
+		unsigned ACKRPD    	: 1;
+        unsigned ACKRequest : 1;
+        unsigned IsACK      : 1;
+        unsigned Pipe		: 3;
     };
 } packetData_t;
 
@@ -48,8 +48,8 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 void nrf24l01SendACK(nrf24l01Packet_t * packet);
 void nrf24l01ChangeTXPower(int addPower);
 unsigned char nrf24l01Send(unsigned char command, unsigned char data);
-void nrf24l01SetTXPipe(char * name);
-void nrf24l01SetRXPipe(char * name);
+void nrf24l01SetTXPipe(unsigned char pipe);
+void nrf24l01SetRXPipe(unsigned char pipe);
 
 #endif	/* NRF24L01_H_ */
 
