@@ -203,16 +203,17 @@ void main(void) {
     
     delayMs(10);
     
-    flashRealod();
-
-	if (romData.check != ENV_FLASH_VERSION){
-		romData.check = ENV_FLASH_VERSION;
-		strcpy(romData.name, ENV_DEVICE_NAME);
-		romData.bootMode = 0x00;
-		flashUpdate();
-	}
+//    flashRealod();
+	
+	// This is broken! Use EEPRON since now we have it
+//	if (romData.check != ENV_FLASH_VERSION){
+//		romData.check = ENV_FLASH_VERSION;
+//		strcpy(romData.name, ENV_DEVICE_NAME);
+//		romData.bootMode = 0x00;
+//		flashUpdate();
+//	}
     
-    strcpy(romData.name, "UW2");
+    strcpy(romData.name, ENV_DEVICE_NAME);
     
     flashRealod();
     

@@ -11189,16 +11189,8 @@ OSCCON1bits.NDIV = 0b000;
 
 _delay((unsigned long)((10)*(16000000/4000.0)));
 
-flashRealod();
-
-if (romData.check != 0x09){
-romData.check = 0x09;
-strcpy(romData.name, "UW0");
-romData.bootMode = 0x00;
-flashUpdate();
-}
-
-strcpy(romData.name, "UW2");
+# 216
+strcpy(romData.name, "UH1");
 
 flashRealod();
 
