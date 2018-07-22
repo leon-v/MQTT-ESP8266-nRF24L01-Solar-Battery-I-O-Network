@@ -20,9 +20,9 @@ void interrupt ISR(void){
     }
 }
 
-unsigned long getADCValue(unsigned char channel, unsigned long divider){
+float getADCValue(unsigned char channel, float multiplier){
 	
-	unsigned long adcSum = 0;
+	float adcSum = 0;
 	unsigned char adcLoop = 255;
 	
 	ADCON0bits.CHS = channel;
@@ -40,8 +40,8 @@ unsigned long getADCValue(unsigned char channel, unsigned long divider){
 		adcSum+= (unsigned) (ADRESH << 8);
 	}
     
-	adcSum*= 100;
-	adcSum/= divider;
+	adcSum/= 255;
+	adcSum*= multiplier;
 	
 	return adcSum;
 }
@@ -73,20 +73,17 @@ void checkRxData(void){
 
 }
 
-void setMessage(nrf24l01Packet_t * packet, const char * topic, unsigned long value){
+void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     memset(packet->Message, 0, sizeof(packet->Message));
     
     strcat(packet->Message, romData.name);
     
     strcat(packet->Message, "/");
     strcat(packet->Message, topic);
-            
-    char tempString[16];
     
-    ultoa(tempString, value, 10);
-    
+	int status;
     strcat(packet->Message, "/");
-    strcat(packet->Message, tempString);
+    strcat(packet->Message, ftoa(value, &status));
 }
 
 void checkTXPower(){
@@ -104,51 +101,62 @@ void loop(){
     
     nrf24l01Packet_t packet;
     
-    setMessage(&packet, "DBG", counter);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep();
+//    setMessage(&packet, "DBG", counter);
+//    packet.packetData.byte = 0;
+//    packet.packetData.ACKRequest = 0;
+//	nrf24l01SendPacket(&packet);
+//    checkTXPower();
+//	sleep();
     
-    setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep();
-    
-    
-    setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
+    setMessage(&packet, "VBAT", getADCValue(0b000100, 0.0101235));
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep();
     
-    setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
+    
+//    setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
+//    packet.packetData.byte = 0;
+//    packet.packetData.ACKRequest = 1;
+//	nrf24l01SendPacket(&packet);
+//    checkTXPower();
+//	sleep();
+    
+//    setMessage(&packet, "FVR", getADCValue(0b111111, 0.0101235));
+//    packet.packetData.byte = 0;
+//    packet.packetData.ACKRequest = 1;
+//	nrf24l01SendPacket(&packet);
+//    checkTXPower();
+//	sleep();
+    
+//	131.5075148238 + 15
+//	116.5075148238
+//	161.363280 = 
+    setMessage(&packet, "TEMP", getADCValue(0b111101, 0.5505378) - 146.5075148238);
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 1;
+	nrf24l01SendPacket(&packet);
+    checkTXPower();
+	sleep();
+	
+	
+	setMessage(&packet, "TEMPR", getADCValue(0b111101, 1));
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep();
     
-    setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep();
-    
-    n_RF_SETUP_t rfSetup;
-    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
-    
-    setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep();
+//    n_RF_SETUP_t rfSetup;
+//    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+//    
+//    setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
+//    packet.packetData.byte = 0;
+//    packet.packetData.ACKRequest = 1;
+//	nrf24l01SendPacket(&packet);
+//    checkTXPower();
+//	sleep();
     
 	
 //	checkRxData();
@@ -238,7 +246,7 @@ void main(void) {
     
     /* Configure Temp sensor*/
     FVRCONbits.TSEN = 0;
-    FVRCONbits.TSRNG = 0; // 1.8V Low Range
+    FVRCONbits.TSRNG = 1; // 0= 1.8V Low Range
     FVRCONbits.TSEN = 1;
     
     /* Configure FVR */
