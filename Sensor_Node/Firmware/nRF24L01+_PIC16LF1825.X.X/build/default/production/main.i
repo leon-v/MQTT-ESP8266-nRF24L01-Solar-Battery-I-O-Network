@@ -11145,7 +11145,7 @@ sleep();
 }
 
 unsigned char nrf24l01GetPipe(char * name){
-unsigned long pipe = 0;
+unsigned char pipe = 0;
 unsigned char i = 0;
 
 
@@ -11153,8 +11153,7 @@ for (i = 0; i < strlen(name); i++){
 pipe+= name[i];
 }
 
-pipe%= 6;
-return pipe;
+return pipe % 6;
 }
 
 void main(void) {
@@ -11180,7 +11179,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 198
+# 197
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11205,8 +11204,8 @@ flashRealod();
 nrf24l01Init();
 
 unsigned char pipe = nrf24l01GetPipe(romData.name);
-nrf24l01SetTXPipe(4);
-nrf24l01SetRXPipe(4);
+nrf24l01SetTXPipe(pipe);
+nrf24l01SetRXPipe(pipe);
 
 
 

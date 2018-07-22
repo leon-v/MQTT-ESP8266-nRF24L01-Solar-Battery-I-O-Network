@@ -155,7 +155,7 @@ void loop(){
 }
 
  unsigned char nrf24l01GetPipe(char * name){
-     unsigned long pipe = 0;
+     unsigned char pipe = 0;
      unsigned char i = 0;
     
      // Calculate a pipe from the name passed
@@ -163,8 +163,7 @@ void loop(){
          pipe+= name[i];
      }
      
-     pipe%= 6;
-     return pipe;
+     return (unsigned) pipe % 6;
  }
 
 void main(void) {
@@ -219,8 +218,8 @@ void main(void) {
     nrf24l01Init();
     
     unsigned char pipe = nrf24l01GetPipe(romData.name);
-    nrf24l01SetTXPipe(4);
-    nrf24l01SetRXPipe(4);
+    nrf24l01SetTXPipe(pipe);
+    nrf24l01SetRXPipe(pipe);
     
 
     /* Setup ADC */
