@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-__end_ofi1_nrf24l01Send E01 0 CODE 0
-=======
-__end_ofi1_nrf24l01Send 924 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__end_ofi1_nrf24l01Send 913 0 CODE 0
 ___lldiv@counter 2E 0 BANK0 1
 ___lbtoft@c 30 0 BANK0 1
 sprintf@f 39 0 BANK0 1
@@ -10,23 +6,14 @@ ___lltoft@c 29 0 BANK0 1
 ___lwtoft@c 29 0 BANK0 1
 __H_romArray_text 2000 0 STRCODE 0
 __L_romArray_text 1FE0 0 STRCODE 0
-__end_of___ftneg 849 0 CODE 0
+__end_of___ftneg 838 0 CODE 0
 __CFG_WRT$OFF 0 0 ABS 0
-<<<<<<< HEAD
-_nrf24l01Send E78 0 CODE 0
-__end_of_loop 13D 0 CODE 0
-__size_of_nrf24l01ISR 0 0 ABS 0
-__p_romArray_text 1FE0 0 STRCODE 0
-_nrf24l01InterfaceInit E1C 0 CODE 0
-_nrf24l01GetRXPacket 7FE 0 CODE 0
-=======
-_nrf24l01Send 9F0 0 CODE 0
+_nrf24l01Send 9DF 0 CODE 0
 __end_of_loop 60A 0 CODE 0
 __size_of_nrf24l01ISR 0 0 ABS 0
 __p_romArray_text 1FE0 0 STRCODE 0
-_nrf24l01InterfaceInit 95B 0 CODE 0
+_nrf24l01InterfaceInit 94A 0 CODE 0
 _nrf24l01GetRXPacket 2 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __S0 800B 0 ABS 0
 __S1 1C0 0 ABS 0
 __S2 0 0 ABS 0
@@ -39,61 +26,40 @@ __pintentry 4 0 CODE 0
 ___ftadd@f1 31 0 BANK0 1
 nrf24l01InitRegisters@status 2E 0 BANK0 1
 __CFG_PWRTE$ON 0 0 ABS 0
-<<<<<<< HEAD
-__end_of_nrf24l01SPISend D4A 0 CODE 0
-=======
 __end_of_nrf24l01SPISend 7FF 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __size_of_nrf24l01SPISend 0 0 ABS 0
 __size_of_loop 0 0 ABS 0
 __size_of___ftsub 0 0 ABS 0
 _WPUA 20C 0 ABS 0
 _WPUC 20E 0 ABS 0
-<<<<<<< HEAD
-setMessage@packet 53 0 BANK0 1
-__end_of_nrf24l01GetPipe 7D8 0 CODE 0
-__size_of_setMessage 0 0 ABS 0
-i1_nrf24l01Send DE6 0 CODE 0
-__CFG_CSWEN$ON 0 0 ABS 0
-_main 2F2 0 CODE 0
-__end_of_flashWriteByte 732 0 CODE 0
-=======
 ___ftneg@f1 21 0 BANK0 1
 setMessage@packet A2 0 BANK1 1
-__end_of_nrf24l01GetPipe E28 0 CODE 0
+__end_of_nrf24l01GetPipe BFC 0 CODE 0
 ___ftadd@f2 34 0 BANK0 1
 ___ftsub@f1 41 0 BANK0 1
 __size_of_setMessage 0 0 ABS 0
 _ftoa 6B3 0 CODE 0
-i1_nrf24l01Send 909 0 CODE 0
+i1_nrf24l01Send 8F8 0 CODE 0
 __CFG_CSWEN$ON 0 0 ABS 0
-_main F6A 0 CODE 0
-__end_of_flashWriteByte B3F 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+_main F69 0 CODE 0
+__end_of_flashWriteByte B5B 0 CODE 0
 __size_of_nrf24l01GetPipe 0 0 ABS 0
 flashWriteByte@data 72 0 COMMON 1
 ___sp 0 0 STACK 2
 btemp 7E 0 ABS 0
 _loop 560 0 CODE 0
 start F 0 CODE 0
-<<<<<<< HEAD
-__end_of_exception D9A 0 CODE 0
-_flashReadByte FCE 0 CODE 0
-__end_of_strcpy E1C 0 CODE 0
-strlen@cp 27 0 BANK0 1
-=======
 ?___ftadd 31 0 BANK0 1
 ___fttol@f1 39 0 BANK0 1
 ___ftsub@f2 3E 0 BANK0 1
-__end_of_exception 8BD 0 CODE 0
+__end_of_exception 8AC 0 CODE 0
 ___ftmul@f1 29 0 BANK0 1
-_flashReadByte B3F 0 CODE 0
+_flashReadByte B5B 0 CODE 0
 _loop$2040 A6 0 BANK1 1
 ___fttol@lval 42 0 BANK0 1
 ___ftdiv@f1 2C 0 BANK0 1
-__end_of_strcpy 993 0 CODE 0
+__end_of_strcpy 982 0 CODE 0
 strlen@cp 25 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __size_of_nrf24l01Send 0 0 ABS 0
 strcat@cp 66 0 BANK0 1
 reset_vec 0 0 CODE 0
@@ -102,79 +68,49 @@ wtemp0 7E 0 ABS 0
 ___ftmul@f2 2C 0 BANK0 1
 strcpy@cp 25 0 BANK0 1
 __size_of_nrf24l01Init 0 0 ABS 0
-<<<<<<< HEAD
-_nrf24l01CELow D17 0 CODE 0
-ultoa@val 2F 0 BANK0 1
-=======
-_nrf24l01CELow 81A 0 CODE 0
+_nrf24l01CELow 809 0 CODE 0
 ___ftdiv@f2 29 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __Hconfig 800B 0 CONFIG 0
 __Lconfig 8007 0 CONFIG 0
 ?___ftneg 21 0 BANK0 1
 main@pipe CB 0 BANK1 1
-___ftpack E7E 0 CODE 0
+___ftpack E7D 0 CODE 0
 i1memset@n 74 0 COMMON 1
 __Hstringtext1 0 0 ABS 0
 __Lstringtext1 0 0 ABS 0
 ?___llmod 2F 0 BANK0 1
 _nrf24l01InitRegisters 1F6 0 CODE 0
 __pstringtext1 1000 0 STRCODE 0
-<<<<<<< HEAD
-?___awmod 21 0 BANK0 1
-__end_of_nrf24l01ChangeTXPower 6F6 0 CODE 0
-=======
 ftoa@f 55 0 BANK0 1
 ftoa@l 5E 0 BANK0 1
-__end_of_nrf24l01ChangeTXPower C5E 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+?___lwmod 21 0 BANK0 1
+__end_of_nrf24l01ChangeTXPower CB2 0 CODE 0
 nrf24l01ISR@status 20 0 BANK0 1
 ___ftdiv@f3 34 0 BANK0 1
 getADCValue@adcLoop 45 0 BANK0 1
 __Hbigram 0 0 ABS 0
 __Lbigram 0 0 ABS 0
-<<<<<<< HEAD
-__end_of_checkTXPower D82 0 CODE 0
-=======
-__end_of_checkTXPower 890 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__end_of_checkTXPower 87F 0 CODE 0
 __Hram 0 0 ABS 0
 ?___ftsub 3E 0 BANK0 1
 __Lram 0 0 ABS 0
-<<<<<<< HEAD
-_ultoa 398 0 CODE 0
-strcat@to 25 0 BANK0 1
-i1memset@p 76 0 COMMON 1
-flashWriteByte@address 25 0 BANK0 1
-_sleep D4A 0 CODE 0
-=======
 strcat@to 67 0 BANK0 1
 i1memset@p 76 0 COMMON 1
 flashWriteByte@address 74 0 COMMON 1
-_sleep 858 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+_sleep 847 0 CODE 0
 __CFG_STVREN$ON 0 0 ABS 0
 ___ftge@ff1 21 0 BANK0 1
 nrf24l01InitRegisters@config 31 0 BANK0 1
-<<<<<<< HEAD
-__end_of_setMessage 4FD 0 CODE 0
-strcpy@to 25 0 BANK0 1
-=======
-__end_of_setMessage E7E 0 CODE 0
+__end_of_setMessage E7D 0 CODE 0
 strcpy@to 24 0 BANK0 1
 ?_sprintf 39 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __Hstringtext7 0 0 ABS 0
 __Lstringtext7 0 0 ABS 0
 __pstringtext7 1051 0 STRCODE 0
 int$flags 7E 0 ABS 0
-<<<<<<< HEAD
-__end_of_flashRealod E78 0 CODE 0
-=======
 ___ftmul@cntr 37 0 BANK0 1
 __size_of___ftadd 0 0 ABS 0
-__end_of_flashRealod 9F0 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__end_of_flashRealod 9DF 0 CODE 0
 __end_of_ISR F 0 CODE 0
 ___ftdiv@cntr 33 0 BANK0 1
 __Hfunctab 0 0 ENTRY 0
@@ -194,36 +130,28 @@ __Heeprom_data 0 0 EEDATA 3
 __Leeprom_data 0 0 EEDATA 3
 _PIR0bits 10 0 ABS 0
 _loop$2039 A3 0 BANK1 1
-i1___wmul 8EE 0 CODE 0
+i1___wmul 8DD 0 CODE 0
 ?___ftmul 29 0 BANK0 1
 sprintf@ap 4A 0 BANK0 1
 ___int_sp 0 0 STACK 2
 _WPUAbits 20C 0 ABS 0
 __CFG_CLKOUTEN$OFF 0 0 ABS 0
 _ANSELA 18C 0 ABS 0
-<<<<<<< HEAD
-i1_memset D9A 0 CODE 0
-=======
-i1_memset 8BD 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+i1_memset 8AC 0 CODE 0
 _ODCONA 28C 0 ABS 0
 ?___lldiv 21 0 BANK0 1
 _ANSELC 18E 0 ABS 0
-___lbtoft 924 0 CODE 0
+___lbtoft 913 0 CODE 0
 _ODCONC 28E 0 ABS 0
 _INLVLA 38C 0 ABS 0
 ?___ftdiv 29 0 BANK0 1
-___lltoft AE5 0 CODE 0
+___lltoft AD4 0 CODE 0
 i1memset@p1 70 0 COMMON 1
 __size_of_checkTXPower 0 0 ABS 0
 _INLVLC 38E 0 ABS 0
-<<<<<<< HEAD
-__end_of_strlen F22 0 CODE 0
-=======
-__end_of_strlen 9D0 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__end_of_strlen 9BF 0 CODE 0
 nrf24l01SetRXMode@rxMode 26 0 BANK0 1
-___lwtoft 890 0 CODE 0
+___lwtoft 87F 0 CODE 0
 _romArray 1FE0 0 STRCODE 0
 _PMADRH 892 0 ABS 0
 _PMDATH 894 0 ABS 0
@@ -260,123 +188,72 @@ __Hsfr9 0 0 ABS 0
 __size_of_nrf24l01ChangeTXPower 0 0 ABS 0
 __Lsfr9 0 0 ABS 0
 flashRealod@i 2B 0 BANK0 1
-__end_of___ftpack EE3 0 CODE 0
+__end_of___ftpack EE2 0 CODE 0
 ?___ftpack 21 0 BANK0 1
 nrf24l01Send@command 23 0 BANK0 1
 __size_of_nrf24l01CELow 0 0 ABS 0
 __size_of_nrf24l01CSLow 0 0 ABS 0
 __size_of_nrf24l01SetRXMode 0 0 ABS 0
-<<<<<<< HEAD
-__end_of_memset DCB 0 CODE 0
-__end_of_nrf24l01InitRegisters 243 0 CODE 0
-__end_of___awmod 630 0 CODE 0
-_nrf24l01Init 7D8 0 CODE 0
-_nrf24l01SPIStart D35 0 CODE 0
-__end_of_flashReadByte 1000 0 CODE 0
-i1flashWriteByte@offset 70 0 COMMON 1
-flashUpdate@i 29 0 BANK0 1
-=======
 __size_of___ftpack 0 0 ABS 0
 __end_of_dpowers 1028 0 STRCODE 0
-__end_of_memset 8EE 0 CODE 0
+__end_of_memset 8DD 0 CODE 0
 __size_of___fttol 0 0 ABS 0
 __end_of_nrf24l01InitRegisters 2FC 0 CODE 0
-_nrf24l01Init ABF 0 CODE 0
-_nrf24l01SPIStart 838 0 CODE 0
-__end_of_flashReadByte B71 0 CODE 0
+_nrf24l01Init AAE 0 CODE 0
+_nrf24l01SPIStart 827 0 CODE 0
+__end_of_flashReadByte B8D 0 CODE 0
 ___ftadd@sign 3B 0 BANK0 1
 flashUpdate@i 78 0 COMMON 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __Hcode 0 0 ABS 0
 __Lcode 0 0 ABS 0
 _nrf24l01SendPacket 3F2 0 CODE 0
 ftoa@cp 62 0 BANK0 1
-___ftge BE3 0 CODE 0
+___ftge C37 0 CODE 0
 stackhi 23EF 0 ABS 0
 sprintf@sp 4F 0 BANK0 1
 __HcstackBANK0 0 0 ABS 0
 __LcstackBANK0 0 0 ABS 0
-<<<<<<< HEAD
-__end_ofi1_flashWriteByte F9E 0 CODE 0
-__pcstackBANK0 20 0 BANK0 1
-_strlen EFD 0 CODE 0
-___awmod@sign 27 0 BANK0 1
-=======
 i1___wmul@product 74 0 COMMON 1
 __pcstackBANK0 20 0 BANK0 1
-_strlen 9B1 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+_strlen 9A0 0 CODE 0
 flashReadByte@address 28 0 BANK0 1
 stacklo 2110 0 ABS 0
 __size_of_flashWriteByte 0 0 ABS 0
-<<<<<<< HEAD
-_strcat F48 0 CODE 0
-___bmul D5C 0 CODE 0
+_strcat A88 0 CODE 0
+___bmul 859 0 CODE 0
 _romArray_absaddr 1FE0 0 ABS 0
 __Hstringtext2 0 0 ABS 0
 __Lstringtext2 0 0 ABS 0
-__end_ofi1_flashUpdate EB9 0 CODE 0
-___lmul F9E 0 CODE 0
-_strcmp F22 0 CODE 0
+_strcmp A62 0 CODE 0
 __Hinit F 0 CODE 0
 __Linit F 0 CODE 0
-___wmul DCB 0 CODE 0
-__pstringtext2 1019 0 STRCODE 0
-i1nrf24l01Send@command 73 0 COMMON 1
-_nrf24l01CheckACK E38 0 CODE 0
-_memset DB2 0 CODE 0
-setMessage@value 3F 0 BANK0 1
-__end_of_main 398 0 CODE 0
-__Htext 0 0 ABS 0
-__Ltext 0 0 ABS 0
-___bmul@multiplier 24 0 BANK0 1
-_strcpy E01 0 CODE 0
-__size_of_nrf24l01SendPacket 0 0 ABS 0
-__end_of_nrf24l01CheckACK E58 0 CODE 0
-___lmul@multiplier 21 0 BANK0 1
-___wmul@multiplier 70 0 COMMON 1
-=======
-_strcat A99 0 CODE 0
-___bmul 86A 0 CODE 0
-_romArray_absaddr 1FE0 0 ABS 0
-__Hstringtext2 0 0 ABS 0
-__Lstringtext2 0 0 ABS 0
-_strcmp A73 0 CODE 0
-__Hinit F 0 CODE 0
-__Linit F 0 CODE 0
-___wmul 93F 0 CODE 0
+___wmul 92E 0 CODE 0
 __pstringtext2 1028 0 STRCODE 0
 i1nrf24l01Send@command 73 0 COMMON 1
-_nrf24l01CheckACK A31 0 CODE 0
-_memset 8D5 0 CODE 0
+_nrf24l01CheckACK A20 0 CODE 0
+_memset 8C4 0 CODE 0
 setMessage@value 6A 0 BANK0 1
 __end_of_main 1000 0 CODE 0
 __size_of___lwtoft 0 0 ABS 0
 __Htext 0 0 ABS 0
 __Ltext 0 0 ABS 0
 ___bmul@multiplier 24 0 BANK0 1
-_strcpy 977 0 CODE 0
+_strcpy 966 0 CODE 0
 __size_of_nrf24l01SendPacket 0 0 ABS 0
-__end_of_nrf24l01CheckACK A52 0 CODE 0
+__end_of_nrf24l01CheckACK A41 0 CODE 0
 sprintf@width 50 0 BANK0 1
 ___wmul@multiplier 21 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __CFG_LVP$ON 0 0 ABS 0
 _romHolder 1A0 0 BANK3 1
 __size_of___ftneg 0 0 ABS 0
-__end_of___lwtoft 8A5 0 CODE 0
+__end_of___lwtoft 894 0 CODE 0
 ___ftmul@sign 38 0 BANK0 1
 end_of_initialization 25 0 CODE 0
 __Hstringtext12 0 0 ABS 0
 __Lstringtext12 0 0 ABS 0
-<<<<<<< HEAD
-__end_ofi1_nrf24l01SetRXMode 7A4 0 CODE 0
-__pstringtext12 103E 0 STRCODE 0
-=======
-__end_ofi1_nrf24l01SetRXMode BA8 0 CODE 0
+__end_ofi1_nrf24l01SetRXMode BC4 0 CODE 0
 ___ftdiv@sign 38 0 BANK0 1
 __pstringtext12 0 0 STRCODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __Hstringtext8 0 0 ABS 0
 __CFG_FEXTOSC$OFF 0 0 ABS 0
 __Lstringtext8 0 0 ABS 0
@@ -428,11 +305,7 @@ __Hsfr27 0 0 ABS 0
 __Lsfr27 0 0 ABS 0
 __Hsfr18 0 0 ABS 0
 __Lsfr18 0 0 ABS 0
-<<<<<<< HEAD
-_exception D82 0 CODE 0
-=======
-_exception 8A5 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+_exception 894 0 CODE 0
 __Hsfr28 0 0 ABS 0
 __size_of_nrf24l01SetRXPipe 0 0 ABS 0
 __Lsfr28 0 0 ABS 0
@@ -444,7 +317,7 @@ __Lsfr29 0 0 ABS 0
 ?i1___wmul 70 0 COMMON 1
 _TRISAbits 8C 0 ABS 0
 __end_of___ftadd 3F2 0 CODE 0
-__end_of___lltoft B0F 0 CODE 0
+__end_of___lltoft AFE 0 CODE 0
 _TRISCbits 8E 0 ABS 0
 _PORTAbits C 0 ABS 0
 _PORTCbits E 0 ABS 0
@@ -454,23 +327,15 @@ __Lstrings 0 0 ABS 0
 nrf24l01Send@data 21 0 BANK0 1
 ?___lltoft 29 0 BANK0 1
 _SSP1BUF 211 0 ABS 0
-<<<<<<< HEAD
-_setMessage 4A9 0 CODE 0
-=======
-_setMessage E28 0 CODE 0
+_setMessage E27 0 CODE 0
 ?___lwtoft 29 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __size_of_strlen 0 0 ABS 0
-__end_ofi1___wmul 909 0 CODE 0
+__end_ofi1___wmul 8F8 0 CODE 0
 __size_of___lltoft 0 0 ABS 0
 __size_of_getADCValue 0 0 ABS 0
 __Hbank0 0 0 ABS 0
 __Lbank0 0 0 ABS 0
-<<<<<<< HEAD
-_nrf24l01CSLow D1D 0 CODE 0
-=======
-_nrf24l01CSLow 820 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+_nrf24l01CSLow 80F 0 CODE 0
 __Hbank1 0 0 ABS 0
 __Lbank1 0 0 ABS 0
 __end_of_n_ADDRESS_MUL 1067 0 STRCODE 0
@@ -483,11 +348,7 @@ ___ftmul@exp 33 0 BANK0 1
 __size_of_flashUpdate 0 0 ABS 0
 __Hbank4 0 0 ABS 0
 __Lbank4 0 0 ABS 0
-<<<<<<< HEAD
-__end_of___lmul FCE 0 CODE 0
-=======
 ___ftdiv@exp 37 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __Hbank5 0 0 ABS 0
 __Lbank5 0 0 ABS 0
 __Hpowerup 0 0 CODE 0
@@ -502,40 +363,22 @@ _OSCCON1bits 919 0 ABS 0
 __Hbank9 0 0 ABS 0
 __Lbank9 0 0 ABS 0
 exception@exception 7C 0 COMMON 1
-<<<<<<< HEAD
-__ptext1 E01 0 CODE 0
-__ptext2 7D8 0 CODE 0
-__ptext3 E1C 0 CODE 0
-_nrf24l01CEHigh D14 0 CODE 0
-flashReadByte@offset 21 0 BANK0 1
-__ptext4 13D 0 CODE 0
-__ptext5 630 0 CODE 0
-__ptext6 D5C 0 CODE 0
-nrf24l01InitRegisters@channel 2A 0 BANK0 1
-__ptext7 EB9 0 CODE 0
-__HcstackBANK1 0 0 ABS 0
-__LcstackBANK1 0 0 ABS 0
-nrf24l01InitRegisters@rfSetup 2D 0 BANK0 1
-__ptext8 7A4 0 CODE 0
-__ptext9 5EA 0 CODE 0
-=======
-__ptext1 977 0 CODE 0
-__ptext2 ABF 0 CODE 0
-__ptext3 95B 0 CODE 0
-_nrf24l01CEHigh 817 0 CODE 0
+__ptext1 966 0 CODE 0
+__ptext2 AAE 0 CODE 0
+__ptext3 94A 0 CODE 0
+_nrf24l01CEHigh 806 0 CODE 0
 flashReadByte@offset 21 0 BANK0 1
 __ptext4 1F6 0 CODE 0
-__ptext5 CA1 0 CODE 0
-__ptext6 86A 0 CODE 0
+__ptext5 CF5 0 CODE 0
+__ptext6 859 0 CODE 0
 nrf24l01InitRegisters@channel 2A 0 BANK0 1
-__ptext7 A52 0 CODE 0
+__ptext7 A41 0 CODE 0
 __HcstackBANK1 0 0 ABS 0
 __LcstackBANK1 0 0 ABS 0
 nrf24l01InitRegisters@rfSetup 2D 0 BANK0 1
-__ptext8 DD3 0 CODE 0
+__ptext8 BC4 0 CODE 0
 sprintf@val 4B 0 BANK0 1
-__ptext9 560 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__ptext9 AFE 0 CODE 0
 __pcstackBANK1 A0 0 BANK1 1
 __Hclrtext 0 0 ABS 0
 __Lclrtext 0 0 ABS 0
@@ -546,45 +389,26 @@ __pstringtext3 104C 0 STRCODE 0
 __size_ofi1_nrf24l01Send 0 0 ABS 0
 __size_of_nrf24l01SPIEnd 0 0 ABS 0
 nrf24l01InitRegisters@i 32 0 BANK0 1
-<<<<<<< HEAD
-i1_nrf24l01SetRXMode 76D 0 CODE 0
+i1_nrf24l01SetRXMode B8D 0 CODE 0
 __CFG_WDTE$ON 0 0 ABS 0
 __size_of_nrf24l01InitRegisters 0 0 ABS 0
-_flashWriteByte 6F6 0 CODE 0
-__end_of_strcmp F48 0 CODE 0
-__size_ofi1_flashUpdate 0 0 ABS 0
+_flashWriteByte B2B 0 CODE 0
+__end_of_strcmp A88 0 CODE 0
 __Hstringtext9 0 0 ABS 0
 __end_of__initialization 25 0 CODE 0
 __Lstringtext9 0 0 ABS 0
-_nrf24l01GetPipe 7A4 0 CODE 0
-__pstringtext9 1032 0 STRCODE 0
-=======
-i1_nrf24l01SetRXMode B71 0 CODE 0
-__CFG_WDTE$ON 0 0 ABS 0
-__size_of_nrf24l01InitRegisters 0 0 ABS 0
-_flashWriteByte B0F 0 CODE 0
-__end_of_strcmp A99 0 CODE 0
-__Hstringtext9 0 0 ABS 0
-__end_of__initialization 25 0 CODE 0
-__Lstringtext9 0 0 ABS 0
-_nrf24l01GetPipe DD3 0 CODE 0
+_nrf24l01GetPipe BC4 0 CODE 0
 __pstringtext9 105B 0 STRCODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __size_of_nrf24l01CEHigh 0 0 ABS 0
 memset@c 23 0 BANK0 1
 nrf24l01SetRXPipe@pipe 26 0 BANK0 1
 __size_of_nrf24l01CSHigh 0 0 ABS 0
 nrf24l01ChangeTXPower@rfSetup 27 0 BANK0 1
 _isdigit$1776 21 0 BANK0 1
-__end_of___lbtoft 93F 0 CODE 0
+__end_of___lbtoft 92E 0 CODE 0
 __end_of_romArray 2000 0 STRCODE 0
-<<<<<<< HEAD
-_nrf24l01SPISend D3D 0 CODE 0
-__end_of_nrf24l01ISR 59D 0 CODE 0
-=======
 _nrf24l01SPISend 7F2 0 CODE 0
-__end_of_nrf24l01ISR D80 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__end_of_nrf24l01ISR DD4 0 CODE 0
 __size_of_memset 0 0 ABS 0
 memset@n 25 0 BANK0 1
 memset@p 27 0 BANK0 1
@@ -598,33 +422,21 @@ ftoa@buf 158 0 BANK2 1
 __Lidloc 0 0 IDLOC 0
 __Hstack 0 0 STACK 2
 __Lstack 0 0 STACK 2
-<<<<<<< HEAD
-___llmod 674 0 CODE 0
-__end_of___lldiv 550 0 CODE 0
-___awmod 5EA 0 CODE 0
-__Hspace_0 800B 0 ABS 0
-__Lspace_0 0 0 ABS 0
-__size_of_flashReadByte 0 0 ABS 0
-__end_of_nrf24l01Send E98 0 CODE 0
-i1flashWriteByte@address 74 0 COMMON 1
-__end_of_nrf24l01Init 7FE 0 CODE 0
-__Hspace_1 161 0 ABS 0
-=======
-___ftneg 840 0 CODE 0
+___ftneg 82F 0 CODE 0
 ftoa@rem 5A 0 BANK0 1
-___llmod C5E 0 CODE 0
-__end_of___lldiv DD3 0 CODE 0
+___llmod CB2 0 CODE 0
+__end_of___lldiv E27 0 CODE 0
+___lwmod AFE 0 CODE 0
 __Hspace_0 800B 0 ABS 0
 __Lspace_0 0 0 ABS 0
 __size_of_flashReadByte 0 0 ABS 0
-__end_of_nrf24l01Send A10 0 CODE 0
-___ftsub 993 0 CODE 0
+__end_of_nrf24l01Send 9FF 0 CODE 0
+___ftsub 982 0 CODE 0
 ___ftpack@sign 25 0 BANK0 1
-__end_of_nrf24l01Init AE5 0 CODE 0
+__end_of_nrf24l01Init AD4 0 CODE 0
 _sprintf 29 0 CODE 0
 setMessage@status A0 0 BANK1 1
 __Hspace_1 1C0 0 ABS 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __Lspace_1 0 0 ABS 0
 ?_strlen 21 0 BANK0 1
 __CFG_BORV$LOW 0 0 ABS 0
@@ -634,20 +446,15 @@ nrf24l01SetTXPipe@pipe 27 0 BANK0 1
 __Hspace_2 0 0 ABS 0
 ?_strcmp 70 0 COMMON 1
 __Lspace_2 0 0 ABS 0
-___fttol EE3 0 CODE 0
+___fttol EE2 0 CODE 0
 ?___wmul 21 0 BANK0 1
-_isdigit 849 0 CODE 0
+_isdigit 838 0 CODE 0
 __Hcinit 29 0 CODE 0
 ___ftmul 4AC 0 CODE 0
 __Lcinit 11 0 CODE 0
-<<<<<<< HEAD
-_counter E4 0 BANK1 1
-___lldiv 4FD 0 CODE 0
-=======
 _counter 120 0 BANK2 1
-___lldiv D80 0 CODE 0
+___lldiv DD4 0 CODE 0
 ___ftdiv 60A 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __Hspace_3 0 0 ABS 0
 __CFG_LPBOREN$OFF 0 0 ABS 0
 __Lspace_3 0 0 ABS 0
@@ -655,52 +462,31 @@ setMessage@topic 68 0 BANK0 1
 nrf24l01SetRXPipe@enRXAddr 27 0 BANK0 1
 __size_of_main 0 0 ABS 0
 __size_of_strcat 0 0 ABS 0
-<<<<<<< HEAD
-_nrf24l01ChangeTXPower 6B7 0 CODE 0
-loop@rfSetup A0 0 BANK1 1
-=======
-_nrf24l01ChangeTXPower C1F 0 CODE 0
+_nrf24l01ChangeTXPower C73 0 CODE 0
 _dpowers 1000 0 STRCODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 nrf24l01InitRegisters@feature 2C 0 BANK0 1
 _nrf24l01 6E 0 BANK0 1
 __size_of_nrf24l01GetRXPacket 0 0 ABS 0
-<<<<<<< HEAD
-_nrf24l01SetRXPipe EB9 0 CODE 0
-_nrf24l01SPIEnd D26 0 CODE 0
-=======
-_nrf24l01SetRXPipe A52 0 CODE 0
-_nrf24l01SPIEnd 829 0 CODE 0
+_nrf24l01SetRXPipe A41 0 CODE 0
+_nrf24l01SPIEnd 818 0 CODE 0
 ___fttol@exp1 46 0 BANK0 1
 __size_of___ftdiv 0 0 ABS 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __Hstringtext10 0 0 ABS 0
 __Lstringtext10 0 0 ABS 0
 __pstringtext10 1060 0 STRCODE 0
 __Hstringtext4 0 0 ABS 0
 __Lstringtext4 0 0 ABS 0
-<<<<<<< HEAD
-__pstringtext4 1013 0 STRCODE 0
-__end_of_nrf24l01CELow D1A 0 CODE 0
-__end_of_nrf24l01CSLow D20 0 CODE 0
-_enableInterrupts D2D 0 CODE 0
-__CFG_DEBUG$OFF 0 0 ABS 0
-__end_of_nrf24l01SetRXMode 76D 0 CODE 0
-clear_ram0 D20 0 CODE 0
-strcat@from 21 0 BANK0 1
-=======
-__end_of_isdigit 858 0 CODE 0
+__end_of_isdigit 847 0 CODE 0
 __end_of_sprintf 1F6 0 CODE 0
 __pstringtext4 1066 0 STRCODE 0
-__end_of_nrf24l01CELow 81D 0 CODE 0
-__end_of_nrf24l01CSLow 823 0 CODE 0
-_enableInterrupts 830 0 CODE 0
+__end_of_nrf24l01CELow 80C 0 CODE 0
+__end_of_nrf24l01CSLow 812 0 CODE 0
+_enableInterrupts 81F 0 CODE 0
 __CFG_DEBUG$OFF 0 0 ABS 0
-__end_of_nrf24l01SetRXMode BE3 0 CODE 0
-clear_ram0 823 0 CODE 0
+__end_of_nrf24l01SetRXMode C37 0 CODE 0
+clear_ram0 812 0 CODE 0
 ___ftpack@arg 21 0 BANK0 1
 strcat@from 63 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 strcpy@from 21 0 BANK0 1
 ___ftadd@exp2 3C 0 BANK0 1
 __HbssBANK0 0 0 ABS 0
@@ -739,269 +525,151 @@ __Lbank23 0 0 BANK23 1
 __Hbank14 0 0 BANK14 1
 __pbssBANK1 ED 0 BANK1 1
 __Lbank14 0 0 BANK14 1
-<<<<<<< HEAD
-__end_of_nrf24l01SPIStart D3D 0 CODE 0
-setMessage@tempString 43 0 BANK0 1
-__Hbank24 0 0 BANK24 1
-__Lbank24 0 0 BANK24 1
-__ptext10 29 0 CODE 0
-flashWriteByte@offset 21 0 BANK0 1
-getADCValue@channel 37 0 BANK0 1
-__Hbank15 0 0 BANK15 1
-__Lbank15 0 0 BANK15 1
-__ptext20 421 0 CODE 0
-__Hbank25 0 0 BANK25 1
-__end_of_nrf24l01SetRXPipe EDA 0 CODE 0
-__Lbank25 0 0 BANK25 1
-__end_of_nrf24l01SetTXPipe 674 0 CODE 0
-__ptext11 D4A 0 CODE 0
-__ptext30 FCE 0 CODE 0
-__Hbank16 0 0 BANK16 1
-__Lbank16 0 0 BANK16 1
-__ptext21 F9E 0 CODE 0
-__ptext40 D3D 0 CODE 0
-__Hbank26 0 0 BANK26 1
-__size_of_exception 0 0 ABS 0
-__Lbank26 0 0 BANK26 1
-__ptext12 4A9 0 CODE 0
-__ptext50 DCB 0 CODE 0
-__Hbank17 0 0 BANK17 1
-__Lbank17 0 0 BANK17 1
-__HbssBANK2 0 0 ABS 0
-__ptext22 4FD 0 CODE 0
-__ptext41 D26 0 CODE 0
-__LbssBANK2 0 0 ABS 0
-__Hbank27 0 0 BANK27 1
-__Lbank27 0 0 BANK27 1
-__ptext13 398 0 CODE 0
-__ptext32 550 0 CODE 0
-=======
 i1___wmul@multiplier 70 0 COMMON 1
-__end_of_nrf24l01SPIStart 840 0 CODE 0
+__end_of_nrf24l01SPIStart 82F 0 CODE 0
 __Hbank24 0 0 BANK24 1
 __Lbank24 0 0 BANK24 1
-__ptext10 858 0 CODE 0
+__ptext10 560 0 CODE 0
 flashWriteByte@offset 70 0 COMMON 1
 getADCValue@channel 44 0 BANK0 1
 __Hbank15 0 0 BANK15 1
 __Lbank15 0 0 BANK15 1
-__ptext20 AE5 0 CODE 0
+__ptext20 DD4 0 CODE 0
 __Hbank25 0 0 BANK25 1
-__end_of_nrf24l01SetRXPipe A73 0 CODE 0
+__end_of_nrf24l01SetRXPipe A62 0 CODE 0
 __Lbank25 0 0 BANK25 1
-__end_of_nrf24l01SetTXPipe CE5 0 CODE 0
-__ptext11 E28 0 CODE 0
-__ptext30 924 0 CODE 0
+__end_of_nrf24l01SetTXPipe D39 0 CODE 0
+__ptext11 847 0 CODE 0
+__ptext30 87F 0 CODE 0
 __Hbank16 0 0 BANK16 1
 __Lbank16 0 0 BANK16 1
-__ptext21 EE3 0 CODE 0
-__ptext40 B3F 0 CODE 0
+__ptext21 AD4 0 CODE 0
+__ptext40 9BF 0 CODE 0
 __Hbank26 0 0 BANK26 1
 __size_of_exception 0 0 ABS 0
 __Lbank26 0 0 BANK26 1
-__ptext12 A99 0 CODE 0
-__ptext31 4AC 0 CODE 0
-__ptext50 7F2 0 CODE 0
+__ptext12 E27 0 CODE 0
+__ptext31 913 0 CODE 0
+__ptext50 80F 0 CODE 0
 __Hbank17 0 0 BANK17 1
 __Lbank17 0 0 BANK17 1
 __HbssBANK2 0 0 ABS 0
-__ptext22 993 0 CODE 0
-__ptext60 B0F 0 CODE 0
+__ptext22 EE2 0 CODE 0
+__ptext41 B5B 0 CODE 0
+__ptext60 9FF 0 CODE 0
 __LbssBANK2 0 0 ABS 0
 __Hbank27 0 0 BANK27 1
 __Lbank27 0 0 BANK27 1
-__ptext13 8D5 0 CODE 0
-__ptext32 60A 0 CODE 0
-__ptext51 829 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__ptext13 A88 0 CODE 0
+__ptext32 4AC 0 CODE 0
+__ptext51 7F2 0 CODE 0
 __Hbank18 0 0 BANK18 1
 __pbssBANK2 120 0 BANK2 1
 __Lbank18 0 0 BANK18 1
 _ADCON0bits 9D 0 ABS 0
 _ADCON1bits 9E 0 ABS 0
-<<<<<<< HEAD
-__ptext23 D6E 0 CODE 0
-__ptext42 D1A 0 CODE 0
-__Hbank28 0 0 BANK28 1
-__Lbank28 0 0 BANK28 1
-_PMCON1bits 895 0 ABS 0
-__ptext14 674 0 CODE 0
-__ptext33 59D 0 CODE 0
-__Hbank19 0 0 BANK19 1
-__Lbank19 0 0 BANK19 1
-_nrf24l01ISR 550 0 CODE 0
-__ptext24 7FE 0 CODE 0
-__ptext43 D2D 0 CODE 0
-__Hbank29 0 0 BANK29 1
-__Lbank29 0 0 BANK29 1
-_nrf24l01SetRXMode 732 0 CODE 0
-__ptext15 F48 0 CODE 0
-__ptext34 D9A 0 CODE 0
-__ptext25 6B7 0 CODE 0
-__ptext44 D17 0 CODE 0
-__ptext16 DB2 0 CODE 0
-__ptext35 E38 0 CODE 0
-__ptext26 E78 0 CODE 0
-__ptext45 D14 0 CODE 0
-__size_of_ultoa 0 0 ABS 0
-__CFG_BOREN$OFF 0 0 ABS 0
-___llmod@divisor 21 0 BANK0 1
-__ptext17 243 0 CODE 0
-__ptext36 76D 0 CODE 0
-_ANSELAbits 18C 0 ABS 0
-___awmod@divisor 21 0 BANK0 1
-__ptext27 EDA 0 CODE 0
-__ptext46 F22 0 CODE 0
-_ANSELCbits 18E 0 ABS 0
-getADCValue@divider 2F 0 BANK0 1
-__ptext18 EFD 0 CODE 0
-__ptext37 DE6 0 CODE 0
-__ptext28 6F6 0 CODE 0
-__ptext47 D82 0 CODE 0
-__ptext19 732 0 CODE 0
-__ptext38 D35 0 CODE 0
-_nrf24l01CSHigh D1A 0 CODE 0
-__ptext29 E58 0 CODE 0
-__ptext48 E98 0 CODE 0
-__ptext39 D1D 0 CODE 0
-__size_ofi1_memset 0 0 ABS 0
-__ptext49 F6E 0 CODE 0
-=======
-__ptext23 840 0 CODE 0
-__ptext42 D32 0 CODE 0
+__ptext23 982 0 CODE 0
+__ptext61 B2B 0 CODE 0
 sprintf@prec 52 0 BANK0 1
 __Hbank28 0 0 BANK28 1
 __Lbank28 0 0 BANK28 1
 _PMCON1bits 895 0 ABS 0
-__ptext14 6B3 0 CODE 0
-__ptext33 2FC 0 CODE 0
-__ptext52 81D 0 CODE 0
+__ptext14 8C4 0 CODE 0
+__ptext33 60A 0 CODE 0
+__ptext52 818 0 CODE 0
 __Hbank19 0 0 BANK19 1
 __Lbank19 0 0 BANK19 1
-_nrf24l01ISR D32 0 CODE 0
-__ptext24 BE3 0 CODE 0
-__ptext43 CE5 0 CODE 0
+_nrf24l01ISR D86 0 CODE 0
+__ptext24 82F 0 CODE 0
+__ptext43 D86 0 CODE 0
 __Hbank29 0 0 BANK29 1
 __Lbank29 0 0 BANK29 1
-_nrf24l01SetRXMode BA8 0 CODE 0
-__ptext15 29 0 CODE 0
-__ptext34 E7E 0 CODE 0
-__ptext53 830 0 CODE 0
-__ptext25 3F2 0 CODE 0
-__ptext44 8BD 0 CODE 0
-__ptext16 849 0 CODE 0
-__ptext35 87C 0 CODE 0
-__ptext54 81A 0 CODE 0
+_nrf24l01SetRXMode BFC 0 CODE 0
+__ptext15 6B3 0 CODE 0
+__ptext34 2FC 0 CODE 0
+__ptext53 80C 0 CODE 0
+__ptext25 C37 0 CODE 0
+__ptext44 D39 0 CODE 0
+__ptext16 29 0 CODE 0
+__ptext35 E7D 0 CODE 0
+__ptext54 81F 0 CODE 0
 __HbssBANK3 0 0 ABS 0
-__ptext26 9B1 0 CODE 0
-__ptext45 A31 0 CODE 0
+__ptext26 3F2 0 CODE 0
+__ptext45 8AC 0 CODE 0
 __LbssBANK3 0 0 ABS 0
 __CFG_BOREN$OFF 0 0 ABS 0
 ___llmod@divisor 2F 0 BANK0 1
-__ptext17 93F 0 CODE 0
-__ptext36 2 0 CODE 0
-__ptext55 817 0 CODE 0
+__ptext17 838 0 CODE 0
+__ptext36 86B 0 CODE 0
+__ptext55 809 0 CODE 0
 __pbssBANK3 1A0 0 BANK3 1
 _ANSELAbits 18C 0 ABS 0
-__ptext27 BA8 0 CODE 0
-__ptext46 B71 0 CODE 0
+__end_of___lwmod B2B 0 CODE 0
+__ptext27 9A0 0 CODE 0
+__ptext46 A20 0 CODE 0
+___lwmod@divisor 21 0 BANK0 1
 _ANSELCbits 18E 0 ABS 0
-__ptext18 C5E 0 CODE 0
-__ptext37 C1F 0 CODE 0
-__ptext56 A73 0 CODE 0
-__ptext28 756 0 CODE 0
-__ptext47 909 0 CODE 0
+__ptext18 92E 0 CODE 0
+__ptext37 2 0 CODE 0
+__ptext56 806 0 CODE 0
+__ptext28 BFC 0 CODE 0
+__ptext47 B8D 0 CODE 0
 ___fttol@sign1 41 0 BANK0 1
-__ptext19 D80 0 CODE 0
-__ptext38 9F0 0 CODE 0
-__ptext57 8A5 0 CODE 0
-_nrf24l01CSHigh 81D 0 CODE 0
-__ptext29 890 0 CODE 0
-__ptext48 838 0 CODE 0
-__ptext39 9D0 0 CODE 0
-__ptext58 8EE 0 CODE 0
+__ptext19 CB2 0 CODE 0
+__ptext38 C73 0 CODE 0
+__ptext57 A62 0 CODE 0
+_nrf24l01CSHigh 80C 0 CODE 0
+__ptext29 756 0 CODE 0
+__ptext48 8F8 0 CODE 0
+__ptext39 9DF 0 CODE 0
+__ptext58 894 0 CODE 0
 __size_ofi1_memset 0 0 ABS 0
-__ptext49 820 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__ptext49 827 0 CODE 0
 _WDTCONbits 97 0 ABS 0
 _INTCONbits B 0 ABS 0
 _FVRCONbits 117 0 ABS 0
-__ptext59 A10 0 CODE 0
+__ptext59 8DD 0 CODE 0
 __CFG_PPS1WAY$ON 0 0 ABS 0
-<<<<<<< HEAD
-__end_of_nrf24l01SPIEnd D2D 0 CODE 0
+__end_of_nrf24l01SPIEnd 81F 0 CODE 0
 __Hend_init 11 0 CODE 0
 __Lend_init F 0 CODE 0
-__end_of_flashUpdate EFD 0 CODE 0
-=======
-__end_of_nrf24l01SPIEnd 830 0 CODE 0
-__Hend_init 11 0 CODE 0
-__Lend_init F 0 CODE 0
-__end_of_flashUpdate A31 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__end_of_flashUpdate A20 0 CODE 0
 _RC0PPSbits EA0 0 ABS 0
 _RC1PPSbits EA1 0 ABS 0
 _RC2PPSbits EA2 0 ABS 0
 ___lldiv@divisor 21 0 BANK0 1
 _STATUSbits 3 0 ABS 0
-<<<<<<< HEAD
-__end_of_nrf24l01CEHigh D17 0 CODE 0
-__size_of___lldiv 0 0 ABS 0
-__end_of_nrf24l01CSHigh D1D 0 CODE 0
-nrf24l01SendPacket@i 2C 0 BANK0 1
-__size_of_nrf24l01ReceivePacket 0 0 ABS 0
-nrf24l01GetPipe@i 2D 0 BANK0 1
-flashReadByte@result 26 0 BANK0 1
-__end_of___llmod 6B7 0 CODE 0
-__size_of___wmul 0 0 ABS 0
-__end_of_strcat F6E 0 CODE 0
-memset@p1 21 0 BANK0 1
-__Hreset_vec 2 0 CODE 0
-__Lreset_vec 0 0 CODE 0
-_nrf24l01SetTXPipe 630 0 CODE 0
-=======
-__end_of_nrf24l01CEHigh 81A 0 CODE 0
+__end_of_nrf24l01CEHigh 809 0 CODE 0
 ___ftpack@exp 24 0 BANK0 1
 __size_of___lldiv 0 0 ABS 0
-__end_of_nrf24l01CSHigh 820 0 CODE 0
+__end_of_nrf24l01CSHigh 80F 0 CODE 0
 __end_of_ftoa 756 0 CODE 0
 nrf24l01SendPacket@i 2B 0 BANK0 1
 __size_of_nrf24l01ReceivePacket 0 0 ABS 0
-nrf24l01GetPipe@i 43 0 BANK0 1
+nrf24l01GetPipe@i 2B 0 BANK0 1
 __end_of___ftmul 560 0 CODE 0
 flashReadByte@result 26 0 BANK0 1
-__end_of___llmod CA1 0 CODE 0
+__end_of___llmod CF5 0 CODE 0
 i1___wmul@multiplicand 72 0 COMMON 1
 __size_of___wmul 0 0 ABS 0
-__end_of_strcat ABF 0 CODE 0
+__end_of_strcat AAE 0 CODE 0
 memset@p1 21 0 BANK0 1
 __Hreset_vec 2 0 CODE 0
 __Lreset_vec 0 0 CODE 0
-_nrf24l01SetTXPipe CA1 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+_nrf24l01SetTXPipe CF5 0 CODE 0
 strcmp@s1 74 0 COMMON 1
 __Hstringtext5 0 0 ABS 0
 __Lstringtext5 0 0 ABS 0
 strcmp@s2 70 0 COMMON 1
-<<<<<<< HEAD
-__pstringtext5 101E 0 STRCODE 0
-nrf24l01GetPipe@name 2C 0 BANK0 1
-nrf24l01GetPipe@pipe 2B 0 BANK0 1
-_checkTXPower D6E 0 CODE 0
-nrf24l01InitRegisters@enAA 2F 0 BANK0 1
-nrf24l01SPISend@data 70 0 COMMON 1
-__end_of_nrf24l01GetRXPacket 800 0 CODE 0
-=======
 __pstringtext5 103B 0 STRCODE 0
-nrf24l01GetPipe@name 3E 0 BANK0 1
-nrf24l01GetPipe@pipe 3F 0 BANK0 1
-_checkTXPower 87C 0 CODE 0
+nrf24l01GetPipe@name 2A 0 BANK0 1
+nrf24l01GetPipe@pipe 29 0 BANK0 1
+_checkTXPower 86B 0 CODE 0
 nrf24l01InitRegisters@enAA 2F 0 BANK0 1
 nrf24l01SPISend@data 70 0 COMMON 1
 __size_ofi1___wmul 0 0 ABS 0
 __end_of_nrf24l01GetRXPacket 4 0 CODE 0
 getADCValue@multiplier 3E 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 intlevel0 0 0 ENTRY 0
 intlevel1 0 0 ENTRY 0
 __size_of_sleep 0 0 ABS 0
@@ -1011,88 +679,49 @@ __size_of_nrf24l01InterfaceInit 0 0 ABS 0
 intlevel3 0 0 ENTRY 0
 intlevel4 0 0 ENTRY 0
 _SSP1CON1bits 215 0 ABS 0
-<<<<<<< HEAD
-__end_ofi1_memset DB2 0 CODE 0
-intlevel5 0 0 ENTRY 0
-i1nrf24l01Send@data 71 0 COMMON 1
-__end_of_ultoa 421 0 CODE 0
-__end_of_getADCValue 4A9 0 CODE 0
-i1nrf24l01SetRXMode@rxMode 76 0 COMMON 1
-__HcstackCOMMON 0 0 ABS 0
-__end_of_enableInterrupts D35 0 CODE 0
-__LcstackCOMMON 0 0 ABS 0
-_flashRealod E58 0 CODE 0
-__pcstackCOMMON 70 0 COMMON 1
-__end_of___wmul DE6 0 CODE 0
-i1_flashUpdate E98 0 CODE 0
-__CFG_CPD$OFF 0 0 ABS 0
-start_initialization 11 0 CODE 0
-_nrf24l01ReceivePacket 59D 0 CODE 0
-___lldiv@quotient 2A 0 BANK0 1
-nrf24l01SendPacket@Packet 2B 0 BANK0 1
-__end_of_nrf24l01ReceivePacket 5EA 0 CODE 0
-checkTXPower@rxPacket 29 0 BANK0 1
-__end_of_sleep D5C 0 CODE 0
-=======
-__end_ofi1_memset 8D5 0 CODE 0
+__end_ofi1_memset 8C4 0 CODE 0
 intlevel5 0 0 ENTRY 0
 i1nrf24l01Send@data 71 0 COMMON 1
 __end_of_getADCValue 7F2 0 CODE 0
 i1nrf24l01SetRXMode@rxMode 76 0 COMMON 1
+__size_of___lwmod 0 0 ABS 0
 __HcstackCOMMON 0 0 ABS 0
-__end_of_enableInterrupts 838 0 CODE 0
+__end_of_enableInterrupts 827 0 CODE 0
 __LcstackCOMMON 0 0 ABS 0
-_flashRealod 9D0 0 CODE 0
+_flashRealod 9BF 0 CODE 0
 __pcstackCOMMON 70 0 COMMON 1
-__end_of___wmul 95B 0 CODE 0
+__end_of___wmul 94A 0 CODE 0
 __CFG_CPD$OFF 0 0 ABS 0
 start_initialization 11 0 CODE 0
-_nrf24l01ReceivePacket CE5 0 CODE 0
+_nrf24l01ReceivePacket D39 0 CODE 0
 ___lldiv@quotient 2A 0 BANK0 1
 ftoa@status 58 0 BANK0 1
 nrf24l01SendPacket@Packet 2A 0 BANK0 1
-__end_of_nrf24l01ReceivePacket D32 0 CODE 0
+__end_of_nrf24l01ReceivePacket D86 0 CODE 0
 __size_of___ftge 0 0 ABS 0
 checkTXPower@rxPacket 29 0 BANK0 1
-__end_of_sleep 86A 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+__end_of_sleep 859 0 CODE 0
 __Hmaintext 0 0 ABS 0
 __Lmaintext 0 0 ABS 0
-__pmaintext F6A 0 CODE 0
+__pmaintext F69 0 CODE 0
 i1nrf24l01SetRXMode@config 75 0 COMMON 1
 __CFG_MCLRE$ON 0 0 ABS 0
-<<<<<<< HEAD
-?_getADCValue 2F 0 BANK0 1
-__size_of___awmod 0 0 ABS 0
-getADCValue@adcSum 39 0 BANK0 1
-__end_of_nrf24l01InterfaceInit E38 0 CODE 0
-__initialization 11 0 CODE 0
-___llmod@dividend 25 0 BANK0 1
-_getADCValue 421 0 CODE 0
-___awmod@dividend 23 0 BANK0 1
-___bmul@product 23 0 BANK0 1
-___llmod@counter 2A 0 BANK0 1
-___lmul@product 29 0 BANK0 1
-___awmod@counter 26 0 BANK0 1
-i1_flashWriteByte F6E 0 CODE 0
-_flashUpdate EDA 0 CODE 0
-___wmul@product 74 0 COMMON 1
-=======
-__end_of___fttol F6A 0 CODE 0
+__end_of___fttol F69 0 CODE 0
 ?_getADCValue 3E 0 BANK0 1
 __size_of_sprintf 0 0 ABS 0
-__end_of___ftsub 9B1 0 CODE 0
+__end_of___ftsub 9A0 0 CODE 0
 getADCValue@adcSum 46 0 BANK0 1
-__end_of_nrf24l01InterfaceInit 977 0 CODE 0
+__end_of_nrf24l01InterfaceInit 966 0 CODE 0
 __initialization 11 0 CODE 0
-__end_of___ftge C1F 0 CODE 0
+__end_of___ftge C73 0 CODE 0
 ___llmod@dividend 33 0 BANK0 1
 _getADCValue 756 0 CODE 0
+___lwmod@dividend 23 0 BANK0 1
 ___bmul@product 23 0 BANK0 1
 ___llmod@counter 38 0 BANK0 1
-_flashUpdate A10 0 CODE 0
+_flashUpdate 9FF 0 CODE 0
 ___wmul@product 25 0 BANK0 1
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+___lwmod@counter 26 0 BANK0 1
 __CFG_CP$OFF 0 0 ABS 0
 __Hstringtext11 0 0 ABS 0
 __Lstringtext11 0 0 ABS 0
@@ -1105,13 +734,9 @@ __Lstringtext6 0 0 ABS 0
 __size_of___ftmul 0 0 ABS 0
 __pstringtext6 1046 0 STRCODE 0
 __size_of___bmul 0 0 ABS 0
-<<<<<<< HEAD
-__end_of___bmul D6E 0 CODE 0
-=======
-__end_of___bmul 87C 0 CODE 0
+__end_of___bmul 86B 0 CODE 0
 sprintf@c 54 0 BANK0 1
 __end_of___ftdiv 6B3 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 __size_of___llmod 0 0 ABS 0
 nrf24l01ReceivePacket@width 79 0 COMMON 1
 ___lldiv@dividend 25 0 BANK0 1
@@ -1119,458 +744,69 @@ isdigit@c 22 0 BANK0 1
 i1memset@c 72 0 COMMON 1
 %segments
 _romArray_text 3FC0 3FFF STRCODE 3FC0 0
-<<<<<<< HEAD
-reset_vec 0 3 CODE 0 0
-intentry 8 FFF CODE 8 0
-=======
 reset_vec 0 7 CODE 0 0
 intentry 8 FFD CODE 8 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
 config 1000E 10015 CONFIG 1000E 0
 cstackCOMMON 70 7D COMMON 70 1
 cstackBANK0 20 6E BANK0 20 1
-<<<<<<< HEAD
-text30 1F9C 1FFF CODE 1F9C 0
-text21 1F3C 1F9B CODE 1F3C 0
-text49 1EDC 1F3B CODE 1EDC 0
-text15 1E90 1EDB CODE 1E90 0
-text46 1E44 1E8F CODE 1E44 0
-text18 1DFA 1E43 CODE 1DFA 0
-text27 1DB4 1DF9 CODE 1DB4 0
-text7 1D72 1DB3 CODE 1D72 0
-text48 1D30 1D71 CODE 1D30 0
-text26 1CF0 1D2F CODE 1CF0 0
-text29 1CB0 1CEF CODE 1CB0 0
-text35 1C70 1CAF CODE 1C70 0
-text3 1C38 1C6F CODE 1C38 0
-text1 1C02 1C37 CODE 1C02 0
-text37 1BCC 1C01 CODE 1BCC 0
-text50 1B96 1BCB CODE 1B96 0
-text16 1B64 1B95 CODE 1B64 0
-text34 1B34 1B63 CODE 1B34 0
-text47 1B04 1B33 CODE 1B04 0
-text23 1ADC 1B03 CODE 1ADC 0
-stringtext1 2000 2089 STRCODE 2000 0
-text6 1AB8 1ADB CODE 1AB8 0
-text11 1A94 1AB7 CODE 1A94 0
-text40 1A7A 1A93 CODE 1A7A 0
-text38 1A6A 1A79 CODE 1A6A 0
-text43 1A5A 1A69 CODE 1A5A 0
-text41 1A4C 1A59 CODE 1A4C 0
-clrtext 1A40 1A4B CODE 1A40 0
-text39 1A3A 1A3F CODE 1A3A 0
-text42 1A34 1A39 CODE 1A34 0
-text44 1A2E 1A33 CODE 1A2E 0
-text45 1A28 1A2D CODE 1A28 0
-%locals
-dist/default/production\nRF24L01__PIC16LF1825.X.X.production.o
-C:\Users\Leon\AppData\Local\Temp\s7kg.
-4531 11 0 CODE 0
-4534 11 0 CODE 0
-4582 11 0 CODE 0
-4583 12 0 CODE 0
-4584 13 0 CODE 0
-4585 14 0 CODE 0
-4586 15 0 CODE 0
-4587 16 0 CODE 0
-4591 19 0 CODE 0
-4592 1A 0 CODE 0
-4593 1B 0 CODE 0
-4594 1C 0 CODE 0
-4595 1D 0 CODE 0
-4599 1E 0 CODE 0
-4600 1F 0 CODE 0
-4601 20 0 CODE 0
-4602 21 0 CODE 0
-4603 22 0 CODE 0
-4604 23 0 CODE 0
-4610 25 0 CODE 0
-4612 25 0 CODE 0
-4613 26 0 CODE 0
-4614 27 0 CODE 0
-4571 D20 0 CODE 0
-4572 D20 0 CODE 0
-4573 D21 0 CODE 0
-4574 D21 0 CODE 0
-4575 D22 0 CODE 0
-4576 D23 0 CODE 0
-4577 D24 0 CODE 0
-4578 D25 0 CODE 0
-main.c
-169 2F2 0 CODE 0
-172 2F2 0 CODE 0
-173 2F4 0 CODE 0
-175 2F5 0 CODE 0
-176 2F7 0 CODE 0
-181 2F8 0 CODE 0
-182 2FA 0 CODE 0
-184 2FB 0 CODE 0
-185 2FD 0 CODE 0
-187 2FE 0 CODE 0
-188 300 0 CODE 0
-190 301 0 CODE 0
-197 303 0 CODE 0
-198 304 0 CODE 0
-200 305 0 CODE 0
-201 308 0 CODE 0
-203 30A 0 CODE 0
-205 313 0 CODE 0
-207 316 0 CODE 0
-208 31B 0 CODE 0
-209 31F 0 CODE 0
-210 327 0 CODE 0
-211 32A 0 CODE 0
-214 32D 0 CODE 0
-216 336 0 CODE 0
-218 339 0 CODE 0
-220 33C 0 CODE 0
-221 345 0 CODE 0
-222 349 0 CODE 0
-226 34E 0 CODE 0
-229 350 0 CODE 0
-230 352 0 CODE 0
-231 354 0 CODE 0
-234 356 0 CODE 0
-235 358 0 CODE 0
-238 35A 0 CODE 0
-239 35C 0 CODE 0
-240 35D 0 CODE 0
-243 35E 0 CODE 0
-244 35F 0 CODE 0
-245 363 0 CODE 0
-247 364 0 CODE 0
-248 367 0 CODE 0
-249 368 0 CODE 0
-250 369 0 CODE 0
-252 36B 0 CODE 0
-253 36F 0 CODE 0
-258 370 0 CODE 0
-259 371 0 CODE 0
-260 372 0 CODE 0
-264 373 0 CODE 0
-267 377 0 CODE 0
-268 378 0 CODE 0
-271 37A 0 CODE 0
-272 37B 0 CODE 0
-276 37C 0 CODE 0
-277 38A 0 CODE 0
-278 38C 0 CODE 0
-279 38D 0 CODE 0
-280 391 0 CODE 0
-283 394 0 CODE 0
-282 397 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcpy.c
-8 E01 0 CODE 0
-18 E03 0 CODE 0
-19 E07 0 CODE 0
-20 E13 0 CODE 0
-21 E17 0 CODE 0
-19 E1B 0 CODE 0
-nrf24l01.c
-444 7D8 0 CODE 0
-447 7D8 0 CODE 0
-452 7DB 0 CODE 0
-454 7DE 0 CODE 0
-456 7EB 0 CODE 0
-458 7EE 0 CODE 0
-460 7FB 0 CODE 0
-463 7FD 0 CODE 0
-interface.c
-28 E1C 0 CODE 0
-30 E1C 0 CODE 0
-31 E1E 0 CODE 0
-33 E1F 0 CODE 0
-34 E20 0 CODE 0
-35 E21 0 CODE 0
-37 E22 0 CODE 0
-39 E24 0 CODE 0
-40 E29 0 CODE 0
-41 E2D 0 CODE 0
-43 E31 0 CODE 0
-44 E33 0 CODE 0
-45 E34 0 CODE 0
-47 E36 0 CODE 0
-49 E37 0 CODE 0
-nrf24l01.c
-343 13D 0 CODE 0
-347 13D 0 CODE 0
-348 13F 0 CODE 0
-351 147 0 CODE 0
-352 149 0 CODE 0
-353 14B 0 CODE 0
-357 153 0 CODE 0
-358 158 0 CODE 0
-362 160 0 CODE 0
-363 162 0 CODE 0
-364 163 0 CODE 0
-365 164 0 CODE 0
-366 166 0 CODE 0
-369 16E 0 CODE 0
-373 172 0 CODE 0
-374 17C 0 CODE 0
-375 17D 0 CODE 0
-376 17E 0 CODE 0
-377 17F 0 CODE 0
-378 180 0 CODE 0
-379 181 0 CODE 0
-380 182 0 CODE 0
-385 18A 0 CODE 0
-386 194 0 CODE 0
-387 195 0 CODE 0
-388 196 0 CODE 0
-391 19E 0 CODE 0
-392 1A8 0 CODE 0
-393 1A9 0 CODE 0
-394 1AA 0 CODE 0
-395 1AB 0 CODE 0
-396 1AC 0 CODE 0
-397 1AD 0 CODE 0
-398 1AE 0 CODE 0
-402 1B6 0 CODE 0
-404 1C0 0 CODE 0
-405 1C3 0 CODE 0
-407 1CA 0 CODE 0
-409 1E2 0 CODE 0
-410 1EA 0 CODE 0
-411 1F2 0 CODE 0
-412 1FA 0 CODE 0
-413 202 0 CODE 0
-416 20A 0 CODE 0
-402 20D 0 CODE 0
-419 219 0 CODE 0
-424 21D 0 CODE 0
-425 21F 0 CODE 0
-426 220 0 CODE 0
-427 221 0 CODE 0
-428 222 0 CODE 0
-431 22A 0 CODE 0
-432 230 0 CODE 0
-435 236 0 CODE 0
-436 238 0 CODE 0
-437 239 0 CODE 0
-438 23A 0 CODE 0
-439 23B 0 CODE 0
-441 242 0 CODE 0
-309 630 0 CODE 0
-312 632 0 CODE 0
-313 635 0 CODE 0
-314 639 0 CODE 0
-315 651 0 CODE 0
-316 659 0 CODE 0
-317 661 0 CODE 0
-318 669 0 CODE 0
-319 671 0 CODE 0
-320 673 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul8.c
-4 D5C 0 CODE 0
-6 D5E 0 CODE 0
-43 D5F 0 CODE 0
-44 D61 0 CODE 0
-45 D65 0 CODE 0
-46 D67 0 CODE 0
-47 D69 0 CODE 0
-50 D6C 0 CODE 0
-nrf24l01.c
-322 EB9 0 CODE 0
-326 EBB 0 CODE 0
-327 EBF 0 CODE 0
-328 EC0 0 CODE 0
-329 EC1 0 CODE 0
-330 EC2 0 CODE 0
-331 EC3 0 CODE 0
-332 EC4 0 CODE 0
-333 EC5 0 CODE 0
-335 EC6 0 CODE 0
-336 EC6 0 CODE 0
-337 EC7 0 CODE 0
-340 ED2 0 CODE 0
-341 ED9 0 CODE 0
-main.c
-157 7A4 0 CODE 0
-158 7A6 0 CODE 0
-159 7A7 0 CODE 0
-162 7A8 0 CODE 0
-163 7B9 0 CODE 0
-162 7C3 0 CODE 0
-166 7C8 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awmod.c
-5 5EA 0 CODE 0
-12 5EA 0 CODE 0
-13 5EC 0 CODE 0
-14 5EE 0 CODE 0
-15 5F3 0 CODE 0
-17 5F5 0 CODE 0
-18 5F7 0 CODE 0
-19 5FC 0 CODE 0
-20 600 0 CODE 0
-21 602 0 CODE 0
-22 604 0 CODE 0
-23 609 0 CODE 0
-21 60D 0 CODE 0
-26 60E 0 CODE 0
-27 616 0 CODE 0
-28 61A 0 CODE 0
-29 61F 0 CODE 0
-31 623 0 CODE 0
-32 626 0 CODE 0
-33 62B 0 CODE 0
-main.c
-100 29 0 CODE 0
-103 29 0 CODE 0
-107 2A 0 CODE 0
-108 43 0 CODE 0
-109 45 0 CODE 0
-110 46 0 CODE 0
-111 4A 0 CODE 0
-112 4D 0 CODE 0
-114 50 0 CODE 0
-115 6E 0 CODE 0
-116 70 0 CODE 0
-117 71 0 CODE 0
-118 75 0 CODE 0
-119 78 0 CODE 0
-122 7B 0 CODE 0
-123 99 0 CODE 0
-124 9B 0 CODE 0
-125 9C 0 CODE 0
-126 A0 0 CODE 0
-127 A3 0 CODE 0
-129 A6 0 CODE 0
-130 C4 0 CODE 0
-131 C6 0 CODE 0
-132 C7 0 CODE 0
-133 CB 0 CODE 0
-134 CE 0 CODE 0
-136 D1 0 CODE 0
-137 FF 0 CODE 0
-138 101 0 CODE 0
-139 102 0 CODE 0
-140 106 0 CODE 0
-141 109 0 CODE 0
-144 10C 0 CODE 0
-146 117 0 CODE 0
-147 130 0 CODE 0
-148 132 0 CODE 0
-149 133 0 CODE 0
-150 137 0 CODE 0
-151 13A 0 CODE 0
-155 13C 0 CODE 0
-49 D4A 0 CODE 0
-50 D4A 0 CODE 0
-52 D4A 0 CODE 0
-54 D53 0 CODE 0
-55 D54 0 CODE 0
-56 D55 0 CODE 0
-58 D56 0 CODE 0
-76 4A9 0 CODE 0
-77 4AB 0 CODE 0
-79 4BA 0 CODE 0
-81 4C4 0 CODE 0
-82 4CE 0 CODE 0
-86 4D8 0 CODE 0
-88 4E9 0 CODE 0
-89 4F3 0 CODE 0
-90 4FC 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ltoa.c
-32 398 0 CODE 0
-38 39A 0 CODE 0
-40 3A2 0 CODE 0
-41 3BF 0 CODE 0
-42 3C3 0 CODE 0
-43 3C9 0 CODE 0
-45 3CF 0 CODE 0
-46 3E8 0 CODE 0
-47 405 0 CODE 0
-48 409 0 CODE 0
-49 40D 0 CODE 0
-50 411 0 CODE 0
-51 41A 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\llmod.c
-5 674 0 CODE 0
-12 674 0 CODE 0
-13 67B 0 CODE 0
-14 67D 0 CODE 0
-15 67F 0 CODE 0
-16 686 0 CODE 0
-14 68A 0 CODE 0
-19 68B 0 CODE 0
-20 69B 0 CODE 0
-21 6A3 0 CODE 0
-22 6AA 0 CODE 0
-24 6AE 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcat.c
-8 F48 0 CODE 0
-18 F4A 0 CODE 0
-19 F4E 0 CODE 0
-20 F54 0 CODE 0
-19 F58 0 CODE 0
-22 F59 0 CODE 0
-23 F5D 0 CODE 0
-21 F61 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c
-8 DB2 0 CODE 0
-18 DB2 0 CODE 0
-19 DB7 0 CODE 0
-20 DC0 0 CODE 0
-19 DCA 0 CODE 0
-=======
 cstackBANK1 A0 EE BANK1 A0 1
 bssBANK2 120 168 BANK2 120 1
 bssBANK3 1A0 1BF BANK3 1A0 1
-maintext 1ED4 1FFF CODE 1ED4 0
-text21 1DC6 1ED3 CODE 1DC6 0
-text34 1CFC 1DC5 CODE 1CFC 0
-text11 1C50 1CFB CODE 1C50 0
-text8 1BA6 1C4F CODE 1BA6 0
-text19 1B00 1BA5 CODE 1B00 0
-text42 1A64 1AFF CODE 1A64 0
-text43 19CA 1A63 CODE 19CA 0
-text5 1942 19C9 CODE 1942 0
-text18 18BC 1941 CODE 18BC 0
-text37 183E 18BB CODE 183E 0
-text24 17C6 183D CODE 17C6 0
-text27 1750 17C5 CODE 1750 0
-text46 16E2 174F CODE 16E2 0
-text40 167E 16E1 CODE 167E 0
-text60 161E 167D CODE 161E 0
-text20 15CA 161D CODE 15CA 0
+maintext 1ED2 1FFF CODE 1ED2 0
+text22 1DC4 1ED1 CODE 1DC4 0
+text35 1CFA 1DC3 CODE 1CFA 0
+text12 1C4E 1CF9 CODE 1C4E 0
+text20 1BA8 1C4D CODE 1BA8 0
+text43 1B0C 1BA7 CODE 1B0C 0
+text44 1A72 1B0B CODE 1A72 0
+text5 19EA 1A71 CODE 19EA 0
+text19 1964 19E9 CODE 1964 0
+text38 18E6 1963 CODE 18E6 0
+text25 186E 18E5 CODE 186E 0
+text28 17F8 186D CODE 17F8 0
+text8 1788 17F7 CODE 1788 0
+text47 171A 1787 CODE 171A 0
+text41 16B6 1719 CODE 16B6 0
+text61 1656 16B5 CODE 1656 0
+text9 15FC 1655 CODE 15FC 0
+text21 15A8 15FB CODE 15A8 0
 stringtext1 2000 20CD STRCODE 2000 0
-text2 157E 15C9 CODE 157E 0
-text12 1532 157D CODE 1532 0
-text56 14E6 1531 CODE 14E6 0
-text7 14A4 14E5 CODE 14A4 0
-text45 1462 14A3 CODE 1462 0
-text59 1420 1461 CODE 1420 0
-text38 13E0 141F CODE 13E0 0
-text39 13A0 13DF CODE 13A0 0
-text26 1362 139F CODE 1362 0
-text22 1326 1361 CODE 1326 0
-text1 12EE 1325 CODE 12EE 0
-text3 12B6 12ED CODE 12B6 0
-text17 127E 12B5 CODE 127E 0
-text30 1248 127D CODE 1248 0
-text47 1212 1247 CODE 1212 0
-text58 11DC 1211 CODE 11DC 0
-text13 11AA 11DB CODE 11AA 0
-text44 117A 11A9 CODE 117A 0
-text57 114A 1179 CODE 114A 0
-text29 1120 1149 CODE 1120 0
-text35 10F8 111F CODE 10F8 0
-text6 10D4 10F7 CODE 10D4 0
-text10 10B0 10D3 CODE 10B0 0
-text16 1092 10AF CODE 1092 0
-text23 1080 1091 CODE 1080 0
-text48 1070 107F CODE 1070 0
-text53 1060 106F CODE 1060 0
-text51 1052 105F CODE 1052 0
-clrtext 1046 1051 CODE 1046 0
-text49 1040 1045 CODE 1040 0
-text52 103A 103F CODE 103A 0
-text54 1034 1039 CODE 1034 0
-text55 102E 1033 CODE 102E 0
+text2 155C 15A7 CODE 155C 0
+text13 1510 155B CODE 1510 0
+text57 14C4 150F CODE 14C4 0
+text7 1482 14C3 CODE 1482 0
+text46 1440 1481 CODE 1440 0
+text60 13FE 143F CODE 13FE 0
+text39 13BE 13FD CODE 13BE 0
+text40 137E 13BD CODE 137E 0
+text27 1340 137D CODE 1340 0
+text23 1304 133F CODE 1304 0
+text1 12CC 1303 CODE 12CC 0
+text3 1294 12CB CODE 1294 0
+text18 125C 1293 CODE 125C 0
+text31 1226 125B CODE 1226 0
+text48 11F0 1225 CODE 11F0 0
+text59 11BA 11EF CODE 11BA 0
+text14 1188 11B9 CODE 1188 0
+text45 1158 1187 CODE 1158 0
+text58 1128 1157 CODE 1128 0
+text30 10FE 1127 CODE 10FE 0
+text36 10D6 10FD CODE 10D6 0
+text6 10B2 10D5 CODE 10B2 0
+text11 108E 10B1 CODE 108E 0
+text17 1070 108D CODE 1070 0
+text24 105E 106F CODE 105E 0
+text49 104E 105D CODE 104E 0
+text54 103E 104D CODE 103E 0
+text52 1030 103D CODE 1030 0
+clrtext 1024 102F CODE 1024 0
+text50 101E 1023 CODE 101E 0
+text53 1018 101D CODE 1018 0
+text55 1012 1017 CODE 1012 0
+text56 100C 1011 CODE 100C 0
 %locals
 dist/default/production\nRF24L01__PIC16LF1825.X.X.production.o
-C:\Users\Leon\AppData\Local\Temp\s2vo.
+C:\Users\Leon\AppData\Local\Temp\schc.
 4589 11 0 CODE 0
 4592 11 0 CODE 0
 4646 11 0 CODE 0
@@ -1594,103 +830,103 @@ C:\Users\Leon\AppData\Local\Temp\s2vo.
 4679 25 0 CODE 0
 4680 26 0 CODE 0
 4681 27 0 CODE 0
-4635 823 0 CODE 0
-4636 823 0 CODE 0
-4637 824 0 CODE 0
-4638 824 0 CODE 0
-4639 825 0 CODE 0
-4640 826 0 CODE 0
-4641 827 0 CODE 0
-4642 828 0 CODE 0
+4635 812 0 CODE 0
+4636 812 0 CODE 0
+4637 813 0 CODE 0
+4638 813 0 CODE 0
+4639 814 0 CODE 0
+4640 815 0 CODE 0
+4641 816 0 CODE 0
+4642 817 0 CODE 0
 main.c
-178 F6A 0 CODE 0
-181 F6A 0 CODE 0
-182 F6C 0 CODE 0
-184 F6D 0 CODE 0
-185 F6F 0 CODE 0
-190 F70 0 CODE 0
-191 F72 0 CODE 0
-193 F73 0 CODE 0
-194 F75 0 CODE 0
-196 F76 0 CODE 0
-197 F78 0 CODE 0
-199 F79 0 CODE 0
+177 F69 0 CODE 0
+180 F69 0 CODE 0
+181 F6B 0 CODE 0
+183 F6C 0 CODE 0
+184 F6E 0 CODE 0
+189 F6F 0 CODE 0
+190 F71 0 CODE 0
+192 F72 0 CODE 0
+193 F74 0 CODE 0
+195 F75 0 CODE 0
+196 F77 0 CODE 0
+198 F78 0 CODE 0
+205 F7A 0 CODE 0
 206 F7B 0 CODE 0
-207 F7C 0 CODE 0
-209 F7D 0 CODE 0
-210 F80 0 CODE 0
-212 F82 0 CODE 0
-224 F8B 0 CODE 0
-226 F94 0 CODE 0
-228 F97 0 CODE 0
-230 F9A 0 CODE 0
-231 FA2 0 CODE 0
-232 FA6 0 CODE 0
-236 FAA 0 CODE 0
-239 FAC 0 CODE 0
-240 FAE 0 CODE 0
-241 FB0 0 CODE 0
-244 FB2 0 CODE 0
-245 FB4 0 CODE 0
-248 FB6 0 CODE 0
-249 FB8 0 CODE 0
-250 FB9 0 CODE 0
-253 FBA 0 CODE 0
-254 FBB 0 CODE 0
-255 FBF 0 CODE 0
-257 FC0 0 CODE 0
-258 FC3 0 CODE 0
-259 FC4 0 CODE 0
-260 FC5 0 CODE 0
-262 FC7 0 CODE 0
-263 FCB 0 CODE 0
-268 FCC 0 CODE 0
-269 FCD 0 CODE 0
-270 FCE 0 CODE 0
-274 FCF 0 CODE 0
-277 FD3 0 CODE 0
-278 FD4 0 CODE 0
-281 FD6 0 CODE 0
-282 FD7 0 CODE 0
-286 FD8 0 CODE 0
-287 FF2 0 CODE 0
-288 FF4 0 CODE 0
-289 FF5 0 CODE 0
-290 FF9 0 CODE 0
-293 FFC 0 CODE 0
-292 FFF 0 CODE 0
+208 F7C 0 CODE 0
+209 F7F 0 CODE 0
+211 F81 0 CODE 0
+223 F8A 0 CODE 0
+225 F93 0 CODE 0
+227 F96 0 CODE 0
+229 F99 0 CODE 0
+230 FA1 0 CODE 0
+231 FA5 0 CODE 0
+235 FAA 0 CODE 0
+238 FAC 0 CODE 0
+239 FAE 0 CODE 0
+240 FB0 0 CODE 0
+243 FB2 0 CODE 0
+244 FB4 0 CODE 0
+247 FB6 0 CODE 0
+248 FB8 0 CODE 0
+249 FB9 0 CODE 0
+252 FBA 0 CODE 0
+253 FBB 0 CODE 0
+254 FBF 0 CODE 0
+256 FC0 0 CODE 0
+257 FC3 0 CODE 0
+258 FC4 0 CODE 0
+259 FC5 0 CODE 0
+261 FC7 0 CODE 0
+262 FCB 0 CODE 0
+267 FCC 0 CODE 0
+268 FCD 0 CODE 0
+269 FCE 0 CODE 0
+273 FCF 0 CODE 0
+276 FD3 0 CODE 0
+277 FD4 0 CODE 0
+280 FD6 0 CODE 0
+281 FD7 0 CODE 0
+285 FD8 0 CODE 0
+286 FF2 0 CODE 0
+287 FF4 0 CODE 0
+288 FF5 0 CODE 0
+289 FF9 0 CODE 0
+292 FFC 0 CODE 0
+291 FFF 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcpy.c
-8 977 0 CODE 0
-18 979 0 CODE 0
-19 97D 0 CODE 0
-20 98A 0 CODE 0
-21 98E 0 CODE 0
-19 992 0 CODE 0
+8 966 0 CODE 0
+18 968 0 CODE 0
+19 96C 0 CODE 0
+20 979 0 CODE 0
+21 97D 0 CODE 0
+19 981 0 CODE 0
 nrf24l01.c
-444 ABF 0 CODE 0
-447 ABF 0 CODE 0
-452 AC2 0 CODE 0
-454 AC5 0 CODE 0
-456 AD2 0 CODE 0
-458 AD5 0 CODE 0
-460 AE2 0 CODE 0
-463 AE4 0 CODE 0
+444 AAE 0 CODE 0
+447 AAE 0 CODE 0
+452 AB1 0 CODE 0
+454 AB4 0 CODE 0
+456 AC1 0 CODE 0
+458 AC4 0 CODE 0
+460 AD1 0 CODE 0
+463 AD3 0 CODE 0
 interface.c
-28 95B 0 CODE 0
-30 95B 0 CODE 0
-31 95D 0 CODE 0
-33 95E 0 CODE 0
-34 95F 0 CODE 0
-35 960 0 CODE 0
-37 961 0 CODE 0
-39 963 0 CODE 0
-40 968 0 CODE 0
-41 96C 0 CODE 0
-43 970 0 CODE 0
-44 972 0 CODE 0
-45 973 0 CODE 0
-47 975 0 CODE 0
-49 976 0 CODE 0
+28 94A 0 CODE 0
+30 94A 0 CODE 0
+31 94C 0 CODE 0
+33 94D 0 CODE 0
+34 94E 0 CODE 0
+35 94F 0 CODE 0
+37 950 0 CODE 0
+39 952 0 CODE 0
+40 957 0 CODE 0
+41 95B 0 CODE 0
+43 95F 0 CODE 0
+44 961 0 CODE 0
+45 962 0 CODE 0
+47 964 0 CODE 0
+49 965 0 CODE 0
 nrf24l01.c
 343 1F6 0 CODE 0
 347 1F6 0 CODE 0
@@ -1751,49 +987,62 @@ nrf24l01.c
 438 2F3 0 CODE 0
 439 2F4 0 CODE 0
 441 2FB 0 CODE 0
-309 CA1 0 CODE 0
-312 CA3 0 CODE 0
-313 CA6 0 CODE 0
-314 CAA 0 CODE 0
-315 CC2 0 CODE 0
-316 CCA 0 CODE 0
-317 CD2 0 CODE 0
-318 CDA 0 CODE 0
-319 CE2 0 CODE 0
-320 CE4 0 CODE 0
+309 CF5 0 CODE 0
+312 CF7 0 CODE 0
+313 CFA 0 CODE 0
+314 CFE 0 CODE 0
+315 D16 0 CODE 0
+316 D1E 0 CODE 0
+317 D26 0 CODE 0
+318 D2E 0 CODE 0
+319 D36 0 CODE 0
+320 D38 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul8.c
-4 86A 0 CODE 0
-6 86C 0 CODE 0
-43 86D 0 CODE 0
-44 86F 0 CODE 0
-45 873 0 CODE 0
-46 875 0 CODE 0
-47 877 0 CODE 0
-50 87A 0 CODE 0
+4 859 0 CODE 0
+6 85B 0 CODE 0
+43 85C 0 CODE 0
+44 85E 0 CODE 0
+45 862 0 CODE 0
+46 864 0 CODE 0
+47 866 0 CODE 0
+50 869 0 CODE 0
 nrf24l01.c
-322 A52 0 CODE 0
-326 A54 0 CODE 0
-327 A58 0 CODE 0
-328 A59 0 CODE 0
-329 A5A 0 CODE 0
-330 A5B 0 CODE 0
-331 A5C 0 CODE 0
-332 A5D 0 CODE 0
-333 A5E 0 CODE 0
-335 A5F 0 CODE 0
-336 A5F 0 CODE 0
-337 A60 0 CODE 0
-340 A6B 0 CODE 0
-341 A72 0 CODE 0
+322 A41 0 CODE 0
+326 A43 0 CODE 0
+327 A47 0 CODE 0
+328 A48 0 CODE 0
+329 A49 0 CODE 0
+330 A4A 0 CODE 0
+331 A4B 0 CODE 0
+332 A4C 0 CODE 0
+333 A4D 0 CODE 0
+335 A4E 0 CODE 0
+336 A4E 0 CODE 0
+337 A4F 0 CODE 0
+340 A5A 0 CODE 0
+341 A61 0 CODE 0
 main.c
-165 DD3 0 CODE 0
-166 DD5 0 CODE 0
-167 DDD 0 CODE 0
-170 DDE 0 CODE 0
-171 DF2 0 CODE 0
-170 E06 0 CODE 0
-174 E0B 0 CODE 0
-175 E26 0 CODE 0
+165 BC4 0 CODE 0
+166 BC6 0 CODE 0
+167 BC7 0 CODE 0
+170 BC8 0 CODE 0
+171 BDC 0 CODE 0
+170 BE7 0 CODE 0
+174 BEC 0 CODE 0
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwmod.c
+5 AFE 0 CODE 0
+12 AFE 0 CODE 0
+13 B03 0 CODE 0
+14 B05 0 CODE 0
+15 B07 0 CODE 0
+16 B0C 0 CODE 0
+14 B10 0 CODE 0
+19 B11 0 CODE 0
+20 B19 0 CODE 0
+21 B1D 0 CODE 0
+22 B22 0 CODE 0
+24 B26 0 CODE 0
+main.c
 97 560 0 CODE 0
 100 560 0 CODE 0
 111 561 0 CODE 0
@@ -1815,36 +1064,36 @@ main.c
 148 604 0 CODE 0
 149 607 0 CODE 0
 163 609 0 CODE 0
-49 858 0 CODE 0
-50 858 0 CODE 0
-52 858 0 CODE 0
-54 861 0 CODE 0
-55 862 0 CODE 0
-56 863 0 CODE 0
-58 864 0 CODE 0
-76 E28 0 CODE 0
-77 E2A 0 CODE 0
-79 E3A 0 CODE 0
-81 E45 0 CODE 0
-82 E50 0 CODE 0
-85 E5B 0 CODE 0
-86 E66 0 CODE 0
-87 E7D 0 CODE 0
+49 847 0 CODE 0
+50 847 0 CODE 0
+52 847 0 CODE 0
+54 850 0 CODE 0
+55 851 0 CODE 0
+56 852 0 CODE 0
+58 853 0 CODE 0
+76 E27 0 CODE 0
+77 E29 0 CODE 0
+79 E39 0 CODE 0
+81 E44 0 CODE 0
+82 E4F 0 CODE 0
+85 E5A 0 CODE 0
+86 E65 0 CODE 0
+87 E7C 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcat.c
-8 A99 0 CODE 0
-18 A9B 0 CODE 0
-19 A9F 0 CODE 0
-20 AA5 0 CODE 0
-19 AA9 0 CODE 0
-22 AAA 0 CODE 0
-23 AAE 0 CODE 0
-21 AB2 0 CODE 0
+8 A88 0 CODE 0
+18 A8A 0 CODE 0
+19 A8E 0 CODE 0
+20 A94 0 CODE 0
+19 A98 0 CODE 0
+22 A99 0 CODE 0
+23 A9D 0 CODE 0
+21 AA1 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c
-8 8D5 0 CODE 0
-18 8D5 0 CODE 0
-19 8DA 0 CODE 0
-20 8E3 0 CODE 0
-19 8ED 0 CODE 0
+8 8C4 0 CODE 0
+18 8C4 0 CODE 0
+19 8C9 0 CODE 0
+20 8D2 0 CODE 0
+19 8DC 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftoa.c
 6 6B3 0 CODE 0
 9 6B3 0 CODE 0
@@ -1908,96 +1157,95 @@ C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\doprnt.c
 1493 1E5 0 CODE 0
 1557 1F0 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\isdigit.c
-8 849 0 CODE 0
-14 84B 0 CODE 0
+8 838 0 CODE 0
+14 83A 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul16.c
-15 93F 0 CODE 0
-43 93F 0 CODE 0
-45 942 0 CODE 0
-46 944 0 CODE 0
-47 948 0 CODE 0
-48 94D 0 CODE 0
-49 952 0 CODE 0
-52 956 0 CODE 0
+15 92E 0 CODE 0
+43 92E 0 CODE 0
+45 931 0 CODE 0
+46 933 0 CODE 0
+47 937 0 CODE 0
+48 93C 0 CODE 0
+49 941 0 CODE 0
+52 945 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\llmod.c
-5 C5E 0 CODE 0
-12 C5E 0 CODE 0
-13 C65 0 CODE 0
-14 C67 0 CODE 0
-15 C69 0 CODE 0
-16 C70 0 CODE 0
-14 C74 0 CODE 0
-19 C75 0 CODE 0
-20 C85 0 CODE 0
-21 C8D 0 CODE 0
-22 C94 0 CODE 0
-24 C98 0 CODE 0
+5 CB2 0 CODE 0
+12 CB2 0 CODE 0
+13 CB9 0 CODE 0
+14 CBB 0 CODE 0
+15 CBD 0 CODE 0
+16 CC4 0 CODE 0
+14 CC8 0 CODE 0
+19 CC9 0 CODE 0
+20 CD9 0 CODE 0
+21 CE1 0 CODE 0
+22 CE8 0 CODE 0
+24 CEC 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\__lldiv.c
-5 D80 0 CODE 0
-13 D80 0 CODE 0
-14 D89 0 CODE 0
-15 D8F 0 CODE 0
-16 D91 0 CODE 0
-17 D93 0 CODE 0
-18 D9A 0 CODE 0
-16 D9E 0 CODE 0
-21 D9F 0 CODE 0
-22 DA6 0 CODE 0
-23 DB6 0 CODE 0
-24 DBE 0 CODE 0
-26 DBF 0 CODE 0
-27 DC6 0 CODE 0
-29 DCA 0 CODE 0
+5 DD4 0 CODE 0
+13 DD4 0 CODE 0
+14 DDD 0 CODE 0
+15 DE3 0 CODE 0
+16 DE5 0 CODE 0
+17 DE7 0 CODE 0
+18 DEE 0 CODE 0
+16 DF2 0 CODE 0
+21 DF3 0 CODE 0
+22 DFA 0 CODE 0
+23 E0A 0 CODE 0
+24 E12 0 CODE 0
+26 E13 0 CODE 0
+27 E1A 0 CODE 0
+29 E1E 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lltoft.c
-35 AE5 0 CODE 0
-38 AE5 0 CODE 0
-41 AEA 0 CODE 0
-42 AEE 0 CODE 0
-43 AF5 0 CODE 0
-41 AF9 0 CODE 0
-45 AFA 0 CODE 0
+35 AD4 0 CODE 0
+38 AD4 0 CODE 0
+41 AD9 0 CODE 0
+42 ADD 0 CODE 0
+43 AE4 0 CODE 0
+41 AE8 0 CODE 0
+45 AE9 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\fttol.c
-44 EE3 0 CODE 0
-49 EE3 0 CODE 0
-50 EF3 0 CODE 0
-51 EFC 0 CODE 0
-52 F0C 0 CODE 0
-53 F0D 0 CODE 0
-54 F13 0 CODE 0
-55 F1A 0 CODE 0
-56 F1C 0 CODE 0
-57 F1E 0 CODE 0
-58 F23 0 CODE 0
-60 F2C 0 CODE 0
-61 F33 0 CODE 0
-63 F3A 0 CODE 0
-64 F3E 0 CODE 0
-66 F47 0 CODE 0
-67 F4E 0 CODE 0
-68 F50 0 CODE 0
-65 F50 0 CODE 0
-70 F53 0 CODE 0
-71 F56 0 CODE 0
-72 F61 0 CODE 0
+44 EE2 0 CODE 0
+49 EE2 0 CODE 0
+50 EF2 0 CODE 0
+51 EFB 0 CODE 0
+52 F0B 0 CODE 0
+53 F0C 0 CODE 0
+54 F12 0 CODE 0
+55 F19 0 CODE 0
+56 F1B 0 CODE 0
+57 F1D 0 CODE 0
+58 F22 0 CODE 0
+60 F2B 0 CODE 0
+61 F32 0 CODE 0
+63 F39 0 CODE 0
+64 F3D 0 CODE 0
+66 F46 0 CODE 0
+67 F4D 0 CODE 0
+68 F4F 0 CODE 0
+65 F4F 0 CODE 0
+70 F52 0 CODE 0
+71 F55 0 CODE 0
+72 F60 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftsub.c
-17 993 0 CODE 0
-22 993 0 CODE 0
-23 999 0 CODE 0
-25 99B 0 CODE 0
+17 982 0 CODE 0
+22 982 0 CODE 0
+23 988 0 CODE 0
+25 98A 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftneg.c
-15 840 0 CODE 0
-17 840 0 CODE 0
-18 846 0 CODE 0
+15 82F 0 CODE 0
+17 82F 0 CODE 0
+18 835 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftge.c
-4 BE3 0 CODE 0
-6 BE3 0 CODE 0
-7 BE6 0 CODE 0
-8 BFA 0 CODE 0
-9 BFC 0 CODE 0
-10 C10 0 CODE 0
-11 C12 0 CODE 0
-12 C14 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+4 C37 0 CODE 0
+6 C37 0 CODE 0
+7 C3A 0 CODE 0
+8 C4E 0 CODE 0
+9 C50 0 CODE 0
+10 C64 0 CODE 0
+11 C66 0 CODE 0
+12 C68 0 CODE 0
 nrf24l01.c
 170 3F2 0 CODE 0
 172 3F4 0 CODE 0
@@ -2036,171 +1284,26 @@ nrf24l01.c
 242 4A7 0 CODE 0
 235 4AB 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c
-<<<<<<< HEAD
-4 EFD 0 CODE 0
-8 EFF 0 CODE 0
-9 F03 0 CODE 0
-10 F09 0 CODE 0
-9 F0D 0 CODE 0
-12 F0E 0 CODE 0
+4 9A0 0 CODE 0
+8 9A0 0 CODE 0
+9 9A5 0 CODE 0
+10 9AC 0 CODE 0
+9 9B0 0 CODE 0
+12 9B1 0 CODE 0
 nrf24l01.c
-54 732 0 CODE 0
-59 734 0 CODE 0
-62 73D 0 CODE 0
-65 742 0 CODE 0
-66 745 0 CODE 0
-69 749 0 CODE 0
-70 74F 0 CODE 0
-73 757 0 CODE 0
-76 75B 0 CODE 0
-77 75F 0 CODE 0
-78 762 0 CODE 0
-83 766 0 CODE 0
-84 76C 0 CODE 0
-main.c
-23 421 0 CODE 0
-25 423 0 CODE 0
-26 42B 0 CODE 0
-28 42F 0 CODE 0
-29 43B 0 CODE 0
-31 43F 0 CODE 0
-33 444 0 CODE 0
-37 446 0 CODE 0
-35 446 0 CODE 0
-36 449 0 CODE 0
-35 44A 0 CODE 0
-39 44B 0 CODE 0
-40 459 0 CODE 0
-31 468 0 CODE 0
-43 469 0 CODE 0
-44 485 0 CODE 0
-46 4A0 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul32.c
-15 F9E 0 CODE 0
-119 F9E 0 CODE 0
-121 FA7 0 CODE 0
-122 FA9 0 CODE 0
-123 FB1 0 CODE 0
-124 FB8 0 CODE 0
-125 FBF 0 CODE 0
-128 FC5 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\__lldiv.c
-5 4FD 0 CODE 0
-13 4FD 0 CODE 0
-14 506 0 CODE 0
-15 50C 0 CODE 0
-16 50E 0 CODE 0
-17 510 0 CODE 0
-18 517 0 CODE 0
-16 51B 0 CODE 0
-21 51C 0 CODE 0
-22 523 0 CODE 0
-23 533 0 CODE 0
-24 53B 0 CODE 0
-26 53C 0 CODE 0
-27 543 0 CODE 0
-29 547 0 CODE 0
-main.c
-92 D6E 0 CODE 0
-93 D6E 0 CODE 0
-95 D75 0 CODE 0
-96 D7B 0 CODE 0
-nrf24l01.c
-131 7FE 0 CODE 0
-132 7FE 0 CODE 0
-33 6B7 0 CODE 0
-36 6B7 0 CODE 0
-38 6C1 0 CODE 0
-39 6CC 0 CODE 0
-40 6D2 0 CODE 0
-44 6DC 0 CODE 0
-45 6DF 0 CODE 0
-46 6E4 0 CODE 0
-50 6EE 0 CODE 0
-52 6F5 0 CODE 0
-9 E78 0 CODE 0
-12 E7A 0 CODE 0
-15 E7E 0 CODE 0
-18 E81 0 CODE 0
-21 E86 0 CODE 0
-24 E8F 0 CODE 0
-27 E92 0 CODE 0
-29 E95 0 CODE 0
-flash.c
-97 EDA 0 CODE 0
-98 EDA 0 CODE 0
-99 EE4 0 CODE 0
-98 EF7 0 CODE 0
-8 6F6 0 CODE 0
-12 6F6 0 CODE 0
-15 6F7 0 CODE 0
-17 6F9 0 CODE 0
-18 700 0 CODE 0
-19 703 0 CODE 0
-21 707 0 CODE 0
-22 708 0 CODE 0
-24 709 0 CODE 0
-25 70B 0 CODE 0
-27 70D 0 CODE 0
-29 70E 0 CODE 0
-30 70F 0 CODE 0
-32 710 0 CODE 0
-36 712 0 CODE 0
-38 713 0 CODE 0
-39 717 0 CODE 0
-41 71B 0 CODE 0
-42 71C 0 CODE 0
-43 71D 0 CODE 0
-45 71E 0 CODE 0
-46 722 0 CODE 0
-48 726 0 CODE 0
-50 727 0 CODE 0
-51 729 0 CODE 0
-53 72B 0 CODE 0
-55 72C 0 CODE 0
-56 72D 0 CODE 0
-58 72E 0 CODE 0
-61 730 0 CODE 0
-62 731 0 CODE 0
-90 E58 0 CODE 0
-92 E58 0 CODE 0
-93 E62 0 CODE 0
-92 E73 0 CODE 0
-64 FCE 0 CODE 0
-68 FCE 0 CODE 0
-70 FCF 0 CODE 0
-72 FD1 0 CODE 0
-73 FD8 0 CODE 0
-74 FDB 0 CODE 0
-76 FDF 0 CODE 0
-78 FE0 0 CODE 0
-79 FE1 0 CODE 0
-81 FE2 0 CODE 0
-82 FE5 0 CODE 0
-83 FEE 0 CODE 0
-85 FFA 0 CODE 0
-87 FFB 0 CODE 0
-=======
-4 9B1 0 CODE 0
-8 9B1 0 CODE 0
-9 9B6 0 CODE 0
-10 9BD 0 CODE 0
-9 9C1 0 CODE 0
-12 9C2 0 CODE 0
-nrf24l01.c
-54 BA8 0 CODE 0
-59 BAA 0 CODE 0
-62 BB3 0 CODE 0
-65 BB8 0 CODE 0
-66 BBB 0 CODE 0
-69 BBF 0 CODE 0
-70 BC5 0 CODE 0
-73 BCD 0 CODE 0
-76 BD1 0 CODE 0
-77 BD5 0 CODE 0
-78 BD8 0 CODE 0
-83 BDC 0 CODE 0
-84 BE2 0 CODE 0
+54 BFC 0 CODE 0
+59 BFE 0 CODE 0
+62 C07 0 CODE 0
+65 C0C 0 CODE 0
+66 C0F 0 CODE 0
+69 C13 0 CODE 0
+70 C19 0 CODE 0
+73 C21 0 CODE 0
+76 C25 0 CODE 0
+77 C29 0 CODE 0
+78 C2C 0 CODE 0
+83 C30 0 CODE 0
+84 C36 0 CODE 0
 main.c
 23 756 0 CODE 0
 25 758 0 CODE 0
@@ -2220,11 +1323,11 @@ main.c
 44 7D6 0 CODE 0
 46 7EB 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwtoft.c
-28 890 0 CODE 0
-30 890 0 CODE 0
+28 87F 0 CODE 0
+30 87F 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lbtoft.c
-27 924 0 CODE 0
-29 926 0 CODE 0
+27 913 0 CODE 0
+29 915 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftmul.c
 62 4AC 0 CODE 0
 67 4AC 0 CODE 0
@@ -2319,73 +1422,72 @@ C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftadd.c
 144 3D8 0 CODE 0
 146 3DA 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\float.c
-62 E7E 0 CODE 0
-64 E7E 0 CODE 0
-65 E87 0 CODE 0
-67 E8E 0 CODE 0
-68 E92 0 CODE 0
-66 E98 0 CODE 0
-71 E9D 0 CODE 0
-72 EA1 0 CODE 0
-73 EAB 0 CODE 0
-74 EB1 0 CODE 0
-70 EB1 0 CODE 0
-76 EB6 0 CODE 0
-77 EB8 0 CODE 0
-75 EBE 0 CODE 0
-79 EC4 0 CODE 0
-80 EC6 0 CODE 0
-81 ECC 0 CODE 0
-82 ECE 0 CODE 0
-83 EDE 0 CODE 0
-84 EE1 0 CODE 0
-86 EE2 0 CODE 0
+62 E7D 0 CODE 0
+64 E7D 0 CODE 0
+65 E86 0 CODE 0
+67 E8D 0 CODE 0
+68 E91 0 CODE 0
+66 E97 0 CODE 0
+71 E9C 0 CODE 0
+72 EA0 0 CODE 0
+73 EAA 0 CODE 0
+74 EB0 0 CODE 0
+70 EB0 0 CODE 0
+76 EB5 0 CODE 0
+77 EB7 0 CODE 0
+75 EBD 0 CODE 0
+79 EC3 0 CODE 0
+80 EC5 0 CODE 0
+81 ECB 0 CODE 0
+82 ECD 0 CODE 0
+83 EDD 0 CODE 0
+84 EE0 0 CODE 0
+86 EE1 0 CODE 0
 main.c
-89 87C 0 CODE 0
-90 87C 0 CODE 0
-92 883 0 CODE 0
-93 889 0 CODE 0
+89 86B 0 CODE 0
+90 86B 0 CODE 0
+92 872 0 CODE 0
+93 878 0 CODE 0
 nrf24l01.c
 131 2 0 CODE 0
 132 2 0 CODE 0
-33 C1F 0 CODE 0
-36 C1F 0 CODE 0
-38 C29 0 CODE 0
-39 C34 0 CODE 0
-40 C3A 0 CODE 0
-44 C44 0 CODE 0
-45 C47 0 CODE 0
-46 C4C 0 CODE 0
-50 C56 0 CODE 0
-52 C5D 0 CODE 0
-9 9F0 0 CODE 0
-12 9F2 0 CODE 0
-15 9F6 0 CODE 0
-18 9F9 0 CODE 0
-21 9FE 0 CODE 0
-24 A07 0 CODE 0
-27 A0A 0 CODE 0
-29 A0D 0 CODE 0
+33 C73 0 CODE 0
+36 C73 0 CODE 0
+38 C7D 0 CODE 0
+39 C88 0 CODE 0
+40 C8E 0 CODE 0
+44 C98 0 CODE 0
+45 C9B 0 CODE 0
+46 CA0 0 CODE 0
+50 CAA 0 CODE 0
+52 CB1 0 CODE 0
+9 9DF 0 CODE 0
+12 9E1 0 CODE 0
+15 9E5 0 CODE 0
+18 9E8 0 CODE 0
+21 9ED 0 CODE 0
+24 9F6 0 CODE 0
+27 9F9 0 CODE 0
+29 9FC 0 CODE 0
 flash.c
-90 9D0 0 CODE 0
-92 9D0 0 CODE 0
-93 9DA 0 CODE 0
-92 9EB 0 CODE 0
-64 B3F 0 CODE 0
-68 B3F 0 CODE 0
-70 B40 0 CODE 0
-72 B42 0 CODE 0
-73 B49 0 CODE 0
-74 B4C 0 CODE 0
-76 B50 0 CODE 0
-78 B51 0 CODE 0
-79 B52 0 CODE 0
-81 B53 0 CODE 0
-82 B56 0 CODE 0
-83 B5F 0 CODE 0
-85 B6B 0 CODE 0
-87 B6C 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+90 9BF 0 CODE 0
+92 9BF 0 CODE 0
+93 9C9 0 CODE 0
+92 9DA 0 CODE 0
+64 B5B 0 CODE 0
+68 B5B 0 CODE 0
+70 B5C 0 CODE 0
+72 B5E 0 CODE 0
+73 B65 0 CODE 0
+74 B68 0 CODE 0
+76 B6C 0 CODE 0
+78 B6D 0 CODE 0
+79 B6E 0 CODE 0
+81 B6F 0 CODE 0
+82 B72 0 CODE 0
+83 B7B 0 CODE 0
+85 B87 0 CODE 0
+87 B88 0 CODE 0
 88 4 0 CODE 0
 main.c
 15 4 0 CODE 0
@@ -2394,252 +1496,87 @@ main.c
 19 B 0 CODE 0
 21 D 0 CODE 0
 nrf24l01.c
-<<<<<<< HEAD
-246 550 0 CODE 0
-249 550 0 CODE 0
-257 559 0 CODE 0
-258 55C 0 CODE 0
-261 560 0 CODE 0
-264 563 0 CODE 0
-267 564 0 CODE 0
-268 566 0 CODE 0
-271 56B 0 CODE 0
-277 56F 0 CODE 0
-280 572 0 CODE 0
-283 574 0 CODE 0
-285 575 0 CODE 0
-288 578 0 CODE 0
-291 584 0 CODE 0
-293 58F 0 CODE 0
-294 592 0 CODE 0
-297 593 0 CODE 0
-300 593 0 CODE 0
-306 594 0 CODE 0
-307 59C 0 CODE 0
-135 59D 0 CODE 0
-138 59D 0 CODE 0
-139 5AB 0 CODE 0
-142 5AD 0 CODE 0
-143 5B5 0 CODE 0
-146 5B6 0 CODE 0
-149 5B9 0 CODE 0
-152 5BC 0 CODE 0
-155 5C0 0 CODE 0
-156 5C8 0 CODE 0
-158 5CA 0 CODE 0
-160 5CC 0 CODE 0
-158 5D8 0 CODE 0
-164 5E4 0 CODE 0
-167 5E7 0 CODE 0
-168 5E9 0 CODE 0
+246 D86 0 CODE 0
+249 D86 0 CODE 0
+257 D8F 0 CODE 0
+258 D92 0 CODE 0
+261 D96 0 CODE 0
+264 D99 0 CODE 0
+267 D9A 0 CODE 0
+268 D9C 0 CODE 0
+271 DA2 0 CODE 0
+277 DA6 0 CODE 0
+280 DA9 0 CODE 0
+283 DAB 0 CODE 0
+285 DAC 0 CODE 0
+288 DAF 0 CODE 0
+291 DBB 0 CODE 0
+293 DC6 0 CODE 0
+294 DC9 0 CODE 0
+297 DCA 0 CODE 0
+300 DCA 0 CODE 0
+306 DCB 0 CODE 0
+307 DD3 0 CODE 0
+135 D39 0 CODE 0
+138 D39 0 CODE 0
+139 D47 0 CODE 0
+142 D49 0 CODE 0
+143 D51 0 CODE 0
+146 D52 0 CODE 0
+149 D55 0 CODE 0
+152 D58 0 CODE 0
+155 D5C 0 CODE 0
+156 D64 0 CODE 0
+158 D66 0 CODE 0
+160 D68 0 CODE 0
+158 D74 0 CODE 0
+164 D80 0 CODE 0
+167 D83 0 CODE 0
+168 D85 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c
-8 D9A 0 CODE 0
-18 D9A 0 CODE 0
-19 D9E 0 CODE 0
-20 DA7 0 CODE 0
-19 DB1 0 CODE 0
+8 8AC 0 CODE 0
+18 8AC 0 CODE 0
+19 8B0 0 CODE 0
+20 8B9 0 CODE 0
+19 8C3 0 CODE 0
 nrf24l01.c
-98 E38 0 CODE 0
-102 E38 0 CODE 0
-107 E3B 0 CODE 0
-110 E3D 0 CODE 0
-115 E42 0 CODE 0
-124 E4F 0 CODE 0
-127 E54 0 CODE 0
-128 E57 0 CODE 0
-54 76D 0 CODE 0
-59 76E 0 CODE 0
-62 776 0 CODE 0
-65 77B 0 CODE 0
-66 77E 0 CODE 0
-69 782 0 CODE 0
-70 787 0 CODE 0
-73 78F 0 CODE 0
-76 793 0 CODE 0
-77 796 0 CODE 0
-78 799 0 CODE 0
-83 79D 0 CODE 0
-84 7A3 0 CODE 0
-9 DE6 0 CODE 0
-12 DE7 0 CODE 0
-15 DEB 0 CODE 0
-18 DEE 0 CODE 0
-21 DF2 0 CODE 0
-24 DF9 0 CODE 0
-27 DFC 0 CODE 0
-29 DFF 0 CODE 0
+98 A20 0 CODE 0
+102 A20 0 CODE 0
+107 A23 0 CODE 0
+110 A25 0 CODE 0
+115 A2B 0 CODE 0
+124 A38 0 CODE 0
+127 A3D 0 CODE 0
+128 A40 0 CODE 0
+54 B8D 0 CODE 0
+59 B8E 0 CODE 0
+62 B96 0 CODE 0
+65 B9B 0 CODE 0
+66 B9E 0 CODE 0
+69 BA2 0 CODE 0
+70 BA7 0 CODE 0
+73 BAF 0 CODE 0
+76 BB3 0 CODE 0
+77 BB6 0 CODE 0
+78 BB9 0 CODE 0
+83 BBD 0 CODE 0
+84 BC3 0 CODE 0
+9 8F8 0 CODE 0
+12 8F9 0 CODE 0
+15 8FD 0 CODE 0
+18 900 0 CODE 0
+21 904 0 CODE 0
+24 90B 0 CODE 0
+27 90E 0 CODE 0
+29 911 0 CODE 0
 interface.c
-65 D35 0 CODE 0
-66 D35 0 CODE 0
-67 D38 0 CODE 0
-68 D3C 0 CODE 0
-18 D1D 0 CODE 0
-19 D1D 0 CODE 0
-20 D1F 0 CODE 0
-52 D3D 0 CODE 0
-53 D3E 0 CODE 0
-55 D41 0 CODE 0
-59 D43 0 CODE 0
-57 D43 0 CODE 0
-58 D46 0 CODE 0
-57 D47 0 CODE 0
-61 D48 0 CODE 0
-71 D26 0 CODE 0
-72 D26 0 CODE 0
-73 D2A 0 CODE 0
-74 D2C 0 CODE 0
-23 D1A 0 CODE 0
-24 D1A 0 CODE 0
-25 D1C 0 CODE 0
-77 D2D 0 CODE 0
-78 D2E 0 CODE 0
-79 D34 0 CODE 0
-8 D17 0 CODE 0
-9 D17 0 CODE 0
-10 D19 0 CODE 0
-13 D14 0 CODE 0
-14 D14 0 CODE 0
-15 D16 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcmp.c
-33 F22 0 CODE 0
-37 F23 0 CODE 0
-38 F24 0 CODE 0
-39 F28 0 CODE 0
-37 F2C 0 CODE 0
-41 F42 0 CODE 0
-interface.c
-81 D82 0 CODE 0
-82 D83 0 CODE 0
-83 D96 0 CODE 0
-84 D98 0 CODE 0
-85 D99 0 CODE 0
-flash.c
-97 E98 0 CODE 0
-98 E98 0 CODE 0
-99 EA1 0 CODE 0
-98 EB4 0 CODE 0
-8 F6E 0 CODE 0
-12 F6E 0 CODE 0
-15 F6F 0 CODE 0
-17 F71 0 CODE 0
-18 F77 0 CODE 0
-19 F79 0 CODE 0
-21 F7B 0 CODE 0
-22 F7C 0 CODE 0
-24 F7D 0 CODE 0
-25 F7F 0 CODE 0
-27 F81 0 CODE 0
-29 F82 0 CODE 0
-30 F83 0 CODE 0
-32 F84 0 CODE 0
-36 F86 0 CODE 0
-38 F87 0 CODE 0
-39 F89 0 CODE 0
-41 F8B 0 CODE 0
-42 F8C 0 CODE 0
-43 F8D 0 CODE 0
-45 F8E 0 CODE 0
-46 F90 0 CODE 0
-48 F92 0 CODE 0
-50 F93 0 CODE 0
-51 F95 0 CODE 0
-53 F97 0 CODE 0
-55 F98 0 CODE 0
-56 F99 0 CODE 0
-58 F9A 0 CODE 0
-61 F9C 0 CODE 0
-62 F9D 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul16.c
-15 DCB 0 CODE 0
-43 DCB 0 CODE 0
-45 DCD 0 CODE 0
-46 DCF 0 CODE 0
-47 DD3 0 CODE 0
-48 DD8 0 CODE 0
-49 DDD 0 CODE 0
-52 DE1 0 CODE 0
-=======
-246 D32 0 CODE 0
-249 D32 0 CODE 0
-257 D3B 0 CODE 0
-258 D3E 0 CODE 0
-261 D42 0 CODE 0
-264 D45 0 CODE 0
-267 D46 0 CODE 0
-268 D48 0 CODE 0
-271 D4E 0 CODE 0
-277 D52 0 CODE 0
-280 D55 0 CODE 0
-283 D57 0 CODE 0
-285 D58 0 CODE 0
-288 D5B 0 CODE 0
-291 D67 0 CODE 0
-293 D72 0 CODE 0
-294 D75 0 CODE 0
-297 D76 0 CODE 0
-300 D76 0 CODE 0
-306 D77 0 CODE 0
-307 D7F 0 CODE 0
-135 CE5 0 CODE 0
-138 CE5 0 CODE 0
-139 CF3 0 CODE 0
-142 CF5 0 CODE 0
-143 CFD 0 CODE 0
-146 CFE 0 CODE 0
-149 D01 0 CODE 0
-152 D04 0 CODE 0
-155 D08 0 CODE 0
-156 D10 0 CODE 0
-158 D12 0 CODE 0
-160 D14 0 CODE 0
-158 D20 0 CODE 0
-164 D2C 0 CODE 0
-167 D2F 0 CODE 0
-168 D31 0 CODE 0
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c
-8 8BD 0 CODE 0
-18 8BD 0 CODE 0
-19 8C1 0 CODE 0
-20 8CA 0 CODE 0
-19 8D4 0 CODE 0
-nrf24l01.c
-98 A31 0 CODE 0
-102 A31 0 CODE 0
-107 A34 0 CODE 0
-110 A36 0 CODE 0
-115 A3C 0 CODE 0
-124 A49 0 CODE 0
-127 A4E 0 CODE 0
-128 A51 0 CODE 0
-54 B71 0 CODE 0
-59 B72 0 CODE 0
-62 B7A 0 CODE 0
-65 B7F 0 CODE 0
-66 B82 0 CODE 0
-69 B86 0 CODE 0
-70 B8B 0 CODE 0
-73 B93 0 CODE 0
-76 B97 0 CODE 0
-77 B9A 0 CODE 0
-78 B9D 0 CODE 0
-83 BA1 0 CODE 0
-84 BA7 0 CODE 0
-9 909 0 CODE 0
-12 90A 0 CODE 0
-15 90E 0 CODE 0
-18 911 0 CODE 0
-21 915 0 CODE 0
-24 91C 0 CODE 0
-27 91F 0 CODE 0
-29 922 0 CODE 0
-interface.c
-65 838 0 CODE 0
-66 838 0 CODE 0
-67 83B 0 CODE 0
-68 83F 0 CODE 0
-18 820 0 CODE 0
-19 820 0 CODE 0
-20 822 0 CODE 0
+65 827 0 CODE 0
+66 827 0 CODE 0
+67 82A 0 CODE 0
+68 82E 0 CODE 0
+18 80F 0 CODE 0
+19 80F 0 CODE 0
+20 811 0 CODE 0
 52 7F2 0 CODE 0
 53 7F3 0 CODE 0
 55 7F6 0 CODE 0
@@ -2648,78 +1585,77 @@ interface.c
 58 7FB 0 CODE 0
 57 7FC 0 CODE 0
 61 7FD 0 CODE 0
-71 829 0 CODE 0
-72 829 0 CODE 0
-73 82D 0 CODE 0
-74 82F 0 CODE 0
-23 81D 0 CODE 0
-24 81D 0 CODE 0
-25 81F 0 CODE 0
-77 830 0 CODE 0
-78 831 0 CODE 0
-79 837 0 CODE 0
-8 81A 0 CODE 0
-9 81A 0 CODE 0
-10 81C 0 CODE 0
-13 817 0 CODE 0
-14 817 0 CODE 0
-15 819 0 CODE 0
+71 818 0 CODE 0
+72 818 0 CODE 0
+73 81C 0 CODE 0
+74 81E 0 CODE 0
+23 80C 0 CODE 0
+24 80C 0 CODE 0
+25 80E 0 CODE 0
+77 81F 0 CODE 0
+78 820 0 CODE 0
+79 826 0 CODE 0
+8 809 0 CODE 0
+9 809 0 CODE 0
+10 80B 0 CODE 0
+13 806 0 CODE 0
+14 806 0 CODE 0
+15 808 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcmp.c
-33 A73 0 CODE 0
-37 A74 0 CODE 0
-38 A75 0 CODE 0
-39 A79 0 CODE 0
-37 A7D 0 CODE 0
-41 A93 0 CODE 0
+33 A62 0 CODE 0
+37 A63 0 CODE 0
+38 A64 0 CODE 0
+39 A68 0 CODE 0
+37 A6C 0 CODE 0
+41 A82 0 CODE 0
 interface.c
-81 8A5 0 CODE 0
-82 8A6 0 CODE 0
-83 8B9 0 CODE 0
-84 8BB 0 CODE 0
-85 8BC 0 CODE 0
+81 894 0 CODE 0
+82 895 0 CODE 0
+83 8A8 0 CODE 0
+84 8AA 0 CODE 0
+85 8AB 0 CODE 0
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul16.c
-15 8EE 0 CODE 0
-43 8EE 0 CODE 0
-45 8F0 0 CODE 0
-46 8F2 0 CODE 0
-47 8F6 0 CODE 0
-48 8FB 0 CODE 0
-49 900 0 CODE 0
-52 904 0 CODE 0
+15 8DD 0 CODE 0
+43 8DD 0 CODE 0
+45 8DF 0 CODE 0
+46 8E1 0 CODE 0
+47 8E5 0 CODE 0
+48 8EA 0 CODE 0
+49 8EF 0 CODE 0
+52 8F3 0 CODE 0
 flash.c
-97 A10 0 CODE 0
-98 A10 0 CODE 0
-99 A19 0 CODE 0
-98 A2C 0 CODE 0
-8 B0F 0 CODE 0
-12 B0F 0 CODE 0
-15 B10 0 CODE 0
-17 B12 0 CODE 0
-18 B18 0 CODE 0
-19 B1A 0 CODE 0
-21 B1C 0 CODE 0
-22 B1D 0 CODE 0
-24 B1E 0 CODE 0
-25 B20 0 CODE 0
-27 B22 0 CODE 0
-29 B23 0 CODE 0
-30 B24 0 CODE 0
-32 B25 0 CODE 0
-36 B27 0 CODE 0
-38 B28 0 CODE 0
-39 B2A 0 CODE 0
-41 B2C 0 CODE 0
-42 B2D 0 CODE 0
-43 B2E 0 CODE 0
-45 B2F 0 CODE 0
-46 B31 0 CODE 0
-48 B33 0 CODE 0
-50 B34 0 CODE 0
-51 B36 0 CODE 0
-53 B38 0 CODE 0
-55 B39 0 CODE 0
-56 B3A 0 CODE 0
-58 B3B 0 CODE 0
-61 B3D 0 CODE 0
-62 B3E 0 CODE 0
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+97 9FF 0 CODE 0
+98 9FF 0 CODE 0
+99 A08 0 CODE 0
+98 A1B 0 CODE 0
+8 B2B 0 CODE 0
+12 B2B 0 CODE 0
+15 B2C 0 CODE 0
+17 B2E 0 CODE 0
+18 B34 0 CODE 0
+19 B36 0 CODE 0
+21 B38 0 CODE 0
+22 B39 0 CODE 0
+24 B3A 0 CODE 0
+25 B3C 0 CODE 0
+27 B3E 0 CODE 0
+29 B3F 0 CODE 0
+30 B40 0 CODE 0
+32 B41 0 CODE 0
+36 B43 0 CODE 0
+38 B44 0 CODE 0
+39 B46 0 CODE 0
+41 B48 0 CODE 0
+42 B49 0 CODE 0
+43 B4A 0 CODE 0
+45 B4B 0 CODE 0
+46 B4D 0 CODE 0
+48 B4F 0 CODE 0
+50 B50 0 CODE 0
+51 B52 0 CODE 0
+53 B54 0 CODE 0
+55 B55 0 CODE 0
+56 B56 0 CODE 0
+58 B57 0 CODE 0
+61 B59 0 CODE 0
+62 B5A 0 CODE 0

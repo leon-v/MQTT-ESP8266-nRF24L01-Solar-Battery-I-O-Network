@@ -11127,7 +11127,7 @@ for (i = 0; i < strlen(name); i++){
 pipe+= name[i];
 }
 
-return pipe % 6;
+return (unsigned) pipe % 6;
 }
 
 void main(void) {
@@ -11153,11 +11153,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-<<<<<<< HEAD
-# 197
-=======
-# 206
->>>>>>> 9ad54c410010eb5f357580d8ac0809e66746f8de
+# 205
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11166,8 +11162,8 @@ OSCCON1bits.NDIV = 0b000;
 
 _delay((unsigned long)((10)*(16000000/4000.0)));
 
-# 224
-strcpy(romData.name, "UH1");
+# 223
+strcpy(romData.name, "UW0");
 
 flashRealod();
 
