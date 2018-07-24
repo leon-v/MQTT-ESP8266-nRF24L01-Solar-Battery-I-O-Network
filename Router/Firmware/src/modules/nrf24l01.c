@@ -155,7 +155,7 @@ void nrf24l01ReceivePacket(void){
     RXPacket.packetData.byte = nrf24l01SPISend(0);
     width--;
     
-    for (i = 0; (i < width) && (i < sizeof(RXPacket.Message)); i++){
+    for (i = 0; (i < width) && (i < sizeof(RXPacket.Message) - 1); i++){
         // Get the byte from the radio IC
 		RXPacket.Message[i] = nrf24l01SPISend(0);
 	}

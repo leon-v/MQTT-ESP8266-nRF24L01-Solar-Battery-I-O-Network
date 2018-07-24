@@ -24,7 +24,6 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		// If we are the primary hub / reciever, we need to send back ACKs
 		if (RXPacket->packetData.ACKRequest){
 			nrf24l01SendACK(RXPacket);
-			os_printf("ACK Pipe = %u\r\n", RXPacket->packetData.Pipe);
 		}
 
 		char* strings = strtok(RXPacket->Message, "/");
@@ -36,7 +35,7 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		char *topic = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(topic, strings);
 		strings = strtok(NULL, "/");
-
+		
 		char *value = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(value, strings);
 
@@ -46,7 +45,6 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		os_sprintf(buffer, "/radio/in/%u/%s/%s", system_get_chip_id(), name, topic);
 
 		os_printf("%s = %s\r\n", buffer, value);
-		os_printf("Data Byte = %u\r\n", RXPacket->packetData.byte);
 
 		if (enabled){
 			MQTT_Publish(mqttClient, buffer, value, strlen(value), 1, 1);
