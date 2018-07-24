@@ -20,52 +20,72 @@ void interrupt ISR(void){
     }
 }
 
-float getADCValue(unsigned char channel, float multiplier){
-	
-	float adcSum = 0;
-	unsigned char adcLoop = 255;
-	
-	ADCON0bits.CHS = channel;
-	delayUs(200);
-	
-	while (--adcLoop){
-		
-		ADCON0bits.ADGO = 1;
-        
-		while (ADCON0bits.ADGO){
-			NOP();
-		}
-		
-		adcSum+= ADRESL;
-		adcSum+= (unsigned) (ADRESH << 8);
-	}
+void sleep(unsigned char wdps){
     
-	adcSum/= 255;
-	adcSum*= multiplier;
-	
-	return adcSum;
-}
-
-void sleep(){
+    WDTCONbits.WDTPS = wdps; //9=500ms, 10=1S, 11=2S, 12=4S
+    
 	while (1){
-        
-        counter++;
         
 		SLEEP();
 		NOP();
 		NOP();
 
 		if (!STATUSbits.nTO && !STATUSbits.nPD) {
+            
+            //Reset WDT to wait for IC failure
+            WDTCONbits.WDTPS = 13;
+            CLRWDT();
+            
 			return;
 		}
 	}
 }
 
+float getADCValue(unsigned char channel){
+    
+    #define ADC_COUNT 1000
+	float adcSum = 0;
+	unsigned int adcLoop = ADC_COUNT;
+	
+	ADCON0bits.CHS = channel;
+    FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
+    ADCON0bits.ADON = 1;
+    
+	sleep(0);
+	
+    counter = 0;
+    
+	while (adcLoop--){
+        
+        counter++;
+		
+		ADCON0bits.ADGO = 1;
+       
+		while (ADCON0bits.ADGO){
+            sleep(0);
+		}
+		
+		adcSum+= (ADRESL | (ADRESH << 8));
+        
+	}
+    
+    FVRCONbits.FVREN = 0; // Disable Voltage Reference Module
+    ADCON0bits.ADON = 0;
+    
+    
+	adcSum/= ADC_COUNT; // Adjust to get average
+    adcSum/= 500; // adjust for FVR +REF @ 2.048 to get volts
+	
+	return adcSum;
+}
+
+
+
 void checkRxData(void){
 	
 	nrf24l01SetRXMode(1);
 	
-	sleep();
+	sleep(10);
 	
 	if (!nrf24l01.RXPending){
 		return;
@@ -96,9 +116,6 @@ void checkTXPower(){
 
 void loop(){
     
-	// Write payload data
-    CLRWDT();
-    
     nrf24l01Packet_t packet;
     
 //    setMessage(&packet, "DBG", counter);
@@ -106,47 +123,50 @@ void loop(){
 //    packet.packetData.ACKRequest = 0;
 //	nrf24l01SendPacket(&packet);
 //    checkTXPower();
-//	sleep();
+//	sleep(10);
     
-    setMessage(&packet, "VBAT", getADCValue(0b000100, 0.0101235));
+    //Resistor divider on Vbatt
+    // 10K / 4.7K  = 2.127659574468085
+    // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
+    setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-	sleep();
+	sleep(10);
     
     
-//    setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
+//    setMessage(&packet, "ANC3mV", getADCValue(0b010011));
 //    packet.packetData.byte = 0;
 //    packet.packetData.ACKRequest = 1;
 //	nrf24l01SendPacket(&packet);
 //    checkTXPower();
-//	sleep();
+//	sleep(10);
     
-//    setMessage(&packet, "FVR", getADCValue(0b111111, 0.0101235));
-//    packet.packetData.byte = 0;
-//    packet.packetData.ACKRequest = 1;
-//	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-//	sleep();
+    FVRCONbits.TSEN = 1;
+    float vOut = getADCValue(0b111101);
+    FVRCONbits.TSEN = 0;
+    float vt = (2.048 - vOut) / 2;
+    #define vf 0.6063
+    #define tc -0.00132
+    float ta = (vt / tc) - (vf / tc) - 40;
     
-//	131.5075148238 + 15
-//	116.5075148238
-//	161.363280 = 
-    setMessage(&packet, "TEMP", getADCValue(0b111101, 0.5505378) - 146.5075148238);
+    
+	setMessage(&packet, "TEMP", ta);
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-	sleep();
-	
-	
-	setMessage(&packet, "TEMPR", getADCValue(0b111101, 1));
+	sleep(10);
+    
+    FVRCONbits.TSEN = 1;
+	setMessage(&packet, "TEMPR", getADCValue(0b111101));
+    FVRCONbits.TSEN = 0;
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-	sleep();
+	sleep(10);
     
 //    n_RF_SETUP_t rfSetup;
 //    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
@@ -156,7 +176,7 @@ void loop(){
 //    packet.packetData.ACKRequest = 1;
 //	nrf24l01SendPacket(&packet);
 //    checkTXPower();
-//	sleep();
+//	sleep(10);
     
 	
 //	checkRxData();
@@ -235,31 +255,31 @@ void main(void) {
     ADCON0bits.ADON = 0;
    
     //ANA4
-    ANSELAbits.ANSA4 = 1;
+    PORTAbits.RA4 = 0;
     TRISAbits.TRISA4 = 1;
     WPUAbits.WPUA4 = 0;
+    ODCONAbits.ODCA4 = 1;
+    ANSELAbits.ANSA4 = 1;
     
     //ANC3
     ANSELCbits.ANSC3 = 1;
     TRISCbits.TRISC3 = 1;
     
     /* Configure Temp sensor*/
-    FVRCONbits.TSEN = 0;
-    FVRCONbits.TSRNG = 1; // 0= 1.8V Low Range
     FVRCONbits.TSEN = 1;
+    FVRCONbits.TSRNG = 1;
     
     /* Configure FVR */
     FVRCONbits.FVREN = 0; // Disable Voltage Reference Module
-    FVRCONbits.ADFVR = 1; // 1.024V
-    FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
+    FVRCONbits.ADFVR = 0b10; // 2.048V
     
-    ADCON1bits.ADCS = 0b111;
+    ADCON1bits.ADCS = 0b111;    
     ADCON1bits.ADFM = 1;
-    ADCON1bits.ADNREF = 0b0;
-    ADCON1bits.ADPREF = 0b00;
+    ADCON1bits.ADPREF = 0b11; // FVR used as + ref
+    ADCON1bits.ADNREF = 0b00; // GND used as - ref
+    
     
     ADCON0bits.CHS = 3;
-    ADCON0bits.ADON = 1;
     
     
     /* Setup Interrupt Pin */
@@ -267,10 +287,6 @@ void main(void) {
     TRISAbits.TRISA2 = 1;
     PIE0bits.INTE = 1;
     INTCONbits.INTEDG = 0;
-            
-    
-    /* Setup WDT*/
-    WDTCONbits.WDTPS = 11; //10=1S, 11=2S, 12=4S
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;
@@ -286,7 +302,7 @@ void main(void) {
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
-	sleep();
+	sleep(10);
     
     while(1){
         loop();
