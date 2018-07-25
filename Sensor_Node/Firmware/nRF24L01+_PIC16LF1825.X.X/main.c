@@ -124,6 +124,7 @@ void loop(){
 //    checkTXPower();
 //	sleep(10);
     
+//	19.086
     //Resistor divider on Vbatt
     // 10K / 4.7K  = 2.127659574468085
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
@@ -135,22 +136,21 @@ void loop(){
 	sleep(10);
     
     
-//    setMessage(&packet, "ANC3mV", getADCValue(0b010011));
-//    packet.packetData.byte = 0;
-//    packet.packetData.ACKRequest = 1;
-//	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-//	sleep(10);
+    setMessage(&packet, "ANC3mV", getADCValue(0b010011));
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 1;
+	nrf24l01SendPacket(&packet);
+    checkTXPower();
+	sleep(10);
     
     FVRCONbits.TSEN = 1;
     float vt = (2.048 - getADCValue(0b111101)) / 2;
     FVRCONbits.TSEN = 0;
     
+	#define tempOffset 27
     #define vf 0.6063
     #define tc -0.00132
-    float ta = (vt / tc) - (vf / tc) - 40;
-    
-    
+    float ta = (vt / tc) - (vf / tc) - tempOffset;
     
 	setMessage(&packet, "TEMP", ta);
     packet.packetData.byte = 0;
@@ -159,24 +159,16 @@ void loop(){
     checkTXPower();
 	sleep(10);
     
-    FVRCONbits.TSEN = 1;
-	setMessage(&packet, "TEMPR", getADCValue(0b111101));
-    FVRCONbits.TSEN = 0;
+    
+    n_RF_SETUP_t rfSetup;
+    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+    
+    setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
 	sleep(10);
-    
-//    n_RF_SETUP_t rfSetup;
-//    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
-//    
-//    setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-//    packet.packetData.byte = 0;
-//    packet.packetData.ACKRequest = 1;
-//	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-//	sleep(10);
     
 	
 //	checkRxData();
@@ -230,24 +222,13 @@ void main(void) {
     
     delayMs(10);
     
-    memcpy(romDataMap.bytes, resetRomData.bytes, sizeof(romDataMap_t.bytes));
-//    flashRealod();
+//    memcpy(romDataMap.bytes, resetRomData.bytes, sizeof(romDataMap_t.bytes));
+    
+	strcpy(romData->name, ENV_DEVICE_NAME);
 	
-	// This is broken! Use EEPRON since now we have it
-//	if (romData.check != ENV_FLASH_VERSION){
-//		romData.check = ENV_FLASH_VERSION;
-//		strcpy(romData.name, ENV_DEVICE_NAME);
-//		romData.bootMode = 0x00;
-//		flashUpdate();
-//	}
-    
-//    strcpy(romData.name, ENV_DEVICE_NAME);
-    
-//    flashRealod();
-    
     nrf24l01Init();
     
-    unsigned char pipe = nrf24l01GetPipe(romData.name);
+    unsigned char pipe = nrf24l01GetPipe(romData->name);
     nrf24l01SetTXPipe(pipe);
     nrf24l01SetRXPipe(pipe);
     
@@ -299,7 +280,7 @@ void main(void) {
     
     nrf24l01Packet_t packet;
         
-    setMessage(&packet, "BOOT", romData.bootMode);
+    setMessage(&packet, "BOOT", romData->bootMode);
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);

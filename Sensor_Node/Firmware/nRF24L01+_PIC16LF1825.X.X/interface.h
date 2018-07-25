@@ -11,21 +11,12 @@
 
 typedef struct{
         unsigned char check;    //1
-        char name[16];          //2
+        char name[16];          //16
         unsigned int bootMode;  //2
         float tempCalVf;        //4
         float tempCalTc;        //4
         float tempCalOffset;    //4
 } romData_t;
-
-static const romData_t resetRomData = {
-     {0xAA},
-     {"UWT"},
-     {0},
-     {0.606},
-     {-0.00132},
-     {40}
-};
 
 typedef union{
     struct{
@@ -36,14 +27,21 @@ typedef union{
     };
 } romDataMap_t;
 
+#warning "romData_s = " sizeof(romData_t)
+
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
+//static const romData_t resetRomData = {
+//     {0xAA},
+//     {"UHT"},
+//     {0},
+//     {0.606},
+//     {-0.00132},
+//     {40}
+//};
 
-
-#define romSize 0x2000U
-
-#define _XTAL_FREQ 16000000
+#define _XTAL_FREQ 32000000
 
 #define delayUs(x) __delay_us(x)
 #define delayMs(x) __delay_ms(x)

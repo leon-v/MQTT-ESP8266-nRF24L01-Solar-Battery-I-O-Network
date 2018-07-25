@@ -10731,9 +10731,6 @@ extern char * ftoa(float f, int * status);
 
 # 12 "interface.h"
 typedef struct{
-
-
-
 unsigned char check;
 char name[16];
 unsigned int bootMode;
@@ -10741,15 +10738,6 @@ float tempCalVf;
 float tempCalTc;
 float tempCalOffset;
 } romData_t;
-
-static const romData_t resetRomData = {
-{0xAA},
-{"UWT"},
-{0},
-{0.606},
-{-0.00132},
-{40}
-};
 
 typedef union{
 struct{
@@ -10760,10 +10748,12 @@ unsigned char bytes[sizeof(romData_t)];
 };
 } romDataMap_t;
 
+
+
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 54
+# 51
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);
@@ -11108,7 +11098,7 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
-# 130
+# 131
 setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
@@ -11116,15 +11106,22 @@ nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep(10);
 
-# 145
+
+setMessage(&packet, "ANC3mV", getADCValue(0b010011));
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 1;
+nrf24l01SendPacket(&packet);
+checkTXPower();
+sleep(10);
+
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
 
 
 
-float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 40;
 
+float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 27;
 
 setMessage(&packet, "TEMP", ta);
 packet.packetData.byte = 0;
@@ -11133,16 +11130,19 @@ nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep(10);
 
-FVRCONbits.TSEN = 1;
-setMessage(&packet, "TEMPR", getADCValue(0b111101));
-FVRCONbits.TSEN = 0;
+
+n_RF_SETUP_t rfSetup;
+rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
+
+setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep(10);
 
-# 182
+
+
 }
 
 unsigned char nrf24l01GetPipe(char * name){
@@ -11180,21 +11180,22 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 224
+# 217
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
 OSCCON1bits.NOSC = 0b000;
 OSCCON1bits.NDIV = 0b000;
 
-_delay((unsigned long)((10)*(16000000/4000.0)));
+_delay((unsigned long)((10)*(32000000/4000.0)));
 
-__builtin_memcpy(romDataMap.bytes,resetRomData.bytes,sizeof(romDataMap_t.bytes));
 
-# 247
+
+strcpy(romData->name, "UH1");
+
 nrf24l01Init();
 
-unsigned char pipe = nrf24l01GetPipe(romData.name);
+unsigned char pipe = nrf24l01GetPipe(romData->name);
 nrf24l01SetTXPipe(pipe);
 nrf24l01SetRXPipe(pipe);
 
@@ -11246,7 +11247,7 @@ INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-setMessage(&packet, "BOOT", romData.bootMode);
+setMessage(&packet, "BOOT", romData->bootMode);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);

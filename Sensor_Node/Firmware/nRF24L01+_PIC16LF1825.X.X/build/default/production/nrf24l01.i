@@ -10617,9 +10617,6 @@ extern __bank0 __bit __timeout;
 
 # 12 "interface.h"
 typedef struct{
-
-
-
 unsigned char check;
 char name[16];
 unsigned int bootMode;
@@ -10627,15 +10624,6 @@ float tempCalVf;
 float tempCalTc;
 float tempCalOffset;
 } romData_t;
-
-static const romData_t resetRomData = {
-{0xAA},
-{"UWT"},
-{0},
-{0.606},
-{-0.00132},
-{40}
-};
 
 typedef union{
 struct{
@@ -10646,10 +10634,12 @@ unsigned char bytes[sizeof(romData_t)];
 };
 } romDataMap_t;
 
+
+
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 54
+# 51
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);
@@ -10987,19 +10977,19 @@ if (config.PRIM_RX != rxMode){
 
 
 nrf24l01CELow();
-_delay((unsigned long)((200)*(16000000/4000000.0)));
+_delay((unsigned long)((200)*(32000000/4000000.0)));
 
 
 config.PRIM_RX = rxMode;
 nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x00, config.byte);
 
 
-_delay((unsigned long)((200)*(16000000/4000000.0)));
+_delay((unsigned long)((200)*(32000000/4000000.0)));
 
 
 if (rxMode){
 nrf24l01CEHigh();
-_delay((unsigned long)((200)*(16000000/4000000.0)));
+_delay((unsigned long)((200)*(32000000/4000000.0)));
 }
 }
 
@@ -11104,7 +11094,7 @@ while (nrf24l01.TXBusy){
 if (!--i) {
 goto RESEND;
 }
-_delay((unsigned long)((100)*(16000000/4000000.0)));
+_delay((unsigned long)((100)*(32000000/4000000.0)));
 }
 
 
@@ -11134,7 +11124,7 @@ nrf24l01SPIEnd();
 
 
 nrf24l01CEHigh();
-_delay((unsigned long)((20)*(16000000/4000000.0)));
+_delay((unsigned long)((20)*(32000000/4000000.0)));
 nrf24l01CELow();
 
 
@@ -11146,7 +11136,7 @@ while (nrf24l01.TXBusy){
 if (!--i) {
 goto RESEND;
 }
-_delay((unsigned long)((100)*(16000000/4000000.0)));
+_delay((unsigned long)((100)*(32000000/4000000.0)));
 }
 
 
@@ -11154,12 +11144,12 @@ _delay((unsigned long)((100)*(16000000/4000000.0)));
 i = 0xFF;
 while (TXPacket->packetData.ACKRequest){
 if (!--i) {
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(32000000/4000000.0)));
+_delay((unsigned long)((50000)*(32000000/4000000.0)));
 nrf24l01ChangeTXPower(1);
 goto RESEND;
 }
-_delay((unsigned long)((100)*(16000000/4000000.0)));
+_delay((unsigned long)((100)*(32000000/4000000.0)));
 }
 }
 
@@ -11371,11 +11361,11 @@ nrf24l01InterfaceInit();
 
 nrf24l01CELow();
 
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(32000000/4000000.0)));
 
 nrf24l01InitRegisters();
 
-_delay((unsigned long)((50000)*(16000000/4000000.0)));
+_delay((unsigned long)((50000)*(32000000/4000000.0)));
 
 nrf24l01CEHigh();
 

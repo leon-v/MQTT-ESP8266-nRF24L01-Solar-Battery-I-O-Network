@@ -10617,9 +10617,6 @@ extern __bank0 __bit __timeout;
 
 # 12 "interface.h"
 typedef struct{
-
-
-
 unsigned char check;
 char name[16];
 unsigned int bootMode;
@@ -10627,15 +10624,6 @@ float tempCalVf;
 float tempCalTc;
 float tempCalOffset;
 } romData_t;
-
-static const romData_t resetRomData = {
-{0xAA},
-{"UWT"},
-{0},
-{0.606},
-{-0.00132},
-{40}
-};
 
 typedef union{
 struct{
@@ -10646,10 +10634,12 @@ unsigned char bytes[sizeof(romData_t)];
 };
 } romDataMap_t;
 
+
+
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 54
+# 51
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);
@@ -10726,12 +10716,12 @@ return SSP1BUF;
 #pragma interrupt_level 1
 void nrf24l01SPIStart(void){
 nrf24l01CSLow();
-_delay((unsigned long)((10)*(16000000/4000000.0)));
+_delay((unsigned long)((10)*(32000000/4000000.0)));
 }
 
 #pragma interrupt_level 1
 void nrf24l01SPIEnd(void){
-_delay((unsigned long)((10)*(16000000/4000000.0)));
+_delay((unsigned long)((10)*(32000000/4000000.0)));
 nrf24l01CSHigh();
 }
 

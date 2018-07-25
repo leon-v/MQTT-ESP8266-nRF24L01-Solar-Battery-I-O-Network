@@ -2,13 +2,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 "12 interface.h
 [s S916 `uc 1 `uc -> 16 `i `ui 1 `f 1 `f 1 `f 1 ]
 [n S916 . check name bootMode tempCalVf tempCalTc tempCalOffset ]
-"34
+"22
 [s S918 `S916 1 ]
 [n S918 . RomData ]
-"37
+"25
 [s S919 `uc -> # `S916 `ui ]
 [n S919 . bytes ]
-"33
+"21
 [u S917 `S918 1 `S919 1 ]
 [n S917 . . . ]
 "11 nrf24l01.h
@@ -26,13 +26,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 "31
 [s S960 `S957 1 `uc -> 32 `i ]
 [n S960 . packetData Message ]
-"64 interface.h
+"61 interface.h
 [v _enableInterrupts `(v ~T0 @X0 0 ef1`uc ]
-"61
+"58
 [v _nrf24l01SPIStart `(v ~T0 @X0 0 ef ]
-"60
+"57
 [v _nrf24l01SPISend `(uc ~T0 @X0 0 ef1`uc ]
-"62
+"59
 [v _nrf24l01SPIEnd `(v ~T0 @X0 0 ef ]
 "130 nRF24L01_Types.h
 [s S939 :8 `uc 1 ]
@@ -52,13 +52,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 "42
 [u S920 `S921 1 `S922 1 ]
 [n S920 . . . ]
-"54 interface.h
+"51 interface.h
 [v _nrf24l01CELow `(v ~T0 @X0 0 ef ]
 [v F6129 `(v ~T0 @X0 1 tf1`ul ]
 "92 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic.h
 [v __delay `JF6129 ~T0 @X0 0 e ]
 [p i __delay ]
-"55 interface.h
+"52 interface.h
 [v _nrf24l01CEHigh `(v ~T0 @X0 0 ef ]
 "51 nrf24l01.h
 [v _nrf24l01SetTXPipe `(v ~T0 @X0 0 ef1`uc ]
@@ -79,7 +79,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "146
 [u S941 `S942 1 `S943 1 ]
 [n S941 . . . ]
-"66 interface.h
+"63 interface.h
 [v _exception `(v ~T0 @X0 0 ef1`uc ]
 "78 nRF24L01_Types.h
 [s S927 :8 `uc 1 ]
@@ -135,7 +135,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "207
 [u S950 `S951 1 `S952 1 ]
 [n S950 . . . ]
-"59 interface.h
+"56 interface.h
 [v _nrf24l01InterfaceInit `(v ~T0 @X0 0 ef ]
 [; ;xc.h: 18: extern const char __xc8_OPTIM_SPEED;
 [; ;xc.h: 20: extern double __fpnormalize(double);
@@ -7265,72 +7265,40 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 138: extern __bank0 __bit __powerdown;
 [; ;pic.h: 139: extern __bank0 __bit __timeout;
 [; ;interface.h: 12: typedef struct{
-[; ;interface.h: 16: unsigned char check;
-[; ;interface.h: 17: char name[16];
-[; ;interface.h: 18: unsigned int bootMode;
-[; ;interface.h: 19: float tempCalVf;
-[; ;interface.h: 20: float tempCalTc;
-[; ;interface.h: 21: float tempCalOffset;
-[; ;interface.h: 22: } romData_t;
-"24 interface.h
-[v _resetRomData `CS916 ~T0 @X0 1 s ]
-[i _resetRomData
-:U ..
-:U ..
-"25
--> -> 170 `i `uc
-:U ..
--> 85 `c
--> 87 `c
--> 84 `c
--> 0 `c
-..
-"27
--> -> 0 `i `ui
-"28
--> .0.606 `f
-"29
--> -U .0.00132 `f
-"30
--> -> 40 `i `f
-..
-..
-]
-[; ;interface.h: 24: static const romData_t resetRomData = {
-[; ;interface.h: 25: {0xAA},
-[; ;interface.h: 26: {"UWT"},
-[; ;interface.h: 27: {0},
-[; ;interface.h: 28: {0.606},
-[; ;interface.h: 29: {-0.00132},
-[; ;interface.h: 30: {40}
-[; ;interface.h: 31: };
-[; ;interface.h: 33: typedef union{
-[; ;interface.h: 34: struct{
-[; ;interface.h: 35: romData_t RomData;
-[; ;interface.h: 36: };
-[; ;interface.h: 37: struct{
-[; ;interface.h: 38: unsigned char bytes[sizeof(romData_t)];
-[; ;interface.h: 39: };
-[; ;interface.h: 40: } romDataMap_t;
-"42
+[; ;interface.h: 13: unsigned char check;
+[; ;interface.h: 14: char name[16];
+[; ;interface.h: 15: unsigned int bootMode;
+[; ;interface.h: 16: float tempCalVf;
+[; ;interface.h: 17: float tempCalTc;
+[; ;interface.h: 18: float tempCalOffset;
+[; ;interface.h: 19: } romData_t;
+[; ;interface.h: 21: typedef union{
+[; ;interface.h: 22: struct{
+[; ;interface.h: 23: romData_t RomData;
+[; ;interface.h: 24: };
+[; ;interface.h: 25: struct{
+[; ;interface.h: 26: unsigned char bytes[sizeof(romData_t)];
+[; ;interface.h: 27: };
+[; ;interface.h: 28: } romDataMap_t;
+"32 interface.h
 [v _romDataMap `S917 ~T0 @X0 1 e ]
-[; ;interface.h: 42: romDataMap_t romDataMap;
-"43
+[; ;interface.h: 32: romDataMap_t romDataMap;
+"33
 [v _romData `*S916 ~T0 @X0 1 e ]
 [i _romData
 &U . . _romDataMap 0 0
 ]
-[; ;interface.h: 43: romData_t * romData = &romDataMap.RomData;
-[; ;interface.h: 54: void nrf24l01CELow(void);
-[; ;interface.h: 55: void nrf24l01CEHigh(void);
-[; ;interface.h: 56: void nrf24l01CSLow(void);
-[; ;interface.h: 57: void nrf24l01CSHigh(void);
-[; ;interface.h: 59: void nrf24l01InterfaceInit(void);
-[; ;interface.h: 60: unsigned char nrf24l01SPISend(unsigned char data);
-[; ;interface.h: 61: void nrf24l01SPIStart(void);
-[; ;interface.h: 62: void nrf24l01SPIEnd(void);
-[; ;interface.h: 64: void enableInterrupts(unsigned char enable);
-[; ;interface.h: 66: void exception(unsigned char exception);
+[; ;interface.h: 33: romData_t * romData = &romDataMap.RomData;
+[; ;interface.h: 51: void nrf24l01CELow(void);
+[; ;interface.h: 52: void nrf24l01CEHigh(void);
+[; ;interface.h: 53: void nrf24l01CSLow(void);
+[; ;interface.h: 54: void nrf24l01CSHigh(void);
+[; ;interface.h: 56: void nrf24l01InterfaceInit(void);
+[; ;interface.h: 57: unsigned char nrf24l01SPISend(unsigned char data);
+[; ;interface.h: 58: void nrf24l01SPIStart(void);
+[; ;interface.h: 59: void nrf24l01SPIEnd(void);
+[; ;interface.h: 61: void enableInterrupts(unsigned char enable);
+[; ;interface.h: 63: void exception(unsigned char exception);
 [; ;nRF24L01_Types.h: 42: typedef union{
 [; ;nRF24L01_Types.h: 43: struct {
 [; ;nRF24L01_Types.h: 44: unsigned byte : 8;
@@ -7670,18 +7638,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.c: 65: nrf24l01CELow();
 "65
 [e ( _nrf24l01CELow ..  ]
-[; ;nrf24l01.c: 66: _delay((unsigned long)((200)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 66: _delay((unsigned long)((200)*(32000000/4000000.0)));
 "66
-[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 [; ;nrf24l01.c: 69: config.PRIM_RX = rxMode;
 "69
 [e = . . _config 1 0 _rxMode ]
 [; ;nrf24l01.c: 70: nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x00, config.byte);
 "70
 [e ( _nrf24l01Send (2 , -> | -> -> 32 `i `ui -> -> 0 `i `ui `uc . . _config 0 0 ]
-[; ;nrf24l01.c: 73: _delay((unsigned long)((200)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 73: _delay((unsigned long)((200)*(32000000/4000000.0)));
 "73
-[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 [; ;nrf24l01.c: 76: if (rxMode){
 "76
 [e $ ! != -> _rxMode `i -> -> -> 0 `i `uc `i 969  ]
@@ -7689,9 +7657,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.c: 77: nrf24l01CEHigh();
 "77
 [e ( _nrf24l01CEHigh ..  ]
-[; ;nrf24l01.c: 78: _delay((unsigned long)((200)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 78: _delay((unsigned long)((200)*(32000000/4000000.0)));
 "78
-[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 200 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 "79
 }
 [e :U 969 ]
@@ -7899,9 +7867,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 986 ]
 [; ;nrf24l01.c: 186: }
-[; ;nrf24l01.c: 187: _delay((unsigned long)((100)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 187: _delay((unsigned long)((100)*(32000000/4000000.0)));
 "187
-[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 "188
 }
 [e :U 983 ]
@@ -7953,9 +7921,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.c: 216: nrf24l01CEHigh();
 "216
 [e ( _nrf24l01CEHigh ..  ]
-[; ;nrf24l01.c: 217: _delay((unsigned long)((20)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 217: _delay((unsigned long)((20)*(32000000/4000000.0)));
 "217
-[e ( __delay (1 -> * -> -> 20 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 20 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 [; ;nrf24l01.c: 218: nrf24l01CELow();
 "218
 [e ( _nrf24l01CELow ..  ]
@@ -7981,9 +7949,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 994 ]
 [; ;nrf24l01.c: 228: }
-[; ;nrf24l01.c: 229: _delay((unsigned long)((100)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 229: _delay((unsigned long)((100)*(32000000/4000000.0)));
 "229
-[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 "230
 }
 [e :U 991 ]
@@ -8003,12 +7971,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 "236
 [e $ ! ! != -> =- _i -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 998  ]
 {
-[; ;nrf24l01.c: 237: _delay((unsigned long)((50000)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 237: _delay((unsigned long)((50000)*(32000000/4000000.0)));
 "237
-[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 16000000 `l `d .4000000.0 `ul ]
-[; ;nrf24l01.c: 238: _delay((unsigned long)((50000)*(16000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 32000000 `l `d .4000000.0 `ul ]
+[; ;nrf24l01.c: 238: _delay((unsigned long)((50000)*(32000000/4000000.0)));
 "238
-[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 [; ;nrf24l01.c: 239: nrf24l01ChangeTXPower(1);
 "239
 [e ( _nrf24l01ChangeTXPower (1 -> 1 `i ]
@@ -8019,9 +7987,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 998 ]
 [; ;nrf24l01.c: 241: }
-[; ;nrf24l01.c: 242: _delay((unsigned long)((100)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 242: _delay((unsigned long)((100)*(32000000/4000000.0)));
 "242
-[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 "243
 }
 [e :U 995 ]
@@ -8471,15 +8439,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.c: 452: nrf24l01CELow();
 "452
 [e ( _nrf24l01CELow ..  ]
-[; ;nrf24l01.c: 454: _delay((unsigned long)((50000)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 454: _delay((unsigned long)((50000)*(32000000/4000000.0)));
 "454
-[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 [; ;nrf24l01.c: 456: nrf24l01InitRegisters();
 "456
 [e ( _nrf24l01InitRegisters ..  ]
-[; ;nrf24l01.c: 458: _delay((unsigned long)((50000)*(16000000/4000000.0)));
+[; ;nrf24l01.c: 458: _delay((unsigned long)((50000)*(32000000/4000000.0)));
 "458
-[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 16000000 `l `d .4000000.0 `ul ]
+[e ( __delay (1 -> * -> -> 50000 `l `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 [; ;nrf24l01.c: 460: nrf24l01CEHigh();
 "460
 [e ( _nrf24l01CEHigh ..  ]
