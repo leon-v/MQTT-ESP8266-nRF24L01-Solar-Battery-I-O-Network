@@ -10,19 +10,36 @@
 
 
 typedef struct{
-    unsigned char check;
-    char name[16];
-    unsigned int bootMode;
+        unsigned char check;    //1
+        char name[16];          //2
+        unsigned int bootMode;  //2
+        float tempCalVf;        //4
+        float tempCalTc;        //4
+        float tempCalOffset;    //4
 } romData_t;
 
-//#define romData_s (sizeof(romData_t))
-#define romData_s 32
-
-const romData_t resetRomData = {
+static const romData_t resetRomData = {
      {0xAA},
-     {"Unconfigured"},
-     {0},    
+     {"UWT"},
+     {0},
+     {0.606},
+     {-0.00132},
+     {40}
 };
+
+typedef union{
+    struct{
+        romData_t RomData;
+    };
+    struct{
+        unsigned char bytes[sizeof(romData_t)];
+    };
+} romDataMap_t;
+
+romDataMap_t romDataMap;
+romData_t * romData = &romDataMap.RomData;
+
+
 
 #define romSize 0x2000U
 

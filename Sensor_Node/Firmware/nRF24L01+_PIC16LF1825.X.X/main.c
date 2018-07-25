@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 #include "nrf24l01.h"
-#include "flash.h"
 #include "interface.h"
 #include "../../../../shared.h"
 
@@ -96,7 +95,7 @@ void checkRxData(void){
 void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     memset(packet->Message, 0, sizeof(packet->Message));
     
-    strcat(packet->Message, romData.name);
+    strcat(packet->Message, romData->name);
     
     strcat(packet->Message, "/");
     strcat(packet->Message, topic);
@@ -144,9 +143,9 @@ void loop(){
 //	sleep(10);
     
     FVRCONbits.TSEN = 1;
-    float vOut = getADCValue(0b111101);
+    float vt = (2.048 - getADCValue(0b111101)) / 2;
     FVRCONbits.TSEN = 0;
-    float vt = (2.048 - vOut) / 2;
+    
     #define vf 0.6063
     #define tc -0.00132
     float ta = (vt / tc) - (vf / tc) - 40;
@@ -230,6 +229,7 @@ void main(void) {
     
     delayMs(10);
     
+    memcpy(romDataMap.bytes, resetRomData.bytes, sizeof(romDataMap_t.bytes));
 //    flashRealod();
 	
 	// This is broken! Use EEPRON since now we have it
@@ -240,9 +240,9 @@ void main(void) {
 //		flashUpdate();
 //	}
     
-    strcpy(romData.name, ENV_DEVICE_NAME);
+//    strcpy(romData.name, ENV_DEVICE_NAME);
     
-    flashRealod();
+//    flashRealod();
     
     nrf24l01Init();
     

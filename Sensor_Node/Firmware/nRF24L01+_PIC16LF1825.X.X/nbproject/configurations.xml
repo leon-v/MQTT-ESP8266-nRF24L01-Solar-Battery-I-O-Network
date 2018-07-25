@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>flash.h</itemPath>
       <itemPath>interface.h</itemPath>
       <itemPath>nrf24l01.h</itemPath>
       <itemPath>nRF24L01_Types.h</itemPath>
@@ -17,7 +16,6 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>config.c</itemPath>
-      <itemPath>flash.c</itemPath>
       <itemPath>interface.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>nrf24l01.c</itemPath>
@@ -150,6 +148,7 @@
                   value="Press to browse for a specific firmware version"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
