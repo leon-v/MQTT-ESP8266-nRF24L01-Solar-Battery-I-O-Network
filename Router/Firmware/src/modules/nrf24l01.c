@@ -85,6 +85,8 @@ void nrf24l01SetRXMode(unsigned char rxMode){
 
 void nrf24l01SendACK(nrf24l01Packet_t * packet){
 
+	nrf24l01SetTXPipe(packet->packetData.Pipe);
+
 	packet->packetData.ACKRequest = 0;
 	packet->packetData.IsACK = 1;
 	packet->packetData.ACKRPD = packet->packetData.RPD;
@@ -153,15 +155,13 @@ void nrf24l01ReceivePacket(void){
     RXPacket.packetData.byte = nrf24l01SPISend(0);
     width--;
     
-    for (i = 0; (i < width) && (i < sizeof(RXPacket.Message)); i++){
+    for (i = 0; (i < width) && (i < sizeof(RXPacket.Message) - 1); i++){
         // Get the byte from the radio IC
 		RXPacket.Message[i] = nrf24l01SPISend(0);
 	}
     
     // End the SPI transaction and release the radio IC
     nrf24l01SPIEnd();
-
-    RXPacket.packetData.RPD = nrf24l01Send(n_R_REGISTER | n_RPD, 0);
 
     // Re-enable the radio IO to continue receiving
     nrf24l01CEHigh();
@@ -226,9 +226,6 @@ RESEND:
         if (!--i) {
             goto RESEND;
         }
-        if (i  > 128){
-            nrf24l01ChangeTXPower(1);
-        }
         delayUs(100);
     }
     
@@ -237,9 +234,12 @@ RESEND:
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
 		if (!--i) {
+            delayUs(50000);
+            delayUs(50000);
+            nrf24l01ChangeTXPower(1);
 			goto RESEND;
 		}
-		delayUs(40);
+		delayUs(100);
 	}
 }
 
@@ -281,7 +281,15 @@ void nrf24l01ISR(void){
 
         	// Flag the radio state as having a RX packet ready
         	nrf24l01.RXPending = 1;
+
 	        nrf24l01ReceivePacket();
+
+	        // Get the Recieved Power Detector bit
+		    RXPacket.packetData.RPD = nrf24l01Send(n_R_REGISTER | n_RPD, 0);
+
+		    // Get the piped the data was recieved on
+		    RXPacket.packetData.Pipe = status.RX_P_NO;
+
 	        nrf24l01CheckACK();
         }
 
@@ -297,9 +305,42 @@ void nrf24l01ISR(void){
 	// Clear the interrupt on the nrf24l01
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.byte);
 }
+ 
+ void nrf24l01SetTXPipe(unsigned char pipe){
+    
+     // Set the pipe address into the 
+     nrf24l01SPIStart();
+     nrf24l01SPISend(n_W_REGISTER | n_TX_ADDR);
+     nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
+     nrf24l01SPISend(n_ADDRESS_P0[3]);
+     nrf24l01SPISend(n_ADDRESS_P0[2]);
+     nrf24l01SPISend(n_ADDRESS_P0[1]);
+     nrf24l01SPISend(n_ADDRESS_P0[0]);
+     nrf24l01SPIEnd();
+ }
 
+ void nrf24l01SetRXPipe(unsigned char pipe){
+    
+     n_EN_RXADDR_t enRXAddr;
+    
+     if (pipe > 5){
+         enRXAddr.ERX_P0 = 1;
+         enRXAddr.ERX_P1 = 1;
+         enRXAddr.ERX_P2 = 1;
+         enRXAddr.ERX_P3 = 1;
+         enRXAddr.ERX_P4 = 1;
+         enRXAddr.ERX_P5 = 1;
+     }
+     
+     else{
+         enRXAddr.ERX_P0 = 1;
+         enRXAddr.byte = (unsigned) enRXAddr.byte << pipe;
+     }
+    
+     nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
+ }
 
-void nrf24l01InitRegisters(unsigned char isReciever){
+void nrf24l01InitRegisters(){
 
     n_CONFIG_t config;
     
@@ -325,14 +366,7 @@ void nrf24l01InitRegisters(unsigned char isReciever){
      nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
     
     // Enable all data pipes
-	n_EN_RXADDR_t enRXAddr;
-	enRXAddr.ERX_P0 = 1;
-	enRXAddr.ERX_P1 = 1;
-	enRXAddr.ERX_P2 = 1;
-	enRXAddr.ERX_P3 = 1;
-	enRXAddr.ERX_P4 = 1;
-	enRXAddr.ERX_P5 = 1;
-	nrf24l01Send(n_W_REGISTER | n_EN_RXADDR, enRXAddr.byte);
+    nrf24l01SetRXPipe(0xFF);
 
 	// Disable Auto ACK MCU needs to do this
 	n_EN_AA_t enAA;
@@ -362,6 +396,28 @@ void nrf24l01InitRegisters(unsigned char isReciever){
 	DynPD.DPL_P4 = 1;
 	DynPD.DPL_P5 = 1;
 	nrf24l01Send(n_W_REGISTER | n_DYNPD, DynPD.byte);
+
+	// Setup all data pipes with our custom address
+    unsigned int i;
+    for (i = 0; i < 6; i++){
+
+        nrf24l01SPIStart();
+        nrf24l01SPISend(n_W_REGISTER | (n_RX_ADDR_P0 + i));
+        
+        nrf24l01SPISend(n_ADDRESS_P0[4] + (n_ADDRESS_MUL * i));
+        
+        if (i < 2){
+            nrf24l01SPISend(n_ADDRESS_P0[3]);
+            nrf24l01SPISend(n_ADDRESS_P0[2]);
+            nrf24l01SPISend(n_ADDRESS_P0[1]);
+            nrf24l01SPISend(n_ADDRESS_P0[0]);
+        }
+        
+        nrf24l01SPIEnd();
+    }
+    
+    nrf24l01SetTXPipe(0);
+
     
     // clear the interrupt flags in case the radio's still asserting an old unhandled interrupt
     n_STATUS_t status;
@@ -384,7 +440,8 @@ void nrf24l01InitRegisters(unsigned char isReciever){
     
 }
 
-void nrf24l01Init(unsigned char isReciever){
+
+void nrf24l01Init(void){
     
     
     nrf24l01InterfaceInit();
@@ -396,7 +453,7 @@ void nrf24l01Init(unsigned char isReciever){
     
     delayUs(50000);
     
-    nrf24l01InitRegisters(isReciever);    
+    nrf24l01InitRegisters();    
     
     delayUs(50000);
 

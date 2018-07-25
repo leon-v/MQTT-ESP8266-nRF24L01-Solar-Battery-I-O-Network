@@ -10734,18 +10734,26 @@ typedef struct{
 unsigned char check;
 char name[16];
 unsigned int bootMode;
+float tempCalVf;
+float tempCalTc;
+float tempCalOffset;
 } romData_t;
 
-
-
-
-const romData_t resetRomData = {
-{0xAA},
-{"Unconfigured"},
-{0},
+typedef union{
+struct{
+romData_t RomData;
 };
+struct{
+unsigned char bytes[sizeof(romData_t)];
+};
+} romDataMap_t;
 
-# 36
+
+
+romDataMap_t romDataMap;
+romData_t * romData = &romDataMap.RomData;
+
+# 51
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);
@@ -10760,7 +10768,7 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
-# 15 "nRF24L01_Types.h"
+# 42 "nRF24L01_Types.h"
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10775,16 +10783,6 @@ unsigned MASK_TX_DS : 1;
 unsigned MASK_RX_DR : 1;
 unsigned Reserved : 1;
 
-};
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
 };
 } n_CONFIG_t;
 
@@ -10803,16 +10801,6 @@ unsigned ENAA_P5 : 1;
 unsigned Reserved : 2;
 
 };
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
-};
 } n_EN_AA_t;
 
 
@@ -10829,16 +10817,6 @@ unsigned ERX_P4 : 1;
 unsigned ERX_P5 : 1;
 unsigned Reserved : 2;
 
-};
-struct {
-unsigned bit0 : 1;
-unsigned bit1 : 1;
-unsigned bit2 : 1;
-unsigned bit3 : 1;
-unsigned bit4 : 1;
-unsigned bit5 : 1;
-unsigned bit6 : 1;
-unsigned bit7 : 1;
 };
 } n_EN_RXADDR_t;
 
@@ -10873,6 +10851,7 @@ unsigned byte : 8;
 };
 struct {
 unsigned RF_CH : 7;
+unsigned Reserved : 1;
 };
 } n_RF_CH_t;
 
@@ -10920,7 +10899,7 @@ unsigned RPD : 1;
 };
 } n_RPD_t;
 
-# 183
+# 187
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10932,7 +10911,7 @@ unsigned Reserved : 2;
 };
 } n_RX_PW_t;
 
-# 203
+# 207
 typedef union{
 struct {
 unsigned byte : 8;
@@ -10973,15 +10952,17 @@ unsigned RXPending : 1;
 unsigned RXMode : 1;
 } nrf24l01_t;
 
+
 typedef union{
 struct{
 unsigned int byte :8;
 };
 struct{
-unsigned RPD :1;
-unsigned ACKRPD :1;
-unsigned ACKRequest :1;
-unsigned IsACK :1;
+unsigned RPD : 1;
+unsigned ACKRPD : 1;
+unsigned ACKRequest : 1;
+unsigned IsACK : 1;
+unsigned Pipe : 3;
 };
 } packetData_t;
 
@@ -10992,9 +10973,9 @@ char Message[32];
 
 volatile nrf24l01_t nrf24l01;
 
-# 40
+# 42
 void nrf24l01ISR(void);
-void nrf24l01Init(unsigned char isReciever);
+void nrf24l01Init(void);
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -11002,26 +10983,10 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 void nrf24l01SendACK(nrf24l01Packet_t * packet);
 void nrf24l01ChangeTXPower(int addPower);
 unsigned char nrf24l01Send(unsigned char command, unsigned char data);
+void nrf24l01SetTXPipe(unsigned char pipe);
+void nrf24l01SetRXPipe(unsigned char pipe);
 
-# 6 "flash.h"
-extern romData_t romData;
-
-typedef union{
-struct{
-romData_t RomData;
-};
-struct{
-unsigned char array[32];
-};
-}romHolder_t;
-
-
-const unsigned char romArray[32]@(0x2000U - 32);
-
-void flashRealod(void);
-void flashUpdate(void);
-
-# 10 "main.c"
+# 9 "main.c"
 unsigned char sleepLoop = 0;
 unsigned long counter = 0;
 
@@ -11035,52 +11000,72 @@ PIR0bits.INTF = 0;
 }
 }
 
-unsigned long getADCValue(unsigned char channel, unsigned long divider){
+void sleep(unsigned char wdps){
 
-unsigned long adcSum = 0;
-unsigned char adcLoop = 255;
+WDTCONbits.WDTPS = wdps;
 
-ADCON0bits.CHS = channel;
-_delay((unsigned long)((200)*(16000000/4000000.0)));
-
-while (--adcLoop){
-
-ADCON0bits.ADGO = 1;
-
-while (ADCON0bits.ADGO){
-__nop();
-}
-
-adcSum+= ADRESL;
-adcSum+= (unsigned) (ADRESH << 8);
-}
-
-adcSum*= 100;
-adcSum/= divider;
-
-return adcSum;
-}
-
-void sleep(){
 while (1){
-
-counter++;
 
 asm("sleep");
 __nop();
 __nop();
 
 if (!STATUSbits.nTO && !STATUSbits.nPD) {
+
+
+WDTCONbits.WDTPS = 13;
+asm("clrwdt");
+
 return;
 }
 }
 }
 
+float getADCValue(unsigned char channel){
+
+
+float adcSum = 0;
+unsigned int adcLoop = 1000;
+
+ADCON0bits.CHS = channel;
+FVRCONbits.FVREN = 1;
+ADCON0bits.ADON = 1;
+
+sleep(0);
+
+counter = 0;
+
+while (adcLoop--){
+
+counter++;
+
+ADCON0bits.ADGO = 1;
+
+while (ADCON0bits.ADGO){
+sleep(0);
+}
+
+adcSum+= (ADRESL | (ADRESH << 8));
+
+}
+
+FVRCONbits.FVREN = 0;
+ADCON0bits.ADON = 0;
+
+
+adcSum/= 1000;
+adcSum/= 500;
+
+return adcSum;
+}
+
+
+
 void checkRxData(void){
 
 nrf24l01SetRXMode(1);
 
-sleep();
+sleep(10);
 
 if (!nrf24l01.RXPending){
 return;
@@ -11088,20 +11073,17 @@ return;
 
 }
 
-void setMessage(nrf24l01Packet_t * packet, const char * topic, unsigned long value){
+void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 memset(packet->Message, 0, sizeof(packet->Message));
 
-strcat(packet->Message, romData.name);
+strcat(packet->Message, romData->name);
 
 strcat(packet->Message, "/");
 strcat(packet->Message, topic);
 
-char tempString[16];
-
-ultoa(tempString, value, 10);
-
+int status;
 strcat(packet->Message, "/");
-strcat(packet->Message, tempString);
+strcat(packet->Message, ftoa(value, &status));
 }
 
 void checkTXPower(){
@@ -11114,59 +11096,65 @@ nrf24l01ChangeTXPower(-1);
 
 void loop(){
 
-
-asm("clrwdt");
-
 nrf24l01Packet_t packet;
 
-setMessage(&packet, "DBG", counter);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
-nrf24l01SendPacket(&packet);
-checkTXPower();
-sleep();
-
-setMessage(&packet, "VBAT", getADCValue(0b000100, 2526));
+# 131
+setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep();
+sleep(10);
 
 
-setMessage(&packet, "ANC3", getADCValue(0b010011, 2500));
+setMessage(&packet, "ANC3mV", getADCValue(0b010011));
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep();
+sleep(10);
 
-setMessage(&packet, "FVR", getADCValue(0b111111, 2500));
+FVRCONbits.TSEN = 1;
+float vt = (2.048 - getADCValue(0b111101)) / 2;
+FVRCONbits.TSEN = 0;
+
+
+
+
+float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 27;
+
+setMessage(&packet, "TEMP", ta);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep();
+sleep(10);
 
-setMessage(&packet, "TEMP", getADCValue(0b111101, 162) - 40000);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
-nrf24l01SendPacket(&packet);
-checkTXPower();
-sleep();
 
 n_RF_SETUP_t rfSetup;
-rfSetup.byte = nrf24l01Send(0b00000000 | 0x06, 0);
+rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 
 setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep();
+sleep(10);
 
 
 
+}
+
+unsigned char nrf24l01GetPipe(char * name){
+unsigned char pipe = 0;
+unsigned char i = 0;
+
+
+for (i = 0; i < strlen(name); i++){
+pipe+= name[i];
+}
+
+return (unsigned) pipe % 6;
 }
 
 void main(void) {
@@ -11192,55 +11180,55 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 185
+# 217
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
 OSCCON1bits.NOSC = 0b000;
 OSCCON1bits.NDIV = 0b000;
 
-_delay((unsigned long)((10)*(16000000/4000.0)));
+_delay((unsigned long)((10)*(32000000/4000.0)));
 
-flashRealod();
 
-if (romData.check != 0x07){
-romData.check = 0x07;
-strcpy(romData.name, "UW2");
-romData.bootMode = 0x00;
-flashUpdate();
-}
 
-nrf24l01Init(0);
+strcpy(romData->name, "UH1");
 
-# 209
+nrf24l01Init();
+
+unsigned char pipe = nrf24l01GetPipe(romData->name);
+nrf24l01SetTXPipe(pipe);
+nrf24l01SetRXPipe(pipe);
+
+
+
 ADCON0bits.ADON = 0;
 
 
-ANSELAbits.ANSA4 = 1;
+PORTAbits.RA4 = 0;
 TRISAbits.TRISA4 = 1;
 WPUAbits.WPUA4 = 0;
+ODCONAbits.ODCA4 = 1;
+ANSELAbits.ANSA4 = 1;
 
 
 ANSELCbits.ANSC3 = 1;
 TRISCbits.TRISC3 = 1;
 
 
-FVRCONbits.TSEN = 0;
-FVRCONbits.TSRNG = 0;
 FVRCONbits.TSEN = 1;
+FVRCONbits.TSRNG = 1;
 
 
 FVRCONbits.FVREN = 0;
-FVRCONbits.ADFVR = 1;
-FVRCONbits.FVREN = 1;
+FVRCONbits.ADFVR = 0b10;
 
 ADCON1bits.ADCS = 0b111;
 ADCON1bits.ADFM = 1;
-ADCON1bits.ADNREF = 0b0;
-ADCON1bits.ADPREF = 0b00;
+ADCON1bits.ADPREF = 0b11;
+ADCON1bits.ADNREF = 0b00;
+
 
 ADCON0bits.CHS = 3;
-ADCON0bits.ADON = 1;
 
 
 
@@ -11248,10 +11236,6 @@ ADCON0bits.ADON = 1;
 TRISAbits.TRISA2 = 1;
 PIE0bits.INTE = 1;
 INTCONbits.INTEDG = 0;
-
-
-
-WDTCONbits.WDTPS = 10;
 
 
 TRISAbits.TRISA5 = 0;
@@ -11263,11 +11247,11 @@ INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-setMessage(&packet, "BOOT", romData.bootMode);
+setMessage(&packet, "BOOT", romData->bootMode);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
-sleep();
+sleep(10);
 
 while(1){
 loop();

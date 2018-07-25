@@ -28,7 +28,6 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 
 		char* strings = strtok(RXPacket->Message, "/");
 
-
 		char *name = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(name, strings);
 		strings = strtok(NULL, "/");
@@ -36,7 +35,7 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		char *topic = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(topic, strings);
 		strings = strtok(NULL, "/");
-
+		
 		char *value = (char *) os_zalloc(strlen(strings) * sizeof(char));
 		strcpy(value, strings);
 
@@ -46,7 +45,6 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		os_sprintf(buffer, "/radio/in/%u/%s/%s", system_get_chip_id(), name, topic);
 
 		os_printf("%s = %s\r\n", buffer, value);
-		os_printf("Data Byte = %u\r\n", RXPacket->packetData.byte);
 
 		if (enabled){
 			MQTT_Publish(mqttClient, buffer, value, strlen(value), 1, 1);
@@ -105,7 +103,7 @@ void ICACHE_FLASH_ATTR radioInit(MQTT_Client* p_mqttClient){
 	ets_isr_attach(ETS_GPIO_INUM, (ets_isr_t) radioInterrupt, NULL);
 	ETS_GPIO_INTR_ENABLE();// Enable interrupts
 
-	nrf24l01Init(1);
+	nrf24l01Init();
 
 	nrf24l01SetRXMode(1);
 

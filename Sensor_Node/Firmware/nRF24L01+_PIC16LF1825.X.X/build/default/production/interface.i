@@ -10620,18 +10620,26 @@ typedef struct{
 unsigned char check;
 char name[16];
 unsigned int bootMode;
+float tempCalVf;
+float tempCalTc;
+float tempCalOffset;
 } romData_t;
 
-
-
-
-const romData_t resetRomData = {
-{0xAA},
-{"Unconfigured"},
-{0},
+typedef union{
+struct{
+romData_t RomData;
 };
+struct{
+unsigned char bytes[sizeof(romData_t)];
+};
+} romDataMap_t;
 
-# 36
+
+
+romDataMap_t romDataMap;
+romData_t * romData = &romDataMap.RomData;
+
+# 51
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);
@@ -10646,26 +10654,8 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
-# 6 "flash.h"
-extern romData_t romData;
 
-typedef union{
-struct{
-romData_t RomData;
-};
-struct{
-unsigned char array[32];
-};
-}romHolder_t;
-
-
-const unsigned char romArray[32]@(0x2000U - 32);
-
-void flashRealod(void);
-void flashUpdate(void);
-
-
-# 7 "interface.c"
+# 6 "interface.c"
 #pragma interrupt_level 1
 void nrf24l01CELow(void){
 PORTAbits.RA0 = 0;
@@ -10726,12 +10716,12 @@ return SSP1BUF;
 #pragma interrupt_level 1
 void nrf24l01SPIStart(void){
 nrf24l01CSLow();
-_delay((unsigned long)((10)*(16000000/4000000.0)));
+_delay((unsigned long)((10)*(32000000/4000000.0)));
 }
 
 #pragma interrupt_level 1
 void nrf24l01SPIEnd(void){
-_delay((unsigned long)((10)*(16000000/4000000.0)));
+_delay((unsigned long)((10)*(32000000/4000000.0)));
 nrf24l01CSHigh();
 }
 
@@ -10741,7 +10731,5 @@ PIE0bits.INTE = enable;
 }
 
 void exception(unsigned char exception){
-romData.bootMode = (unsigned) (exception * 10);
-flashUpdate();
 asm("reset");
 }

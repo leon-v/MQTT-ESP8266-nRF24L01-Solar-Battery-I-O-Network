@@ -1,17 +1,44 @@
 #ifndef NRF24L01_TYPES_H_
 #define NRF24L01_TYPES_H_
 
-#define n_R_REGISTER	0b00000000
-#define n_W_REGISTER	0b00100000
-#define n_R_RX_PAYLOAD  0b01100001
-#define n_W_TX_PAYLOAD  0b10100000
-#define n_FLUSH_TX      0b11100001
-#define n_FLUSH_RX      0b11100010
-#define n_R_RX_PL_WID	0b01100000
-#define W_TX_PAYLOAD_NOACK 0b10110000
+#define n_R_REGISTER        (unsigned) 0b00000000
+#define n_W_REGISTER        (unsigned) 0b00100000
+#define n_R_RX_PAYLOAD      (unsigned) 0b01100001
+#define n_W_TX_PAYLOAD      (unsigned) 0b10100000
+#define n_FLUSH_TX          (unsigned) 0b11100001
+#define n_FLUSH_RX          (unsigned) 0b11100010
+#define n_R_RX_PL_WID       (unsigned) 0b01100000
+#define W_TX_PAYLOAD_NOACK  (unsigned) 0b10110000
+/*
+ typedef union{
+	struct {
+		unsigned byte : 8;
+	};
+	struct {
+		unsigned bit0	: 1;
+		unsigned bit1	: 1;
+		unsigned bit2	: 1;
+		unsigned bit3	: 1;
+		unsigned bit4	: 1;
+		unsigned bit5	: 1;
+		unsigned bit6	: 1;
+		unsigned bit7	: 1;
+	};
+	struct {
+		unsigned bit0	: 1;
+		unsigned bit1	: 1;
+		unsigned bit2	: 1;
+		unsigned bit3	: 1;
+		unsigned bit4	: 1;
+		unsigned bit5	: 1;
+		unsigned bit6	: 1;
+		unsigned bit7	: 1;
+	};
+} n_NAME_t;
+ */
 
 
-#define n_CONFIG 		0x00
+#define n_CONFIG 		(unsigned) 0x00
 typedef union{
 	struct {
 		unsigned byte : 8;
@@ -27,19 +54,9 @@ typedef union{
 		unsigned Reserved	: 1;
 
 	};
-	struct {
-		unsigned bit0	: 1;
-		unsigned bit1	: 1;
-		unsigned bit2	: 1;
-		unsigned bit3	: 1;
-		unsigned bit4	: 1;
-		unsigned bit5	: 1;
-		unsigned bit6	: 1;
-		unsigned bit7	: 1;
-	};
 } n_CONFIG_t;
 
-#define n_EN_AA			0x01
+#define n_EN_AA			(unsigned) 0x01
 typedef union{
 	struct {
 		unsigned byte : 8;
@@ -54,19 +71,9 @@ typedef union{
 		unsigned Reserved	: 2;
 
 	};
-	struct {
-		unsigned bit0	: 1;
-		unsigned bit1	: 1;
-		unsigned bit2	: 1;
-		unsigned bit3	: 1;
-		unsigned bit4	: 1;
-		unsigned bit5	: 1;
-		unsigned bit6	: 1;
-		unsigned bit7	: 1;
-	};
 } n_EN_AA_t;
 
-#define n_EN_RXADDR		0x02
+#define n_EN_RXADDR		(unsigned) 0x02
 typedef union{
 	struct {
 		unsigned byte : 8;
@@ -81,19 +88,9 @@ typedef union{
 		unsigned Reserved	: 2;
 
 	};
-	struct {
-		unsigned bit0	: 1;
-		unsigned bit1	: 1;
-		unsigned bit2	: 1;
-		unsigned bit3	: 1;
-		unsigned bit4	: 1;
-		unsigned bit5	: 1;
-		unsigned bit6	: 1;
-		unsigned bit7	: 1;
-	};
 } n_EN_RXADDR_t;
 
-#define n_SETUP_AW		0x02
+#define n_SETUP_AW		(unsigned) 0x02
 typedef union{
     struct {
 		unsigned byte : 8;
@@ -105,7 +102,7 @@ typedef union{
 } n_SETUP_AW_t;
 
 
-#define n_SETUP_RETR    0x04
+#define n_SETUP_RETR    (unsigned) 0x04
 typedef union{
 	struct {
 		unsigned byte : 8;
@@ -117,17 +114,18 @@ typedef union{
 	};
 } n_SETUP_RETR_t;
 
-#define n_RF_CH         0x05
+#define n_RF_CH         (unsigned) 0x05
 typedef union {
     struct {
 		unsigned byte   : 8;
 	};
     struct {
-        unsigned RF_CH  : 7;
+        unsigned RF_CH  	: 7;
+        unsigned Reserved	: 1;
     };
 } n_RF_CH_t;
 
-#define n_RF_SETUP		0x06
+#define n_RF_SETUP		(unsigned) 0x06
 typedef union {
     struct {
 		unsigned byte       : 8;
@@ -144,7 +142,7 @@ typedef union {
 } n_RF_SETUP_t;
 
 
-#define n_STATUS		0x07
+#define n_STATUS		(unsigned) 0x07
 typedef union{
 	struct {
 		unsigned byte : 8;
@@ -160,7 +158,7 @@ typedef union{
 	};
 } n_STATUS_t;
 
-#define n_RPD			0x09
+#define n_RPD			(unsigned) 0x09
 typedef union{
 	struct {
 		unsigned byte	: 8;
@@ -171,15 +169,21 @@ typedef union{
 	};
 } n_RPD_t;
 
+#define n_RX_ADDR_P0    (unsigned) 0x0A
+#define n_RX_ADDR_P1    (unsigned) 0x0B
+#define n_RX_ADDR_P2    (unsigned) 0x0C
+#define n_RX_ADDR_P3    (unsigned) 0x0D
+#define n_RX_ADDR_P4    (unsigned) 0x0E
+#define n_RX_ADDR_P5    (unsigned)  0x0F
 
-#define n_TX_ADDR       0x10
+#define n_TX_ADDR       (unsigned) 0x10
 
-#define n_RX_PW_P0		0x11
-#define n_RX_PW_P1		0x12
-#define n_RX_PW_P2		0x13
-#define n_RX_PW_P3		0x14
-#define n_RX_PW_P4		0x15
-#define n_RX_PW_P5		0x16
+#define n_RX_PW_P0		(unsigned) 0x11
+#define n_RX_PW_P1		(unsigned) 0x12
+#define n_RX_PW_P2		(unsigned) 0x13
+#define n_RX_PW_P3		(unsigned) 0x14
+#define n_RX_PW_P4		(unsigned) 0x15
+#define n_RX_PW_P5		(unsigned) 0x16
 typedef union{
 	struct {
 		unsigned byte : 8;
@@ -191,15 +195,15 @@ typedef union{
 	};
 } n_RX_PW_t;
 
-#define n_RX_ADDR_P0		0x0A
-#define n_RX_ADDR_P1		0x0B
-#define n_RX_ADDR_P2		0x0C
-#define n_RX_ADDR_P3		0x0D
-#define n_RX_ADDR_P4		0x0E
-#define n_RX_ADDR_P5		0x0F
+#define n_RX_ADDR_P0		(unsigned) 0x0A
+#define n_RX_ADDR_P1		(unsigned) 0x0B
+#define n_RX_ADDR_P2		(unsigned) 0x0C
+#define n_RX_ADDR_P3		(unsigned) 0x0D
+#define n_RX_ADDR_P4		(unsigned) 0x0E
+#define n_RX_ADDR_P5		(unsigned) 0x0F
 
 
-#define n_DYNPD				0x1C
+#define n_DYNPD				(unsigned) 0x1C
 typedef union{
 	struct {
 		unsigned byte : 8;
@@ -217,7 +221,7 @@ typedef union{
 } n_DYNPD_t;
 
 
-#define n_FEATURE			0x1D
+#define n_FEATURE			(unsigned) 0x1D
 typedef union{
 	struct {
 		unsigned byte : 8;

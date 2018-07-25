@@ -1,5 +1,4 @@
 #include <xc.h>
-#include "flash.h"
 #include "interface.h"
 
 
@@ -79,7 +78,5 @@ void enableInterrupts(unsigned char enable){
 }
 
 void exception(unsigned char exception){
-    romData.bootMode = (unsigned) (exception * 10);
-    flashUpdate();
     RESET();
 }

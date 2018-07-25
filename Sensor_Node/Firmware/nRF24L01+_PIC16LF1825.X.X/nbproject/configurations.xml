@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>flash.h</itemPath>
       <itemPath>interface.h</itemPath>
       <itemPath>nrf24l01.h</itemPath>
       <itemPath>nRF24L01_Types.h</itemPath>
@@ -17,7 +16,6 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>config.c</itemPath>
-      <itemPath>flash.c</itemPath>
       <itemPath>interface.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>nrf24l01.c</itemPath>
@@ -382,6 +380,12 @@
         <property key="warningmessagebreakoptions.W0113_SIM_WRITE_TO_PROTECTED_SFR"
                   value="report"/>
         <property key="warningmessagebreakoptions.W0114_SIM_INVALID_KEY" value="report"/>
+        <property key="warningmessagebreakoptions.W0115_SIM_FAILED_TO_PARSE_DEVICE_FILE"
+                  value="report"/>
+        <property key="warningmessagebreakoptions.W0116_SIM_STACK_OVERFLOW"
+                  value="report"/>
+        <property key="warningmessagebreakoptions.W0117_SIM_STACK_UNDERFLOW"
+                  value="report"/>
         <property key="warningmessagebreakoptions.W0201_ADC_NO_STIMULUS_FILE"
                   value="report"/>
         <property key="warningmessagebreakoptions.W0202_ADC_GO_DONE_BIT" value="report"/>
