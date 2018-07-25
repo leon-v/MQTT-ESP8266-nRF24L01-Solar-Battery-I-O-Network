@@ -151,6 +151,7 @@ void loop(){
     float ta = (vt / tc) - (vf / tc) - 40;
     
     
+    
 	setMessage(&packet, "TEMP", ta);
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
