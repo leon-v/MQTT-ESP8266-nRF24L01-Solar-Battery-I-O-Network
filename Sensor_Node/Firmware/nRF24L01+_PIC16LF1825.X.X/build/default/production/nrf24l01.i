@@ -10617,21 +10617,39 @@ extern __bank0 __bit __timeout;
 
 # 12 "interface.h"
 typedef struct{
+
+
+
 unsigned char check;
 char name[16];
 unsigned int bootMode;
+float tempCalVf;
+float tempCalTc;
+float tempCalOffset;
 } romData_t;
 
-
-
-
-const romData_t resetRomData = {
+static const romData_t resetRomData = {
 {0xAA},
-{"Unconfigured"},
+{"UWT"},
 {0},
+{0.606},
+{-0.00132},
+{40}
 };
 
-# 36
+typedef union{
+struct{
+romData_t RomData;
+};
+struct{
+unsigned char bytes[sizeof(romData_t)];
+};
+} romDataMap_t;
+
+romDataMap_t romDataMap;
+romData_t * romData = &romDataMap.RomData;
+
+# 54
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);
