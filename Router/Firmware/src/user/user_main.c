@@ -232,7 +232,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 		INFO("MQTT: Init: mqtt_user %s\r\n", sysCfg.mqtt_user);
 		INFO("MQTT: Init: mqtt_keepalive %u\r\n", sysCfg.mqtt_keepalive);
 
-		MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
+		MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, 30, 1);
 
 		MQTT_OnConnected(&mqttClient, mqttConnectedCb);
 		MQTT_OnDisconnected(&mqttClient, mqttDisconnectedCb);
@@ -244,6 +244,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 		INFO("\r\nSystem started ...\r\n");	
 	}
 }
+
 
 
 // 638 = 3.3

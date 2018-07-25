@@ -30,7 +30,7 @@ typedef union{
 
 typedef struct{
     packetData_t packetData;
-    char Message[32];
+    char Message[33];
 } nrf24l01Packet_t;
 
 volatile nrf24l01_t nrf24l01;
