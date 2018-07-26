@@ -14,3 +14,11 @@
 *.rlf
 *.sdb
 *.sym
+*.bin
+*.dump
+*.S
+*.out
+*.a
+*.o
+*.d
+*.o

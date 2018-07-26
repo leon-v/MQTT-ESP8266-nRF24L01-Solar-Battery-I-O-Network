@@ -10986,7 +10986,7 @@ void nrf24l01SetRXPipe(unsigned char pipe);
 
 # 9 "main.c"
 unsigned char sleepLoop = 0;
-unsigned long counter = 0;
+float counter = 0;
 
 
 
@@ -11031,11 +11031,7 @@ ADCON0bits.ADON = 1;
 
 sleep(0);
 
-counter = 0;
-
 while (adcLoop--){
-
-counter++;
 
 ADCON0bits.ADGO = 1;
 
@@ -11069,6 +11065,31 @@ if (!nrf24l01.RXPending){
 return;
 }
 
+nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
+
+
+if (RXPacket->packetData.ACKRequest){
+nrf24l01SendACK(RXPacket);
+}
+
+char* strings = strtok(RXPacket->Message, "/");
+
+char name[32];
+strcpy(name, strings);
+strings = strtok((0), "/");
+
+char topic[32];
+strcpy(topic, strings);
+strings = strtok((0), "/");
+
+char value[32];
+strcpy(value, strings);
+
+counter = atof(value);
+
+nrf24l01.RXPending = 0;
+
+nrf24l01SetRXMode(0);
 }
 
 void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
@@ -11096,12 +11117,20 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
-# 129
+setMessage(&packet, "DBG", counter);
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 0;
+nrf24l01SendPacket(&packet);
+checkTXPower();
+sleep(10);
+
+
+
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / (FVRCONbits.TSRNG ? 2 : 4);
 FVRCONbits.TSEN = 0;
 
-# 139
+# 160
 float ta = (vt / -0.0014) - (0.6063 / -0.0014) - 40;
 
 setMessage(&packet, "TEMP", ta);
@@ -11109,15 +11138,17 @@ packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep(10);
 
-# 153
+checkRxData();
+
+# 175
 setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep(10);
+
+checkRxData();
 
 
 setMessage(&packet, "ANC3mV", getADCValue(0b010011));
@@ -11125,7 +11156,8 @@ packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep(10);
+
+checkRxData();
 
 
 n_RF_SETUP_t rfSetup;
@@ -11136,7 +11168,8 @@ packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep(10);
+
+checkRxData();
 
 
 
@@ -11177,7 +11210,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 223
+# 248
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 

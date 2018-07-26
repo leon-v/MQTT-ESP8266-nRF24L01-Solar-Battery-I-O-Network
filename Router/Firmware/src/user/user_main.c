@@ -82,7 +82,7 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args){
 	// MQTT_Publish(client, "/sensor/test/max", "4500", 4, 1, 1);
 	// MQTT_Publish(client, "/sensor/test/min", "2500", 4, 1, 1);
 
-	// MQTT_Subscribe(client, "/mqtt/topic/0", 0);
+	// MQTT_Subscribe(client, "/radio/out/#", 0);
 	// MQTT_Subscribe(client, "/mqtt/topic/1", 1);
 	// MQTT_Subscribe(client, "/mqtt/topic/2", 2);
 	// MQTT_Subscribe(client, "/sensor/test/0", 0);
@@ -124,6 +124,9 @@ void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const cha
     dataBuf[data_len] = 0;
 
     INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
+
+    radioForwardPacket(topicBuf, dataBuf);
+    
     os_free(topicBuf);
     os_free(dataBuf);
 }

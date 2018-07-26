@@ -7,7 +7,7 @@
 #include "../../../../shared.h"
 
 unsigned char sleepLoop = 0;
-unsigned long counter = 0;
+float counter = 0;
 
 // Cahnge ISR to trigger super loop code to do its bidding
 
@@ -51,12 +51,8 @@ float getADCValue(unsigned char channel){
     ADCON0bits.ADON = 1;
     
 	sleep(0);
-	
-    counter = 0;
     
 	while (adcLoop--){
-        
-        counter++;
 		
 		ADCON0bits.ADGO = 1;
        
@@ -89,7 +85,32 @@ void checkRxData(void){
 	if (!nrf24l01.RXPending){
 		return;
 	}
+    
+    nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
+    
+    // If we are the primary hub / reciever, we need to send back ACKs
+    if (RXPacket->packetData.ACKRequest){
+        nrf24l01SendACK(RXPacket);
+    }
+       
+    char* strings = strtok(RXPacket->Message, "/");
 
+    char name[32];
+    strcpy(name, strings);
+    strings = strtok(NULL, "/");
+
+    char topic[32];
+    strcpy(topic, strings);
+    strings = strtok(NULL, "/");
+
+    char value[32];
+    strcpy(value, strings);
+    
+    counter = atof(value);
+    
+    nrf24l01.RXPending = 0;
+    
+    nrf24l01SetRXMode(0);
 }
 
 void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
@@ -117,12 +138,12 @@ void loop(){
     
     nrf24l01Packet_t packet;
     
-//    setMessage(&packet, "DBG", counter);
-//    packet.packetData.byte = 0;
-//    packet.packetData.ACKRequest = 0;
-//	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-//	sleep(10);
+    setMessage(&packet, "DBG", counter);
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 0;
+	nrf24l01SendPacket(&packet);
+    checkTXPower();
+	sleep(10);
     
     
         
@@ -143,7 +164,8 @@ void loop(){
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-	sleep(10);
+//	sleep(10);
+    checkRxData();
     
     
     
@@ -155,7 +177,8 @@ void loop(){
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-	sleep(10);
+//	sleep(10);
+    checkRxData();
     
     
     setMessage(&packet, "ANC3mV", getADCValue(0b010011));
@@ -163,7 +186,8 @@ void loop(){
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-	sleep(10);
+//	sleep(10);
+    checkRxData();
     
     
     n_RF_SETUP_t rfSetup;
@@ -174,7 +198,8 @@ void loop(){
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-	sleep(10);
+//	sleep(10);
+    checkRxData();
     
 	
 //	checkRxData();
