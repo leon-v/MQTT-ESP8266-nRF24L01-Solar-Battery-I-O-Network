@@ -2,3 +2,15 @@
 *.d
 *.i
 *.p1
+*.i
+*.p1
+*.elf
+*.cmf
+*.lst
+*.hxl
+*.mum
+*.map
+*.o
+*.rlf
+*.sdb
+*.sym

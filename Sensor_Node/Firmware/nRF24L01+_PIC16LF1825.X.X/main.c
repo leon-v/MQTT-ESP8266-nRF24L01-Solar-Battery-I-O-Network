@@ -124,7 +124,29 @@ void loop(){
 //    checkTXPower();
 //	sleep(10);
     
-//	19.086
+    
+        
+    FVRCONbits.TSEN = 1;
+    float vt = (2.048 - getADCValue(0b111101)) / (FVRCONbits.TSRNG ? 2 : 4);
+    FVRCONbits.TSEN = 0;
+    
+	#define tempOffset 40
+    #define vf 0.6063
+    #define tc -0.0014 // 19.601568 betwen max nad min
+//    #define tc -0.00132 // 23.226564 From AN1333 PDF
+//    #define tc -0.00162 // 11.156252 Min
+//    #define tc -0.00118 // 30.835936 MAx
+    float ta = (vt / tc) - (vf / tc) - tempOffset;
+    
+	setMessage(&packet, "TEMP", ta);
+    packet.packetData.byte = 0;
+    packet.packetData.ACKRequest = 1;
+	nrf24l01SendPacket(&packet);
+    checkTXPower();
+	sleep(10);
+    
+    
+    
     //Resistor divider on Vbatt
     // 10K / 4.7K  = 2.127659574468085
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
@@ -137,22 +159,6 @@ void loop(){
     
     
     setMessage(&packet, "ANC3mV", getADCValue(0b010011));
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep(10);
-    
-    FVRCONbits.TSEN = 1;
-    float vt = (2.048 - getADCValue(0b111101)) / 2;
-    FVRCONbits.TSEN = 0;
-    
-	#define tempOffset 27
-    #define vf 0.6063
-    #define tc -0.00132
-    float ta = (vt / tc) - (vf / tc) - tempOffset;
-    
-	setMessage(&packet, "TEMP", ta);
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);

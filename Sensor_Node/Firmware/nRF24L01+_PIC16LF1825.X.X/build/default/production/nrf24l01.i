@@ -10634,12 +10634,10 @@ unsigned char bytes[sizeof(romData_t)];
 };
 } romDataMap_t;
 
-
-
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 51
+# 49
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);

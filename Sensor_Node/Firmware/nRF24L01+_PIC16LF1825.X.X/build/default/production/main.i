@@ -10748,12 +10748,10 @@ unsigned char bytes[sizeof(romData_t)];
 };
 } romDataMap_t;
 
-
-
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 51
+# 49
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);
@@ -11098,7 +11096,22 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
-# 131
+# 129
+FVRCONbits.TSEN = 1;
+float vt = (2.048 - getADCValue(0b111101)) / (FVRCONbits.TSRNG ? 2 : 4);
+FVRCONbits.TSEN = 0;
+
+# 139
+float ta = (vt / -0.0014) - (0.6063 / -0.0014) - 40;
+
+setMessage(&packet, "TEMP", ta);
+packet.packetData.byte = 0;
+packet.packetData.ACKRequest = 1;
+nrf24l01SendPacket(&packet);
+checkTXPower();
+sleep(10);
+
+# 153
 setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
@@ -11108,22 +11121,6 @@ sleep(10);
 
 
 setMessage(&packet, "ANC3mV", getADCValue(0b010011));
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
-nrf24l01SendPacket(&packet);
-checkTXPower();
-sleep(10);
-
-FVRCONbits.TSEN = 1;
-float vt = (2.048 - getADCValue(0b111101)) / 2;
-FVRCONbits.TSEN = 0;
-
-
-
-
-float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 27;
-
-setMessage(&packet, "TEMP", ta);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
@@ -11180,7 +11177,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 217
+# 223
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11191,7 +11188,7 @@ _delay((unsigned long)((10)*(32000000/4000.0)));
 
 
 
-strcpy(romData->name, "UH1");
+strcpy(romData->name, "UWT");
 
 nrf24l01Init();
 
