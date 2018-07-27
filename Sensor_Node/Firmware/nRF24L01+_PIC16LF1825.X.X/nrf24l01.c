@@ -174,8 +174,6 @@ void nrf24l01ReceivePacket(void){
 }
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
-    
-    TXPacket = Packet;
 	
 	// Initalise an iterator for the many loops
     unsigned char i;
@@ -187,11 +185,16 @@ RESEND:
 //	 Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
+        
+        nrf24l01ISR();
+                
         if (!--i) {
             goto RESEND;
         }
         delayUs(100);
     }
+
+    TXPacket = Packet;
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
 	nrf24l01.TXBusy = 1;
@@ -229,6 +232,9 @@ RESEND:
     // Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
+        
+        nrf24l01ISR();
+                
         if (!--i) {
             goto RESEND;
         }
@@ -239,6 +245,9 @@ RESEND:
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
+        
+        nrf24l01ISR();
+                
 		if (!--i) {
             delayUs(50000);
             delayUs(50000);

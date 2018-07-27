@@ -11083,8 +11083,6 @@ nrf24l01CEHigh();
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
 
-TXPacket = Packet;
-
 
 unsigned char i;
 
@@ -11095,11 +11093,16 @@ RESEND:
 
 i = 0xFF;
 while (nrf24l01.TXBusy){
+
+nrf24l01ISR();
+
 if (!--i) {
 goto RESEND;
 }
 _delay((unsigned long)((100)*(32000000/4000000.0)));
 }
+
+TXPacket = Packet;
 
 
 nrf24l01.TXBusy = 1;
@@ -11137,6 +11140,9 @@ enableInterrupts(1);
 
 i = 0xFF;
 while (nrf24l01.TXBusy){
+
+nrf24l01ISR();
+
 if (!--i) {
 goto RESEND;
 }
@@ -11147,6 +11153,9 @@ _delay((unsigned long)((100)*(32000000/4000000.0)));
 
 i = 0xFF;
 while (TXPacket->packetData.ACKRequest){
+
+nrf24l01ISR();
+
 if (!--i) {
 _delay((unsigned long)((50000)*(32000000/4000000.0)));
 _delay((unsigned long)((50000)*(32000000/4000000.0)));

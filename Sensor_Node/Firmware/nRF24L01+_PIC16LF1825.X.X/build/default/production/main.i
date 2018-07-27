@@ -11016,34 +11016,12 @@ void handleRXData(void){
 
 nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
-char string[16];
-char* strings = strtok(RXPacket->Message, "/");
-
-strcpy(string, strings);
-
-if (strcmp(string, romData->name) != 0){
-
-
-
-}
-
-
+# 52
 if (RXPacket->packetData.ACKRequest){
 nrf24l01SendACK(RXPacket);
 }
 
-strings = strtok((0), "/");
-strcpy(string, strings);
-
-
-
-strings = strtok((0), "/");
-strcpy(string, strings);
-
-
-
-counter = atof(string);
-
+# 68
 nrf24l01.RXPending = 0;
 }
 
@@ -11073,10 +11051,7 @@ nrf24l01SetRXMode(1);
 
 doWDTSleep(0b01000);
 
-
-nrf24l01SetRXMode(0);
-
-
+# 101
 if (nrf24l01.RXPending){
 handleRXData();
 }

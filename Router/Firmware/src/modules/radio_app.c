@@ -16,12 +16,12 @@ void radioEnable(uint8 enable){
 }
 
 void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
-	// os_printf("radio_Task \r\n");
     
 	if (!nrf24l01.RXPending){
-		enableInterrupts(0);
 		return;
 	}
+
+	os_printf("radio_Task \r\n");
 		
 	nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
@@ -66,7 +66,6 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 	nrf24l01.RXPending = 0;
 
 	nrf24l01SetRXMode(1);
-	enableInterrupts(0);
 }
 
 void radoCheckStatus(void){
@@ -75,12 +74,11 @@ void radoCheckStatus(void){
 
 	if (nrf24l01.RXPending){
 		system_os_post(RADIO_TASK_PRIO, 0, (os_param_t) mqttClient);
-		enableInterrupts(0);
 	}
 }
 
 void ICACHE_FLASH_ATTR spiTestTimerFunction(void *arg){
-	os_printf("Radio: Timer\r\n");
+	// os_printf("Radio: Timer\r\n");
 	radoCheckStatus();
 }
 
@@ -89,7 +87,7 @@ void radioInterrupt(int * arg){
 
 	uint32 gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
 
-	os_printf("Radio: Interrupt\r\n");
+	// os_printf("Radio: Interrupt\r\n");
 	radoCheckStatus();
 
 	GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);

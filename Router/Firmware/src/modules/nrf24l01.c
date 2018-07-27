@@ -186,6 +186,9 @@ RESEND:
 //	 Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
+
+    	nrf24l01ISR();
+    	
         if (!--i) {
         	INFO("TXBusy 1\r\n");
             goto RESEND;
@@ -231,6 +234,9 @@ RESEND:
     // Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
+
+    	nrf24l01ISR();
+
         if (!--i) {
         	INFO("TXBusy 2\r\n");
             goto RESEND;
@@ -242,14 +248,15 @@ RESEND:
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
+
+		nrf24l01ISR();
+
 		if (!--i) {
 			INFO("ACKRequest 2\r\n");
             nrf24l01ChangeTXPower(1);
-            delayUs(50000);
-            delayUs(50000);
 			goto RESEND;
 		}
-		delayUs(1000);
+		delayUs(10000);
 	}
 }
 
@@ -307,7 +314,7 @@ void nrf24l01ISR(void){
         else{
 
         	// We don't want to clear the interrupt so we can pick it up next time
-        	// status.RX_DR = 0;
+        	status.RX_DR = 0;
         }
         
     }

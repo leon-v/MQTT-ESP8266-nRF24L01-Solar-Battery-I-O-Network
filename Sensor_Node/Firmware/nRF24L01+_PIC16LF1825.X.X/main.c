@@ -37,33 +37,33 @@ void handleRXData(void){
     
     nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
     
-    char string[16];
-    char* strings = strtok(RXPacket->Message, "/");
+//    char string[16];
+//    char* strings = strtok(RXPacket->Message, "/");
     
-    strcpy(string, strings);
+//    strcpy(string, strings);
     
-    if (strcmp(string, romData->name) != 0){
+//    if (strcmp(string, romData->name) != 0){
         
 //        nrf24l01.RXPending = 0;
 //        return;
-    }
+//    }
     
     // If we are the primary hub / reciever, we need to send back ACKs
     if (RXPacket->packetData.ACKRequest){
         nrf24l01SendACK(RXPacket);
     }    
     
-    strings = strtok(NULL, "/");
-    strcpy(string, strings);
-    
-    // Check topic
-    
-    strings = strtok(NULL, "/");
-    strcpy(string, strings);
-    
-    // Check value
-    
-    counter = atof(string);
+//    strings = strtok(NULL, "/");
+//    strcpy(string, strings);
+//    
+//    // Check topic
+//    
+//    strings = strtok(NULL, "/");
+//    strcpy(string, strings);
+//    
+//    // Check value
+//    
+//    counter = atof(string);
     
     nrf24l01.RXPending = 0;
 }
@@ -95,7 +95,7 @@ void sleep(unsigned int milliseconds){
         doWDTSleep(0b01000);
         
         // Set the radio to TX mode to go into low power mode
-        nrf24l01SetRXMode(0);
+//        nrf24l01SetRXMode(0);
 
         // Process the packet if there was one
         if (nrf24l01.RXPending){
