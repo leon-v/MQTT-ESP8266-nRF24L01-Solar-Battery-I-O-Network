@@ -10998,24 +10998,91 @@ PIR0bits.INTF = 0;
 }
 }
 
-void sleep(unsigned char wdps){
+void doWDTSleep(unsigned char wdtps){
 
-WDTCONbits.WDTPS = wdps;
 
-while (1){
+WDTCONbits.WDTPS = wdtps;
+
 
 asm("sleep");
 __nop();
 __nop();
 
-if (!STATUSbits.nTO && !STATUSbits.nPD) {
-
-
-WDTCONbits.WDTPS = 13;
+WDTCONbits.WDTPS = 0b01101;
 asm("clrwdt");
+}
 
+void handleRXData(void){
+
+nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
+
+char string[16];
+char* strings = strtok(RXPacket->Message, "/");
+
+strcpy(string, strings);
+
+if (strcmp(string, romData->name) != 0){
+
+
+
+}
+
+
+if (RXPacket->packetData.ACKRequest){
+nrf24l01SendACK(RXPacket);
+}
+
+strings = strtok((0), "/");
+strcpy(string, strings);
+
+
+
+strings = strtok((0), "/");
+strcpy(string, strings);
+
+
+
+counter = atof(string);
+
+nrf24l01.RXPending = 0;
+}
+
+
+void sleep(unsigned int milliseconds){
+
+
+if (!milliseconds){
+doWDTSleep(0b00000);
 return;
 }
+
+
+
+
+milliseconds = (unsigned int) (milliseconds / (256));
+
+
+milliseconds++;
+
+
+while (--milliseconds){
+
+
+nrf24l01SetRXMode(1);
+
+
+doWDTSleep(0b01000);
+
+
+nrf24l01SetRXMode(0);
+
+
+if (nrf24l01.RXPending){
+handleRXData();
+}
+
+
+
 }
 }
 
@@ -11029,14 +11096,14 @@ ADCON0bits.CHS = channel;
 FVRCONbits.FVREN = 1;
 ADCON0bits.ADON = 1;
 
-sleep(0);
+doWDTSleep(0b00000);
 
 while (adcLoop--){
 
 ADCON0bits.ADGO = 1;
 
 while (ADCON0bits.ADGO){
-sleep(0);
+doWDTSleep(0b00000);
 }
 
 adcSum+= (ADRESL | (ADRESH << 8));
@@ -11051,45 +11118,6 @@ adcSum/= 1000;
 adcSum/= 500;
 
 return adcSum;
-}
-
-
-
-void checkRxData(void){
-
-nrf24l01SetRXMode(1);
-
-sleep(10);
-
-if (!nrf24l01.RXPending){
-return;
-}
-
-nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
-
-
-if (RXPacket->packetData.ACKRequest){
-nrf24l01SendACK(RXPacket);
-}
-
-char* strings = strtok(RXPacket->Message, "/");
-
-char name[32];
-strcpy(name, strings);
-strings = strtok((0), "/");
-
-char topic[32];
-strcpy(topic, strings);
-strings = strtok((0), "/");
-
-char value[32];
-strcpy(value, strings);
-
-counter = atof(value);
-
-nrf24l01.RXPending = 0;
-
-nrf24l01SetRXMode(0);
 }
 
 void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
@@ -11115,6 +11143,7 @@ nrf24l01ChangeTXPower(-1);
 
 void loop(){
 
+
 nrf24l01Packet_t packet;
 
 setMessage(&packet, "DBG", counter);
@@ -11122,7 +11151,7 @@ packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-sleep(10);
+sleep(2000);
 
 
 
@@ -11130,7 +11159,7 @@ FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / (FVRCONbits.TSRNG ? 2 : 4);
 FVRCONbits.TSEN = 0;
 
-# 160
+# 189
 float ta = (vt / -0.0014) - (0.6063 / -0.0014) - 40;
 
 setMessage(&packet, "TEMP", ta);
@@ -11138,17 +11167,15 @@ packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
+sleep(2000);
 
-checkRxData();
-
-# 175
+# 203
 setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-
-checkRxData();
+sleep(2000);
 
 
 setMessage(&packet, "ANC3mV", getADCValue(0b010011));
@@ -11156,8 +11183,7 @@ packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-
-checkRxData();
+sleep(2000);
 
 
 n_RF_SETUP_t rfSetup;
@@ -11168,8 +11194,7 @@ packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
 nrf24l01SendPacket(&packet);
 checkTXPower();
-
-checkRxData();
+sleep(2000);
 
 
 
@@ -11188,6 +11213,8 @@ return (unsigned) pipe % 6;
 }
 
 void main(void) {
+
+unsigned char bootStatus = STATUS;
 
 
 ANSELA = 0x00;
@@ -11210,7 +11237,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 248
+# 275
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11277,11 +11304,11 @@ INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-setMessage(&packet, "BOOT", romData->bootMode);
+setMessage(&packet, "BOOT", bootStatus);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
-sleep(10);
+sleep(3000);
 
 while(1){
 loop();

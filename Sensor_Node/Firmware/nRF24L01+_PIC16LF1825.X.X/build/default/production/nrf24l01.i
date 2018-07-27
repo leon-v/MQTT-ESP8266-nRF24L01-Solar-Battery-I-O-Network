@@ -10965,6 +10965,12 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x06, rfSetup.byte);
 
 void nrf24l01SetRXMode(unsigned char rxMode){
 
+if (rxMode){
+if (nrf24l01.TXBusy){
+return;
+}
+}
+
 n_CONFIG_t config;
 
 
@@ -11028,7 +11034,7 @@ if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
 return;
 }
 
-# 124
+# 130
 TXPacket->packetData.ACKRequest = 0;
 
 

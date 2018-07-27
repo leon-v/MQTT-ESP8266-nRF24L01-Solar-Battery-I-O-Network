@@ -3,6 +3,7 @@
 
 #include "osapi.h"
 #include "gpio.h"
+#include "debug.h"
 
 #define i_uint8_t uint8
 #define i_int8_t int8

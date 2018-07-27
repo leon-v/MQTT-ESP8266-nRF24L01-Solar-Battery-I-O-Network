@@ -53,6 +53,12 @@ void nrf24l01ChangeTXPower(int addPower){
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
+    if (rxMode){
+        if (nrf24l01.TXBusy){
+            return;
+        }
+    }
+    
     n_CONFIG_t config;
     
     // Get the current IC configuration

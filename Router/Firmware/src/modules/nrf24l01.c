@@ -52,6 +52,12 @@ void nrf24l01ChangeTXPower(int addPower){
 }
 
 void nrf24l01SetRXMode(unsigned char rxMode){
+
+	if (rxMode){
+        if (nrf24l01.TXBusy){
+            return;
+        }
+    }
     
     n_CONFIG_t config;
     
@@ -168,13 +174,12 @@ void nrf24l01ReceivePacket(void){
 }
 
 void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
-    
-    TXPacket = Packet;
 	
 	// Initalise an iterator for the many loops
     unsigned char i;
     
-	
+	INFO("nrf24l01SendPacket\r\n");
+
 // Define where to re-start the send if the previous one failed
 RESEND:
 	
@@ -182,10 +187,13 @@ RESEND:
 	i = 0xFF;
     while (nrf24l01.TXBusy){
         if (!--i) {
+        	INFO("TXBusy 1\r\n");
             goto RESEND;
         }
-        delayUs(100);
+        delayUs(1000);
     }
+
+	TXPacket = Packet;
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
 	nrf24l01.TXBusy = 1;
@@ -224,9 +232,10 @@ RESEND:
 	i = 0xFF;
     while (nrf24l01.TXBusy){
         if (!--i) {
+        	INFO("TXBusy 2\r\n");
             goto RESEND;
         }
-        delayUs(100);
+        delayUs(1000);
     }
     
 		
@@ -234,12 +243,13 @@ RESEND:
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
 		if (!--i) {
-            delayUs(50000);
-            delayUs(50000);
+			INFO("ACKRequest 2\r\n");
             nrf24l01ChangeTXPower(1);
+            delayUs(50000);
+            delayUs(50000);
 			goto RESEND;
 		}
-		delayUs(100);
+		delayUs(1000);
 	}
 }
 
@@ -297,7 +307,7 @@ void nrf24l01ISR(void){
         else{
 
         	// We don't want to clear the interrupt so we can pick it up next time
-        	status.RX_DR = 0;
+        	// status.RX_DR = 0;
         }
         
     }

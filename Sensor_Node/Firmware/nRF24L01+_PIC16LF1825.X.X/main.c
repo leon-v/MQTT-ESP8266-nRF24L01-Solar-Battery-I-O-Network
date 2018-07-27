@@ -19,25 +19,92 @@ void interrupt ISR(void){
     }
 }
 
-void sleep(unsigned char wdps){
+void doWDTSleep(unsigned char wdtps){
     
-    WDTCONbits.WDTPS = wdps; //9=500ms, 10=1S, 11=2S, 12=4S
-    
-	while (1){
+    // Set watchdog
+    WDTCONbits.WDTPS = wdtps;
         
-		SLEEP();
-		NOP();
-		NOP();
+    // Start the sleep
+    SLEEP();
+    NOP();
+    NOP();
+    
+    WDTCONbits.WDTPS = 0b01101; // 8s
+    CLRWDT();
+}
 
-		if (!STATUSbits.nTO && !STATUSbits.nPD) {
+void handleRXData(void){
+    
+    nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
+    
+    char string[16];
+    char* strings = strtok(RXPacket->Message, "/");
+    
+    strcpy(string, strings);
+    
+    if (strcmp(string, romData->name) != 0){
+        
+//        nrf24l01.RXPending = 0;
+//        return;
+    }
+    
+    // If we are the primary hub / reciever, we need to send back ACKs
+    if (RXPacket->packetData.ACKRequest){
+        nrf24l01SendACK(RXPacket);
+    }    
+    
+    strings = strtok(NULL, "/");
+    strcpy(string, strings);
+    
+    // Check topic
+    
+    strings = strtok(NULL, "/");
+    strcpy(string, strings);
+    
+    // Check value
+    
+    counter = atof(string);
+    
+    nrf24l01.RXPending = 0;
+}
+
+
+void sleep(unsigned int milliseconds){
+    
+    // If no time passed, sleep until interrupt triggered or 1ms
+    if (!milliseconds){
+        doWDTSleep(0b00000);
+        return;
+    }
+    
+    // If there was a valid time passed
+        
+    // Divide the value by the amount of loops we need to do
+    milliseconds = (unsigned int) (milliseconds / (256));
+
+    // Bump it up 1 to make sure we have at least 1
+    milliseconds++;
             
-            //Reset WDT to wait for IC failure
-            WDTCONbits.WDTPS = 13;
-            CLRWDT();
-            
-			return;
-		}
-	}
+    // Loop 
+    while (--milliseconds){
+        
+        // Set the radio to RX mode to check for incoming packets
+        nrf24l01SetRXMode(1);
+
+        // Listen for 256mS
+        doWDTSleep(0b01000);
+        
+        // Set the radio to TX mode to go into low power mode
+        nrf24l01SetRXMode(0);
+
+        // Process the packet if there was one
+        if (nrf24l01.RXPending){
+            handleRXData();
+        }
+        
+        // Do nothing for 256mS
+//        doWDTSleep(0b01000);
+    }
 }
 
 float getADCValue(unsigned char channel){
@@ -50,14 +117,14 @@ float getADCValue(unsigned char channel){
     FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
     ADCON0bits.ADON = 1;
     
-	sleep(0);
+	doWDTSleep(0b00000); //1ms
     
 	while (adcLoop--){
 		
 		ADCON0bits.ADGO = 1;
        
 		while (ADCON0bits.ADGO){
-            sleep(0);
+            doWDTSleep(0b00000); //1ms
 		}
 		
 		adcSum+= (ADRESL | (ADRESH << 8));
@@ -72,45 +139,6 @@ float getADCValue(unsigned char channel){
     adcSum/= 500; // adjust for FVR +REF @ 2.048 to get volts
 	
 	return adcSum;
-}
-
-
-
-void checkRxData(void){
-	
-	nrf24l01SetRXMode(1);
-	
-	sleep(10);
-	
-	if (!nrf24l01.RXPending){
-		return;
-	}
-    
-    nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
-    
-    // If we are the primary hub / reciever, we need to send back ACKs
-    if (RXPacket->packetData.ACKRequest){
-        nrf24l01SendACK(RXPacket);
-    }
-       
-    char* strings = strtok(RXPacket->Message, "/");
-
-    char name[32];
-    strcpy(name, strings);
-    strings = strtok(NULL, "/");
-
-    char topic[32];
-    strcpy(topic, strings);
-    strings = strtok(NULL, "/");
-
-    char value[32];
-    strcpy(value, strings);
-    
-    counter = atof(value);
-    
-    nrf24l01.RXPending = 0;
-    
-    nrf24l01SetRXMode(0);
 }
 
 void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
@@ -136,6 +164,7 @@ void checkTXPower(){
 
 void loop(){
     
+#define SLEEP_TIME 2000
     nrf24l01Packet_t packet;
     
     setMessage(&packet, "DBG", counter);
@@ -143,10 +172,10 @@ void loop(){
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-	sleep(10);
+	sleep(SLEEP_TIME);
     
     
-        
+    
     FVRCONbits.TSEN = 1;
     float vt = (2.048 - getADCValue(0b111101)) / (FVRCONbits.TSRNG ? 2 : 4);
     FVRCONbits.TSEN = 0;
@@ -164,8 +193,7 @@ void loop(){
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-//	sleep(10);
-    checkRxData();
+    sleep(SLEEP_TIME);
     
     
     
@@ -174,11 +202,10 @@ void loop(){
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
     setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
+    packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-//	sleep(10);
-    checkRxData();
+    sleep(SLEEP_TIME);
     
     
     setMessage(&packet, "ANC3mV", getADCValue(0b010011));
@@ -186,8 +213,7 @@ void loop(){
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-//	sleep(10);
-    checkRxData();
+    sleep(SLEEP_TIME);
     
     
     n_RF_SETUP_t rfSetup;
@@ -198,8 +224,7 @@ void loop(){
     packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
-//	sleep(10);
-    checkRxData();
+    sleep(SLEEP_TIME);
     
 	
 //	checkRxData();
@@ -218,6 +243,8 @@ void loop(){
  }
 
 void main(void) {
+    
+    unsigned char bootStatus = STATUS;
     
     // I Always forget to reset that damn ADC
     ANSELA = 0x00;
@@ -311,11 +338,11 @@ void main(void) {
     
     nrf24l01Packet_t packet;
         
-    setMessage(&packet, "BOOT", romData->bootMode);
+    setMessage(&packet, "BOOT", bootStatus);
     packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
-	sleep(10);
+    sleep(3000);
     
     while(1){
         loop();
