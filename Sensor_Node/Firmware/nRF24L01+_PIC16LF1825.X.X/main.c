@@ -80,7 +80,7 @@ void sleep(unsigned int milliseconds){
     // If there was a valid time passed
         
     // Divide the value by the amount of loops we need to do
-    milliseconds = (unsigned int) (milliseconds / (256));
+    milliseconds = (unsigned int) (milliseconds / (256 + 2));
 
     // Bump it up 1 to make sure we have at least 1
     milliseconds++;
@@ -91,11 +91,11 @@ void sleep(unsigned int milliseconds){
         // Set the radio to RX mode to check for incoming packets
         nrf24l01SetRXMode(1);
 
-        // Listen for 256mS
-        doWDTSleep(0b01000);
+        // Listen for 2mS
+        doWDTSleep(3);
         
         // Set the radio to TX mode to go into low power mode
-//        nrf24l01SetRXMode(0);
+        nrf24l01SetRXMode(0);
 
         // Process the packet if there was one
         if (nrf24l01.RXPending){
@@ -103,7 +103,7 @@ void sleep(unsigned int milliseconds){
         }
         
         // Do nothing for 256mS
-//        doWDTSleep(0b01000);
+        doWDTSleep(0b01000);
     }
 }
 
@@ -180,7 +180,7 @@ void loop(){
     float vt = (2.048 - getADCValue(0b111101)) / (FVRCONbits.TSRNG ? 2 : 4);
     FVRCONbits.TSEN = 0;
     
-	#define tempOffset 40
+	#define tempOffset 40 + 14.8
     #define vf 0.6063
     #define tc -0.0014 // 19.601568 betwen max nad min
 //    #define tc -0.00132 // 23.226564 From AN1333 PDF
@@ -190,7 +190,7 @@ void loop(){
     
 	setMessage(&packet, "TEMP", ta);
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
+    packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
     sleep(SLEEP_TIME);
@@ -210,7 +210,7 @@ void loop(){
     
     setMessage(&packet, "ANC3mV", getADCValue(0b010011));
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
+    packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
     sleep(SLEEP_TIME);
@@ -221,7 +221,7 @@ void loop(){
     
     setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
+    packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
     sleep(SLEEP_TIME);

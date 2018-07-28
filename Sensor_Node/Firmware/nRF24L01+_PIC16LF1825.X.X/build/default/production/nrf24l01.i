@@ -10965,12 +10965,7 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x06, rfSetup.byte);
 
 void nrf24l01SetRXMode(unsigned char rxMode){
 
-if (rxMode){
-if (nrf24l01.TXBusy){
-return;
-}
-}
-
+# 62
 n_CONFIG_t config;
 
 
@@ -11094,8 +11089,6 @@ RESEND:
 i = 0xFF;
 while (nrf24l01.TXBusy){
 
-nrf24l01ISR();
-
 if (!--i) {
 goto RESEND;
 }
@@ -11141,8 +11134,6 @@ enableInterrupts(1);
 i = 0xFF;
 while (nrf24l01.TXBusy){
 
-nrf24l01ISR();
-
 if (!--i) {
 goto RESEND;
 }
@@ -11153,8 +11144,6 @@ _delay((unsigned long)((100)*(32000000/4000000.0)));
 
 i = 0xFF;
 while (TXPacket->packetData.ACKRequest){
-
-nrf24l01ISR();
 
 if (!--i) {
 _delay((unsigned long)((50000)*(32000000/4000000.0)));

@@ -53,11 +53,11 @@ void nrf24l01ChangeTXPower(int addPower){
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
-    if (rxMode){
-        if (nrf24l01.TXBusy){
-            return;
-        }
-    }
+//    if (rxMode){
+//        if (nrf24l01.TXBusy){
+//            return;
+//        }
+//    }
     
     n_CONFIG_t config;
     
@@ -185,8 +185,6 @@ RESEND:
 //	 Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
-        
-        nrf24l01ISR();
                 
         if (!--i) {
             goto RESEND;
@@ -232,8 +230,6 @@ RESEND:
     // Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
-        
-        nrf24l01ISR();
                 
         if (!--i) {
             goto RESEND;
@@ -245,8 +241,6 @@ RESEND:
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
-        
-        nrf24l01ISR();
                 
 		if (!--i) {
             delayUs(50000);

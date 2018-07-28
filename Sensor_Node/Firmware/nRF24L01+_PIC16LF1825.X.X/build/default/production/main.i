@@ -11037,7 +11037,7 @@ return;
 
 
 
-milliseconds = (unsigned int) (milliseconds / (256));
+milliseconds = (unsigned int) (milliseconds / (256 + 2));
 
 
 milliseconds++;
@@ -11049,15 +11049,18 @@ while (--milliseconds){
 nrf24l01SetRXMode(1);
 
 
-doWDTSleep(0b01000);
+doWDTSleep(3);
 
-# 101
+
+nrf24l01SetRXMode(0);
+
+
 if (nrf24l01.RXPending){
 handleRXData();
 }
 
 
-
+doWDTSleep(0b01000);
 }
 }
 
@@ -11135,11 +11138,11 @@ float vt = (2.048 - getADCValue(0b111101)) / (FVRCONbits.TSRNG ? 2 : 4);
 FVRCONbits.TSEN = 0;
 
 # 189
-float ta = (vt / -0.0014) - (0.6063 / -0.0014) - 40;
+float ta = (vt / -0.0014) - (0.6063 / -0.0014) - 40 + 14.8;
 
 setMessage(&packet, "TEMP", ta);
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep(2000);
@@ -11155,7 +11158,7 @@ sleep(2000);
 
 setMessage(&packet, "ANC3mV", getADCValue(0b010011));
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep(2000);
@@ -11166,7 +11169,7 @@ rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 
 setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
+packet.packetData.ACKRequest = 0;
 nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep(2000);
@@ -11223,7 +11226,7 @@ _delay((unsigned long)((10)*(32000000/4000.0)));
 
 
 
-strcpy(romData->name, "UWT");
+strcpy(romData->name, "UH1");
 
 nrf24l01Init();
 
