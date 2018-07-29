@@ -10981,19 +10981,19 @@ if (config.PRIM_RX != rxMode){
 
 
 nrf24l01CELow();
-_delay((unsigned long)((200)*(32000000/4000000.0)));
+_delay((unsigned long)((120)*(32000000/4000000.0)));
 
 
 config.PRIM_RX = rxMode;
 nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x00, config.byte);
 
 
-_delay((unsigned long)((200)*(32000000/4000000.0)));
+_delay((unsigned long)((120)*(32000000/4000000.0)));
 
 
 if (rxMode){
 nrf24l01CEHigh();
-_delay((unsigned long)((200)*(32000000/4000000.0)));
+_delay((unsigned long)((120)*(32000000/4000000.0)));
 }
 }
 
@@ -11035,9 +11035,7 @@ if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
 return;
 }
 
-TXPacket->packetData.ACKRequest = 0;
-
-# 133
+# 130
 TXPacket->packetData.ACKRequest = 0;
 
 
@@ -11157,8 +11155,7 @@ while (TXPacket->packetData.ACKRequest){
 nrf24l01SetRXMode(1);
 
 if (!--i) {
-_delay((unsigned long)((50000)*(32000000/4000000.0)));
-_delay((unsigned long)((50000)*(32000000/4000000.0)));
+_delay((unsigned long)((10000)*(32000000/4000000.0)));
 nrf24l01ChangeTXPower(1);
 goto RESEND;
 }

@@ -11016,12 +11016,29 @@ void handleRXData(void){
 
 nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
-# 52
+
 if (RXPacket->packetData.ACKRequest){
 nrf24l01SendACK(RXPacket);
 }
 
-# 68
+char string[16];
+char* strings = strtok(RXPacket->Message, "/");
+
+strcpy(string, strings);
+
+# 58
+strings = strtok((0), "/");
+strcpy(string, strings);
+
+
+
+strings = strtok((0), "/");
+strcpy(string, strings);
+
+
+
+counter = atof(string);
+
 nrf24l01.RXPending = 0;
 }
 
@@ -11037,7 +11054,7 @@ return;
 
 
 
-milliseconds = (unsigned int) (milliseconds / (256 + 8));
+milliseconds = (unsigned int) (milliseconds / (256 + 128));
 
 
 milliseconds++;
@@ -11049,7 +11066,7 @@ while (--milliseconds){
 nrf24l01SetRXMode(1);
 
 
-doWDTSleep(3);
+doWDTSleep(7);
 
 
 nrf24l01SetRXMode(0);
@@ -11107,7 +11124,7 @@ break;
 return adcSum;
 }
 
-# 174
+# 176
 void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 memset(packet->Message, 0, sizeof(packet->Message));
 
@@ -11149,7 +11166,7 @@ FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / (FVRCONbits.TSRNG ? 2 : 4);
 FVRCONbits.TSEN = 0;
 
-# 221
+# 223
 float ta = (vt / -0.0014) - (0.6063 / -0.0014) - 40 + 14.8;
 
 setMessage(&packet, "TEMP", ta);
@@ -11158,7 +11175,7 @@ nrf24l01SendPacket(&packet);
 checkTXPower();
 sleep(2000);
 
-# 234
+# 236
 ADCON1bits.ADPREF = 0b00;
 FVRCONbits.ADFVR = 0b10;
 setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
@@ -11225,7 +11242,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 305
+# 307
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 

@@ -123,9 +123,9 @@ void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const cha
     os_memcpy(dataBuf, data, data_len);
     dataBuf[data_len] = 0;
 
-    INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
-
     radioForwardPacket(topicBuf, dataBuf);
+
+    INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
     
     os_free(topicBuf);
     os_free(dataBuf);

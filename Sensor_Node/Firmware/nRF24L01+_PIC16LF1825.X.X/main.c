@@ -36,11 +36,16 @@ void doWDTSleep(unsigned char wdtps){
 void handleRXData(void){
     
     nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
+	
+	// If we are the primary hub / reciever, we need to send back ACKs
+    if (RXPacket->packetData.ACKRequest){
+        nrf24l01SendACK(RXPacket);
+    }
     
-//    char string[16];
-//    char* strings = strtok(RXPacket->Message, "/");
+    char string[16];
+    char* strings = strtok(RXPacket->Message, "/");
     
-//    strcpy(string, strings);
+    strcpy(string, strings);
     
 //    if (strcmp(string, romData->name) != 0){
         
@@ -48,22 +53,19 @@ void handleRXData(void){
 //        return;
 //    }
     
-    // If we are the primary hub / reciever, we need to send back ACKs
-    if (RXPacket->packetData.ACKRequest){
-        nrf24l01SendACK(RXPacket);
-    }    
     
-//    strings = strtok(NULL, "/");
-//    strcpy(string, strings);
+    
+    strings = strtok(NULL, "/");
+    strcpy(string, strings);
 //    
 //    // Check topic
 //    
-//    strings = strtok(NULL, "/");
-//    strcpy(string, strings);
+    strings = strtok(NULL, "/");
+    strcpy(string, strings);
 //    
 //    // Check value
 //    
-//    counter = atof(string);
+    counter = atof(string);
     
     nrf24l01.RXPending = 0;
 }
@@ -80,7 +82,7 @@ void sleep(unsigned int milliseconds){
     // If there was a valid time passed
         
     // Divide the value by the amount of loops we need to do
-    milliseconds = (unsigned int) (milliseconds / (256 + 8));
+    milliseconds = (unsigned int) (milliseconds / (256 + 128));
 
     // Bump it up 1 to make sure we have at least 1
     milliseconds++;
@@ -91,8 +93,8 @@ void sleep(unsigned int milliseconds){
         // Set the radio to RX mode to check for incoming packets
         nrf24l01SetRXMode(1);
 
-        // Listen for 8mS
-        doWDTSleep(3);
+        // Listen for 128mS
+        doWDTSleep(7);
         
         // Set the radio to TX mode to go into low power mode
         nrf24l01SetRXMode(0);

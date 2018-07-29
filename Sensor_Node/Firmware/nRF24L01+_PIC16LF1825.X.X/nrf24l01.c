@@ -69,19 +69,19 @@ void nrf24l01SetRXMode(unsigned char rxMode){
         
         // Disable the IC and wait for the IC to disable
         nrf24l01CELow();
-        delayUs(200);
+        delayUs(120);
         
         // Change the mode of the IC to the mode requested
         config.PRIM_RX = rxMode;
         nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
         
         // Wait for the IC to update
-        delayUs(200);
+        delayUs(120);
 
         // If we changed to receiver mode, re-enable the IC to start listening
         if (rxMode){
         	nrf24l01CEHigh();
-            delayUs(200);
+            delayUs(120);
         }
     }
     
@@ -122,11 +122,8 @@ void nrf24l01CheckACK(void){
     if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
         return;
     }
-	
-	TXPacket->packetData.ACKRequest = 0;
     
     // We have a valid ACK packet
-    
     
     
     // Clear the ACKRequest to signal that we no longer need to wait
@@ -249,8 +246,7 @@ RESEND:
 		nrf24l01SetRXMode(1);
                 
 		if (!--i) {
-            delayUs(50000);
-            delayUs(50000);
+            delayUs(10000);
             nrf24l01ChangeTXPower(1);
 			goto RESEND;
 		}

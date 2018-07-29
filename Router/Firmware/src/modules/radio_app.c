@@ -144,7 +144,7 @@ void ICACHE_FLASH_ATTR radioForwardPacket(char * mqttTopic, char * mqttValue){
 
 	nrf24l01SetRXMode(1);
 
-	INFO("Radio Sent");
+	INFO("Radio Sent\r\n");
 
 	
 }
