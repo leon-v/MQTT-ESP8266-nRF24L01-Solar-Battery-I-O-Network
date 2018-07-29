@@ -102,7 +102,6 @@ void nrf24l01SendACK(nrf24l01Packet_t * packet){
 }
 
 void nrf24l01CheckACK(void){
-	TXPacket->packetData.ACKRequest = 0;
 	
     /* Check if the RX packet is an ACK */
     
@@ -123,6 +122,8 @@ void nrf24l01CheckACK(void){
     if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
         return;
     }
+	
+	TXPacket->packetData.ACKRequest = 0;
     
     // We have a valid ACK packet
     

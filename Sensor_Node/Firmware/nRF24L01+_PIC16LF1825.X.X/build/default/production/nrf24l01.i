@@ -10965,7 +10965,12 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x06, rfSetup.byte);
 
 void nrf24l01SetRXMode(unsigned char rxMode){
 
-# 62
+if (rxMode){
+if (nrf24l01.TXBusy){
+return;
+}
+}
+
 n_CONFIG_t config;
 
 
@@ -11009,7 +11014,6 @@ nrf24l01SendPacket(packet);
 }
 
 void nrf24l01CheckACK(void){
-TXPacket->packetData.ACKRequest = 0;
 
 
 
@@ -11031,7 +11035,9 @@ if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
 return;
 }
 
-# 132
+TXPacket->packetData.ACKRequest = 0;
+
+# 133
 TXPacket->packetData.ACKRequest = 0;
 
 
@@ -11094,7 +11100,7 @@ while (nrf24l01.TXBusy){
 if (!--i) {
 goto RESEND;
 }
-_delay((unsigned long)((100)*(32000000/4000000.0)));
+_delay((unsigned long)((500)*(32000000/4000000.0)));
 }
 
 TXPacket = Packet;
@@ -11139,7 +11145,7 @@ while (nrf24l01.TXBusy){
 if (!--i) {
 goto RESEND;
 }
-_delay((unsigned long)((100)*(32000000/4000000.0)));
+_delay((unsigned long)((500)*(32000000/4000000.0)));
 }
 
 
@@ -11156,7 +11162,7 @@ _delay((unsigned long)((50000)*(32000000/4000000.0)));
 nrf24l01ChangeTXPower(1);
 goto RESEND;
 }
-_delay((unsigned long)((100)*(32000000/4000000.0)));
+_delay((unsigned long)((500)*(32000000/4000000.0)));
 }
 }
 

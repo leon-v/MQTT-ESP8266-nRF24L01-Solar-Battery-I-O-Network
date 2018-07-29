@@ -52,8 +52,8 @@ void nrf24l01ChangeTXPower(int addPower){
 }
 
 void nrf24l01SetRXMode(unsigned char rxMode){
-
-	if (rxMode){
+    
+    if (rxMode){
         if (nrf24l01.TXBusy){
             return;
         }
@@ -102,6 +102,7 @@ void nrf24l01SendACK(nrf24l01Packet_t * packet){
 }
 
 void nrf24l01CheckACK(void){
+	
     /* Check if the RX packet is an ACK */
     
     // If the current RX packet is not an ACK, skip
@@ -177,22 +178,22 @@ void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
 	
 	// Initalise an iterator for the many loops
     unsigned char i;
-
+    
+	
 // Define where to re-start the send if the previous one failed
 RESEND:
 	
 //	 Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
-    	
+                
         if (!--i) {
-        	INFO("TXBusy 1\r\n");
             goto RESEND;
         }
-        delayUs(1000);
+        delayUs(500);
     }
 
-	TXPacket = Packet;
+    TXPacket = Packet;
 	
 	// Set the transmit busy flag so that the interrupt can clear it later.
 	nrf24l01.TXBusy = 1;
@@ -230,28 +231,28 @@ RESEND:
     // Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
-
+                
         if (!--i) {
-        	INFO("TXBusy 2\r\n");
             goto RESEND;
         }
-        delayUs(1000);
+        delayUs(500);
     }
     
 		
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
-
+		
 		// Put the radio into receiver mode so we can get an ACK
 		nrf24l01SetRXMode(1);
-
+                
 		if (!--i) {
-			INFO("ACKRequest 2\r\n");
+            delayUs(50000);
+            delayUs(50000);
             nrf24l01ChangeTXPower(1);
 			goto RESEND;
 		}
-		delayUs(10000);
+		delayUs(500);
 	}
 }
 
@@ -461,7 +462,5 @@ void nrf24l01Init(void){
     delayUs(50000);
 
     nrf24l01CEHigh();
-    
-    
 }
 

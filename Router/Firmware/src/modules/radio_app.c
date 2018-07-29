@@ -38,20 +38,20 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		
 	nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
+	// If we are the primary hub / reciever, we need to send back ACKs
+	if (RXPacket->packetData.ACKRequest){
+		nrf24l01SetTXPipe(RXPacket->packetData.Pipe);
+		nrf24l01SendACK(RXPacket);
+	}
+
 	os_printf("Radio RX Message: = %s\r\n", RXPacket->Message);
+
 
 	char* strings = strtok(RXPacket->Message, "/");
 
 	char *name = (char *) os_zalloc(strlen(strings) * sizeof(char));
 	strcpy(name, strings);
 	strings = strtok(NULL, "/");
-
-	// If we are the primary hub / reciever, we need to send back ACKs
-	if (RXPacket->packetData.ACKRequest){
-		unsigned char pipe = nrf24l01GetPipe(name);
-		nrf24l01SetTXPipe(pipe);
-		nrf24l01SendACK(RXPacket);
-	}
 
 	char *topic = (char *) os_zalloc(strlen(strings) * sizeof(char));
 	strcpy(topic, strings);
