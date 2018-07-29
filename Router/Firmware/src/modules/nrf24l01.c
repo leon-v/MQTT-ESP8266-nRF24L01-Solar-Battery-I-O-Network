@@ -177,8 +177,6 @@ void nrf24l01SendPacket(nrf24l01Packet_t * Packet){
 	
 	// Initalise an iterator for the many loops
     unsigned char i;
-    
-	INFO("nrf24l01SendPacket\r\n");
 
 // Define where to re-start the send if the previous one failed
 RESEND:
@@ -186,8 +184,6 @@ RESEND:
 //	 Wait for the TXBusy to clear so we know the packet has been sent
 	i = 0xFF;
     while (nrf24l01.TXBusy){
-
-    	nrf24l01ISR();
     	
         if (!--i) {
         	INFO("TXBusy 1\r\n");
@@ -235,8 +231,6 @@ RESEND:
 	i = 0xFF;
     while (nrf24l01.TXBusy){
 
-    	nrf24l01ISR();
-
         if (!--i) {
         	INFO("TXBusy 2\r\n");
             goto RESEND;
@@ -249,7 +243,8 @@ RESEND:
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
 
-		nrf24l01ISR();
+		// Put the radio into receiver mode so we can get an ACK
+		nrf24l01SetRXMode(1);
 
 		if (!--i) {
 			INFO("ACKRequest 2\r\n");
@@ -279,15 +274,6 @@ void nrf24l01ISR(void){
         
         // Flag PTX as not busy anymore
         nrf24l01.TXBusy = 0;
-        
-        // If the nrf24l01 is in PTX mode and we are waiting for an ACK
-        if (!nrf24l01.RXMode){
-            if (TXPacket->packetData.ACKRequest){
-
-                // Put the radio into receiver mode so we can get an ACK
-                nrf24l01SetRXMode(1);
-            }
-        }
     }
 
     // Check id there is a received packet waiting

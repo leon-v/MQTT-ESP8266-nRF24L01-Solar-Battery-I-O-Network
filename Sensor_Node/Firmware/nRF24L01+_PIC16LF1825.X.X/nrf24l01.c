@@ -53,11 +53,11 @@ void nrf24l01ChangeTXPower(int addPower){
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
-//    if (rxMode){
-//        if (nrf24l01.TXBusy){
-//            return;
-//        }
-//    }
+    if (rxMode){
+        if (nrf24l01.TXBusy){
+            return;
+        }
+    }
     
     n_CONFIG_t config;
     
@@ -102,6 +102,8 @@ void nrf24l01SendACK(nrf24l01Packet_t * packet){
 }
 
 void nrf24l01CheckACK(void){
+	TXPacket->packetData.ACKRequest = 0;
+	
     /* Check if the RX packet is an ACK */
     
     // If the current RX packet is not an ACK, skip
@@ -189,7 +191,7 @@ RESEND:
         if (!--i) {
             goto RESEND;
         }
-        delayUs(100);
+        delayUs(500);
     }
 
     TXPacket = Packet;
@@ -234,13 +236,16 @@ RESEND:
         if (!--i) {
             goto RESEND;
         }
-        delayUs(100);
+        delayUs(500);
     }
     
 		
 	// Wait for the transmit ACK flag to become clear so we know we got an ACK
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
+		
+		// Put the radio into receiver mode so we can get an ACK
+		nrf24l01SetRXMode(1);
                 
 		if (!--i) {
             delayUs(50000);
@@ -248,7 +253,7 @@ RESEND:
             nrf24l01ChangeTXPower(1);
 			goto RESEND;
 		}
-		delayUs(100);
+		delayUs(500);
 	}
 }
 
@@ -271,15 +276,6 @@ void nrf24l01ISR(void){
         
         // Flag PTX as not busy anymore
         nrf24l01.TXBusy = 0;
-        
-        // If the nrf24l01 is in PTX mode and we are waiting for an ACK
-        if (!nrf24l01.RXMode){
-            if (TXPacket->packetData.ACKRequest){
-
-                // Put the radio into receiver mode so we can get an ACK
-                nrf24l01SetRXMode(1);
-            }
-        }
     }
 
     // Check id there is a received packet waiting
@@ -467,7 +463,5 @@ void nrf24l01Init(void){
     delayUs(50000);
 
     nrf24l01CEHigh();
-    
-    
 }
 

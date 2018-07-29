@@ -15,6 +15,19 @@ void radioEnable(uint8 enable){
 	enabled = enable;
 }
 
+unsigned char ICACHE_FLASH_ATTR nrf24l01GetPipe(char * name){
+
+	unsigned char pipe = 0;
+	unsigned char i = 0;
+
+	// Calculate a pipe from the name passed
+	for (i = 0; i < strlen(name); i++){
+		pipe+= name[i];
+	}
+
+	return (unsigned) pipe % 6;
+}
+
 void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
     
 	if (!nrf24l01.RXPending){
@@ -25,11 +38,6 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		
 	nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
-	// If we are the primary hub / reciever, we need to send back ACKs
-	if (RXPacket->packetData.ACKRequest){
-		nrf24l01SendACK(RXPacket);
-	}
-
 	os_printf("Radio RX Message: = %s\r\n", RXPacket->Message);
 
 	char* strings = strtok(RXPacket->Message, "/");
@@ -38,12 +46,21 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 	strcpy(name, strings);
 	strings = strtok(NULL, "/");
 
+	// If we are the primary hub / reciever, we need to send back ACKs
+	if (RXPacket->packetData.ACKRequest){
+		unsigned char pipe = nrf24l01GetPipe(name);
+		nrf24l01SetTXPipe(pipe);
+		nrf24l01SendACK(RXPacket);
+	}
+
 	char *topic = (char *) os_zalloc(strlen(strings) * sizeof(char));
 	strcpy(topic, strings);
 	strings = strtok(NULL, "/");
 	
 	char *value = (char *) os_zalloc(strlen(strings) * sizeof(char));
 	strcpy(value, strings);
+
+
 
 	char *buffer = NULL;
 	buffer = (char *) os_zalloc(128 * sizeof(char));
@@ -91,19 +108,6 @@ void radioInterrupt(int * arg){
 	radoCheckStatus();
 
 	GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);
-}
-
-unsigned char ICACHE_FLASH_ATTR nrf24l01GetPipe(char * name){
-
-	unsigned char pipe = 0;
-	unsigned char i = 0;
-
-	// Calculate a pipe from the name passed
-	for (i = 0; i < strlen(name); i++){
-		pipe+= name[i];
-	}
-
-	return (unsigned) pipe % 6;
 }
 
 void ICACHE_FLASH_ATTR radioForwardPacket(char * mqttTopic, char * mqttValue){

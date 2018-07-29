@@ -11009,6 +11009,8 @@ nrf24l01SendPacket(packet);
 }
 
 void nrf24l01CheckACK(void){
+TXPacket->packetData.ACKRequest = 0;
+
 
 
 
@@ -11029,7 +11031,7 @@ if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
 return;
 }
 
-# 130
+# 132
 TXPacket->packetData.ACKRequest = 0;
 
 
@@ -11145,6 +11147,9 @@ _delay((unsigned long)((100)*(32000000/4000000.0)));
 i = 0xFF;
 while (TXPacket->packetData.ACKRequest){
 
+
+nrf24l01SetRXMode(1);
+
 if (!--i) {
 _delay((unsigned long)((50000)*(32000000/4000000.0)));
 _delay((unsigned long)((50000)*(32000000/4000000.0)));
@@ -11174,15 +11179,6 @@ if (status.TX_DS){
 
 
 nrf24l01.TXBusy = 0;
-
-
-if (!nrf24l01.RXMode){
-if (TXPacket->packetData.ACKRequest){
-
-
-nrf24l01SetRXMode(1);
-}
-}
 }
 
 
@@ -11370,7 +11366,5 @@ nrf24l01InitRegisters();
 _delay((unsigned long)((50000)*(32000000/4000000.0)));
 
 nrf24l01CEHigh();
-
-
 }
 

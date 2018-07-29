@@ -80,7 +80,7 @@ void sleep(unsigned int milliseconds){
     // If there was a valid time passed
         
     // Divide the value by the amount of loops we need to do
-    milliseconds = (unsigned int) (milliseconds / (256 + 2));
+    milliseconds = (unsigned int) (milliseconds / (256 + 8));
 
     // Bump it up 1 to make sure we have at least 1
     milliseconds++;
@@ -91,7 +91,7 @@ void sleep(unsigned int milliseconds){
         // Set the radio to RX mode to check for incoming packets
         nrf24l01SetRXMode(1);
 
-        // Listen for 2mS
+        // Listen for 8mS
         doWDTSleep(3);
         
         // Set the radio to TX mode to go into low power mode
@@ -136,10 +136,40 @@ float getADCValue(unsigned char channel){
     
     
 	adcSum/= ADC_COUNT; // Adjust to get average
-    adcSum/= 500; // adjust for FVR +REF @ 2.048 to get volts
+	
+	// adjust for FVR +REF @ 2.048 to get volts
+	if (ADCON1bits.ADPREF == 0b11){
+		switch (FVRCONbits.ADFVR){
+			case 0b10:
+				adcSum/= 500;
+				break;		
+		}
+	}
+    
 	
 	return adcSum;
 }
+
+//void calebrate(void){
+//	
+//	// Get VCC voltage (should be 3.3)
+//	
+//	// Set fixed voltage reference
+//	FVRCONbits.ADFVR = 0b10; // 2.048V
+//	
+//	//Set ADC + VRef to VCC
+//	ADCON1bits.ADPREF = 0b00;
+//	
+//	// Get ADC result of the 2.048 reference
+//	float vcc = (1024 / getADCValue(0b111111)) * 2.048;
+//	
+//	// Get the forward diode voltage of all 4 diodes
+//	FVRCONbits.TSRNG = 1;
+//	float diodeCal = getADCValue(0b111101);
+//	
+//	counter = vcc;
+//	
+//}
 
 void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     memset(packet->Message, 0, sizeof(packet->Message));
@@ -152,6 +182,8 @@ void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 	int status;
     strcat(packet->Message, "/");
     strcat(packet->Message, ftoa(value, &status));
+	
+	packet->packetData.byte = 0;
 }
 
 void checkTXPower(){
@@ -167,8 +199,8 @@ void loop(){
 #define SLEEP_TIME 2000
     nrf24l01Packet_t packet;
     
+//	calebrate();
     setMessage(&packet, "DBG", counter);
-    packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
@@ -189,8 +221,7 @@ void loop(){
     float ta = (vt / tc) - (vf / tc) - tempOffset;
     
 	setMessage(&packet, "TEMP", ta);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
     sleep(SLEEP_TIME);
@@ -200,17 +231,17 @@ void loop(){
     //Resistor divider on Vbatt
     // 10K / 4.7K  = 2.127659574468085
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
+	ADCON1bits.ADPREF = 0b00; // ADC VREF to FVR
+	FVRCONbits.ADFVR = 0b10; // FVR to 2.048V
     setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
     sleep(SLEEP_TIME);
     
     
     setMessage(&packet, "ANC3mV", getADCValue(0b010011));
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
     sleep(SLEEP_TIME);
@@ -220,8 +251,7 @@ void loop(){
     rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
     
     setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
+    packet.packetData.ACKRequest = 1;
 	nrf24l01SendPacket(&packet);
     checkTXPower();
     sleep(SLEEP_TIME);
@@ -290,6 +320,7 @@ void main(void) {
     nrf24l01SetTXPipe(pipe);
     nrf24l01SetRXPipe(pipe);
     
+	counter = pipe;
 
     /* Setup ADC */
     ADCON0bits.ADON = 0;
@@ -306,7 +337,7 @@ void main(void) {
     TRISCbits.TRISC3 = 1;
     
     /* Configure Temp sensor*/
-    FVRCONbits.TSEN = 1;
+    FVRCONbits.TSEN = 0;
     FVRCONbits.TSRNG = 1;
     
     /* Configure FVR */
@@ -339,7 +370,6 @@ void main(void) {
     nrf24l01Packet_t packet;
         
     setMessage(&packet, "BOOT", bootStatus);
-    packet.packetData.byte = 0;
     packet.packetData.ACKRequest = 0;
 	nrf24l01SendPacket(&packet);
     sleep(3000);
