@@ -9,6 +9,29 @@ extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
 typedef struct{
+    unsigned busy           : 1;
+    unsigned packetSend     : 1;
+    unsigned packetSending  : 1;
+    unsigned packetSent     : 1;
+    unsigned ackSend        : 1;
+    
+    
+} nrf24l01TXState_t;
+
+
+typedef struct{
+    unsigned dataReady  : 1;
+} nrf24l01RXState_t;
+
+
+typedef struct{
+    nrf24l01TXState_t TX;
+    nrf24l01RXState_t RX;
+} nrf24l01State_t;
+
+
+
+typedef struct{
     unsigned TXBusy             : 1;
     unsigned RXPending			: 1;
     unsigned RXMode             : 1;
@@ -34,6 +57,7 @@ typedef struct{
 } nrf24l01Packet_t;
 
 volatile nrf24l01_t nrf24l01;
+volatile nrf24l01State_t nrf24l01State;
 
 //Transmitters using e.i.r.p.s greater than 0 dBW (1 W)
 //must employ frequency hopping or digital modulation techniques.
