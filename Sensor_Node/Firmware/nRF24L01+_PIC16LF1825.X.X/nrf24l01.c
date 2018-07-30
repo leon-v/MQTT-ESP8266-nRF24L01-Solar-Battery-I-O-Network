@@ -416,9 +416,9 @@ void nrf24l01Service(void){
     
     unsigned char i;
     
-    if (nrf24l01State.txState){
+    if (nrf24l01State.txState != nrf24l01TXStates.txIdle){
         
-        if (nrf24l01State.txState == nrf24l01States.txReady){
+        if (nrf24l01State.txState == nrf24l01TXStates.txReady){
             
             // Disable interrupts while sending.
             enableInterrupts(0);
@@ -447,23 +447,31 @@ void nrf24l01Service(void){
             delayUs(20);
             nrf24l01CELow();
             
-            nrf24l01State.txState = nrf24l01States.txSending;
+            nrf24l01State.txState = nrf24l01TXStates.txSending;
         }
         
-        if (nrf24l01State.txState = nrf24l01States.txSending){
+        if (nrf24l01State.txState = nrf24l01TXStates.txSending){
             // ISR handles this condition
         }
         
-        if (nrf24l01State.txState == nrf24l01States.txSent){
+        if (nrf24l01State.txState == nrf24l01TXStates.txSent){
             
             
             if (TXPacket->packetData.ACKRequest){
-                nrf24l01State.txState = nrf24l01States.txPendingACK;
+                nrf24l01State.txState = nrf24l01TXStates.txPendingACK;
             }
             else{
-                nrf24l01State.txState = nrf24l01States.txReady;
+                nrf24l01State.txState = nrf24l01TXStates.txIdle;
             }
         }
+        
+        if (nrf24l01State.txState == nrf24l01TXStates.txPendingACK){
+            nrf24l01SetRXMode(1);
+        }
+    }
+    
+    switch (nrf24l01State.rxState){
+        case nrf24l01RXStates.rxPending:
     }
         
 //        if (nrf24l01State.TX.pendingSent){

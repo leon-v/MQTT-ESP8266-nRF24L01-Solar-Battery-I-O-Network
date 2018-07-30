@@ -17,15 +17,29 @@ typedef struct{
 volatile nrf24l01State_t nrf24l01State;
 
 typedef struct{
+    unsigned int txIdle;
     unsigned int txReady;
     unsigned int txSending;
     unsigned int txSent;
     unsigned int txPendingACK;
-} nrf24l01States_t;
+} nrf24l01TXStates_t;
 
-static const nrf24l01States_t nrf24l01States = {
-    0,1,2,3
+static const nrf24l01TXStates_t nrf24l01TXStates = {
+    0,1,2,3,4
 };
+
+typedef struct{
+    unsigned int rxIdle;
+    unsigned int rxPending;
+    unsigned int rxCheckACKIn;
+    unsigned int rxCheckACKOut;
+    unsigned int rxUserProcess;
+} nrf24l01RXStates_t;
+
+static const nrf24l01RXStates_t nrf24l01RXStates = {
+    0,1,2,3,4
+};
+
 
 typedef struct{
     unsigned TXBusy             : 1;

@@ -5,7 +5,7 @@ Linker command line:
 -W-3 --edf=C:\Program Files (x86)\Microchip\xc8\v2.00\pic\dat\en_msgs.txt \
   -cs -h+dist/default/production\nRF24L01__PIC16LF1825.X.X.production.sym \
   --cmf=dist/default/production\nRF24L01__PIC16LF1825.X.X.production.cmf -z \
-  -Q16LF18325 -oC:\Users\Leon\AppData\Local\Temp\s1bo.2 \
+  -Q16LF18325 -oC:\Users\Leon\AppData\Local\Temp\s1eo.2 \
   --defsym=__MPLAB_BUILD=1 \
   -Mdist/default/production/nRF24L01__PIC16LF1825.X.X.production.map -E1 \
   -ver=XC8 -ASTACK=02131h-023efh -pstack=STACK -ACODE=00h-07FFhx4 \
@@ -33,7 +33,7 @@ Linker command line:
   -pconfig=CONFIG -DCONFIG=2 -AIDLOC=08000h-08003h -pidloc=IDLOC -DIDLOC=2 \
   -AEEDATA=00h-0FFh/0F000h -peeprom_data=EEDATA -DEEDATA=2 -DCODE=2 \
   -DSTRCODE=2 -DSTRING=2 -DCONST=2 -DENTRY=2 -k \
-  C:\Users\Leon\AppData\Local\Temp\s1bo.o \
+  C:\Users\Leon\AppData\Local\Temp\s1eo.o \
   dist/default/production\nRF24L01__PIC16LF1825.X.X.production.o 
 
 Object code version is 3.11
@@ -43,7 +43,7 @@ Machine type is 16LF18325
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-C:\Users\Leon\AppData\Local\Temp\s1bo.o
+C:\Users\Leon\AppData\Local\Temp\s1eo.o
                 end_init                             13       13        2        8       0
                 reset_vec                             0        0        2        0       0
                 config                             8007     8007        4    1000E       0
@@ -120,17 +120,17 @@ dist/default/production\nRF24L01__PIC16LF1825.X.X.production.o
                 dataBANK1                            EC       EC        1       A0       1
                 bssBANK0                             6A       6A        2       20       1
                 bssCOMMON                            7B       7B        2       70       1
-                stringtext14                       18AF     18AF        2     3000       0
-                stringtext13                       18AC     18AC        3     3000       0
-                stringtext12                       18A8     18A8        4     3000       0
-                stringtext11                       18A3     18A3        5     3000       0
-                stringtext10                       189E     189E        5     3000       0
-                stringtext9                        1899     1899        5     3000       0
-                stringtext8                        188E     188E        6     3000       0
-                stringtext7                        1886     1886        8     3000       0
-                stringtext6                        1894     1894        5     3000       0
-                stringtext5                        187E     187E        8     3000       0
-                stringtext4                        1876     1876        8     3000       0
+                stringtext14                       18B3     18B3        2     3000       0
+                stringtext13                       18B0     18B0        3     3000       0
+                stringtext12                       18AC     18AC        4     3000       0
+                stringtext11                       18A7     18A7        5     3000       0
+                stringtext10                       18A2     18A2        5     3000       0
+                stringtext9                        189D     189D        5     3000       0
+                stringtext8                        1892     1892        6     3000       0
+                stringtext7                        188A     188A        8     3000       0
+                stringtext6                        1898     1898        5     3000       0
+                stringtext5                        1880     1880        A     3000       0
+                stringtext4                        1876     1876        A     3000       0
                 stringtext3                        184F     184F       27     3000       0
                 stringtext2                        1828     1828       27     3000       0
                 stringtext1                        1800     1800       28     3000       0
@@ -209,17 +209,17 @@ TOTAL           Name                               Link     Load   Length     Sp
                 idataBANK1                          800      800        1         0
 
         CLASS   STRCODE        
-                stringtext14                       18AF     18AF        2         0
-                stringtext13                       18AC     18AC        3         0
-                stringtext12                       18A8     18A8        4         0
-                stringtext11                       18A3     18A3        5         0
-                stringtext10                       189E     189E        5         0
-                stringtext9                        1899     1899        5         0
-                stringtext8                        188E     188E        6         0
-                stringtext7                        1886     1886        8         0
-                stringtext6                        1894     1894        5         0
-                stringtext5                        187E     187E        8         0
-                stringtext4                        1876     1876        8         0
+                stringtext14                       18B3     18B3        2         0
+                stringtext13                       18B0     18B0        3         0
+                stringtext12                       18AC     18AC        4         0
+                stringtext11                       18A7     18A7        5         0
+                stringtext10                       18A2     18A2        5         0
+                stringtext9                        189D     189D        5         0
+                stringtext8                        1892     1892        6         0
+                stringtext7                        188A     188A        8         0
+                stringtext6                        1898     1898        5         0
+                stringtext5                        1880     1880        A         0
+                stringtext4                        1876     1876        A         0
                 stringtext3                        184F     184F       27         0
                 stringtext2                        1828     1828       27         0
                 stringtext1                        1800     1800       28         0
@@ -418,7 +418,7 @@ SEGMENTS        Name                           Load    Length   Top    Selector 
                 text33                         0015C4  0000B0  001674      2B88       0  CODE        2
                 text35                         001674  0000B8  00172C      2CE8       0  CODE        2
                 text22                         00172C  0000D4  001800      2E58       0  CODE        2
-                stringtext1                    001800  0000B1  0018B1      3000       0  STRCODE     2
+                stringtext1                    001800  0000B5  0018B5      3000       0  STRCODE     2
                 text60                         001C57  000003  001C5A      38AE       0  CODE        2
                 text59                         001C5A  000003  001C5D      38B4       0  CODE        2
                 text57                         001C5D  000003  001C60      38BA       0  CODE        2
@@ -471,13 +471,13 @@ UNUSED ADDRESS RANGES
         BANK9            004A0-004EF              50           1
         BIGRAM           02000-023EF             3F0           1
         CODE             01000-01000               1           2
-                         018B1-01C56             3A6
+                         018B5-01C56             3A2
         COMMON           0007D-0007D               1           1
         CONST            01000-01000               1           2
-                         018B1-01C56             100
+                         018B5-01C56             100
         EEDATA           0F000-0F0FF             100           2
         ENTRY            01000-01000               1           2
-                         018B1-01C56             100
+                         018B5-01C56             100
         IDLOC            08000-08003               4           2
         RAM              0006C-0006F               4           1
                          000ED-000EF               3
@@ -525,9 +525,9 @@ UNUSED ADDRESS RANGES
         SFR9             00480-0049F              20           1
         STACK            02131-023EF             2BF           1
         STRCODE          01000-01000               1           2
-                         018B1-01C56             3A6
+                         018B5-01C56             3A2
         STRING           01000-01000               1           2
-                         018B1-01C56             100
+                         018B5-01C56             100
 
                                   Symbol Table
 
@@ -967,8 +967,8 @@ __end_of_getADCValue            text33       01674
 __end_of_loop                   text10       00D20
 __end_of_main                   maintext     015C4
 __end_of_memset                 text31       01DB7
-__end_of_n_ADDRESS_MUL          stringtext7  01887
-__end_of_n_ADDRESS_P0           stringtext6  01899
+__end_of_n_ADDRESS_MUL          stringtext7  0188B
+__end_of_n_ADDRESS_P0           stringtext6  0189D
 __end_of_nrf24l01CEHigh         text60       01C5A
 __end_of_nrf24l01CELow          text59       01C5D
 __end_of_nrf24l01CSHigh         text57       01C60
@@ -990,7 +990,7 @@ __end_of_nrf24l01SendPacket     text32       01406
 __end_of_nrf24l01SetRXMode      text51       02000
 __end_of_nrf24l01SetRXPipe      text7        01E46
 __end_of_nrf24l01SetTXPipe      text5        010C3
-__end_of_nrf24l01States         stringtext5  01886
+__end_of_nrf24l01States         stringtext5  0188A
 __end_of_scale                  text14       01000
 __end_of_setMessage             text11       011A7
 __end_of_sleep                  text34       01E21
@@ -1001,7 +1001,7 @@ __end_of_strcpy                 text1        01D73
 __end_of_strlen                 text9        01EBD
 __end_ofi1_memset               text48       01D52
 __end_ofi1_nrf24l01Send         text52       01D14
-__end_ofnrf24l01@nrf24l01States stringtext4  0187E
+__end_ofnrf24l01@nrf24l01States stringtext4  01880
 __initialization                cinit        00015
 __npowers_                      stringtext3  0184F
 __pbssBANK0                     bssBANK0     0006A
@@ -1017,20 +1017,20 @@ __pintentry                     intentry     00004
 __pmaintext                     maintext     01522
 __powers_                       stringtext2  01828
 __pstringtext1                  stringtext1  01800
-__pstringtext10                 stringtext10 0189E
-__pstringtext11                 stringtext11 018A3
-__pstringtext12                 stringtext12 018A8
-__pstringtext13                 stringtext13 018AC
-__pstringtext14                 stringtext14 018AF
+__pstringtext10                 stringtext10 018A2
+__pstringtext11                 stringtext11 018A7
+__pstringtext12                 stringtext12 018AC
+__pstringtext13                 stringtext13 018B0
+__pstringtext14                 stringtext14 018B3
 __pstringtext15                 stringtext15 00000
 __pstringtext2                  stringtext2  01828
 __pstringtext3                  stringtext3  0184F
 __pstringtext4                  stringtext4  01876
-__pstringtext5                  stringtext5  0187E
-__pstringtext6                  stringtext6  01894
-__pstringtext7                  stringtext7  01886
-__pstringtext8                  stringtext8  0188E
-__pstringtext9                  stringtext9  01899
+__pstringtext5                  stringtext5  01880
+__pstringtext6                  stringtext6  01898
+__pstringtext7                  stringtext7  0188A
+__pstringtext8                  stringtext8  01892
+__pstringtext9                  stringtext9  0189D
 __ptext1                        text1        01D52
 __ptext10                       text10       00BDC
 __ptext11                       text11       0115A
@@ -1165,16 +1165,16 @@ _dpowers                        stringtext1  01800
 _enableInterrupts               text58       01C6C
 _exception                      text61       00002
 _fround                         text17       0053D
-_fround$2107                    cstackBANK1  000B4
-_fround$2108                    cstackBANK1  000B1
+_fround$2111                    cstackBANK1  000B4
+_fround$2112                    cstackBANK1  000B1
 _getADCValue                    text33       015C4
 _loop                           text10       00BDC
-_loop$2105                      cstackBANK2  00126
-_loop$2106                      cstackBANK2  00129
+_loop$2109                      cstackBANK2  00126
+_loop$2110                      cstackBANK2  00129
 _main                           maintext     01522
 _memset                         text31       01D95
-_n_ADDRESS_MUL                  stringtext7  01886
-_n_ADDRESS_P0                   stringtext6  01894
+_n_ADDRESS_MUL                  stringtext7  0188A
+_n_ADDRESS_P0                   stringtext6  01898
 _nrf24l01                       bssBANK0     0006B
 _nrf24l01CEHigh                 text60       01C57
 _nrf24l01CELow                  text59       01C5A
@@ -1201,11 +1201,11 @@ _nrf24l01State                  bssCOMMON    0007C
 _romData                        dataBANK1    000EC
 _romDataMap                     bssBANK3     001C5
 _scale                          text14       00D20
-_scale$2109                     cstackBANK1  000B1
+_scale$2113                     cstackBANK1  000B1
 _setMessage                     text11       0115A
 _sleep                          text34       01DFD
 _sprintf                        text13       0002B
-_sprintf$2110                   cstackBANK1  000CE
+_sprintf$2114                   cstackBANK1  000CE
 _strcat                         text12       01009
 _strcmp                         text50       01EEC
 _strcpy                         text1        01D52
@@ -3523,17 +3523,17 @@ C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcat.c estim
 
 shared
 		i1_nrf24l01Send		CODE           	1CF7	0000	30
-		nrf24l01@nrf24l01States		STRCODE        	1876	0000	9
+		nrf24l01@nrf24l01States		STRCODE        	1876	0000	11
 		__powers_      		STRCODE        	1828	0000	40
 		_dpowers       		STRCODE        	1800	0000	41
-		_n_ADDRESS_P0  		STRCODE        	1894	0000	6
-		_n_ADDRESS_MUL 		STRCODE        	1886	0000	2
+		_n_ADDRESS_P0  		STRCODE        	1898	0000	6
+		_n_ADDRESS_MUL 		STRCODE        	188A	0000	2
 		__npowers_     		STRCODE        	184F	0000	40
 		__initialization		CODE           	0015	0000	19
 		_nrf24l01States		STRCODE        	0000	0000	0
 		i1_memset      		CODE           	1D31	0000	34
 
-shared estimated size: 221
+shared estimated size: 223
 
 interface.c
 		_nrf24l01SPISend		CODE           	1C81	0000	18

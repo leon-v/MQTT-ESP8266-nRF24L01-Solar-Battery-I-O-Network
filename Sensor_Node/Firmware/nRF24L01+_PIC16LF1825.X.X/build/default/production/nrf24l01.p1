@@ -15,21 +15,21 @@ Version 3.2 HI-TECH Software Intermediate Code
 [s S956 :4 `uc 1 :4 `uc 1 ]
 [n S956 . txState rxState ]
 "19
-[s S957 `ui 1 `ui 1 `ui 1 `ui 1 ]
-[n S957 . txReady txSending txSent txPendingACK ]
-"30
+[s S957 `ui 1 `ui 1 `ui 1 `ui 1 `ui 1 ]
+[n S957 . txIdle txReady txSending txSent txPendingACK ]
+"31
 [s S958 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S958 . TXBusy RXPending RXMode ]
-"38
+"39
 [s S960 :8 `uc 1 ]
 [n S960 . byte ]
-"41
+"42
 [s S961 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :3 `uc 1 ]
 [n S961 . RPD ACKRPD ACKRequest IsACK Pipe ]
-"37
+"38
 [u S959 `S960 1 `S961 1 ]
 [n S959 . . . ]
-"50
+"51
 [s S962 `S959 1 `uc -> 32 `i ]
 [n S962 . packetData Message ]
 "60 interface.h
@@ -66,9 +66,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [p i __delay ]
 "51 interface.h
 [v _nrf24l01CEHigh `(v ~T0 @X0 0 ef ]
-"71 nrf24l01.h
+"72 nrf24l01.h
 [v _nrf24l01SetTXPipe `(v ~T0 @X0 0 ef1`uc ]
-"65
+"66
 [v _nrf24l01SendPacket `(v ~T0 @X0 0 ef1`*S962 ]
 "45 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h
 [v _strcmp `(i ~T0 @X0 0 ef2`*Cuc`*Cuc ]
@@ -7482,63 +7482,65 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _nrf24l01State `VS956 ~T0 @X0 1 e ]
 [; ;nrf24l01.h: 17: volatile nrf24l01State_t nrf24l01State;
 [; ;nrf24l01.h: 19: typedef struct{
-[; ;nrf24l01.h: 20: unsigned int txReady;
-[; ;nrf24l01.h: 21: unsigned int txSending;
-[; ;nrf24l01.h: 22: unsigned int txSent;
-[; ;nrf24l01.h: 23: unsigned int txPendingACK;
-[; ;nrf24l01.h: 24: } nrf24l01States_t;
-"26
+[; ;nrf24l01.h: 20: unsigned int txIdle;
+[; ;nrf24l01.h: 21: unsigned int txReady;
+[; ;nrf24l01.h: 22: unsigned int txSending;
+[; ;nrf24l01.h: 23: unsigned int txSent;
+[; ;nrf24l01.h: 24: unsigned int txPendingACK;
+[; ;nrf24l01.h: 25: } nrf24l01States_t;
+"27
 [v _nrf24l01States `CS957 ~T0 @X0 1 s ]
 [i _nrf24l01States
 :U ..
 :U ..
-"27
+"28
 -> -> 0 `i `ui
 -> -> 1 `i `ui
 -> -> 2 `i `ui
-"28
 -> -> 3 `i `ui
+"29
+-> -> 4 `i `ui
 ..
 ..
 ]
-[; ;nrf24l01.h: 26: static const nrf24l01States_t nrf24l01States = {
-[; ;nrf24l01.h: 27: 0,1,2,3
-[; ;nrf24l01.h: 28: };
-[; ;nrf24l01.h: 30: typedef struct{
-[; ;nrf24l01.h: 31: unsigned TXBusy : 1;
-[; ;nrf24l01.h: 32: unsigned RXPending : 1;
-[; ;nrf24l01.h: 33: unsigned RXMode : 1;
-[; ;nrf24l01.h: 34: } nrf24l01_t;
-[; ;nrf24l01.h: 37: typedef union{
-[; ;nrf24l01.h: 38: struct{
-[; ;nrf24l01.h: 39: unsigned int byte :8;
-[; ;nrf24l01.h: 40: };
-[; ;nrf24l01.h: 41: struct{
-[; ;nrf24l01.h: 42: unsigned RPD : 1;
-[; ;nrf24l01.h: 43: unsigned ACKRPD : 1;
-[; ;nrf24l01.h: 44: unsigned ACKRequest : 1;
-[; ;nrf24l01.h: 45: unsigned IsACK : 1;
-[; ;nrf24l01.h: 46: unsigned Pipe : 3;
-[; ;nrf24l01.h: 47: };
-[; ;nrf24l01.h: 48: } packetData_t;
-[; ;nrf24l01.h: 50: typedef struct{
-[; ;nrf24l01.h: 51: packetData_t packetData;
-[; ;nrf24l01.h: 52: char Message[32];
-[; ;nrf24l01.h: 53: } nrf24l01Packet_t;
-"55
+[; ;nrf24l01.h: 27: static const nrf24l01States_t nrf24l01States = {
+[; ;nrf24l01.h: 28: 0,1,2,3,4
+[; ;nrf24l01.h: 29: };
+[; ;nrf24l01.h: 31: typedef struct{
+[; ;nrf24l01.h: 32: unsigned TXBusy : 1;
+[; ;nrf24l01.h: 33: unsigned RXPending : 1;
+[; ;nrf24l01.h: 34: unsigned RXMode : 1;
+[; ;nrf24l01.h: 35: } nrf24l01_t;
+[; ;nrf24l01.h: 38: typedef union{
+[; ;nrf24l01.h: 39: struct{
+[; ;nrf24l01.h: 40: unsigned int byte :8;
+[; ;nrf24l01.h: 41: };
+[; ;nrf24l01.h: 42: struct{
+[; ;nrf24l01.h: 43: unsigned RPD : 1;
+[; ;nrf24l01.h: 44: unsigned ACKRPD : 1;
+[; ;nrf24l01.h: 45: unsigned ACKRequest : 1;
+[; ;nrf24l01.h: 46: unsigned IsACK : 1;
+[; ;nrf24l01.h: 47: unsigned Pipe : 3;
+[; ;nrf24l01.h: 48: };
+[; ;nrf24l01.h: 49: } packetData_t;
+[; ;nrf24l01.h: 51: typedef struct{
+[; ;nrf24l01.h: 52: packetData_t packetData;
+[; ;nrf24l01.h: 53: char Message[32];
+[; ;nrf24l01.h: 54: } nrf24l01Packet_t;
+"56
 [v _nrf24l01 `VS958 ~T0 @X0 1 e ]
-[; ;nrf24l01.h: 55: volatile nrf24l01_t nrf24l01;
-[; ;nrf24l01.h: 56: volatile nrf24l01State_t nrf24l01State;
-[; ;nrf24l01.h: 62: void nrf24l01ISR(void);
-[; ;nrf24l01.h: 63: void nrf24l01Init(void);
-[; ;nrf24l01.h: 65: void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
-[; ;nrf24l01.h: 66: void nrf24l01SetRXMode(unsigned char rxMode);
-[; ;nrf24l01.h: 67: nrf24l01Packet_t *nrf24l01GetRXPacket(void);
-[; ;nrf24l01.h: 68: void nrf24l01SendACK(nrf24l01Packet_t * packet);
-[; ;nrf24l01.h: 69: void nrf24l01ChangeTXPower(int addPower);
-[; ;nrf24l01.h: 70: unsigned char nrf24l01Send(unsigned char command, unsigned char data);
-[; ;nrf24l01.h: 71: void nrf24l01SetTXPipe(unsigned char pipe);
-[; ;nrf24l01.h: 72: void nrf24l01SetRXPipe(unsigned char pipe);
+[; ;nrf24l01.h: 56: volatile nrf24l01_t nrf24l01;
+[; ;nrf24l01.h: 57: volatile nrf24l01State_t nrf24l01State;
+[; ;nrf24l01.h: 63: void nrf24l01ISR(void);
+[; ;nrf24l01.h: 64: void nrf24l01Init(void);
+[; ;nrf24l01.h: 66: void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
+[; ;nrf24l01.h: 67: void nrf24l01SetRXMode(unsigned char rxMode);
+[; ;nrf24l01.h: 68: nrf24l01Packet_t *nrf24l01GetRXPacket(void);
+[; ;nrf24l01.h: 69: void nrf24l01SendACK(nrf24l01Packet_t * packet);
+[; ;nrf24l01.h: 70: void nrf24l01ChangeTXPower(int addPower);
+[; ;nrf24l01.h: 71: unsigned char nrf24l01Send(unsigned char command, unsigned char data);
+[; ;nrf24l01.h: 72: void nrf24l01SetTXPipe(unsigned char pipe);
+[; ;nrf24l01.h: 73: void nrf24l01SetRXPipe(unsigned char pipe);
 "3 nrf24l01.c
 [v _n_ADDRESS_P0 `Cuc ~T0 @X0 -> 0 `x e ]
 [i _n_ADDRESS_P0
@@ -8344,11 +8346,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 {
 [; ;nrf24l01.c: 371: if (nrf24l01State.txState == nrf24l01States.txSending){
 "371
-[e $ ! == -> . _nrf24l01State 0 `ui . _nrf24l01States 1 1010  ]
+[e $ ! == -> . _nrf24l01State 0 `ui . _nrf24l01States 2 1010  ]
 {
 [; ;nrf24l01.c: 372: nrf24l01State.txState = nrf24l01States.txSent;
 "372
-[e = . _nrf24l01State 0 -> . _nrf24l01States 2 `uc ]
+[e = . _nrf24l01State 0 -> . _nrf24l01States 3 `uc ]
 "373
 }
 [e :U 1010 ]
@@ -8415,13 +8417,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 "417
 [v _i `uc ~T0 @X0 1 a ]
 [; ;nrf24l01.c: 417: unsigned char i;
-[; ;nrf24l01.c: 419: if (nrf24l01State.txState){
+[; ;nrf24l01.c: 419: if (nrf24l01State.txState != nrf24l01States.txReady){
 "419
-[e $ ! != -> . _nrf24l01State 0 `i -> -> -> 0 `i `Vuc `i 1015  ]
+[e $ ! != -> . _nrf24l01State 0 `ui . _nrf24l01States 1 1015  ]
 {
 [; ;nrf24l01.c: 421: if (nrf24l01State.txState == nrf24l01States.txReady){
 "421
-[e $ ! == -> . _nrf24l01State 0 `ui . _nrf24l01States 0 1016  ]
+[e $ ! == -> . _nrf24l01State 0 `ui . _nrf24l01States 1 1016  ]
 {
 [; ;nrf24l01.c: 424: enableInterrupts(0);
 "424
@@ -8472,14 +8474,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _nrf24l01CELow ..  ]
 [; ;nrf24l01.c: 450: nrf24l01State.txState = nrf24l01States.txSending;
 "450
-[e = . _nrf24l01State 0 -> . _nrf24l01States 1 `uc ]
+[e = . _nrf24l01State 0 -> . _nrf24l01States 2 `uc ]
 "451
 }
 [e :U 1016 ]
 [; ;nrf24l01.c: 451: }
 [; ;nrf24l01.c: 453: if (nrf24l01State.txState = nrf24l01States.txSending){
 "453
-[e $ ! != -> = . _nrf24l01State 0 -> . _nrf24l01States 1 `uc `i -> -> -> 0 `i `Vuc `i 1021  ]
+[e $ ! != -> = . _nrf24l01State 0 -> . _nrf24l01States 2 `uc `i -> -> -> 0 `i `Vuc `i 1021  ]
 {
 "455
 }
@@ -8487,7 +8489,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nrf24l01.c: 455: }
 [; ;nrf24l01.c: 457: if (nrf24l01State.txState == nrf24l01States.txSent){
 "457
-[e $ ! == -> . _nrf24l01State 0 `ui . _nrf24l01States 2 1022  ]
+[e $ ! == -> . _nrf24l01State 0 `ui . _nrf24l01States 3 1022  ]
 {
 [; ;nrf24l01.c: 460: if (TXPacket->packetData.ACKRequest){
 "460
@@ -8495,7 +8497,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 {
 [; ;nrf24l01.c: 461: nrf24l01State.txState = nrf24l01States.txPendingACK;
 "461
-[e = . _nrf24l01State 0 -> . _nrf24l01States 3 `uc ]
+[e = . _nrf24l01State 0 -> . _nrf24l01States 4 `uc ]
 "462
 }
 [; ;nrf24l01.c: 462: }
@@ -8506,7 +8508,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 {
 [; ;nrf24l01.c: 464: nrf24l01State.txState = nrf24l01States.txReady;
 "464
-[e = . _nrf24l01State 0 -> . _nrf24l01States 0 `uc ]
+[e = . _nrf24l01State 0 -> . _nrf24l01States 1 `uc ]
 "465
 }
 [e :U 1024 ]

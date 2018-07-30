@@ -10881,6 +10881,7 @@ unsigned int rxState : 4;
 volatile nrf24l01State_t nrf24l01State;
 
 typedef struct{
+unsigned int txIdle;
 unsigned int txReady;
 unsigned int txSending;
 unsigned int txSent;
@@ -10888,7 +10889,7 @@ unsigned int txPendingACK;
 } nrf24l01States_t;
 
 static const nrf24l01States_t nrf24l01States = {
-0,1,2,3
+0,1,2,3,4
 };
 
 typedef struct{
@@ -10919,7 +10920,7 @@ char Message[32];
 volatile nrf24l01_t nrf24l01;
 volatile nrf24l01State_t nrf24l01State;
 
-# 62
+# 63
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 
@@ -11341,7 +11342,7 @@ void nrf24l01Service(void){
 
 unsigned char i;
 
-if (nrf24l01State.txState){
+if (nrf24l01State.txState != nrf24l01States.txReady){
 
 if (nrf24l01State.txState == nrf24l01States.txReady){
 
