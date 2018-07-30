@@ -1,6 +1,7 @@
 #include <xc.h>
 #include <string.h>
 #include <stdlib.h>
+#include    <stdio.h>
 
 #include "nrf24l01.h"
 #include "interface.h"
@@ -10,8 +11,7 @@ unsigned char sleepLoop = 0;
 unsigned long counter = 0;
 
 // Cahnge ISR to trigger super loop code to do its bidding
-
-void interrupt ISR(void){    
+void __interrupt() ISR(void){    
     
     if (PIR0bits.INTF){
         nrf24l01ISR();
@@ -102,7 +102,9 @@ void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	int status;
     strcat(packet->Message, "/");
-    strcat(packet->Message, ftoa(value, &status));
+    
+    sprintf(packet->Message, "%f", value);
+//    strcat(packet->Message, ftoa(value, &status));
 }
 
 void checkTXPower(){

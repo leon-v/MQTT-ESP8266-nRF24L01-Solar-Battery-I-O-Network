@@ -10729,6 +10729,66 @@ extern char * ultoa(char * buf, unsigned long val, int base);
 
 extern char * ftoa(float f, int * status);
 
+# 7 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdarg.h"
+typedef void * va_list[1];
+
+#pragma intrinsic(__va_start)
+extern void * __va_start(void);
+
+#pragma intrinsic(__va_arg)
+extern void * __va_arg(void *, ...);
+
+# 43 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdio.h"
+struct __prbuf
+{
+char * ptr;
+void (* func)(char);
+};
+
+# 29 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\errno.h"
+extern int errno;
+
+# 12 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\conio.h"
+extern void init_uart(void);
+
+extern char getch(void);
+extern char getche(void);
+extern void putch(char);
+extern void ungetch(char);
+
+extern __bit kbhit(void);
+
+# 23
+extern char * cgets(char *);
+extern void cputs(const char *);
+
+# 88 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdio.h"
+extern int cprintf(char *, ...);
+#pragma printf_check(cprintf)
+
+
+
+extern int _doprnt(struct __prbuf *, const register char *, register va_list);
+
+
+# 180
+#pragma printf_check(vprintf) const
+#pragma printf_check(vsprintf) const
+
+extern char * gets(char *);
+extern int puts(const char *);
+extern int scanf(const char *, ...) __attribute__((unsupported("scanf() is not supported by this compiler")));
+extern int sscanf(const char *, const char *, ...) __attribute__((unsupported("sscanf() is not supported by this compiler")));
+extern int vprintf(const char *, va_list) __attribute__((unsupported("vprintf() is not supported by this compiler")));
+extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
+extern int vscanf(const char *, va_list ap) __attribute__((unsupported("vscanf() is not supported by this compiler")));
+extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
+
+#pragma printf_check(printf) const
+#pragma printf_check(sprintf) const
+extern int sprintf(char *, const char *, ...);
+extern int printf(const char *, ...);
+
 # 12 "interface.h"
 typedef struct{
 unsigned char check;
@@ -10749,11 +10809,10 @@ unsigned char bytes[sizeof(romData_t)];
 } romDataMap_t;
 
 
-
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 51
+# 50
 void nrf24l01CELow(void);
 void nrf24l01CEHigh(void);
 void nrf24l01CSLow(void);
@@ -10946,6 +11005,25 @@ unsigned Reserved : 5;
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+
+typedef struct{
+unsigned int txState : 4;
+unsigned int rxState : 4;
+} nrf24l01State_t;
+
+volatile nrf24l01State_t nrf24l01State;
+
+typedef struct{
+unsigned int txReady;
+unsigned int txSending;
+unsigned int txSent;
+unsigned int txPendingACK;
+} nrf24l01States_t;
+
+static const nrf24l01States_t nrf24l01States = {
+0,1,2,3
+};
+
 typedef struct{
 unsigned TXBusy : 1;
 unsigned RXPending : 1;
@@ -10972,8 +11050,9 @@ char Message[32];
 } nrf24l01Packet_t;
 
 volatile nrf24l01_t nrf24l01;
+volatile nrf24l01State_t nrf24l01State;
 
-# 42
+# 62
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
 
@@ -10986,13 +11065,12 @@ unsigned char nrf24l01Send(unsigned char command, unsigned char data);
 void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SetRXPipe(unsigned char pipe);
 
-# 9 "main.c"
+# 10 "main.c"
 unsigned char sleepLoop = 0;
 unsigned long counter = 0;
 
 
-
-void interrupt ISR(void){
+void __interrupt() ISR(void){
 
 if (PIR0bits.INTF){
 nrf24l01ISR();
@@ -11083,7 +11161,9 @@ strcat(packet->Message, topic);
 
 int status;
 strcat(packet->Message, "/");
-strcat(packet->Message, ftoa(value, &status));
+
+sprintf(packet->Message, "%f", value);
+
 }
 
 void checkTXPower(){
@@ -11098,7 +11178,7 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
-# 131
+# 133
 setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 packet.packetData.byte = 0;
 packet.packetData.ACKRequest = 1;
@@ -11180,7 +11260,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 217
+# 219
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11191,7 +11271,7 @@ _delay((unsigned long)((10)*(32000000/4000.0)));
 
 
 
-strcpy(romData->name, "UH1");
+strcpy(romData->name, "UWT");
 
 nrf24l01Init();
 

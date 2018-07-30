@@ -27,7 +27,6 @@ typedef union{
     };
 } romDataMap_t;
 
-#warning "romData_s = " sizeof(romData_t)
 
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;

@@ -368,10 +368,13 @@ void nrf24l01ISR(void){
     }
 	
 	if (status.TX_DS){
+        if (nrf24l01State.txState == nrf24l01States.txSending){
+            nrf24l01State.txState = nrf24l01States.txSent;
+        }
         
-        nrf24l01State.TX.pendingSent = 0;
+//        nrf24l01State.TX.pendingSent = 0;
         
-        nrf24l01State.TX.pendingACK = TXPacket->packetData.ACKRequest;
+//        nrf24l01State.TX.pendingACK = TXPacket->packetData.ACKRequest;
         
         
     }
@@ -413,10 +416,10 @@ void nrf24l01Service(void){
     
     unsigned char i;
     
-    if (nrf24l01State.TX.pending){
+    if (nrf24l01State.txState){
         
-        if (nrf24l01State.TX.pendingSend){
-
+        if (nrf24l01State.txState == nrf24l01States.txReady){
+            
             // Disable interrupts while sending.
             enableInterrupts(0);
 
@@ -443,22 +446,38 @@ void nrf24l01Service(void){
             nrf24l01CEHigh();
             delayUs(20);
             nrf24l01CELow();
-
-            nrf24l01State.TX.pendingSent = 1;
-        }
-
-        if (nrf24l01State.TX.pendingSent){
-            // Handeled by ISR
-        }
-
-        if (nrf24l01State.TX.pendingACK){
             
-            nrf24l01SetRXMode(1);
-            
-            
+            nrf24l01State.txState = nrf24l01States.txSending;
         }
         
+        if (nrf24l01State.txState = nrf24l01States.txSending){
+            // ISR handles this condition
+        }
+        
+        if (nrf24l01State.txState == nrf24l01States.txSent){
+            
+            
+            if (TXPacket->packetData.ACKRequest){
+                nrf24l01State.txState = nrf24l01States.txPendingACK;
+            }
+            else{
+                nrf24l01State.txState = nrf24l01States.txReady;
+            }
+        }
     }
+        
+//        if (nrf24l01State.TX.pendingSent){
+//            // Handeled by ISR
+//        }
+//
+//        if (nrf24l01State.TX.pendingACK){
+//            
+//            nrf24l01SetRXMode(1);
+//            
+//            
+//        }
+        
+//    }
 }
 
 void nrf24l01Init(void){

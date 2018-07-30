@@ -8,28 +8,24 @@
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
-typedef struct{
-    unsigned busy           : 1;
-    unsigned packetSend     : 1;
-    unsigned packetSending  : 1;
-    unsigned packetSent     : 1;
-    unsigned ackSend        : 1;
-    
-    
-} nrf24l01TXState_t;
-
 
 typedef struct{
-    unsigned dataReady  : 1;
-} nrf24l01RXState_t;
-
-
-typedef struct{
-    nrf24l01TXState_t TX;
-    nrf24l01RXState_t RX;
+    unsigned int txState    : 4;
+    unsigned int rxState    : 4;
 } nrf24l01State_t;
 
+volatile nrf24l01State_t nrf24l01State;
 
+typedef struct{
+    unsigned int txReady;
+    unsigned int txSending;
+    unsigned int txSent;
+    unsigned int txPendingACK;
+} nrf24l01States_t;
+
+static const nrf24l01States_t nrf24l01States = {
+    0,1,2,3
+};
 
 typedef struct{
     unsigned TXBusy             : 1;
