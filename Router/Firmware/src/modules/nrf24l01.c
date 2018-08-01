@@ -1,4 +1,5 @@
 #include "nrf24l01.h"
+#include "debug.h"
 
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;

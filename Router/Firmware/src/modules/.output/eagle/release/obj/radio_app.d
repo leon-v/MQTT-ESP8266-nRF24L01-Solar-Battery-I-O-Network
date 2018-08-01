@@ -28,4 +28,4 @@
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/stdlib.h \
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/machine/stdlib.h \
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/alloca.h \
- ../include/mqtt/typedef.h ../../include/mem.h
+ ../include/mqtt/typedef.h ../../include/mem.h ../include/mqtt/debug.h

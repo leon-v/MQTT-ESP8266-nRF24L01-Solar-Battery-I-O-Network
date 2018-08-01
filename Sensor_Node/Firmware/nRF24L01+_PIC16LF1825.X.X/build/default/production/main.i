@@ -11042,8 +11042,6 @@ unsigned char sleepLoop = 0;
 
 void interrupt ISR(void){
 
-counter++;
-
 if (PIR0bits.INTF){
 nrf24l01ISR();
 PIR0bits.INTF = 0;
@@ -11109,31 +11107,37 @@ return adcSum;
 
 void sleep(unsigned int milliseconds){
 
-# 86
-milliseconds = 2;
+
+milliseconds = (unsigned int) (milliseconds / (128 + 128));
+
+
+milliseconds++;
 
 
 while (--milliseconds){
 
-
-nrf24l01SetRXMode(1);
-
-
-doWDTSleep(0b01000);
-
-nrf24l01Service();
+# 93
+doWDTSleep(0b00111);
 
 
 nrf24l01SetRXMode(0);
 
 
-doWDTSleep(0b01000);
+doWDTSleep(0b00111);
 
 }
 }
 
-void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
+void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
+
 sprintf(packet->Message, "/%s/%s/%f", romData->name, topic, value);
+
+packet->packetData.byte = 0;
+packet->packetData.ACKRequest = 1;
+
+nrf24l01SendPacket(packet);
+
+sleep(2000);
 }
 
 
@@ -11141,27 +11145,19 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
-setMessage(&packet, "DBG", counter);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
-nrf24l01SendPacket(&packet);
-sleep(1000);
+sendMessage(&packet, "DBG1", counter);
 
 # 127
-setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
-nrf24l01SendPacket(&packet);
+sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
-sleep(1000);
+sendMessage(&packet, "DBG2", counter);
 
 
-setMessage(&packet, "ANC3mV", getADCValue(0b010011));
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
-nrf24l01SendPacket(&packet);
+sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 
-sleep(1000);
+
+sendMessage(&packet, "DBG3", counter);
+
 
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
@@ -11170,26 +11166,18 @@ FVRCONbits.TSEN = 0;
 
 
 
-float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 27;
+float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 40;
 
-setMessage(&packet, "TEMP", ta);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
-nrf24l01SendPacket(&packet);
+sendMessage(&packet, "TEMP", ta);
 
-sleep(1000);
-
+sendMessage(&packet, "DBG4", counter);
 
 n_RF_SETUP_t rfSetup;
 rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 
-setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
-nrf24l01SendPacket(&packet);
+sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 
-sleep(1000);
-
+sendMessage(&packet, "DBG5", counter);
 }
 
 unsigned char nrf24l01GetPipe(char * name){
@@ -11227,7 +11215,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 211
+# 199
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11294,11 +11282,7 @@ INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-setMessage(&packet, "BOOT", romData->bootMode);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
-nrf24l01SendPacket(&packet);
-sleep(1000);
+sendMessage(&packet, "BOOT", romData->bootMode);
 
 while(1){
 loop();

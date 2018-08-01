@@ -1,4 +1,5 @@
 #include "radio_app.h"
+#include "debug.h"
 
 LOCAL MQTT_Client* mqttClient;
 
@@ -24,6 +25,7 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 		// If we are the primary hub / reciever, we need to send back ACKs
 		if (RXPacket->packetData.ACKRequest){
 			nrf24l01SendACK(RXPacket);
+			INFO("ACK Sent\r\n");
 		}
 
 		char* strings = strtok(RXPacket->Message, "/");

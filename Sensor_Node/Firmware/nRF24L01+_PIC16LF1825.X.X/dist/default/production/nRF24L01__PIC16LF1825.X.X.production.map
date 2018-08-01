@@ -5,7 +5,7 @@ Linker command line:
 -W-3 --edf=C:\Program Files (x86)\Microchip\xc8\v2.00\pic\dat\en_msgs.txt \
   -cs -h+dist/default/production\nRF24L01__PIC16LF1825.X.X.production.sym \
   --cmf=dist/default/production\nRF24L01__PIC16LF1825.X.X.production.cmf -z \
-  -Q16LF18325 -oC:\Users\Leon\AppData\Local\Temp\seb4.2 \
+  -Q16LF18325 -oC:\Users\Leon\AppData\Local\Temp\s4a0.2 \
   --defsym=__MPLAB_BUILD=1 \
   -Mdist/default/production/nRF24L01__PIC16LF1825.X.X.production.map -E1 \
   -ver=XC8 -ASTACK=0215Ch-023efh -pstack=STACK -ACODE=00h-07FFhx4 \
@@ -33,7 +33,7 @@ Linker command line:
   -pconfig=CONFIG -DCONFIG=2 -AIDLOC=08000h-08003h -pidloc=IDLOC -DIDLOC=2 \
   -AEEDATA=00h-0FFh/0F000h -peeprom_data=EEDATA -DEEDATA=2 -DCODE=2 \
   -DSTRCODE=2 -DSTRING=2 -DCONST=2 -DENTRY=2 -k \
-  C:\Users\Leon\AppData\Local\Temp\seb4.o \
+  C:\Users\Leon\AppData\Local\Temp\s4a0.o \
   dist/default/production\nRF24L01__PIC16LF1825.X.X.production.o 
 
 Object code version is 3.11
@@ -43,80 +43,88 @@ Machine type is 16LF18325
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-C:\Users\Leon\AppData\Local\Temp\seb4.o
-                end_init                             1C       1C        2        8       0
+C:\Users\Leon\AppData\Local\Temp\s4a0.o
+                end_init                              F        F        2        8       0
                 reset_vec                             0        0        2        0       0
                 config                             8007     8007        4    1000E       0
 dist/default/production\nRF24L01__PIC16LF1825.X.X.production.o
-                cinit                                1E       1E       22        8       0
-                intentry                              4        4       18        8       0
-                text54                             1C76     1C76        8     38EC       0
-                text53                             1C67     1C67        3     38CE       0
-                text52                             1C7E     1C7E        8     38FC       0
-                text51                             1C93     1C93       11     3926       0
-                text50                             1C6A     1C6A        3     38D4       0
-                text49                             1003     1003        8     2006       0
-                text48                             1D1C     1D1C       1D     3A38       0
-                text47                             1056     1056       4F     20AC       0
-                text45                             1274     1274       7D     24E8       0
-                text44                             1CB8     1CB8       17     3970       0
-                text43                             1D39     1D39       1D     3A72       0
-                text42                             1E42     1E42       27     3C84       0
-                text41                             16CF     16CF      131     2D9E       0
-                text40                              748      748       B8        8       0
-                text39                             1CCF     1CCF       17     399E       0
-                text38                             1436     1436       B4     286C       0
-                text37                             1CA4     1CA4       14     3948       0
-                text36                             100B     100B       4B     2016       0
-                text35                             1C86     1C86        D     390C       0
-                text34                             1DD8     1DD8       23     3BB0       0
-                text33                             12F1     12F1       9F     25E2       0
-                text32                             11A8     11A8       62     2350       0
-                text31                             10A5     10A5       52     214A       0
-                text30                             1E90     1E90       30     3D20       0
-                text29                              8FA      8FA      13B     11F4       0
-                text28                              826      826       D4     104C       0
-                text27                             14EA     14EA       CA     29D4       0
-                text26                             1F77     1F77       44     3EEE       0
-                text25                             1EC0     1EC0       3C     3D80       0
-                text24                             1DFB     1DFB       23     3BF6       0
-                text23                              58C      58C      1BC        8       0
-                text22                             120A     120A       6A     2414       0
-                text21                             114A     114A       5E     2294       0
-                text20                              D20      D20      2E0     1A40       0
-                text19                               40       40      54C        8       0
-                text18                             1D56     1D56       1D     3AAC       0
-                text17                             1D94     1D94       22     3B28       0
-                text16                             1C6D     1C6D        3     38DA       0
-                text15                             1000     1000        3     1A40       0
-                text14                             1DB6     1DB6       22     3B6C       0
-                text13                             10F7     10F7       53     21EE       0
-                text12                             1E1E     1E1E       24     3C3C       0
-                text11                              A35      A35      160     146A       0
-                text10                             1E69     1E69       27     3CD2       0
-                text9                               B95      B95      18B     172A       0
-                text8                              1F39     1F39       3E     3E72       0
-                text7                               801      801       25     1002       0
-                text6                              1CE6     1CE6       1A     39CC       0
-                text5                              1FBB     1FBB       45     3F76       0
-                text4                              15B4     15B4      11B     2B68       0
-                text3                              1D00     1D00       1C     3A00       0
-                text2                              1EFC     1EFC       3D     3DF8       0
-                text1                              1D73     1D73       21     3AE6       0
-                maintext                           1390     1390       A6     2720       0
+                cinit                                11       11       21        8       0
+                intentry                              4        4        B        8       0
+                text58                             1D3A     1D3A       1B     3A74       0
+                text57                             1CE1     1CE1        3     39C2       0
+                text56                             1CE4     1CE4        3     39C8       0
+                text55                             1CF4     1CF4        8     39E8       0
+                text54                              800      800        3        8       0
+                text53                             1CED     1CED        7     39DA       0
+                text52                              7F0      7F0        D        8       0
+                text51                              7FD      7FD        3        8       0
+                text50                             1000     1000        8     1BE2       0
+                text49                             1D55     1D55       1B     3AAA       0
+                text48                             1011     1011       3A     2022       0
+                text47                             1DFB     1DFB       1E     3BF6       0
+                text46                              9D6      9D6      121     13AC       0
+                text45                             11D5     11D5       4E     23AA       0
+                text43                             1275     1275       65     24EA       0
+                text42                             1D0E     1D0E       15     3A1C       0
+                text41                             1D70     1D70       1B     3AE0       0
+                text40                             1E97     1E97       22     3D2E       0
+                text39                             15F7     15F7       F6     2BEE       0
+                text38                             149A     149A       A9     2934       0
+                text37                             1D23     1D23       17     3A46       0
+                text36                             13F4     13F4       A6     27E8       0
+                text35                             1D8B     1D8B       1C     3B16       0
+                text34                             1E56     1E56       20     3CAC       0
+                text33                             1087     1087       3E     210E       0
+                text32                             1E37     1E37       1F     3C6E       0
+                text31                              AF7      AF7      14A     15EE       0
+                text30                             1EDF     1EDF       2A     3DBE       0
+                text29                             1EB9     1EB9       26     3D72       0
+                text28                             104B     104B       3C     2096       0
+                text27                             1008     1008        9     2010       0
+                text26                             1E19     1E19       1E     3C32       0
+                text25                             12DA     12DA       87     25B4       0
+                text24                              79D      79D       53        8       0
+                text23                             10C5     10C5       43     218A       0
+                text22                             1F09     1F09       2A     3E12       0
+                text21                              8B9      8B9      11D     1172       0
+                text20                              803      803       B6     1006       0
+                text19                             1543     1543       B4     2A86       0
+                text18                             1F93     1F93       35     3F26       0
+                text17                             1F33     1F33       2D     3E66       0
+                text16                             1DA7     1DA7       1C     3B4E       0
+                text15                              C41      C41      1B0     1882       0
+                text14                             1223     1223       52     2446       0
+                text13                             118F     118F       46     231E       0
+                text12                              4D7      4D7      2C6        8       0
+                text11                               32       32      4A5        8       0
+                text10                             1F60     1F60       33     3EC0       0
+                text9                               DF1      DF1      20F     1BE2       0
+                text8                              1FC8     1FC8       38     3F90       0
+                text7                              1E76     1E76       21     3CEC       0
+                text6                              1CFC     1CFC       12     39F8       0
+                text5                              114B     114B       44     2296       0
+                text4                              16ED     16ED      113     2DDA       0
+                text3                              1DC3     1DC3       1C     3B86       0
+                text2                              1108     1108       43     2210       0
+                text1                              1DDF     1DDF       1C     3BBE       0
+                maintext                           1361     1361       93     26C2       0
                 cstackBANK0                          20       20       50       20       1
-                cstackCOMMON                         70       70        6       70       1
+                cstackCOMMON                         70       70        C       70       1
                 cstackBANK1                          A0       A0       48       A0       1
                 cstackBANK2                         120      120       31      120       1
                 cstackBANK3                         1A0      1A0       22      1A0       1
-                clrtext                            1C70     1C70        6     38E0       0
+                clrtext                            1CE7     1CE7        6     39CE       0
                 bssBANK4                            220      220       1C      220       1
                 bssBANK3                            1C2      1C2       21      1A0       1
                 bssBANK2                            151      151        4      120       1
-                dataBANK1                            E8       E8        1       A0       1
-                bssCOMMON                            76       76        4       70       1
-                stringtext14                       18B8     18B8        4     3000       0
-                stringtext13                       18B4     18B4        4     3000       0
+                dataBANK1                            EC       EC        1       A0       1
+                bssBANK1                             E8       E8        4       A0       1
+                stringtext18                       18CD     18CD        4     3000       0
+                stringtext17                       18C8     18C8        5     3000       0
+                stringtext16                       18C3     18C3        5     3000       0
+                stringtext15                       18BE     18BE        5     3000       0
+                stringtext14                       18B9     18B9        5     3000       0
+                stringtext13                       18B4     18B4        5     3000       0
                 stringtext12                       18AF     18AF        5     3000       0
                 stringtext11                       18AA     18AA        5     3000       0
                 stringtext10                       18A5     18A5        5     3000       0
@@ -135,70 +143,78 @@ TOTAL           Name                               Link     Load   Length     Sp
         CLASS   STACK          
 
         CLASS   CODE           
-                end_init                             1C       1C        2         0
-                cinit                                1E       1E       22         0
-                intentry                              4        4       18         0
+                end_init                              F        F        2         0
+                cinit                                11       11       21         0
+                intentry                              4        4        B         0
                 reset_vec                             0        0        2         0
-                text54                             1C76     1C76        8         0
-                text53                             1C67     1C67        3         0
-                text52                             1C7E     1C7E        8         0
-                text51                             1C93     1C93       11         0
-                text50                             1C6A     1C6A        3         0
-                text49                             1003     1003        8         0
-                text48                             1D1C     1D1C       1D         0
-                text47                             1056     1056       4F         0
-                text45                             1274     1274       7D         0
-                text44                             1CB8     1CB8       17         0
-                text43                             1D39     1D39       1D         0
-                text42                             1E42     1E42       27         0
-                text41                             16CF     16CF      131         0
-                text40                              748      748       B8         0
-                text39                             1CCF     1CCF       17         0
-                text38                             1436     1436       B4         0
-                text37                             1CA4     1CA4       14         0
-                text36                             100B     100B       4B         0
-                text35                             1C86     1C86        D         0
-                text34                             1DD8     1DD8       23         0
-                text33                             12F1     12F1       9F         0
-                text32                             11A8     11A8       62         0
-                text31                             10A5     10A5       52         0
-                text30                             1E90     1E90       30         0
-                text29                              8FA      8FA      13B         0
-                text28                              826      826       D4         0
-                text27                             14EA     14EA       CA         0
-                text26                             1F77     1F77       44         0
-                text25                             1EC0     1EC0       3C         0
-                text24                             1DFB     1DFB       23         0
-                text23                              58C      58C      1BC         0
-                text22                             120A     120A       6A         0
-                text21                             114A     114A       5E         0
-                text20                              D20      D20      2E0         0
-                text19                               40       40      54C         0
-                text18                             1D56     1D56       1D         0
-                text17                             1D94     1D94       22         0
-                text16                             1C6D     1C6D        3         0
-                text15                             1000     1000        3         0
-                text14                             1DB6     1DB6       22         0
-                text13                             10F7     10F7       53         0
-                text12                             1E1E     1E1E       24         0
-                text11                              A35      A35      160         0
-                text10                             1E69     1E69       27         0
-                text9                               B95      B95      18B         0
-                text8                              1F39     1F39       3E         0
-                text7                               801      801       25         0
-                text6                              1CE6     1CE6       1A         0
-                text5                              1FBB     1FBB       45         0
-                text4                              15B4     15B4      11B         0
-                text3                              1D00     1D00       1C         0
-                text2                              1EFC     1EFC       3D         0
-                text1                              1D73     1D73       21         0
-                maintext                           1390     1390       A6         0
-                clrtext                            1C70     1C70        6         0
+                text58                             1D3A     1D3A       1B         0
+                text57                             1CE1     1CE1        3         0
+                text56                             1CE4     1CE4        3         0
+                text55                             1CF4     1CF4        8         0
+                text54                              800      800        3         0
+                text53                             1CED     1CED        7         0
+                text52                              7F0      7F0        D         0
+                text51                              7FD      7FD        3         0
+                text50                             1000     1000        8         0
+                text49                             1D55     1D55       1B         0
+                text48                             1011     1011       3A         0
+                text47                             1DFB     1DFB       1E         0
+                text46                              9D6      9D6      121         0
+                text45                             11D5     11D5       4E         0
+                text43                             1275     1275       65         0
+                text42                             1D0E     1D0E       15         0
+                text41                             1D70     1D70       1B         0
+                text40                             1E97     1E97       22         0
+                text39                             15F7     15F7       F6         0
+                text38                             149A     149A       A9         0
+                text37                             1D23     1D23       17         0
+                text36                             13F4     13F4       A6         0
+                text35                             1D8B     1D8B       1C         0
+                text34                             1E56     1E56       20         0
+                text33                             1087     1087       3E         0
+                text32                             1E37     1E37       1F         0
+                text31                              AF7      AF7      14A         0
+                text30                             1EDF     1EDF       2A         0
+                text29                             1EB9     1EB9       26         0
+                text28                             104B     104B       3C         0
+                text27                             1008     1008        9         0
+                text26                             1E19     1E19       1E         0
+                text25                             12DA     12DA       87         0
+                text24                              79D      79D       53         0
+                text23                             10C5     10C5       43         0
+                text22                             1F09     1F09       2A         0
+                text21                              8B9      8B9      11D         0
+                text20                              803      803       B6         0
+                text19                             1543     1543       B4         0
+                text18                             1F93     1F93       35         0
+                text17                             1F33     1F33       2D         0
+                text16                             1DA7     1DA7       1C         0
+                text15                              C41      C41      1B0         0
+                text14                             1223     1223       52         0
+                text13                             118F     118F       46         0
+                text12                              4D7      4D7      2C6         0
+                text11                               32       32      4A5         0
+                text10                             1F60     1F60       33         0
+                text9                               DF1      DF1      20F         0
+                text8                              1FC8     1FC8       38         0
+                text7                              1E76     1E76       21         0
+                text6                              1CFC     1CFC       12         0
+                text5                              114B     114B       44         0
+                text4                              16ED     16ED      113         0
+                text3                              1DC3     1DC3       1C         0
+                text2                              1108     1108       43         0
+                text1                              1DDF     1DDF       1C         0
+                maintext                           1361     1361       93         0
+                clrtext                            1CE7     1CE7        6         0
                 idataBANK1                            3        3        1         0
 
         CLASS   STRCODE        
-                stringtext14                       18B8     18B8        4         0
-                stringtext13                       18B4     18B4        4         0
+                stringtext18                       18CD     18CD        4         0
+                stringtext17                       18C8     18C8        5         0
+                stringtext16                       18C3     18C3        5         0
+                stringtext15                       18BE     18BE        5         0
+                stringtext14                       18B9     18B9        5         0
+                stringtext13                       18B4     18B4        5         0
                 stringtext12                       18AF     18AF        5         0
                 stringtext11                       18AA     18AA        5         0
                 stringtext10                       18A5     18A5        5         0
@@ -219,15 +235,15 @@ TOTAL           Name                               Link     Load   Length     Sp
         CLASS   ENTRY          
 
         CLASS   COMMON         
-                cstackCOMMON                         70       70        6         1
-                bssCOMMON                            76       76        4         1
+                cstackCOMMON                         70       70        C         1
 
         CLASS   BANK0          
                 cstackBANK0                          20       20       50         1
 
         CLASS   BANK1          
                 cstackBANK1                          A0       A0       48         1
-                dataBANK1                            E8       E8        1         1
+                dataBANK1                            EC       EC        1         1
+                bssBANK1                             E8       E8        4         1
 
         CLASS   BANK2          
                 cstackBANK2                         120      120       31         1
@@ -378,72 +394,73 @@ SEGMENTS        Name                           Load    Length   Top    Selector 
 
                 reset_vec                      000000  000002  000002         0       0  CODE        2
                 idataBANK1                     000003  000001  000004         6       0  CODE        2
-                intentry                       000004  0007FC  000800         8       0  CODE        2
+                intentry                       000004  0007FF  000803         8       0  CODE        2
                 cstackBANK0                    000020  000050  000070        20       1  BANK0       1
-                cstackCOMMON                   000070  00000A  00007A        70       1  COMMON      1
-                cstackBANK1                    0000A0  000049  0000E9        A0       1  BANK1       1
+                cstackCOMMON                   000070  00000C  00007C        70       1  COMMON      1
+                cstackBANK1                    0000A0  00004D  0000ED        A0       1  BANK1       1
                 cstackBANK2                    000120  000035  000155       120       1  BANK2       1
                 cstackBANK3                    0001A0  000043  0001E3       1A0       1  BANK3       1
                 bssBANK4                       000220  00001C  00023C       220       1  BANK4       1
-                text7                          000801  000025  000826      1002       0  CODE        2
-                text28                         000826  0000D4  0008FA      104C       0  CODE        2
-                text29                         0008FA  00013B  000A35      11F4       0  CODE        2
-                text11                         000A35  000160  000B95      146A       0  CODE        2
-                text9                          000B95  00018B  000D20      172A       0  CODE        2
-                text20                         000D20  0002E3  001003      1A40       0  CODE        2
-                text49                         001003  000008  00100B      2006       0  CODE        2
-                text36                         00100B  00004B  001056      2016       0  CODE        2
-                text47                         001056  00004F  0010A5      20AC       0  CODE        2
-                text31                         0010A5  000052  0010F7      214A       0  CODE        2
-                text13                         0010F7  000053  00114A      21EE       0  CODE        2
-                text21                         00114A  00005E  0011A8      2294       0  CODE        2
-                text32                         0011A8  000062  00120A      2350       0  CODE        2
-                text22                         00120A  00006A  001274      2414       0  CODE        2
-                text45                         001274  00007D  0012F1      24E8       0  CODE        2
-                text33                         0012F1  00009F  001390      25E2       0  CODE        2
-                maintext                       001390  0000A6  001436      2720       0  CODE        2
-                text38                         001436  0000B4  0014EA      286C       0  CODE        2
-                text27                         0014EA  0000CA  0015B4      29D4       0  CODE        2
-                text4                          0015B4  00011B  0016CF      2B68       0  CODE        2
-                text41                         0016CF  000131  001800      2D9E       0  CODE        2
-                stringtext1                    001800  0000BC  0018BC      3000       0  STRCODE     2
-                text53                         001C67  000003  001C6A      38CE       0  CODE        2
-                text50                         001C6A  000003  001C6D      38D4       0  CODE        2
-                text16                         001C6D  000003  001C70      38DA       0  CODE        2
-                clrtext                        001C70  000006  001C76      38E0       0  CODE        2
-                text54                         001C76  000008  001C7E      38EC       0  CODE        2
-                text52                         001C7E  000008  001C86      38FC       0  CODE        2
-                text35                         001C86  00000D  001C93      390C       0  CODE        2
-                text51                         001C93  000011  001CA4      3926       0  CODE        2
-                text37                         001CA4  000014  001CB8      3948       0  CODE        2
-                text44                         001CB8  000017  001CCF      3970       0  CODE        2
-                text39                         001CCF  000017  001CE6      399E       0  CODE        2
-                text6                          001CE6  00001A  001D00      39CC       0  CODE        2
-                text3                          001D00  00001C  001D1C      3A00       0  CODE        2
-                text48                         001D1C  00001D  001D39      3A38       0  CODE        2
-                text43                         001D39  00001D  001D56      3A72       0  CODE        2
-                text18                         001D56  00001D  001D73      3AAC       0  CODE        2
-                text1                          001D73  000021  001D94      3AE6       0  CODE        2
-                text17                         001D94  000022  001DB6      3B28       0  CODE        2
-                text14                         001DB6  000022  001DD8      3B6C       0  CODE        2
-                text34                         001DD8  000023  001DFB      3BB0       0  CODE        2
-                text24                         001DFB  000023  001E1E      3BF6       0  CODE        2
-                text12                         001E1E  000024  001E42      3C3C       0  CODE        2
-                text42                         001E42  000027  001E69      3C84       0  CODE        2
-                text10                         001E69  000027  001E90      3CD2       0  CODE        2
-                text30                         001E90  000030  001EC0      3D20       0  CODE        2
-                text25                         001EC0  00003C  001EFC      3D80       0  CODE        2
-                text2                          001EFC  00003D  001F39      3DF8       0  CODE        2
-                text8                          001F39  00003E  001F77      3E72       0  CODE        2
-                text26                         001F77  000044  001FBB      3EEE       0  CODE        2
-                text5                          001FBB  000045  002000      3F76       0  CODE        2
+                text20                         000803  0000B6  0008B9      1006       0  CODE        2
+                text21                         0008B9  00011D  0009D6      1172       0  CODE        2
+                text46                         0009D6  000121  000AF7      13AC       0  CODE        2
+                text31                         000AF7  00014A  000C41      15EE       0  CODE        2
+                text15                         000C41  0001B0  000DF1      1882       0  CODE        2
+                text9                          000DF1  000217  001008      1BE2       0  CODE        2
+                text27                         001008  000009  001011      2010       0  CODE        2
+                text48                         001011  00003A  00104B      2022       0  CODE        2
+                text28                         00104B  00003C  001087      2096       0  CODE        2
+                text33                         001087  00003E  0010C5      210E       0  CODE        2
+                text23                         0010C5  000043  001108      218A       0  CODE        2
+                text2                          001108  000043  00114B      2210       0  CODE        2
+                text5                          00114B  000044  00118F      2296       0  CODE        2
+                text13                         00118F  000046  0011D5      231E       0  CODE        2
+                text45                         0011D5  00004E  001223      23AA       0  CODE        2
+                text14                         001223  000052  001275      2446       0  CODE        2
+                text43                         001275  000065  0012DA      24EA       0  CODE        2
+                text25                         0012DA  000087  001361      25B4       0  CODE        2
+                maintext                       001361  000093  0013F4      26C2       0  CODE        2
+                text36                         0013F4  0000A6  00149A      27E8       0  CODE        2
+                text38                         00149A  0000A9  001543      2934       0  CODE        2
+                text19                         001543  0000B4  0015F7      2A86       0  CODE        2
+                text39                         0015F7  0000F6  0016ED      2BEE       0  CODE        2
+                text4                          0016ED  000113  001800      2DDA       0  CODE        2
+                stringtext1                    001800  0000D1  0018D1      3000       0  STRCODE     2
+                text57                         001CE1  000003  001CE4      39C2       0  CODE        2
+                text56                         001CE4  000003  001CE7      39C8       0  CODE        2
+                clrtext                        001CE7  000006  001CED      39CE       0  CODE        2
+                text53                         001CED  000007  001CF4      39DA       0  CODE        2
+                text55                         001CF4  000008  001CFC      39E8       0  CODE        2
+                text6                          001CFC  000012  001D0E      39F8       0  CODE        2
+                text42                         001D0E  000015  001D23      3A1C       0  CODE        2
+                text37                         001D23  000017  001D3A      3A46       0  CODE        2
+                text58                         001D3A  00001B  001D55      3A74       0  CODE        2
+                text49                         001D55  00001B  001D70      3AAA       0  CODE        2
+                text41                         001D70  00001B  001D8B      3AE0       0  CODE        2
+                text35                         001D8B  00001C  001DA7      3B16       0  CODE        2
+                text16                         001DA7  00001C  001DC3      3B4E       0  CODE        2
+                text3                          001DC3  00001C  001DDF      3B86       0  CODE        2
+                text1                          001DDF  00001C  001DFB      3BBE       0  CODE        2
+                text47                         001DFB  00001E  001E19      3BF6       0  CODE        2
+                text26                         001E19  00001E  001E37      3C32       0  CODE        2
+                text32                         001E37  00001F  001E56      3C6E       0  CODE        2
+                text34                         001E56  000020  001E76      3CAC       0  CODE        2
+                text7                          001E76  000021  001E97      3CEC       0  CODE        2
+                text40                         001E97  000022  001EB9      3D2E       0  CODE        2
+                text29                         001EB9  000026  001EDF      3D72       0  CODE        2
+                text30                         001EDF  00002A  001F09      3DBE       0  CODE        2
+                text22                         001F09  00002A  001F33      3E12       0  CODE        2
+                text17                         001F33  00002D  001F60      3E66       0  CODE        2
+                text10                         001F60  000033  001F93      3EC0       0  CODE        2
+                text18                         001F93  000035  001FC8      3F26       0  CODE        2
+                text8                          001FC8  000038  002000      3F90       0  CODE        2
                 config                         008007  000004  00800B     1000E       0  CONFIG      2
 
 
 UNUSED ADDRESS RANGES
 
         Name                Unused          Largest block    Delta
-        BANK1            000E9-000EF               7           1
+        BANK1            000ED-000EF               3           1
         BANK10           00520-0056F              50           1
         BANK11           005A0-005EF              50           1
         BANK12           00620-0064F              30           1
@@ -457,18 +474,15 @@ UNUSED ADDRESS RANGES
         BANK9            004A0-004EF              50           1
         BIGRAM           02000-023EF             3F0           1
         CODE             00002-00002               1           2
-                         00800-00800               1
-                         018BC-01C66             3AB
-        COMMON           0007A-0007D               4           1
+                         018D1-01CE0             410
+        COMMON           0007C-0007D               2           1
         CONST            00002-00002               1           2
-                         00800-00800               1
-                         018BC-01C66             100
+                         018D1-01CE0             100
         EEDATA           0F000-0F0FF             100           2
         ENTRY            00002-00002               1           2
-                         00800-00800               1
-                         018BC-01C66             100
+                         018D1-01CE0             100
         IDLOC            08000-08003               4           2
-        RAM              000E9-000EF               7           1
+        RAM              000ED-000EF               3           1
                          00155-0016F              1B
                          001E3-001EF               D
                          0023C-0026F              34
@@ -514,11 +528,9 @@ UNUSED ADDRESS RANGES
         SFR9             00480-0049F              20           1
         STACK            0215C-023EF             294           1
         STRCODE          00002-00002               1           2
-                         00800-00800               1
-                         018BC-01C66             3AB
+                         018D1-01CE0             410
         STRING           00002-00002               1           2
-                         00800-00800               1
-                         018BC-01C66             100
+                         018D1-01CE0             100
 
                                   Symbol Table
 
@@ -547,6 +559,7 @@ UNUSED ADDRESS RANGES
 ?_scale                         cstackBANK1  000A0
 ?_sprintf                       cstackBANK1  000B9
 ?_strlen                        cstackBANK0  00020
+?i1_strlen                      cstackCOMMON 00070
 _ADCON0bits                     (abs)        0009D
 _ADCON1bits                     (abs)        0009E
 _ADRESH                         (abs)        0009C
@@ -577,7 +590,7 @@ _SSP1CON1bits                   (abs)        00215
 _SSP1STATbits                   (abs)        00214
 _TRISAbits                      (abs)        0008C
 _TRISCbits                      (abs)        0008E
-_TXPacket                       bssCOMMON    00078
+_TXPacket                       bssBANK1     000EA
 _WDTCONbits                     (abs)        00097
 _WPUA                           (abs)        0020C
 _WPUAbits                       (abs)        0020C
@@ -634,11 +647,11 @@ __Hbank7                        bank7        00000
 __Hbank8                        bank8        00000
 __Hbank9                        bank9        00000
 __Hbigram                       bigram       00000
+__HbssBANK1                     bssBANK1     00000
 __HbssBANK2                     bssBANK2     00000
 __HbssBANK3                     bssBANK3     00000
 __HbssBANK4                     bssBANK4     00000
-__HbssCOMMON                    bssCOMMON    00000
-__Hcinit                        cinit        00040
+__Hcinit                        cinit        00032
 __Hclrtext                      clrtext      00000
 __Hcode                         code         00000
 __Hcommon                       common       00000
@@ -650,12 +663,12 @@ __HcstackBANK3                  cstackBANK3  00000
 __HcstackCOMMON                 cstackCOMMON 00000
 __HdataBANK1                    dataBANK1    00000
 __Heeprom_data                  eeprom_data  00000
-__Hend_init                     end_init     0001E
+__Hend_init                     end_init     00011
 __Hfunctab                      functab      00000
 __HidataBANK1                   idataBANK1   00000
 __Hidloc                        idloc        00000
-__Hinit                         init         0001C
-__Hintentry                     intentry     0001C
+__Hinit                         init         0000F
+__Hintentry                     intentry     0000F
 __Hmaintext                     maintext     00000
 __Hpowerup                      powerup      00000
 __Hram                          ram          00000
@@ -705,6 +718,10 @@ __Hstringtext12                 stringtext12 00000
 __Hstringtext13                 stringtext13 00000
 __Hstringtext14                 stringtext14 00000
 __Hstringtext15                 stringtext15 00000
+__Hstringtext16                 stringtext16 00000
+__Hstringtext17                 stringtext17 00000
+__Hstringtext18                 stringtext18 00000
+__Hstringtext19                 stringtext19 00000
 __Hstringtext2                  stringtext2  00000
 __Hstringtext3                  stringtext3  00000
 __Hstringtext4                  stringtext4  00000
@@ -748,11 +765,11 @@ __Lbank7                        bank7        00000
 __Lbank8                        bank8        00000
 __Lbank9                        bank9        00000
 __Lbigram                       bigram       00000
+__LbssBANK1                     bssBANK1     00000
 __LbssBANK2                     bssBANK2     00000
 __LbssBANK3                     bssBANK3     00000
 __LbssBANK4                     bssBANK4     00000
-__LbssCOMMON                    bssCOMMON    00000
-__Lcinit                        cinit        0001E
+__Lcinit                        cinit        00011
 __Lclrtext                      clrtext      00000
 __Lcode                         code         00000
 __Lcommon                       common       00000
@@ -764,11 +781,11 @@ __LcstackBANK3                  cstackBANK3  00000
 __LcstackCOMMON                 cstackCOMMON 00000
 __LdataBANK1                    dataBANK1    00000
 __Leeprom_data                  eeprom_data  00000
-__Lend_init                     end_init     0001C
+__Lend_init                     end_init     0000F
 __Lfunctab                      functab      00000
 __LidataBANK1                   idataBANK1   00000
 __Lidloc                        idloc        00000
-__Linit                         init         0001C
+__Linit                         init         0000F
 __Lintentry                     intentry     00004
 __Lmaintext                     maintext     00000
 __Lpowerup                      powerup      00000
@@ -819,6 +836,10 @@ __Lstringtext12                 stringtext12 00000
 __Lstringtext13                 stringtext13 00000
 __Lstringtext14                 stringtext14 00000
 __Lstringtext15                 stringtext15 00000
+__Lstringtext16                 stringtext16 00000
+__Lstringtext17                 stringtext17 00000
+__Lstringtext18                 stringtext18 00000
+__Lstringtext19                 stringtext19 00000
 __Lstringtext2                  stringtext2  00000
 __Lstringtext3                  stringtext3  00000
 __Lstringtext4                  stringtext4  00000
@@ -832,184 +853,192 @@ __S0                            (abs)        0800B
 __S1                            (abs)        0023C
 __S2                            (abs)        00000
 __S3                            (abs)        00000
-___awdiv                        text22       0120A
+___awdiv                        text14       01223
 ___awdiv@counter                cstackBANK0  0002C
 ___awdiv@dividend               cstackBANK0  00029
 ___awdiv@divisor                cstackBANK0  00027
 ___awdiv@quotient               cstackBANK0  0002E
 ___awdiv@sign                   cstackBANK0  0002D
-___awmod                        text21       0114A
+___awmod                        text13       0118F
 ___awmod@counter                cstackBANK0  00025
 ___awmod@dividend               cstackBANK0  00022
 ___awmod@divisor                cstackBANK0  00020
 ___awmod@sign                   cstackBANK0  00026
-___awtoft                       text42       01E42
+___awtoft                       text40       01E97
 ___awtoft@c                     cstackBANK0  00028
 ___awtoft@sign                  cstackBANK0  0002D
-___bmul                         text6        01CE6
+___bmul                         text6        01CFC
 ___bmul@multiplicand            cstackBANK0  00020
 ___bmul@multiplier              cstackBANK0  00023
 ___bmul@product                 cstackBANK0  00022
-___ftadd                        text41       016CF
+___ftadd                        text39       015F7
 ___ftadd@exp1                   cstackBANK0  00042
 ___ftadd@exp2                   cstackBANK0  00041
 ___ftadd@f1                     cstackBANK0  00036
 ___ftadd@f2                     cstackBANK0  00039
 ___ftadd@sign                   cstackBANK0  00040
-___ftdiv                        text40       00748
+___ftdiv                        text38       0149A
 ___ftdiv@cntr                   cstackBANK0  0004D
 ___ftdiv@exp                    cstackBANK0  00051
 ___ftdiv@f1                     cstackBANK0  00046
 ___ftdiv@f2                     cstackBANK0  00043
 ___ftdiv@f3                     cstackBANK0  0004E
 ___ftdiv@sign                   cstackBANK0  00052
-___ftge                         text36       0100B
+___ftge                         text28       0104B
 ___ftge@ff1                     cstackBANK0  00020
 ___ftge@ff2                     cstackBANK0  00023
-___ftmul                        text27       014EA
+___ftmul                        text19       01543
 ___ftmul@cntr                   cstackBANK0  0006D
 ___ftmul@exp                    cstackBANK0  00069
 ___ftmul@f1                     cstackBANK0  0005F
 ___ftmul@f2                     cstackBANK0  00062
 ___ftmul@f3_as_product          cstackBANK0  0006A
 ___ftmul@sign                   cstackBANK0  0006E
-___ftneg                        text35       01C86
+___ftneg                        text27       01008
 ___ftneg@f1                     cstackBANK0  0005F
-___ftpack                       text45       01274
+___ftpack                       text43       01275
 ___ftpack@arg                   cstackBANK0  00020
 ___ftpack@exp                   cstackBANK0  00023
 ___ftpack@sign                  cstackBANK0  00024
-___ftsub                        text34       01DD8
+___ftsub                        text26       01E19
 ___ftsub@f1                     cstackBANK0  00046
 ___ftsub@f2                     cstackBANK0  00043
-___fttol                        text33       012F1
+___fttol                        text25       012DA
 ___fttol@exp1                   cstackBANK1  000B8
 ___fttol@f1                     cstackBANK1  000AB
 ___fttol@lval                   cstackBANK1  000B4
 ___fttol@sign1                  cstackBANK1  000B3
 ___int_sp                       stack        00000
 ___latbits                      (abs)        00002
-___lbtoft                       text43       01D39
+___lbtoft                       text41       01D70
 ___lbtoft@c                     cstackBANK0  0002F
-___lldiv                        text32       011A8
+___lldiv                        text24       0079D
 ___lldiv@counter                cstackBANK0  0002D
 ___lldiv@dividend               cstackBANK0  00024
 ___lldiv@divisor                cstackBANK0  00020
 ___lldiv@quotient               cstackBANK0  00029
-___llmod                        text31       010A5
+___llmod                        text23       010C5
 ___llmod@counter                cstackBANK0  00029
 ___llmod@dividend               cstackBANK0  00024
 ___llmod@divisor                cstackBANK0  00020
-___lltoft                       text30       01E90
+___lltoft                       text22       01F09
 ___lltoft@c                     cstackBANK0  00028
 ___lltoft@exp                   cstackBANK0  0002D
-___lwdiv                        text26       01F77
+___lwdiv                        text18       01F93
 ___lwdiv@counter                cstackBANK0  0002B
 ___lwdiv@dividend               cstackBANK0  00028
 ___lwdiv@divisor                cstackBANK0  00026
 ___lwdiv@quotient               cstackBANK0  0002C
-___lwmod                        text25       01EC0
+___lwmod                        text17       01F33
 ___lwmod@counter                cstackBANK0  00025
 ___lwmod@dividend               cstackBANK0  00022
 ___lwmod@divisor                cstackBANK0  00020
-___lwtoft                       text44       01CB8
+___lwtoft                       text42       01D0E
 ___lwtoft@c                     cstackBANK0  00028
 ___sp                           stack        00000
-___wmul                         text24       01DFB
+___wmul                         text16       01DA7
 ___wmul@multiplicand            cstackBANK0  00032
 ___wmul@multiplier              cstackBANK0  00030
 ___wmul@product                 cstackBANK0  00034
-__div_to_l_                     text29       008FA
+__div_to_l_                     text21       008B9
 __div_to_l_@cntr                cstackBANK0  00032
 __div_to_l_@exp1                cstackBANK0  00033
 __div_to_l_@f1                  cstackBANK0  00020
 __div_to_l_@f2                  cstackBANK0  00023
 __div_to_l_@quot                cstackBANK0  0002E
-__end_of_ISR                    intentry     0001C
-__end_of___awdiv                text22       01274
-__end_of___awmod                text21       011A8
-__end_of___awtoft               text42       01E69
-__end_of___bmul                 text6        01D00
-__end_of___ftadd                text41       01800
-__end_of___ftdiv                text40       00800
-__end_of___ftge                 text36       01056
-__end_of___ftmul                text27       015B4
-__end_of___ftneg                text35       01C93
-__end_of___ftpack               text45       012F1
-__end_of___ftsub                text34       01DFB
-__end_of___fttol                text33       01390
-__end_of___lbtoft               text43       01D56
-__end_of___lldiv                text32       0120A
-__end_of___llmod                text31       010F7
-__end_of___lltoft               text30       01EC0
-__end_of___lwdiv                text26       01FBB
-__end_of___lwmod                text25       01EFC
-__end_of___lwtoft               text44       01CCF
-__end_of___wmul                 text24       01E1E
-__end_of__div_to_l_             text29       00A35
-__end_of__initialization        cinit        0003C
+__end_of_ISR                    intentry     0000F
+__end_of___awdiv                text14       01275
+__end_of___awmod                text13       011D5
+__end_of___awtoft               text40       01EB9
+__end_of___bmul                 text6        01D0E
+__end_of___ftadd                text39       016ED
+__end_of___ftdiv                text38       01543
+__end_of___ftge                 text28       01087
+__end_of___ftmul                text19       015F7
+__end_of___ftneg                text27       01011
+__end_of___ftpack               text43       012DA
+__end_of___ftsub                text26       01E37
+__end_of___fttol                text25       01361
+__end_of___lbtoft               text41       01D8B
+__end_of___lldiv                text24       007F0
+__end_of___llmod                text23       01108
+__end_of___lltoft               text22       01F33
+__end_of___lwdiv                text18       01FC8
+__end_of___lwmod                text17       01F60
+__end_of___lwtoft               text42       01D23
+__end_of___wmul                 text16       01DC3
+__end_of__div_to_l_             text21       009D6
+__end_of__initialization        cinit        0002E
 __end_of__npowers_              stringtext3  01876
 __end_of__powers_               stringtext2  0184F
-__end_of__tdiv_to_l_            text28       008FA
-__end_of_doWDTSleep             text39       01CE6
+__end_of__tdiv_to_l_            text20       008B9
+__end_of_doWDTSleep             text37       01D3A
 __end_of_dpowers                stringtext1  01828
-__end_of_enableInterrupts       text54       01C7E
-__end_of_fround                 text23       00748
-__end_of_getADCValue            text38       014EA
-__end_of_loop                   text9        00D20
-__end_of_main                   maintext     01436
-__end_of_memset                 text17       01DB6
+__end_of_enableInterrupts       text55       01CFC
+__end_of_fround                 text15       00DF1
+__end_of_getADCValue            text36       0149A
+__end_of_loop                   text9        01000
+__end_of_main                   maintext     013F4
+__end_of_memset                 text35       01DA7
 __end_of_n_ADDRESS_MUL          stringtext6  01882
 __end_of_n_ADDRESS_P0           stringtext5  018A5
-__end_of_nrf24l01CEHigh         text16       01C70
-__end_of_nrf24l01CELow          text15       01003
-__end_of_nrf24l01CSHigh         text53       01C6A
-__end_of_nrf24l01CSLow          text50       01C6D
-__end_of_nrf24l01GetPipe        text8        01F77
-__end_of_nrf24l01ISR            text47       010A5
-__end_of_nrf24l01Init           text2        01F39
-__end_of_nrf24l01InitRegisters  text4        016CF
-__end_of_nrf24l01InterfaceInit  text3        01D1C
-__end_of_nrf24l01SPIEnd         text52       01C86
-__end_of_nrf24l01SPISend        text51       01CA4
-__end_of_nrf24l01SPIStart       text49       0100B
-__end_of_nrf24l01Send           text14       01DD8
-__end_of_nrf24l01SendPacket     text37       01CB8
-__end_of_nrf24l01Service        text11       00B95
-__end_of_nrf24l01SetRXMode      text13       0114A
-__end_of_nrf24l01SetRXPipe      text7        00826
-__end_of_nrf24l01SetTXPipe      text5        02000
-__end_of_scale                  text20       01000
-__end_of_setMessage             text18       01D73
-__end_of_sleep                  text10       01E90
-__end_of_sprintf                text19       0058C
+__end_of_nrf24l01CEHigh         text57       01CE4
+__end_of_nrf24l01CELow          text56       01CE7
+__end_of_nrf24l01CSHigh         text54       00803
+__end_of_nrf24l01CSLow          text51       00800
+__end_of_nrf24l01GetPipe        text8        02000
+__end_of_nrf24l01ISR            text45       01223
+__end_of_nrf24l01Init           text2        0114B
+__end_of_nrf24l01InitRegisters  text4        01800
+__end_of_nrf24l01InterfaceInit  text3        01DDF
+__end_of_nrf24l01SPIEnd         text53       01CF4
+__end_of_nrf24l01SPISend        text52       007FD
+__end_of_nrf24l01SPIStart       text50       01008
+__end_of_nrf24l01Send           text34       01E76
+__end_of_nrf24l01SendPacket     text30       01F09
+__end_of_nrf24l01Service        text31       00C41
+__end_of_nrf24l01SetRXMode      text33       010C5
+__end_of_nrf24l01SetRXPipe      text7        01E97
+__end_of_nrf24l01SetTXPipe      text5        0118F
+__end_of_scale                  text12       0079D
+__end_of_sendMessage            text10       01F93
+__end_of_sleep                  text29       01EDF
+__end_of_sprintf                text11       004D7
 __end_of_statuses               stringtext4  01881
-__end_of_strcpy                 text1        01D94
-__end_of_strlen                 text12       01E42
-__end_ofi1_nrf24l01Send         text48       01D39
-__initialization                cinit        0001E
+__end_of_strcpy                 text1        01DFB
+__end_of_strlen                 text32       01E56
+__end_ofi1_memset               text58       01D55
+__end_ofi1_nrf24l01Send         text49       01D70
+__end_ofi1_nrf24l01Service      text46       00AF7
+__end_ofi1_nrf24l01SetRXMode    text48       0104B
+__end_ofi1_strlen               text47       01E19
+__initialization                cinit        00011
 __npowers_                      stringtext3  0184F
+__pbssBANK1                     bssBANK1     000E8
 __pbssBANK2                     bssBANK2     00151
 __pbssBANK3                     bssBANK3     001C2
 __pbssBANK4                     bssBANK4     00220
-__pbssCOMMON                    bssCOMMON    00076
 __pcstackBANK0                  cstackBANK0  00020
 __pcstackBANK1                  cstackBANK1  000A0
 __pcstackBANK2                  cstackBANK2  00120
 __pcstackBANK3                  cstackBANK3  001A0
 __pcstackCOMMON                 cstackCOMMON 00070
-__pdataBANK1                    dataBANK1    000E8
+__pdataBANK1                    dataBANK1    000EC
 __pidataBANK1                   idataBANK1   00003
 __pintentry                     intentry     00004
-__pmaintext                     maintext     01390
+__pmaintext                     maintext     01361
 __powers_                       stringtext2  01828
 __pstringtext1                  stringtext1  01800
 __pstringtext10                 stringtext10 018A5
 __pstringtext11                 stringtext11 018AA
 __pstringtext12                 stringtext12 018AF
 __pstringtext13                 stringtext13 018B4
-__pstringtext14                 stringtext14 018B8
-__pstringtext15                 stringtext15 00000
+__pstringtext14                 stringtext14 018B9
+__pstringtext15                 stringtext15 018BE
+__pstringtext16                 stringtext16 018C3
+__pstringtext17                 stringtext17 018C8
+__pstringtext18                 stringtext18 018CD
+__pstringtext19                 stringtext19 00000
 __pstringtext2                  stringtext2  01828
 __pstringtext3                  stringtext3  0184F
 __pstringtext4                  stringtext4  01876
@@ -1018,59 +1047,63 @@ __pstringtext6                  stringtext6  01881
 __pstringtext7                  stringtext7  0188C
 __pstringtext8                  stringtext8  01893
 __pstringtext9                  stringtext9  0189A
-__ptext1                        text1        01D73
-__ptext10                       text10       01E69
-__ptext11                       text11       00A35
-__ptext12                       text12       01E1E
-__ptext13                       text13       010F7
-__ptext14                       text14       01DB6
-__ptext15                       text15       01000
-__ptext16                       text16       01C6D
-__ptext17                       text17       01D94
-__ptext18                       text18       01D56
-__ptext19                       text19       00040
-__ptext2                        text2        01EFC
-__ptext20                       text20       00D20
-__ptext21                       text21       0114A
-__ptext22                       text22       0120A
-__ptext23                       text23       0058C
-__ptext24                       text24       01DFB
-__ptext25                       text25       01EC0
-__ptext26                       text26       01F77
-__ptext27                       text27       014EA
-__ptext28                       text28       00826
-__ptext29                       text29       008FA
-__ptext3                        text3        01D00
-__ptext30                       text30       01E90
-__ptext31                       text31       010A5
-__ptext32                       text32       011A8
-__ptext33                       text33       012F1
-__ptext34                       text34       01DD8
-__ptext35                       text35       01C86
-__ptext36                       text36       0100B
-__ptext37                       text37       01CA4
-__ptext38                       text38       01436
-__ptext39                       text39       01CCF
-__ptext4                        text4        015B4
-__ptext40                       text40       00748
-__ptext41                       text41       016CF
-__ptext42                       text42       01E42
-__ptext43                       text43       01D39
-__ptext44                       text44       01CB8
-__ptext45                       text45       01274
-__ptext47                       text47       01056
-__ptext48                       text48       01D1C
-__ptext49                       text49       01003
-__ptext5                        text5        01FBB
-__ptext50                       text50       01C6A
-__ptext51                       text51       01C93
-__ptext52                       text52       01C7E
-__ptext53                       text53       01C67
-__ptext54                       text54       01C76
-__ptext6                        text6        01CE6
-__ptext7                        text7        00801
-__ptext8                        text8        01F39
-__ptext9                        text9        00B95
+__ptext1                        text1        01DDF
+__ptext10                       text10       01F60
+__ptext11                       text11       00032
+__ptext12                       text12       004D7
+__ptext13                       text13       0118F
+__ptext14                       text14       01223
+__ptext15                       text15       00C41
+__ptext16                       text16       01DA7
+__ptext17                       text17       01F33
+__ptext18                       text18       01F93
+__ptext19                       text19       01543
+__ptext2                        text2        01108
+__ptext20                       text20       00803
+__ptext21                       text21       008B9
+__ptext22                       text22       01F09
+__ptext23                       text23       010C5
+__ptext24                       text24       0079D
+__ptext25                       text25       012DA
+__ptext26                       text26       01E19
+__ptext27                       text27       01008
+__ptext28                       text28       0104B
+__ptext29                       text29       01EB9
+__ptext3                        text3        01DC3
+__ptext30                       text30       01EDF
+__ptext31                       text31       00AF7
+__ptext32                       text32       01E37
+__ptext33                       text33       01087
+__ptext34                       text34       01E56
+__ptext35                       text35       01D8B
+__ptext36                       text36       013F4
+__ptext37                       text37       01D23
+__ptext38                       text38       0149A
+__ptext39                       text39       015F7
+__ptext4                        text4        016ED
+__ptext40                       text40       01E97
+__ptext41                       text41       01D70
+__ptext42                       text42       01D0E
+__ptext43                       text43       01275
+__ptext45                       text45       011D5
+__ptext46                       text46       009D6
+__ptext47                       text47       01DFB
+__ptext48                       text48       01011
+__ptext49                       text49       01D55
+__ptext5                        text5        0114B
+__ptext50                       text50       01000
+__ptext51                       text51       007FD
+__ptext52                       text52       007F0
+__ptext53                       text53       01CED
+__ptext54                       text54       00800
+__ptext55                       text55       01CF4
+__ptext56                       text56       01CE4
+__ptext57                       text57       01CE1
+__ptext58                       text58       01D3A
+__ptext6                        text6        01CFC
+__ptext7                        text7        01E76
+__ptext8                        text8        01FC8
+__ptext9                        text9        00DF1
 __size_of_ISR                   (abs)        00000
 __size_of___awdiv               (abs)        00000
 __size_of___awmod               (abs)        00000
@@ -1120,76 +1153,94 @@ __size_of_nrf24l01SetRXMode     (abs)        00000
 __size_of_nrf24l01SetRXPipe     (abs)        00000
 __size_of_nrf24l01SetTXPipe     (abs)        00000
 __size_of_scale                 (abs)        00000
-__size_of_setMessage            (abs)        00000
+__size_of_sendMessage           (abs)        00000
 __size_of_sleep                 (abs)        00000
 __size_of_sprintf               (abs)        00000
 __size_of_strcpy                (abs)        00000
 __size_of_strlen                (abs)        00000
+__size_ofi1_memset              (abs)        00000
 __size_ofi1_nrf24l01Send        (abs)        00000
-__tdiv_to_l_                    text28       00826
+__size_ofi1_nrf24l01Service     (abs)        00000
+__size_ofi1_nrf24l01SetRXMode   (abs)        00000
+__size_ofi1_strlen              (abs)        00000
+__tdiv_to_l_                    text20       00803
 __tdiv_to_l_@cntr               cstackBANK0  0002E
 __tdiv_to_l_@exp1               cstackBANK0  0002F
 __tdiv_to_l_@f1                 cstackBANK0  00020
 __tdiv_to_l_@f2                 cstackBANK0  00023
 __tdiv_to_l_@quot               cstackBANK0  0002A
 _counter                        bssBANK2     00151
-_doWDTSleep                     text39       01CCF
+_doWDTSleep                     text37       01D23
 _dpowers                        stringtext1  01800
-_enableInterrupts               text54       01C76
-_fround                         text23       0058C
-_fround$2003                    cstackBANK1  000AA
-_fround$2004                    cstackBANK1  000A7
-_getADCValue                    text38       01436
-_loop                           text9        00B95
-_loop$2000                      cstackBANK2  00126
-_loop$2001                      cstackBANK2  00129
-_loop$2002                      cstackBANK2  0012C
-_main                           maintext     01390
-_memset                         text17       01D94
+_enableInterrupts               text55       01CF4
+_fround                         text15       00C41
+_fround$1984                    cstackBANK1  000AA
+_fround$1985                    cstackBANK1  000A7
+_getADCValue                    text36       013F4
+_loop                           text9        00DF1
+_loop$1981                      cstackBANK2  0012D
+_loop$1982                      cstackBANK2  00126
+_loop$1983                      cstackBANK2  00129
+_main                           maintext     01361
+_memset                         text35       01D8B
 _n_ADDRESS_MUL                  stringtext6  01881
 _n_ADDRESS_P0                   stringtext5  018A0
-_nrf24l01CEHigh                 text16       01C6D
-_nrf24l01CELow                  text15       01000
-_nrf24l01CSHigh                 text53       01C67
-_nrf24l01CSLow                  text50       01C6A
-_nrf24l01GetPipe                text8        01F39
-_nrf24l01ISR                    text47       01056
-_nrf24l01Init                   text2        01EFC
-_nrf24l01InitRegisters          text4        015B4
-_nrf24l01InterfaceInit          text3        01D00
-_nrf24l01SPIEnd                 text52       01C7E
-_nrf24l01SPISend                text51       01C93
-_nrf24l01SPIStart               text49       01003
-_nrf24l01Send                   text14       01DB6
-_nrf24l01SendPacket             text37       01CA4
-_nrf24l01Service                text11       00A35
-_nrf24l01SetRXMode              text13       010F7
-_nrf24l01SetRXPipe              text7        00801
-_nrf24l01SetTXPipe              text5        01FBB
-_romData                        dataBANK1    000E8
+_nrf24l01CEHigh                 text57       01CE1
+_nrf24l01CELow                  text56       01CE4
+_nrf24l01CSHigh                 text54       00800
+_nrf24l01CSLow                  text51       007FD
+_nrf24l01GetPipe                text8        01FC8
+_nrf24l01ISR                    text45       011D5
+_nrf24l01Init                   text2        01108
+_nrf24l01InitRegisters          text4        016ED
+_nrf24l01InterfaceInit          text3        01DC3
+_nrf24l01SPIEnd                 text53       01CED
+_nrf24l01SPISend                text52       007F0
+_nrf24l01SPIStart               text50       01000
+_nrf24l01Send                   text34       01E56
+_nrf24l01SendPacket             text30       01EDF
+_nrf24l01Service                text31       00AF7
+_nrf24l01SetRXMode              text33       01087
+_nrf24l01SetRXPipe              text7        01E76
+_nrf24l01SetTXPipe              text5        0114B
+_romData                        dataBANK1    000EC
 _romDataMap                     bssBANK4     00220
-_scale                          text20       00D20
-_scale$2005                     cstackBANK1  000A7
-_setMessage                     text18       01D56
-_sleep                          text10       01E69
-_sprintf                        text19       00040
-_sprintf$2006                   cstackBANK1  000C8
-_status                         bssCOMMON    00076
+_scale                          text12       004D7
+_scale$1986                     cstackBANK1  000A7
+_sendMessage                    text10       01F60
+_sleep                          text29       01EB9
+_sprintf                        text11       00032
+_sprintf$1987                   cstackBANK1  000C8
+_status                         bssBANK1     000E8
 _statuses                       stringtext4  01876
-_strcpy                         text1        01D73
-_strlen                         text12       01E1E
+_strcpy                         text1        01DDF
+_strlen                         text32       01E37
 btemp                           (abs)        0007E
-clear_ram0                      clrtext      01C70
+clear_ram0                      clrtext      01CE7
 doWDTSleep@wdtps                cstackBANK0  00021
 enableInterrupts@enable         cstackCOMMON 00070
-end_of_initialization           cinit        0003C
+end_of_initialization           cinit        0002E
 fround@prec                     cstackBANK1  000AD
 getADCValue@adcLoop             cstackBANK0  0005A
 getADCValue@adcSum              cstackBANK0  0005C
 getADCValue@channel             cstackBANK0  00059
-i1_nrf24l01Send                 text48       01D1C
+i1_memset                       text58       01D3A
+i1_nrf24l01Send                 text49       01D55
+i1_nrf24l01Service              text46       009D6
+i1_nrf24l01SetRXMode            text48       01011
+i1_strlen                       text47       01DFB
+i1memset@c                      cstackCOMMON 00070
+i1memset@n                      cstackCOMMON 00072
+i1memset@p                      cstackCOMMON 00076
+i1memset@p1                     cstackCOMMON 00075
 i1nrf24l01Send@command          cstackCOMMON 00073
 i1nrf24l01Send@data             cstackCOMMON 00071
+i1nrf24l01Service@i             cstackCOMMON 0007A
+i1nrf24l01Service@width         cstackCOMMON 00079
+i1nrf24l01SetRXMode@config      cstackCOMMON 00075
+i1nrf24l01SetRXMode@rxMode      cstackCOMMON 00076
+i1strlen@cp                     cstackCOMMON 00074
+i1strlen@s                      cstackCOMMON 00070
 int$flags                       (abs)        0007E
 intlevel0                       functab      00000
 intlevel1                       functab      00000
@@ -1198,7 +1249,7 @@ intlevel3                       functab      00000
 intlevel4                       functab      00000
 intlevel5                       functab      00000
 loop@packet                     cstackBANK2  00130
-loop@rfSetup                    cstackBANK2  0012F
+loop@rfSetup                    cstackBANK2  0012C
 loop@ta                         cstackBANK2  00123
 loop@vt                         cstackBANK2  00120
 main@packet                     cstackBANK3  001A1
@@ -1210,7 +1261,6 @@ memset@p1                       cstackBANK0  00025
 nrf24l01GetPipe@i               cstackBANK0  0002A
 nrf24l01GetPipe@name            cstackBANK0  00029
 nrf24l01GetPipe@pipe            cstackBANK0  00028
-nrf24l01ISR@statusRegister      cstackCOMMON 00075
 nrf24l01InitRegisters@DynPD     cstackBANK0  0002E
 nrf24l01InitRegisters@channel   cstackBANK0  00029
 nrf24l01InitRegisters@config    cstackBANK0  0002F
@@ -1222,7 +1272,7 @@ nrf24l01InitRegisters@setupAW   cstackBANK0  0002A
 nrf24l01SPISend@data            cstackCOMMON 00070
 nrf24l01Send@command            cstackBANK0  00022
 nrf24l01Send@data               cstackBANK0  00020
-nrf24l01SendPacket@txPacket     cstackBANK0  00021
+nrf24l01SendPacket@txPacket     cstackBANK0  0002C
 nrf24l01Service@i               cstackBANK0  0002A
 nrf24l01Service@width           cstackBANK0  00029
 nrf24l01SetRXMode@config        cstackBANK0  00024
@@ -1232,10 +1282,10 @@ nrf24l01SetRXPipe@pipe          cstackBANK0  00025
 nrf24l01SetTXPipe@pipe          cstackBANK0  00026
 reset_vec                       reset_vec    00000
 scale@scl                       cstackBANK1  000AA
-setMessage@packet               cstackBANK0  0006F
-setMessage@topic                cstackBANK1  000E1
-setMessage@value                cstackBANK1  000E3
-sleep@milliseconds              cstackBANK0  0002B
+sendMessage@packet              cstackBANK0  0006F
+sendMessage@topic               cstackBANK1  000E1
+sendMessage@value               cstackBANK1  000E3
+sleep@milliseconds              cstackBANK0  00026
 sprintf@ap                      cstackBANK1  000CB
 sprintf@c                       cstackBANK1  000E0
 sprintf@cp                      cstackBANK1  000CE
@@ -1249,8 +1299,8 @@ sprintf@tmpval                  cstackBANK1  000D8
 sprintf@val                     cstackBANK1  000D2
 stackhi                         (abs)        023EF
 stacklo                         (abs)        0215C
-start                           init         0001C
-start_initialization            cinit        0001E
+start                           init         0000F
+start_initialization            cinit        00011
 strcpy@cp                       cstackBANK0  00024
 strcpy@from                     cstackBANK0  00020
 strcpy@to                       cstackBANK0  00023
@@ -1263,7 +1313,7 @@ FUNCTION INFORMATION:
 
  *************** function _main *****************
  Defined at:
-		line 183 in file "main.c"
+		line 171 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1283,17 +1333,15 @@ FUNCTION INFORMATION:
       Temps:          0       0       1       0       0       0       0       0       0       0       0       0       0       0
       Totals:         0       0       1       0      34       0       0       0       0       0       0       0       0       0
 Total ram usage:       35 bytes
- Hardware stack levels required when called:   12
+ Hardware stack levels required when called:   15
  This function calls:
 		___lwtoft
 		_loop
 		_nrf24l01GetPipe
 		_nrf24l01Init
-		_nrf24l01SendPacket
 		_nrf24l01SetRXPipe
 		_nrf24l01SetTXPipe
-		_setMessage
-		_sleep
+		_sendMessage
 		_strcpy
  This function is called by:
 		Startup code after reset
@@ -1307,7 +1355,7 @@ Total ram usage:       35 bytes
   to              1    wreg     PTR unsigned char 
 		 -> romDataMap(28), 
   from            2    0[BANK0 ] PTR const unsigned char 
-		 -> STR_7(4), 
+		 -> STR_11(4), 
  Auto vars:     Size  Location     Type
   to              1    3[BANK0 ] PTR unsigned char 
 		 -> romDataMap(28), 
@@ -1328,7 +1376,7 @@ Total ram usage:       35 bytes
       Totals:         0       5       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        5 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -1338,7 +1386,7 @@ Total ram usage:        5 bytes
 
  *************** function _nrf24l01Init *****************
  Defined at:
-		line 481 in file "nrf24l01.c"
+		line 491 in file "nrf24l01.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1358,7 +1406,7 @@ Total ram usage:        5 bytes
       Totals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        2 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:   10
+ Hardware stack levels required when called:   12
  This function calls:
 		_nrf24l01CEHigh
 		_nrf24l01CELow
@@ -1391,7 +1439,7 @@ Total ram usage:        2 bytes
       Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        0 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -1401,7 +1449,7 @@ Total ram usage:        0 bytes
 
  *************** function _nrf24l01InitRegisters *****************
  Defined at:
-		line 379 in file "nrf24l01.c"
+		line 389 in file "nrf24l01.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1428,7 +1476,7 @@ Total ram usage:        0 bytes
       Totals:         0      11       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       11 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    9
+ Hardware stack levels required when called:   11
  This function calls:
 		___bmul
 		_nrf24l01SPIEnd
@@ -1444,7 +1492,7 @@ Total ram usage:       11 bytes
 
  *************** function _nrf24l01SetTXPipe *****************
  Defined at:
-		line 174 in file "nrf24l01.c"
+		line 183 in file "nrf24l01.c"
  Parameters:    Size  Location     Type
   pipe            1    wreg     unsigned char 
  Auto vars:     Size  Location     Type
@@ -1464,7 +1512,7 @@ Total ram usage:       11 bytes
       Totals:         0       3       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        3 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    7
+ Hardware stack levels required when called:    9
  This function calls:
 		___bmul
 		_nrf24l01SPIEnd
@@ -1500,7 +1548,7 @@ Total ram usage:        3 bytes
       Totals:         0       4       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        4 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -1511,7 +1559,7 @@ Total ram usage:        4 bytes
 
  *************** function _nrf24l01SetRXPipe *****************
  Defined at:
-		line 187 in file "nrf24l01.c"
+		line 196 in file "nrf24l01.c"
  Parameters:    Size  Location     Type
   pipe            1    wreg     unsigned char 
  Auto vars:     Size  Location     Type
@@ -1532,7 +1580,7 @@ Total ram usage:        4 bytes
       Totals:         0       4       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        4 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    8
+ Hardware stack levels required when called:   10
  This function calls:
 		_nrf24l01Send
  This function is called by:
@@ -1543,7 +1591,7 @@ Total ram usage:        4 bytes
 
  *************** function _nrf24l01GetPipe *****************
  Defined at:
-		line 171 in file "main.c"
+		line 159 in file "main.c"
  Parameters:    Size  Location     Type
   name            1    wreg     PTR unsigned char 
 		 -> romDataMap(28), 
@@ -1567,7 +1615,7 @@ Total ram usage:        4 bytes
       Totals:         0       5       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        5 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		___lwmod
 		_strlen
@@ -1578,14 +1626,14 @@ Total ram usage:        5 bytes
 
  *************** function _loop *****************
  Defined at:
-		line 113 in file "main.c"
+		line 117 in file "main.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
   packet         33   16[BANK2 ] struct .
   ta              3    3[BANK2 ] float 
   vt              3    0[BANK2 ] float 
-  rfSetup         1   15[BANK2 ] struct .
+  rfSetup         1   12[BANK2 ] struct .
  Return value:  Size  Location     Type
                   1    wreg      void 
  Registers used:
@@ -1601,7 +1649,7 @@ Total ram usage:        5 bytes
       Totals:         0       0       1      49       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       50 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:   11
+ Hardware stack levels required when called:   14
  This function calls:
 		___ftadd
 		___ftdiv
@@ -1611,304 +1659,22 @@ Total ram usage:       50 bytes
 		___lltoft
 		_getADCValue
 		_nrf24l01Send
-		_nrf24l01SendPacket
-		_setMessage
-		_sleep
+		_sendMessage
  This function is called by:
 		_main
  This function uses a non-reentrant model
 
 
- *************** function _sleep *****************
+ *************** function _sendMessage *****************
  Defined at:
-		line 80 in file "main.c"
- Parameters:    Size  Location     Type
-  milliseconds    2   11[BANK0 ] unsigned int 
- Auto vars:     Size  Location     Type
-		None
- Return value:  Size  Location     Type
-                  1    wreg      void 
- Registers used:
-		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath, cstack
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
-      Params:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Temps:          0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        2 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:   10
- This function calls:
-		_doWDTSleep
-		_nrf24l01Service
-		_nrf24l01SetRXMode
- This function is called by:
-		_loop
-		_main
- This function uses a non-reentrant model
-
-
- *************** function _nrf24l01Service *****************
- Defined at:
-		line 261 in file "nrf24l01.c"
- Parameters:    Size  Location     Type
-		None
- Auto vars:     Size  Location     Type
-  width           1    9[BANK0 ] unsigned char 
-  i               1   10[BANK0 ] unsigned char 
- Return value:  Size  Location     Type
-                  1    wreg      void 
- Registers used:
-		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath, cstack
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
-      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
-      Temps:          0       2       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       4       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        4 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:    9
- This function calls:
-		_enableInterrupts
-		_memset
-		_nrf24l01CEHigh
-		_nrf24l01CELow
-		_nrf24l01SPIEnd
-		_nrf24l01SPISend
-		_nrf24l01SPIStart
-		_nrf24l01Send
-		_nrf24l01SetRXMode
-		_strlen
- This function is called by:
-		_sleep
- This function uses a non-reentrant model
-
-
- *************** function _strlen *****************
- Defined at:
-		line 4 in file "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c"
- Parameters:    Size  Location     Type
-  s               2    0[BANK0 ] PTR const unsigned char 
-		 -> packet.Message(32), packet.Message(32), NULL(0), main@packet(33), 
-		 -> loop@packet(33), romDataMap(28), 
- Auto vars:     Size  Location     Type
-  cp              2    4[BANK0 ] PTR const unsigned char 
-		 -> packet.Message(32), packet.Message(32), NULL(0), main@packet(33), 
-		 -> loop@packet(33), romDataMap(28), 
- Return value:  Size  Location     Type
-                  2    0[BANK0 ] unsigned int 
- Registers used:
-		wreg, fsr1l, fsr1h, status,2, status,0
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
-      Params:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
-      Temps:          0       2       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       6       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        6 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:    5
- This function calls:
-		Nothing
- This function is called by:
-		_nrf24l01GetPipe
-		_nrf24l01Service
- This function uses a non-reentrant model
-
-
- *************** function _nrf24l01SetRXMode *****************
- Defined at:
-		line 90 in file "nrf24l01.c"
- Parameters:    Size  Location     Type
-  rxMode          1    wreg     unsigned char 
- Auto vars:     Size  Location     Type
-  rxMode          1    5[BANK0 ] unsigned char 
-  config          1    4[BANK0 ] struct .
- Return value:  Size  Location     Type
-                  1    wreg      void 
- Registers used:
-		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
-      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
-      Temps:          0       1       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       3       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        3 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:    8
- This function calls:
-		_nrf24l01CEHigh
-		_nrf24l01CELow
-		_nrf24l01Send
- This function is called by:
-		_sleep
-		_nrf24l01Service
- This function uses a non-reentrant model
-
-
- *************** function _nrf24l01Send *****************
- Defined at:
-		line 45 in file "nrf24l01.c"
- Parameters:    Size  Location     Type
-  command         1    wreg     unsigned char 
-  data            1    0[BANK0 ] unsigned char 
- Auto vars:     Size  Location     Type
-  command         1    2[BANK0 ] unsigned char 
- Return value:  Size  Location     Type
-                  1    wreg      unsigned char 
- Registers used:
-		wreg, status,2, status,0, pclath, cstack
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
-      Params:         0       1       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       1       0       0       0       0       0       0       0       0       0       0       0       0
-      Temps:          0       1       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       3       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        3 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:    7
- This function calls:
-		_enableInterrupts
-		_nrf24l01SPIEnd
-		_nrf24l01SPISend
-		_nrf24l01SPIStart
- This function is called by:
-		_loop
-		_nrf24l01SetRXMode
-		_nrf24l01SetRXPipe
-		_nrf24l01Service
-		_nrf24l01InitRegisters
-		_nrf24l01ChangeTXPower
- This function uses a non-reentrant model
-
-
- *************** function _nrf24l01CELow *****************
- Defined at:
-		line 7 in file "interface.c"
- Parameters:    Size  Location     Type
-		None
- Auto vars:     Size  Location     Type
-		None
- Return value:  Size  Location     Type
-                  1    wreg      void 
- Registers used:
-		None
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
-      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Temps:          0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        0 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:    5
- This function calls:
-		Nothing
- This function is called by:
-		_nrf24l01SetRXMode
-		_nrf24l01Service
-		_nrf24l01Init
- This function uses a non-reentrant model
-
-
- *************** function _nrf24l01CEHigh *****************
- Defined at:
-		line 12 in file "interface.c"
- Parameters:    Size  Location     Type
-		None
- Auto vars:     Size  Location     Type
-		None
- Return value:  Size  Location     Type
-                  1    wreg      void 
- Registers used:
-		None
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
-      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Temps:          0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        0 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:    5
- This function calls:
-		Nothing
- This function is called by:
-		_nrf24l01SetRXMode
-		_nrf24l01Service
-		_nrf24l01Init
- This function uses a non-reentrant model
-
-
- *************** function _memset *****************
- Defined at:
-		line 8 in file "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c"
- Parameters:    Size  Location     Type
-  p1              1    wreg     PTR void 
-		 -> RXPacket(33), 
-  c               2    0[BANK0 ] int 
-  n               2    2[BANK0 ] unsigned int 
- Auto vars:     Size  Location     Type
-  p1              1    5[BANK0 ] PTR void 
-		 -> RXPacket(33), 
-  p               1    6[BANK0 ] PTR unsigned char 
-		 -> RXPacket(33), 
- Return value:  Size  Location     Type
-                  1    wreg      PTR void 
- Registers used:
-		wreg, fsr1l, fsr1h, status,2, status,0
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
-      Params:         0       4       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
-      Temps:          0       1       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         0       7       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        7 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:    5
- This function calls:
-		Nothing
- This function is called by:
-		_nrf24l01Service
- This function uses a non-reentrant model
-
-
- *************** function _setMessage *****************
- Defined at:
-		line 108 in file "main.c"
+		line 104 in file "main.c"
  Parameters:    Size  Location     Type
   packet          1    wreg     PTR struct .
 		 -> main@packet(33), loop@packet(33), 
   topic           2   65[BANK1 ] PTR const unsigned char 
-		 -> STR_8(5), STR_6(6), STR_5(5), STR_4(7), 
-		 -> STR_3(5), STR_2(4), 
+		 -> STR_12(5), STR_10(5), STR_9(6), STR_8(5), 
+		 -> STR_7(5), STR_6(5), STR_5(7), STR_4(5), 
+		 -> STR_3(5), STR_2(5), 
   value           3   67[BANK1 ] float 
  Auto vars:     Size  Location     Type
   packet          1   79[BANK0 ] PTR struct .
@@ -1928,8 +1694,10 @@ Total ram usage:        7 bytes
       Totals:         0       1       5       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        6 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    9
+ Hardware stack levels required when called:   13
  This function calls:
+		_nrf24l01SendPacket
+		_sleep
 		_sprintf
  This function is called by:
 		_loop
@@ -1954,9 +1722,10 @@ Total ram usage:        6 bytes
   eexp            2   54[BANK1 ] int 
   prec            2   48[BANK1 ] int 
   cp              2   46[BANK1 ] PTR const unsigned char 
-		 -> romDataMap.name(16), STR_9(7), ?_sprintf(2), STR_8(5), 
-		 -> STR_6(6), STR_5(5), STR_4(7), STR_3(5), 
-		 -> STR_2(4), romDataMap(28), 
+		 -> romDataMap.name(16), STR_13(7), ?_sprintf(2), STR_12(5), 
+		 -> STR_10(5), STR_9(6), STR_8(5), STR_7(5), 
+		 -> STR_6(5), STR_5(7), STR_4(5), STR_3(5), 
+		 -> STR_2(5), romDataMap(28), 
   flag            2   44[BANK1 ] unsigned short 
   len             2    0        unsigned int 
   width           2    0        int 
@@ -1979,7 +1748,7 @@ Total ram usage:        6 bytes
       Totals:         0       0      40       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       40 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    8
+ Hardware stack levels required when called:   10
  This function calls:
 		___awdiv
 		___ftadd
@@ -1997,7 +1766,7 @@ Total ram usage:       40 bytes
 		_fround
 		_scale
  This function is called by:
-		_setMessage
+		_sendMessage
  This function uses a non-reentrant model
 
 
@@ -2023,7 +1792,7 @@ Total ram usage:       40 bytes
       Totals:         0       0      11       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       11 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    7
+ Hardware stack levels required when called:    9
  This function calls:
 		___awdiv
 		___awmod
@@ -2058,7 +1827,7 @@ Total ram usage:       11 bytes
       Totals:         0       7       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        7 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2091,7 +1860,7 @@ Total ram usage:        7 bytes
       Totals:         0       9       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        9 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2122,7 +1891,7 @@ Total ram usage:        9 bytes
       Totals:         0       0      14       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       14 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    7
+ Hardware stack levels required when called:    9
  This function calls:
 		___ftmul
 		___lwdiv
@@ -2156,7 +1925,7 @@ Total ram usage:       14 bytes
       Totals:         0       6       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        6 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2189,7 +1958,7 @@ Total ram usage:        6 bytes
       Totals:         0       6       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        6 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2222,7 +1991,7 @@ Total ram usage:        6 bytes
       Totals:         0       8       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        8 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2256,7 +2025,7 @@ Total ram usage:        8 bytes
       Totals:         0      16       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       16 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		___ftpack
  This function is called by:
@@ -2292,7 +2061,7 @@ Total ram usage:       16 bytes
       Totals:         0      16       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       16 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2325,7 +2094,7 @@ Total ram usage:       16 bytes
       Totals:         0      20       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       20 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2355,7 +2124,7 @@ Total ram usage:       20 bytes
       Totals:         0       6       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        6 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		___ftpack
  This function is called by:
@@ -2387,7 +2156,7 @@ Total ram usage:        6 bytes
       Totals:         0      10       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       10 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2419,7 +2188,7 @@ Total ram usage:       10 bytes
       Totals:         0      14       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       14 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2451,7 +2220,7 @@ Total ram usage:       14 bytes
       Totals:         0       0      14       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       14 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2482,7 +2251,7 @@ Total ram usage:       14 bytes
       Totals:         0       6       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        6 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    7
+ Hardware stack levels required when called:    9
  This function calls:
 		___ftadd
  This function is called by:
@@ -2512,7 +2281,7 @@ Total ram usage:        6 bytes
       Totals:         0       3       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        3 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2544,7 +2313,7 @@ Total ram usage:        3 bytes
       Totals:         0       9       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        9 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2552,19 +2321,50 @@ Total ram usage:        9 bytes
  This function uses a non-reentrant model
 
 
+ *************** function _sleep *****************
+ Defined at:
+		line 78 in file "main.c"
+ Parameters:    Size  Location     Type
+  milliseconds    2    6[BANK0 ] unsigned int 
+ Auto vars:     Size  Location     Type
+		None
+ Return value:  Size  Location     Type
+                  1    wreg      void 
+ Registers used:
+		wreg, status,2, status,0, pclath, cstack
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         0       4       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        4 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:   11
+ This function calls:
+		_doWDTSleep
+		_nrf24l01SetRXMode
+ This function is called by:
+		_sendMessage
+ This function uses a non-reentrant model
+
+
  *************** function _nrf24l01SendPacket *****************
  Defined at:
-		line 211 in file "nrf24l01.c"
+		line 220 in file "nrf24l01.c"
  Parameters:    Size  Location     Type
   txPacket        1    wreg     PTR struct .
 		 -> main@packet(33), loop@packet(33), 
  Auto vars:     Size  Location     Type
-  txPacket        1    1[BANK0 ] PTR struct .
+  txPacket        1   12[BANK0 ] PTR struct .
 		 -> main@packet(33), loop@packet(33), 
  Return value:  Size  Location     Type
-                  2    6[COMMON] unsigned int 
+                  2   13[BANK0 ] unsigned int 
  Registers used:
-		wreg, fsr0l, fsr0h, status,2, status,0, pclath
+		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath, cstack
  Tracked objects:
 		On entry : 
 		On exit  : 
@@ -2576,18 +2376,201 @@ Total ram usage:        9 bytes
       Totals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        2 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:   12
+ This function calls:
+		_nrf24l01Service
+ This function is called by:
+		_sendMessage
+ This function uses a non-reentrant model
+
+
+ *************** function _nrf24l01Service *****************
+ Defined at:
+		line 270 in file "nrf24l01.c"
+ Parameters:    Size  Location     Type
+		None
+ Auto vars:     Size  Location     Type
+  width           1    9[BANK0 ] unsigned char 
+  i               1   10[BANK0 ] unsigned char 
+ Return value:  Size  Location     Type
+                  1    wreg      void 
+ Registers used:
+		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath, cstack
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         0       4       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        4 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:   11
+ This function calls:
+		_enableInterrupts
+		_memset
+		_nrf24l01CEHigh
+		_nrf24l01CELow
+		_nrf24l01SPIEnd
+		_nrf24l01SPISend
+		_nrf24l01SPIStart
+		_nrf24l01Send
+		_nrf24l01SetRXMode
+		_strlen
+ This function is called by:
+		_nrf24l01SendPacket
+ This function uses a non-reentrant model
+
+
+ *************** function _strlen *****************
+ Defined at:
+		line 4 in file "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c"
+ Parameters:    Size  Location     Type
+  s               2    0[BANK0 ] PTR const unsigned char 
+		 -> packet.Message(32), packet.Message(32), NULL(0), main@packet(33), 
+		 -> loop@packet(33), romDataMap(28), 
+ Auto vars:     Size  Location     Type
+  cp              2    4[BANK0 ] PTR const unsigned char 
+		 -> packet.Message(32), packet.Message(32), NULL(0), main@packet(33), 
+		 -> loop@packet(33), romDataMap(28), 
+ Return value:  Size  Location     Type
+                  2    0[BANK0 ] unsigned int 
+ Registers used:
+		wreg, fsr1l, fsr1h, status,2, status,0
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         0       6       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        6 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
+		_nrf24l01GetPipe
+		_nrf24l01Service
+ This function uses a non-reentrant model
+
+
+ *************** function _nrf24l01SetRXMode *****************
+ Defined at:
+		line 90 in file "nrf24l01.c"
+ Parameters:    Size  Location     Type
+  rxMode          1    wreg     unsigned char 
+ Auto vars:     Size  Location     Type
+  rxMode          1    5[BANK0 ] unsigned char 
+  config          1    4[BANK0 ] struct .
+ Return value:  Size  Location     Type
+                  1    wreg      void 
+ Registers used:
+		wreg, status,2, status,0, pclath, cstack
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          0       1       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         0       3       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        3 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:   10
+ This function calls:
+		_nrf24l01CEHigh
+		_nrf24l01CELow
+		_nrf24l01Send
+ This function is called by:
+		_sleep
+		_nrf24l01Service
+ This function uses a non-reentrant model
+
+
+ *************** function _nrf24l01Send *****************
+ Defined at:
+		line 45 in file "nrf24l01.c"
+ Parameters:    Size  Location     Type
+  command         1    wreg     unsigned char 
+  data            1    0[BANK0 ] unsigned char 
+ Auto vars:     Size  Location     Type
+  command         1    2[BANK0 ] unsigned char 
+ Return value:  Size  Location     Type
+                  1    wreg      unsigned char 
+ Registers used:
+		wreg, status,2, status,0, pclath, cstack
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       1       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       1       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          0       1       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         0       3       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        3 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:    9
+ This function calls:
+		_enableInterrupts
+		_nrf24l01SPIEnd
+		_nrf24l01SPISend
+		_nrf24l01SPIStart
+ This function is called by:
 		_loop
-		_main
+		_nrf24l01SetRXMode
+		_nrf24l01SetRXPipe
+		_nrf24l01Service
+		_nrf24l01InitRegisters
+		_nrf24l01ChangeTXPower
+ This function uses a non-reentrant model
+
+
+ *************** function _memset *****************
+ Defined at:
+		line 8 in file "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c"
+ Parameters:    Size  Location     Type
+  p1              1    wreg     PTR void 
+		 -> RXPacket(33), 
+  c               2    0[BANK0 ] int 
+  n               2    2[BANK0 ] unsigned int 
+ Auto vars:     Size  Location     Type
+  p1              1    5[BANK0 ] PTR void 
+		 -> RXPacket(33), 
+  p               1    6[BANK0 ] PTR unsigned char 
+		 -> RXPacket(33), 
+ Return value:  Size  Location     Type
+                  1    wreg      PTR void 
+ Registers used:
+		wreg, fsr1l, fsr1h, status,2, status,0
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       4       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          0       1       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         0       7       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        7 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:    7
+ This function calls:
+		Nothing
+ This function is called by:
+		_nrf24l01Service
  This function uses a non-reentrant model
 
 
  *************** function _getADCValue *****************
  Defined at:
-		line 37 in file "main.c"
+		line 35 in file "main.c"
  Parameters:    Size  Location     Type
   channel         1    wreg     unsigned char 
  Auto vars:     Size  Location     Type
@@ -2609,7 +2592,7 @@ Total ram usage:        2 bytes
       Totals:         0      12       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       12 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    7
+ Hardware stack levels required when called:    9
  This function calls:
 		___awtoft
 		___ftadd
@@ -2622,7 +2605,7 @@ Total ram usage:       12 bytes
 
  *************** function _doWDTSleep *****************
  Defined at:
-		line 23 in file "main.c"
+		line 21 in file "main.c"
  Parameters:    Size  Location     Type
   wdtps           1    wreg     unsigned char 
  Auto vars:     Size  Location     Type
@@ -2642,7 +2625,7 @@ Total ram usage:       12 bytes
       Totals:         0       2       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        2 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2677,7 +2660,7 @@ Total ram usage:        2 bytes
       Totals:         0      16       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       16 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		___ftpack
  This function is called by:
@@ -2711,7 +2694,7 @@ Total ram usage:       16 bytes
       Totals:         0      13       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:       13 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		___ftpack
  This function is called by:
@@ -2744,7 +2727,7 @@ Total ram usage:       13 bytes
       Totals:         0       6       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        6 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		___ftpack
  This function is called by:
@@ -2774,7 +2757,7 @@ Total ram usage:        6 bytes
       Totals:         0       8       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        8 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		___ftpack
  This function is called by:
@@ -2804,7 +2787,7 @@ Total ram usage:        8 bytes
       Totals:         0       4       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        4 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		___ftpack
  This function is called by:
@@ -2836,7 +2819,7 @@ Total ram usage:        4 bytes
       Totals:         0       8       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        8 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -2860,7 +2843,7 @@ Total ram usage:        8 bytes
  Return value:  Size  Location     Type
                   1    wreg      void 
  Registers used:
-		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath, cstack
  Tracked objects:
 		On entry : 
 		On exit  : 
@@ -2872,7 +2855,7 @@ Total ram usage:        8 bytes
       Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        0 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    4
+ Hardware stack levels required when called:    6
  This function calls:
 		_nrf24l01ISR
  This function is called by:
@@ -2882,31 +2865,138 @@ Total ram usage:        0 bytes
 
  *************** function _nrf24l01ISR *****************
  Defined at:
-		line 225 in file "nrf24l01.c"
+		line 237 in file "nrf24l01.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
-  statusRegist    1    5[COMMON] struct .
+		None
  Return value:  Size  Location     Type
                   1    wreg      void 
  Registers used:
-		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath, cstack
  Tracked objects:
 		On entry : 
 		On exit  : 
 		Unchanged: 
  Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
       Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Locals:         1       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
       Temps:          1       0       0       0       0       0       0       0       0       0       0       0       0       0
-      Totals:         2       0       0       0       0       0       0       0       0       0       0       0       0       0
-Total ram usage:        2 bytes
+      Totals:         1       0       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        1 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:    5
+ This function calls:
+		i1_nrf24l01Send
+		i1_nrf24l01Service
+ This function is called by:
+		_ISR
+ This function uses a non-reentrant model
+
+
+ *************** function i1_nrf24l01Service *****************
+ Defined at:
+		line 270 in file "nrf24l01.c"
+ Parameters:    Size  Location     Type
+		None
+ Auto vars:     Size  Location     Type
+  nrf24l01Serv    1   10[COMMON] unsigned char 
+  nrf24l01Serv    1    9[COMMON] unsigned char 
+ Return value:  Size  Location     Type
+                  1    wreg      void 
+ Registers used:
+		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath, cstack
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         2       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          2       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         4       0       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        4 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:    4
+ This function calls:
+		_enableInterrupts
+		_nrf24l01CEHigh
+		_nrf24l01CELow
+		_nrf24l01SPIEnd
+		_nrf24l01SPISend
+		_nrf24l01SPIStart
+		i1_memset
+		i1_nrf24l01Send
+		i1_nrf24l01SetRXMode
+		i1_strlen
+ This function is called by:
+		_nrf24l01ISR
+ This function uses a non-reentrant model
+
+
+ *************** function i1_strlen *****************
+ Defined at:
+		line 4 in file "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c"
+ Parameters:    Size  Location     Type
+  s               2    0[COMMON] PTR const unsigned char 
+		 -> packet.Message(32), packet.Message(32), NULL(0), main@packet(33), 
+		 -> loop@packet(33), romDataMap(28), 
+ Auto vars:     Size  Location     Type
+  strlen          2    4[COMMON] PTR const unsigned char 
+		 -> packet.Message(32), packet.Message(32), NULL(0), main@packet(33), 
+		 -> loop@packet(33), romDataMap(28), 
+ Return value:  Size  Location     Type
+                  2    0[COMMON] unsigned int 
+ Registers used:
+		wreg, fsr1l, fsr1h, status,2, status,0
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         2       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         2       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          2       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         6       0       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        6 bytes
+ Hardware stack levels used:    1
+ This function calls:
+		Nothing
+ This function is called by:
+		i1_nrf24l01Service
+ This function uses a non-reentrant model
+
+
+ *************** function i1_nrf24l01SetRXMode *****************
+ Defined at:
+		line 90 in file "nrf24l01.c"
+ Parameters:    Size  Location     Type
+  rxMode          1    wreg     unsigned char 
+ Auto vars:     Size  Location     Type
+  rxMode          1    6[COMMON] unsigned char 
+  nrf24l01SetR    1    5[COMMON] struct .
+ Return value:  Size  Location     Type
+                  1    wreg      void 
+ Registers used:
+		wreg, status,2, status,0, pclath, cstack
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         2       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          1       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         3       0       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        3 bytes
  Hardware stack levels used:    1
  Hardware stack levels required when called:    3
  This function calls:
+		_nrf24l01CEHigh
+		_nrf24l01CELow
 		i1_nrf24l01Send
  This function is called by:
-		_ISR
+		i1_nrf24l01Service
  This function uses a non-reentrant model
 
 
@@ -2941,6 +3031,8 @@ Total ram usage:        3 bytes
 		_nrf24l01SPIStart
  This function is called by:
 		_nrf24l01ISR
+		i1_nrf24l01SetRXMode
+		i1_nrf24l01Service
  This function uses a non-reentrant model
 
 
@@ -2966,7 +3058,7 @@ Total ram usage:        3 bytes
       Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        0 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		_nrf24l01CSLow
  This function is called by:
@@ -2975,6 +3067,7 @@ Total ram usage:        0 bytes
 		_nrf24l01Service
 		_nrf24l01InitRegisters
 		i1_nrf24l01Send
+		i1_nrf24l01Service
  This function uses a non-reentrant model
 
 
@@ -3000,7 +3093,7 @@ Total ram usage:        0 bytes
       Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        0 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -3030,7 +3123,7 @@ Total ram usage:        0 bytes
       Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        0 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -3039,6 +3132,7 @@ Total ram usage:        0 bytes
 		_nrf24l01Service
 		_nrf24l01InitRegisters
 		i1_nrf24l01Send
+		i1_nrf24l01Service
  This function uses a non-reentrant model
 
 
@@ -3064,7 +3158,7 @@ Total ram usage:        0 bytes
       Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        0 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    6
+ Hardware stack levels required when called:    8
  This function calls:
 		_nrf24l01CSHigh
  This function is called by:
@@ -3073,6 +3167,7 @@ Total ram usage:        0 bytes
 		_nrf24l01Service
 		_nrf24l01InitRegisters
 		i1_nrf24l01Send
+		i1_nrf24l01Service
  This function uses a non-reentrant model
 
 
@@ -3098,7 +3193,7 @@ Total ram usage:        0 bytes
       Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        0 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
@@ -3128,13 +3223,117 @@ Total ram usage:        0 bytes
       Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
 Total ram usage:        0 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    5
+ Hardware stack levels required when called:    7
  This function calls:
 		Nothing
  This function is called by:
 		_nrf24l01Send
 		_nrf24l01Service
 		i1_nrf24l01Send
+		i1_nrf24l01Service
+ This function uses a non-reentrant model
+
+
+ *************** function _nrf24l01CELow *****************
+ Defined at:
+		line 7 in file "interface.c"
+ Parameters:    Size  Location     Type
+		None
+ Auto vars:     Size  Location     Type
+		None
+ Return value:  Size  Location     Type
+                  1    wreg      void 
+ Registers used:
+		None
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        0 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:    7
+ This function calls:
+		Nothing
+ This function is called by:
+		_nrf24l01SetRXMode
+		_nrf24l01Service
+		_nrf24l01Init
+		i1_nrf24l01SetRXMode
+		i1_nrf24l01Service
+ This function uses a non-reentrant model
+
+
+ *************** function _nrf24l01CEHigh *****************
+ Defined at:
+		line 12 in file "interface.c"
+ Parameters:    Size  Location     Type
+		None
+ Auto vars:     Size  Location     Type
+		None
+ Return value:  Size  Location     Type
+                  1    wreg      void 
+ Registers used:
+		None
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          0       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         0       0       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        0 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:    7
+ This function calls:
+		Nothing
+ This function is called by:
+		_nrf24l01SetRXMode
+		_nrf24l01Service
+		_nrf24l01Init
+		i1_nrf24l01SetRXMode
+		i1_nrf24l01Service
+ This function uses a non-reentrant model
+
+
+ *************** function i1_memset *****************
+ Defined at:
+		line 8 in file "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c"
+ Parameters:    Size  Location     Type
+  p1              1    wreg     PTR void 
+		 -> RXPacket(33), 
+  c               2    0[COMMON] int 
+  n               2    2[COMMON] unsigned int 
+ Auto vars:     Size  Location     Type
+  p1              1    5[COMMON] PTR void 
+		 -> RXPacket(33), 
+  memset          1    6[COMMON] PTR unsigned char 
+		 -> RXPacket(33), 
+ Return value:  Size  Location     Type
+                  1    wreg      PTR void 
+ Registers used:
+		wreg, fsr1l, fsr1h, status,2, status,0
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK11  BANK12
+      Params:         4       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Locals:         2       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Temps:          1       0       0       0       0       0       0       0       0       0       0       0       0       0
+      Totals:         7       0       0       0       0       0       0       0       0       0       0       0       0       0
+Total ram usage:        7 bytes
+ Hardware stack levels used:    1
+ This function calls:
+		Nothing
+ This function is called by:
+		i1_nrf24l01Service
  This function uses a non-reentrant model
 
 
@@ -3143,184 +3342,188 @@ MODULE INFORMATION
 
 Module		Function		Class		Link	Load	Size
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftneg.c
-		___ftneg       		CODE           	1C86	0000	14
+		___ftneg       		CODE           	1008	0000	10
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftneg.c estimated size: 14
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftneg.c estimated size: 10
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftsub.c
-		___ftsub       		CODE           	1DD8	0000	36
+		___ftsub       		CODE           	1E19	0000	31
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftsub.c estimated size: 36
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftsub.c estimated size: 31
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\float.c
-		___ftpack      		CODE           	1274	0000	126
+		___ftpack      		CODE           	1275	0000	102
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\float.c estimated size: 126
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\float.c estimated size: 102
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwmod.c
-		___lwmod       		CODE           	1EC0	0000	61
+		___lwmod       		CODE           	1F33	0000	46
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwmod.c estimated size: 61
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwmod.c estimated size: 46
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awmod.c
-		___awmod       		CODE           	114A	0000	95
+		___awmod       		CODE           	118F	0000	71
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awmod.c estimated size: 95
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awmod.c estimated size: 71
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\doprnt.c
-		_scale         		CODE           	0D20	0000	737
-		_sprintf       		CODE           	0040	0000	1357
-		_fround        		CODE           	058C	0000	445
+		_scale         		CODE           	04D7	0000	711
+		_sprintf       		CODE           	0032	0000	1190
+		_fround        		CODE           	0C41	0000	433
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\doprnt.c estimated size: 2539
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\doprnt.c estimated size: 2334
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\llmod.c
-		___llmod       		CODE           	10A5	0000	83
+		___llmod       		CODE           	10C5	0000	68
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\llmod.c estimated size: 83
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\llmod.c estimated size: 68
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftdivl.c
-		__tdiv_to_l_   		CODE           	0826	0000	213
+		__tdiv_to_l_   		CODE           	0803	0000	183
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftdivl.c estimated size: 213
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftdivl.c estimated size: 183
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul16.c
-		___wmul        		CODE           	1DFB	0000	36
+		___wmul        		CODE           	1DA7	0000	29
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul16.c estimated size: 36
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul16.c estimated size: 29
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftmul.c
-		___ftmul       		CODE           	14EA	0000	203
+		___ftmul       		CODE           	1543	0000	181
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftmul.c estimated size: 203
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftmul.c estimated size: 181
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftdiv.c
-		___ftdiv       		CODE           	0748	0000	185
+		___ftdiv       		CODE           	149A	0000	170
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftdiv.c estimated size: 185
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftdiv.c estimated size: 170
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\__lldiv.c
-		___lldiv       		CODE           	11A8	0000	99
+		___lldiv       		CODE           	079D	0000	84
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\__lldiv.c estimated size: 99
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\__lldiv.c estimated size: 84
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwdiv.c
-		___lwdiv       		CODE           	1F77	0000	69
+		___lwdiv       		CODE           	1F93	0000	54
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwdiv.c estimated size: 69
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwdiv.c estimated size: 54
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awdiv.c
-		___awdiv       		CODE           	120A	0000	107
+		___awdiv       		CODE           	1223	0000	83
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awdiv.c estimated size: 107
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awdiv.c estimated size: 83
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\fldivl.c
-		__div_to_l_    		CODE           	08FA	0000	316
+		__div_to_l_    		CODE           	08B9	0000	286
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\fldivl.c estimated size: 316
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\fldivl.c estimated size: 286
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul8.c
-		___bmul        		CODE           	1CE6	0000	27
+		___bmul        		CODE           	1CFC	0000	19
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul8.c estimated size: 27
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul8.c estimated size: 19
 
 shared
-		i1_nrf24l01Send		CODE           	1D1C	0000	30
+		i1_nrf24l01Send		CODE           	1D55	0000	28
 		_statuses      		STRCODE        	1876	0000	12
 		__powers_      		STRCODE        	1828	0000	40
 		_dpowers       		STRCODE        	1800	0000	41
+		i1_nrf24l01SetRXMode		CODE           	1011	0000	59
 		_n_ADDRESS_P0  		STRCODE        	18A0	0000	6
 		_n_ADDRESS_MUL 		STRCODE        	1881	0000	2
 		__npowers_     		STRCODE        	184F	0000	40
-		__initialization		CODE           	001E	0000	31
+		__initialization		CODE           	0011	0000	30
+		i1_strlen      		CODE           	1DFB	0000	31
+		i1_memset      		CODE           	1D3A	0000	28
+		i1_nrf24l01Service		CODE           	09D6	0000	290
 
-shared estimated size: 202
+shared estimated size: 607
 
 interface.c
-		_nrf24l01SPISend		CODE           	1C93	0000	18
-		_nrf24l01CELow 		CODE           	1000	0000	4
-		_nrf24l01CSLow 		CODE           	1C6A	0000	4
-		_nrf24l01SPIStart		CODE           	1003	0000	9
-		_nrf24l01SPIEnd		CODE           	1C7E	0000	9
-		_nrf24l01CEHigh		CODE           	1C6D	0000	4
-		_nrf24l01CSHigh		CODE           	1C67	0000	4
-		_enableInterrupts		CODE           	1C76	0000	9
-		_nrf24l01InterfaceInit		CODE           	1D00	0000	29
+		_nrf24l01SPISend		CODE           	07F0	0000	14
+		_nrf24l01CELow 		CODE           	1CE4	0000	4
+		_nrf24l01CSLow 		CODE           	07FD	0000	4
+		_nrf24l01SPIStart		CODE           	1000	0000	9
+		_nrf24l01SPIEnd		CODE           	1CED	0000	8
+		_nrf24l01CEHigh		CODE           	1CE1	0000	4
+		_nrf24l01CSHigh		CODE           	0800	0000	4
+		_enableInterrupts		CODE           	1CF4	0000	9
+		_nrf24l01InterfaceInit		CODE           	1DC3	0000	29
 
-interface.c estimated size: 90
+interface.c estimated size: 85
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\fttol.c
-		___fttol       		CODE           	12F1	0000	160
+		___fttol       		CODE           	12DA	0000	136
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\fttol.c estimated size: 160
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\fttol.c estimated size: 136
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c
-		_strlen        		CODE           	1E1E	0000	37
+		_strlen        		CODE           	1E37	0000	32
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c estimated size: 37
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c estimated size: 32
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftge.c
-		___ftge        		CODE           	100B	0000	76
+		___ftge        		CODE           	104B	0000	61
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftge.c estimated size: 76
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftge.c estimated size: 61
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftadd.c
-		___ftadd       		CODE           	16CF	0000	306
+		___ftadd       		CODE           	15F7	0000	247
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftadd.c estimated size: 306
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftadd.c estimated size: 247
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awtoft.c
-		___awtoft      		CODE           	1E42	0000	40
+		___awtoft      		CODE           	1E97	0000	35
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awtoft.c estimated size: 40
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awtoft.c estimated size: 35
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcpy.c
-		_strcpy        		CODE           	1D73	0000	34
+		_strcpy        		CODE           	1DDF	0000	29
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcpy.c estimated size: 34
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcpy.c estimated size: 29
 
 nrf24l01.c
-		_nrf24l01Service		CODE           	0A35	0000	353
-		_nrf24l01SendPacket		CODE           	1CA4	0000	21
-		_nrf24l01InitRegisters		CODE           	15B4	0000	284
-		_nrf24l01ISR   		CODE           	1056	0000	80
-		_nrf24l01Send  		CODE           	1DB6	0000	35
-		_nrf24l01Init  		CODE           	1EFC	0000	62
-		_nrf24l01SetRXMode		CODE           	10F7	0000	84
-		_nrf24l01SetRXPipe		CODE           	0801	0000	38
-		_nrf24l01SetTXPipe		CODE           	1FBB	0000	70
+		_nrf24l01Service		CODE           	0AF7	0000	331
+		_nrf24l01SendPacket		CODE           	1EDF	0000	43
+		_nrf24l01InitRegisters		CODE           	16ED	0000	276
+		_nrf24l01ISR   		CODE           	11D5	0000	79
+		_nrf24l01Send  		CODE           	1E56	0000	33
+		_nrf24l01Init  		CODE           	1108	0000	68
+		_nrf24l01SetRXMode		CODE           	1087	0000	63
+		_nrf24l01SetRXPipe		CODE           	1E76	0000	34
+		_nrf24l01SetTXPipe		CODE           	114B	0000	69
 
-nrf24l01.c estimated size: 1027
+nrf24l01.c estimated size: 996
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lbtoft.c
-		___lbtoft      		CODE           	1D39	0000	30
+		___lbtoft      		CODE           	1D70	0000	28
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lbtoft.c estimated size: 30
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lbtoft.c estimated size: 28
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c
-		_memset        		CODE           	1D94	0000	35
+		_memset        		CODE           	1D8B	0000	29
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c estimated size: 35
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c estimated size: 29
 
 main.c
-		_loop          		CODE           	0B95	0000	396
-		_nrf24l01GetPipe		CODE           	1F39	0000	63
-		_setMessage    		CODE           	1D56	0000	30
-		_ISR           		CODE           	0004	0000	25
-		_main          		CODE           	1390	0000	167
-		_doWDTSleep    		CODE           	1CCF	0000	24
-		_getADCValue   		CODE           	1436	0000	181
-		_sleep         		CODE           	1E69	0000	40
+		_loop          		CODE           	0DF1	0000	528
+		_nrf24l01GetPipe		CODE           	1FC8	0000	57
+		_ISR           		CODE           	0004	0000	12
+		_main          		CODE           	1361	0000	148
+		_doWDTSleep    		CODE           	1D23	0000	24
+		_getADCValue   		CODE           	13F4	0000	167
+		_sleep         		CODE           	1EB9	0000	39
+		_sendMessage   		CODE           	1F60	0000	52
 
-main.c estimated size: 926
+main.c estimated size: 1027
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwtoft.c
-		___lwtoft      		CODE           	1CB8	0000	24
+		___lwtoft      		CODE           	1D0E	0000	22
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwtoft.c estimated size: 24
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwtoft.c estimated size: 22
 
 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lltoft.c
-		___lltoft      		CODE           	1E90	0000	49
+		___lltoft      		CODE           	1F09	0000	43
 
-C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lltoft.c estimated size: 49
+C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lltoft.c estimated size: 43
 

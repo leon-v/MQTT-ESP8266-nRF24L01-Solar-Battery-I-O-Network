@@ -89,9 +89,18 @@ void nrf24l01ChangeTXPower(int addPower){
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
-    if (status.TX == statuses.TX.Sending){
-        return;
-    }
+//    if (rxMode){
+//        if (status.TX == statuses.TX.Sending){
+//            return;
+//        }
+//    }
+//    
+//    if (!rxMode){
+//        if (status.TX == statuses.TX.PendingACK){
+//            return;
+//        }
+//    }
+    
     
     n_CONFIG_t config;
     
@@ -209,52 +218,52 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 
 
 unsigned int nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
-        
-//    if (status.TX == statuses.TX.Idle){
+    
+    nrf24l01Service();
+    
+    if (status.TX == statuses.TX.Idle){
         
         TXPacket = txPacket;
-        
         status.TX = statuses.TX.Ready;
         
+        nrf24l01Service();
+        
         return 1;
-//    }
+    }
     
     return 0;
 }
 
 void nrf24l01ISR(void){
     
-    n_STATUS_t statusRegister;
-            
-    statusRegister.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
-    
-//    counter = status.statusRegister.byte;
+    status.statusRegister.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
 	
-	if (statusRegister.TX_DS){
+	if (status.statusRegister.TX_DS){
         
         if (status.TX == statuses.TX.Sending){
             status.TX = statuses.TX.Sent;
+            nrf24l01Service();
         }
         
         else{
-//            statusRegister.TX_DS = 0;
+            status.statusRegister.TX_DS = 0;
         }
     }
 
     // Check id there is a received packet waiting
-    if (statusRegister.RX_DR){
-        
+    if (status.statusRegister.RX_DR){
         if (status.RX == statuses.RX.Idle){
             status.RX = statuses.RX.Pending;
+            nrf24l01Service();
         }
         
         else{
-//            statusRegister.RX_DR = 0;
+            status.statusRegister.RX_DR = 0;
         }
     }
-	
+    
 	// Clear the interrupt on the nrf24l01
-	nrf24l01Send(n_W_REGISTER | n_STATUS, statusRegister.byte);
+	nrf24l01Send(n_W_REGISTER | n_STATUS, status.statusRegister.byte);
 }
 
 
@@ -279,7 +288,7 @@ void nrf24l01Service(void){
         nrf24l01SPISend(TXPacket->packetData.byte);
 
         // Loop through each character of the name buffer and send it to the radio
-        for (i = 0; (i  < strlen(TXPacket->Message)) && (i < 32); i++) {
+        for (i = 0; (i  < strlen(TXPacket->Message)) && (i < 31); i++) {
             nrf24l01SPISend(TXPacket->Message[i]);
         }
 
@@ -294,23 +303,18 @@ void nrf24l01Service(void){
 
         // Pull the CE pin high on the radio for at least 10us
         nrf24l01CEHigh();
-        delayUs(20);
+        delayUs(12);
         nrf24l01CELow();
     }
 
-    if (status.TX = statuses.TX.Sending){
+    if (status.TX == statuses.TX.Sending){
         // ISR handles this condition
     }
 
     if (status.TX == statuses.TX.Sent){
-
         
         // If the transmit data requires an ACK
         if (TXPacket->packetData.ACKRequest){
-
-            // Set the radio into receiver mode
-            nrf24l01SetRXMode(1);
-
             status.TX = statuses.TX.PendingACK;
         }
 
@@ -322,10 +326,15 @@ void nrf24l01Service(void){
 
 
     if (status.TX == statuses.TX.PendingACK){
+        
+        // Set the radio into receiver mode
         nrf24l01SetRXMode(1);
+        
+        // Debug
+        status.TX = statuses.TX.Idle;
     }
     
-    if (status.RX = statuses.RX.Pending){
+    if (status.RX == statuses.RX.Pending){
         
         // Clear all the current RX buffers
         memset(RXPacket.Message, 0 ,sizeof(RXPacket.Message));
@@ -374,6 +383,7 @@ void nrf24l01Service(void){
         
         
     }
+    
 }
 
 void nrf24l01InitRegisters(){

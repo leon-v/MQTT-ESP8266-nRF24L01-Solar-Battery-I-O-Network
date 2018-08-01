@@ -12,8 +12,6 @@ unsigned char sleepLoop = 0;
 
 void interrupt ISR(void){
     
-    counter++;
-    
     if (PIR0bits.INTF){
         nrf24l01ISR();
         PIR0bits.INTF = 0;
@@ -80,33 +78,39 @@ float getADCValue(unsigned char channel){
 void sleep(unsigned int milliseconds){
         
     // Divide the value by the amount of loops we need to do
-//    milliseconds = (unsigned int) (milliseconds / (256 + 256));
+    milliseconds = (unsigned int) (milliseconds / (128 + 128));
 
     // Bump it up 1 to make sure we have at least 1
-    milliseconds = 2;
+    milliseconds++;
             
     // Loop 
     while (--milliseconds){
         
         // Set the radio to RX mode to check for incoming packets
-        nrf24l01SetRXMode(1);
+//        nrf24l01SetRXMode(1);
 
-        // Listen for 256mS
-        doWDTSleep(0b01000);
-        
-        nrf24l01Service();
+        // Listen for 128mS
+        doWDTSleep(0b00111);
         
         // Set the radio to TX mode to go into low power mode
         nrf24l01SetRXMode(0);
         
-        // Do nothing for 256mS
-        doWDTSleep(0b01000);
+        // Listen for 128mS
+        doWDTSleep(0b00111);
         
     }
 }
 
-void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
+void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
+    
     sprintf(packet->Message, "/%s/%s/%f", romData->name, topic, value);
+    
+    packet->packetData.byte = 0;
+    packet->packetData.ACKRequest = 1;
+    
+	nrf24l01SendPacket(packet);
+    
+	sleep(2000);
 }
 
 
@@ -114,58 +118,42 @@ void loop(){
     
     nrf24l01Packet_t packet;
     
-    setMessage(&packet, "DBG", counter);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&packet);
-	sleep(1000);
+    sendMessage(&packet, "DBG1", counter);
     
-//	19.086
+    // 19.086
     //Resistor divider on Vbatt
     // 10K / 4.7K  = 2.127659574468085
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
-    setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-	sleep(1000);
+    sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
+    
+    sendMessage(&packet, "DBG2", counter);
     
     
-    setMessage(&packet, "ANC3mV", getADCValue(0b010011));
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-	sleep(1000);
+    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
+    
+    
+    sendMessage(&packet, "DBG3", counter);
+    
     
     FVRCONbits.TSEN = 1;
     float vt = (2.048 - getADCValue(0b111101)) / 2;
     FVRCONbits.TSEN = 0;
-    
-	#define tempOffset 27
+//    
+	#define tempOffset 40
     #define vf 0.6063
     #define tc -0.00132
     float ta = (vt / tc) - (vf / tc) - tempOffset;
     
-	setMessage(&packet, "TEMP", ta);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-	sleep(1000);
+	sendMessage(&packet, "TEMP", ta);
     
+    sendMessage(&packet, "DBG4", counter);
     
     n_RF_SETUP_t rfSetup;
     rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
     
-    setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-	sleep(1000);
+    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     
+    sendMessage(&packet, "DBG5", counter);
 }
 
  unsigned char nrf24l01GetPipe(char * name){
@@ -274,11 +262,7 @@ void main(void) {
     
     nrf24l01Packet_t packet;
         
-    setMessage(&packet, "BOOT", romData->bootMode);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&packet);
-	sleep(1000);
+    sendMessage(&packet, "BOOT", romData->bootMode);
     
     while(1){
         loop();
