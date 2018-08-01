@@ -1,7 +1,7 @@
 #include <xc.h>
 #include <string.h>
 #include <stdlib.h>
-#include    <stdio.h>
+#include <stdio.h>
 
 #include "nrf24l01.h"
 #include "interface.h"

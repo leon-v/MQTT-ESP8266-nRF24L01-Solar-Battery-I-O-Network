@@ -11226,7 +11226,7 @@ _delay((unsigned long)((10)*(32000000/4000.0)));
 
 
 
-strcpy(romData->name, "UWT");
+strcpy(romData->name, "UH1");
 
 nrf24l01Init();
 

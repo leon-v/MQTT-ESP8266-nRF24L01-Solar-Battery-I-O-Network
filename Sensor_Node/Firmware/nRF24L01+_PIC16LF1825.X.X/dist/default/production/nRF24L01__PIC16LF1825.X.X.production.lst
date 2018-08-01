@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC LITE Macro Assembler V2.00 build -1524193055 
-                                                                                               Wed Aug 01 16:48:44 2018
+                                                                                               Wed Aug 01 21:30:47 2018
 
 Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 20180527130849
      1                           	processor	16LF18325
@@ -2140,8 +2140,8 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   2126  18CD                     __pstringtext18:	
   2127  18CD                     STR_11:	
   2128  18CD  3455               	retlw	85	;'U'
-  2129  18CE  3457               	retlw	87	;'W'
-  2130  18CF  3454               	retlw	84	;'T'
+  2129  18CE  3448               	retlw	72	;'H'
+  2130  18CF  3431               	retlw	49	;'1'
   2131  18D0  3400               	retlw	0
   2132                           
   2133                           	psect	stringtext19
@@ -3274,7 +3274,7 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   3255  1380  2B7D               	goto	u6957
   3256  1381  0000               	nop
   3257                           
-  3258                           ;main.c: 209: strcpy(romData->name, "UWT");
+  3258                           ;main.c: 209: strcpy(romData->name, "UH1");
   3259  1382  30CD               	movlw	low (STR_11| (0+32768))
   3260  1383  0020               	movlb	0	; select bank0
   3261  1384  00A0               	movwf	strcpy@from
@@ -15981,7 +15981,7 @@ SFR31                0      0       0      32        0.0%
 
 
 Microchip Technology PIC Macro Assembler V2.00 build -1524193055 
-Symbol Table                                                                                   Wed Aug 01 16:48:44 2018
+Symbol Table                                                                                   Wed Aug 01 21:30:47 2018
 
                 ___bmul@product 0022                     __CFG_CP$OFF 0000                sendMessage@value 00E3  
                   ___awdiv@sign 002D                sendMessage@topic 00E1             ___wmul@multiplicand 0032  
