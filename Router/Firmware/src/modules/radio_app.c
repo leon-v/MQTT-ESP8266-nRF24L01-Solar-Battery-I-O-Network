@@ -24,6 +24,7 @@ void ICACHE_FLASH_ATTR radio_Task(os_event_t *e) {
 
 		// If we are the primary hub / reciever, we need to send back ACKs
 		if (RXPacket->packetData.ACKRequest){
+			os_delay_us(1000);
 			nrf24l01SendACK(RXPacket);
 			INFO("ACK Sent\r\n");
 		}
@@ -120,7 +121,7 @@ void ICACHE_FLASH_ATTR radioInit(MQTT_Client* p_mqttClient){
 	os_printf("Radio Init End\r\n");
 }
 
-// Get the RX data into the buffer
+// Get the RX data into the buffern
         // nrf24l01ReceiveString();
 
         // if (nrf24l01.RXPending){

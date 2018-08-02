@@ -11,6 +11,7 @@ typedef struct{
     unsigned char TX    : 4;
     unsigned char RX    : 4;
     n_STATUS_t statusRegister;
+    n_CONFIG_t configRegister;
 } nrf24l01State_t;
 
 typedef struct{
@@ -89,42 +90,39 @@ void nrf24l01ChangeTXPower(int addPower){
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
-//    if (rxMode){
-//        if (status.TX == statuses.TX.Sending){
-//            return;
-//        }
-//    }
+    if (rxMode){
+        if (status.TX == statuses.TX.Sending){
+            return;
+        }
+    }
+    
+    if (!rxMode){
+        if (status.TX == statuses.TX.PendingACK){
+            return;
+        }
+    }
 //    
-//    if (!rxMode){
-//        if (status.TX == statuses.TX.PendingACK){
-//            return;
-//        }
-//    }
-    
-    
-    n_CONFIG_t config;
-    
     // Get the current IC configuration
-    config.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
+//    status.configRegister.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
     
     // If the IC is not in the same mode as requested, change it.
-    if (config.PRIM_RX != rxMode){
+    if (status.configRegister.PRIM_RX != rxMode){
         
         // Disable the IC and wait for the IC to disable
         nrf24l01CELow();
-        delayUs(200);
+        delayUs(2000);
         
         // Change the mode of the IC to the mode requested
-        config.PRIM_RX = rxMode;
-        nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
+        status.configRegister.PRIM_RX = rxMode;
+        nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
         
         // Wait for the IC to update
-        delayUs(200);
+        delayUs(2000);
 
         // If we changed to receiver mode, re-enable the IC to start listening
         if (rxMode){
         	nrf24l01CEHigh();
-            delayUs(200);
+            delayUs(2000);
         }
     }
 }
@@ -242,7 +240,6 @@ void nrf24l01ISR(void){
         
         if (status.TX == statuses.TX.Sending){
             status.TX = statuses.TX.Sent;
-            nrf24l01Service();
         }
         
         else{
@@ -252,12 +249,9 @@ void nrf24l01ISR(void){
 
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
-        
-        counter++;
                 
         if (status.RX == statuses.RX.Idle){
-            status.RX = statuses.RX.Pending;
-            nrf24l01Service();
+//            status.RX = statuses.RX.Pending;
         }
         
         else{
@@ -267,6 +261,8 @@ void nrf24l01ISR(void){
     
 	// Clear the interrupt on the nrf24l01
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.statusRegister.byte);
+    
+    nrf24l01Service();
 }
 
 
@@ -275,9 +271,6 @@ void nrf24l01Service(void){
     unsigned char i;
             
     if (status.TX == statuses.TX.Ready){
-
-        // Disable interrupts while sending.
-        enableInterrupts(0);
 
         // Set the radio into transmitter mode
         nrf24l01SetRXMode(0);
@@ -300,9 +293,6 @@ void nrf24l01Service(void){
 
         // Setup the status as sending
         status.TX = statuses.TX.Sending;
-        
-        // Enable interrupts while sending.
-        enableInterrupts(1);
 
         // Pull the CE pin high on the radio for at least 10us
         nrf24l01CEHigh();
@@ -311,7 +301,8 @@ void nrf24l01Service(void){
     }
 
     if (status.TX == statuses.TX.Sending){
-        // ISR handles this condition
+        // ISR handles this condition by:
+        // status.TX == statuses.TX.Sent
     }
 
     if (status.TX == statuses.TX.Sent){
@@ -331,7 +322,8 @@ void nrf24l01Service(void){
     if (status.TX == statuses.TX.PendingACK){
         
         // Set the radio into receiver mode
-        nrf24l01SetRXMode(1);
+        
+//        nrf24l01SetRXMode(1);
         
         // Debug
         status.TX = statuses.TX.Idle;
@@ -380,22 +372,16 @@ void nrf24l01Service(void){
     }
     
     if (status.RX == statuses.RX.Ready){
-        
-        
         // If this RX packet required an ACK, send one
-        
-        
     }
-    
 }
 
 void nrf24l01InitRegisters(){
 
-    n_CONFIG_t config;
-    config.byte = 0x00;
+    status.configRegister.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
     
-	config.PWR_UP = 0;
-	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
+	status.configRegister.PWR_UP = 0;
+	nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
     
     n_SETUP_AW_t setupAW;
     setupAW.byte = 0x00;
@@ -483,12 +469,11 @@ void nrf24l01InitRegisters(){
     nrf24l01Send(n_FLUSH_RX, 0);
     
     // Enable 2-byte CRC and power up in receive mode.
-	config.PRIM_RX = 1;
-	config.EN_CRC = 1;
-    config.CRCO = 1;
-	config.PWR_UP = 1;
-	nrf24l01Send(n_W_REGISTER | n_CONFIG, config.byte);
-    
+	status.configRegister.PRIM_RX = 0;
+	status.configRegister.EN_CRC = 1;
+    status.configRegister.CRCO = 1;
+	status.configRegister.PWR_UP = 1;
+	nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
 }
 
 void nrf24l01Init(void){

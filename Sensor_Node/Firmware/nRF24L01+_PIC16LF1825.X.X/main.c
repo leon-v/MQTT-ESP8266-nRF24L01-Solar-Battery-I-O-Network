@@ -93,7 +93,7 @@ void sleep(unsigned int milliseconds){
         doWDTSleep(0b00111);
         
         // Set the radio to TX mode to go into low power mode
-        nrf24l01SetRXMode(0);
+//        nrf24l01SetRXMode(0);
         
         // Listen for 128mS
         doWDTSleep(0b00111);
@@ -221,7 +221,7 @@ void main(void) {
     
     unsigned char pipe = nrf24l01GetPipe(romData->name);
     nrf24l01SetTXPipe(pipe);
-    nrf24l01SetRXPipe(pipe);
+//    nrf24l01SetRXPipe(pipe);
     
 
     /* Setup ADC */

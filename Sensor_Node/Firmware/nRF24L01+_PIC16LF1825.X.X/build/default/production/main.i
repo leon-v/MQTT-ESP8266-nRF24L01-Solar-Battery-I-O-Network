@@ -11119,10 +11119,7 @@ while (--milliseconds){
 # 93
 doWDTSleep(0b00111);
 
-
-nrf24l01SetRXMode(0);
-
-
+# 99
 doWDTSleep(0b00111);
 
 }
@@ -11235,13 +11232,13 @@ _delay((unsigned long)((10)*(32000000/4000.0)));
 
 
 
-strcpy(romData->name, "UH1");
+strcpy(romData->name, "UWT");
 
 nrf24l01Init();
 
 unsigned char pipe = nrf24l01GetPipe(romData->name);
 nrf24l01SetTXPipe(pipe);
-nrf24l01SetRXPipe(pipe);
+
 
 
 
