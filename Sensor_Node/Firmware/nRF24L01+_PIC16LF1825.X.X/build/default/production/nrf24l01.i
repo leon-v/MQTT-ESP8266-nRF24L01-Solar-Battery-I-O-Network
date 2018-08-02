@@ -11100,6 +11100,9 @@ status.statusRegister.TX_DS = 0;
 
 
 if (status.statusRegister.RX_DR){
+
+counter++;
+
 if (status.RX == statuses.RX.Idle){
 status.RX = statuses.RX.Pending;
 nrf24l01Service();
@@ -11226,7 +11229,7 @@ status.RX = statuses.RX.Ready;
 
 if (status.RX == statuses.RX.Ready){
 
-# 385
+# 388
 }
 
 }

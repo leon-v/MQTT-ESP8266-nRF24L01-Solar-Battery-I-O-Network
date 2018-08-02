@@ -11130,7 +11130,16 @@ doWDTSleep(0b00111);
 
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 
-sprintf(packet->Message, "/%s/%s/%f", romData->name, topic, value);
+int status;
+
+strcpy(packet->Message, romData->name);
+strcat(packet->Message, "/");
+strcat(packet->Message, topic);
+strcat(packet->Message, "/");
+strcat(packet->Message, ftoa(value, &status));
+
+
+
 
 packet->packetData.byte = 0;
 packet->packetData.ACKRequest = 1;
@@ -11147,7 +11156,7 @@ nrf24l01Packet_t packet;
 
 sendMessage(&packet, "DBG1", counter);
 
-# 127
+# 136
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
 sendMessage(&packet, "DBG2", counter);
@@ -11215,7 +11224,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 199
+# 208
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 

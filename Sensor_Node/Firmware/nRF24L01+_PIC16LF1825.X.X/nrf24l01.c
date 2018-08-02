@@ -252,6 +252,9 @@ void nrf24l01ISR(void){
 
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
+        
+        counter++;
+                
         if (status.RX == statuses.RX.Idle){
             status.RX = statuses.RX.Pending;
             nrf24l01Service();

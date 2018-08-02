@@ -103,7 +103,16 @@ void sleep(unsigned int milliseconds){
 
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
-    sprintf(packet->Message, "/%s/%s/%f", romData->name, topic, value);
+    int status;
+    
+    strcpy(packet->Message, romData->name);
+    strcat(packet->Message, "/");
+    strcat(packet->Message, topic);
+    strcat(packet->Message, "/");
+    strcat(packet->Message, ftoa(value, &status));
+    
+    
+//    sprintf(packet->Message, "/%s/%s/%f", romData->name, topic, value);
     
     packet->packetData.byte = 0;
     packet->packetData.ACKRequest = 1;
