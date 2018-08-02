@@ -1,7 +1,11 @@
 
 
 Microchip Technology PIC LITE Macro Assembler V2.00 build -1524193055 
+<<<<<<< HEAD
                                                                                                Thu Aug 02 12:07:07 2018
+=======
+                                                                                               Wed Aug 01 21:30:47 2018
+>>>>>>> 1d4db504068e8c8c8cdf720102f8bcd4a3c081ef
 
 Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 20180527130849
      1                           	processor	16LF18325
@@ -2109,6 +2113,7 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   2095  0155                     ftoa@buf:	
   2096  0155                     	ds	17
   2097                           
+<<<<<<< HEAD
   2098                           	psect	bssBANK3
   2099  01A0                     __pbssBANK3:	
   2100  01A0                     _RXPacket:	
@@ -2152,6 +2157,51 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   2138                           ; 1 bytes @ 0xC
   2139  012C                     	ds	1
   2140  012D                     _loop$1971:	
+=======
+  2098                           	psect	stringtext15
+  2099  18BE                     __pstringtext15:	
+  2100  18BE                     STR_7:	
+  2101  18BE  3454               	retlw	84	;'T'
+  2102  18BF  3445               	retlw	69	;'E'
+  2103  18C0  344D               	retlw	77	;'M'
+  2104  18C1  3450               	retlw	80	;'P'
+  2105  18C2  3400               	retlw	0
+  2106                           
+  2107                           	psect	stringtext16
+  2108  18C3                     __pstringtext16:	
+  2109  18C3                     STR_3:	
+  2110  18C3  3456               	retlw	86	;'V'
+  2111  18C4  3442               	retlw	66	;'B'
+  2112  18C5  3441               	retlw	65	;'A'
+  2113  18C6  3454               	retlw	84	;'T'
+  2114  18C7  3400               	retlw	0
+  2115                           
+  2116                           	psect	stringtext17
+  2117  18C8                     __pstringtext17:	
+  2118  18C8                     STR_12:	
+  2119  18C8  3442               	retlw	66	;'B'
+  2120  18C9  344F               	retlw	79	;'O'
+  2121  18CA  344F               	retlw	79	;'O'
+  2122  18CB  3454               	retlw	84	;'T'
+  2123  18CC  3400               	retlw	0
+  2124                           
+  2125                           	psect	stringtext18
+  2126  18CD                     __pstringtext18:	
+  2127  18CD                     STR_11:	
+  2128  18CD  3455               	retlw	85	;'U'
+  2129  18CE  3448               	retlw	72	;'H'
+  2130  18CF  3431               	retlw	49	;'1'
+  2131  18D0  3400               	retlw	0
+  2132                           
+  2133                           	psect	stringtext19
+  2134  0000                     __pstringtext19:	
+  2135                           
+  2136                           ; #config settings
+  2137  0000                     
+  2138                           	psect	cinit
+  2139  0011                     start_initialization:	
+  2140  0011                     __initialization:	
+>>>>>>> 1d4db504068e8c8c8cdf720102f8bcd4a3c081ef
   2141                           
   2142                           ; 3 bytes @ 0xD
   2143  012D                     	ds	3
@@ -3262,6 +3312,7 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   3242 ;;		Unchanged: 0/0
   3243 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK1
       +1  BANK12
+<<<<<<< HEAD
   3244 ;;      Params:         0       0       0       0       0       0       0       0       0       0       0       0       
       +0       0
   3245 ;;      Locals:         0       0       0       0       0       0       0       0       0       0       0       0       
@@ -3313,6 +3364,138 @@ Microchip Technology Omniscient Code Generator v2.00 (Free mode) build 201805271
   3288                           
   3289                           ;nrf24l01.c: 506: nrf24l01InitRegisters();
   3290  0927  3186  26A3  3189   	fcall	_nrf24l01InitRegisters
+=======
+  3165 ;;      Params:         0       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0
+  3166 ;;      Locals:         0       0       0       0      34       0       0       0       0       0       0       0       
+      +0       0
+  3167 ;;      Temps:          0       0       1       0       0       0       0       0       0       0       0       0       
+      +0       0
+  3168 ;;      Totals:         0       0       1       0      34       0       0       0       0       0       0       0       
+      +0       0
+  3169 ;;Total ram usage:       35 bytes
+  3170 ;; Hardware stack levels required when called:   15
+  3171 ;; This function calls:
+  3172 ;;		___lwtoft
+  3173 ;;		_loop
+  3174 ;;		_nrf24l01GetPipe
+  3175 ;;		_nrf24l01Init
+  3176 ;;		_nrf24l01SetRXPipe
+  3177 ;;		_nrf24l01SetTXPipe
+  3178 ;;		_sendMessage
+  3179 ;;		_strcpy
+  3180 ;; This function is called by:
+  3181 ;;		Startup code after reset
+  3182 ;; This function uses a non-reentrant model
+  3183 ;;
+  3184                           
+  3185                           
+  3186                           ;psect for function _main
+  3187  1361                     _main:	
+  3188                           
+  3189                           ;main.c: 174: ANSELA = 0x00;
+  3190                           
+  3191                           ;incstack = 0
+  3192                           ; Regs used in _main: [wreg-fsr1h+status,2+status,0+pclath+cstack]
+  3193  1361  0023               	movlb	3	; select bank3
+  3194  1362  018C               	clrf	12	;volatile
+  3195                           
+  3196                           ;main.c: 175: ANSELC = 0x00;
+  3197  1363  018E               	clrf	14	;volatile
+  3198                           
+  3199                           ;main.c: 177: ODCONA = 0x00;
+  3200  1364  0025               	movlb	5	; select bank5
+  3201  1365  018C               	clrf	12	;volatile
+  3202                           
+  3203                           ;main.c: 178: ODCONC = 0x00;
+  3204  1366  018E               	clrf	14	;volatile
+  3205                           
+  3206                           ;main.c: 183: INLVLA = 0x00;
+  3207  1367  0027               	movlb	7	; select bank7
+  3208  1368  018C               	clrf	12	;volatile
+  3209                           
+  3210                           ;main.c: 184: INLVLC = 0x00;
+  3211  1369  018E               	clrf	14	;volatile
+  3212                           
+  3213                           ;main.c: 186: WPUA = 0x00;
+  3214  136A  0024               	movlb	4	; select bank4
+  3215  136B  018C               	clrf	12	;volatile
+  3216                           
+  3217                           ;main.c: 187: WPUC = 0x00;
+  3218  136C  018E               	clrf	14	;volatile
+  3219                           
+  3220                           ;main.c: 189: TRISCbits.TRISC5 = 0;
+  3221  136D  0021               	movlb	1	; select bank1
+  3222  136E  128E               	bcf	14,5	;volatile
+  3223                           
+  3224                           ;main.c: 190: TRISCbits.TRISC4 = 0;
+  3225  136F  120E               	bcf	14,4	;volatile
+  3226                           
+  3227                           ;main.c: 192: PORTCbits.RC4 = 0;
+  3228  1370  0020               	movlb	0	; select bank0
+  3229  1371  120E               	bcf	14,4	;volatile
+  3230                           
+  3231                           ;main.c: 199: INTCONbits.PEIE = 0;
+  3232  1372  130B               	bcf	11,6	;volatile
+  3233                           
+  3234                           ;main.c: 200: INTCONbits.GIE = 0;
+  3235  1373  138B               	bcf	11,7	;volatile
+  3236                           
+  3237                           ;main.c: 202: OSCCON1bits.NOSC = 0b000;
+  3238  1374  308F               	movlw	-113
+  3239  1375  0032               	movlb	18	; select bank18
+  3240  1376  0599               	andwf	25,f	;volatile
+  3241                           
+  3242                           ;main.c: 203: OSCCON1bits.NDIV = 0b000;
+  3243  1377  30F0               	movlw	-16
+  3244  1378  0599               	andwf	25,f	;volatile
+  3245                           
+  3246                           ;main.c: 205: _delay((unsigned long)((10)*(32000000/4000.0)));
+  3247  1379  3068               	movlw	104
+  3248  137A  0021               	movlb	1	; select bank1
+  3249  137B  00E7               	movwf	??_main^(0+128)
+  3250  137C  30E4               	movlw	228
+  3251  137D                     u6957:	
+  3252  137D  0B89               	decfsz	9,f
+  3253  137E  2B7D               	goto	u6957
+  3254  137F  0BE7               	decfsz	??_main^(0+128),f
+  3255  1380  2B7D               	goto	u6957
+  3256  1381  0000               	nop
+  3257                           
+  3258                           ;main.c: 209: strcpy(romData->name, "UH1");
+  3259  1382  30CD               	movlw	low (STR_11| (0+32768))
+  3260  1383  0020               	movlb	0	; select bank0
+  3261  1384  00A0               	movwf	strcpy@from
+  3262  1385  3098               	movlw	high (STR_11| (0+32768))
+  3263  1386  00A1               	movwf	strcpy@from+1
+  3264  1387  0021               	movlb	1	; select bank1
+  3265  1388  086C               	movf	_romData^(0+128),w
+  3266  1389  3E01               	addlw	1
+  3267  138A  319D  25DF  3193   	fcall	_strcpy
+  3268                           
+  3269                           ;main.c: 211: nrf24l01Init();
+  3270  138D  3191  2108  3193   	fcall	_nrf24l01Init
+  3271                           
+  3272                           ;main.c: 213: unsigned char pipe = nrf24l01GetPipe(romData->name);
+  3273  1390  0021               	movlb	1	; select bank1
+  3274  1391  086C               	movf	_romData^(0+128),w
+  3275  1392  3E01               	addlw	1
+  3276  1393  319F  27C8  3193   	fcall	_nrf24l01GetPipe
+  3277  1396  0021               	movlb	1	; select bank1
+  3278  1397  00E7               	movwf	??_main^(0+128)
+  3279  1398  0867               	movf	??_main^(0+128),w
+  3280  1399  0023               	movlb	3	; select bank3
+  3281  139A  00A0               	movwf	main@pipe^(0+384)
+  3282                           
+  3283                           ;main.c: 214: nrf24l01SetTXPipe(pipe);
+  3284  139B  0820               	movf	main@pipe^(0+384),w
+  3285  139C  3191  214B  3193   	fcall	_nrf24l01SetTXPipe
+  3286                           
+  3287                           ;main.c: 215: nrf24l01SetRXPipe(pipe);
+  3288  139F  0023               	movlb	3	; select bank3
+  3289  13A0  0820               	movf	main@pipe^(0+384),w
+  3290  13A1  319E  2676  3193   	fcall	_nrf24l01SetRXPipe
+>>>>>>> 1d4db504068e8c8c8cdf720102f8bcd4a3c081ef
   3291                           
   3292                           ;nrf24l01.c: 508: _delay((unsigned long)((50000)*(32000000/4000000.0)));
   3293  092A  3003               	movlw	3
@@ -12544,7 +12727,11 @@ SFR31                0      0       0      32        0.0%
 
 
 Microchip Technology PIC Macro Assembler V2.00 build -1524193055 
+<<<<<<< HEAD
 Symbol Table                                                                                   Thu Aug 02 12:07:07 2018
+=======
+Symbol Table                                                                                   Wed Aug 01 21:30:47 2018
+>>>>>>> 1d4db504068e8c8c8cdf720102f8bcd4a3c081ef
 
                 ___bmul@product 0022                     __CFG_CP$OFF 0000                sendMessage@value 00BD  
               sendMessage@topic 00BB             ___wmul@multiplicand 0022             nrf24l01Send@command 0022  
