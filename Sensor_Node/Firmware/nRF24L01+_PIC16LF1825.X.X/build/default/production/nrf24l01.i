@@ -10653,6 +10653,8 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
+void sleepMs(unsigned int milliseconds);
+
 # 42 "nRF24L01_Types.h"
 typedef union{
 struct {
@@ -11062,17 +11064,15 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x02, enRXAddr.byte);
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
 
-while (status.TX != statuses.TX.Idle){
-_delay((unsigned long)((500)*(32000000/4000000.0)));
-nrf24l01Service();
-}
-
 strcpy(TXPacket.Message, txPacket->Message);
 TXPacket.packetData = txPacket->packetData;
 
 status.TX = statuses.TX.Ready;
 
+while (status.TX != statuses.TX.Idle){
+sleepMs(10);
 nrf24l01Service();
+}
 }
 
 void nrf24l01ISR(void){

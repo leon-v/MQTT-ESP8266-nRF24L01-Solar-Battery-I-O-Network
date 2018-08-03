@@ -61,5 +61,7 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
+void sleepMs(unsigned int milliseconds);
+
 #endif	/* INTERFACE_H */
 

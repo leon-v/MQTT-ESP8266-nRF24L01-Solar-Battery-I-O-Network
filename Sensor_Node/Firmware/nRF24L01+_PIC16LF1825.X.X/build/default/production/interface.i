@@ -10653,6 +10653,8 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
+void sleepMs(unsigned int milliseconds);
+
 
 # 6 "interface.c"
 #pragma interrupt_level 1
@@ -10697,6 +10699,24 @@ SSP1CON1bits.SSPM = 0b0001;
 
 SSP1CON1bits.SSPEN = 1;
 
+}
+
+#pragma interrupt_level 1
+void sleepMs(unsigned int milliseconds){
+
+unsigned char wdtps;
+for (wdtps = 0; wdtps <= 0b10010; wdtps++){
+if ((milliseconds >> wdtps) & 0b1){
+WDTCONbits.WDTPS = wdtps;
+asm("sleep");
+__nop();
+__nop();
+
+}
+}
+
+WDTCONbits.WDTPS = 0b01101;
+asm("clrwdt");
 }
 
 #pragma interrupt_level 1

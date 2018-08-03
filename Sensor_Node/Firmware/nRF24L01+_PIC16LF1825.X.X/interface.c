@@ -48,6 +48,24 @@ void nrf24l01InterfaceInit(void){
 }
 
 #pragma interrupt_level 1
+void sleepMs(unsigned int milliseconds){
+	
+	unsigned char wdtps;
+	for (wdtps = 0; wdtps <= 0b10010; wdtps++){
+		if ((milliseconds >> wdtps) & 0b1){
+			WDTCONbits.WDTPS = wdtps;
+			SLEEP();
+			NOP();
+			NOP();
+			
+		}
+	}
+	
+	WDTCONbits.WDTPS = 0b01101; // 8s
+    CLRWDT();
+}
+
+#pragma interrupt_level 1
 unsigned char nrf24l01SPISend(unsigned char data){
     SSP1BUF = data;
     

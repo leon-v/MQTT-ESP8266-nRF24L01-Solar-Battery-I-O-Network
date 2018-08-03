@@ -18,6 +18,7 @@ void interrupt ISR(void){
     }
 }
 
+
 void doWDTSleep(unsigned char wdtps){
     
     // Set watchdog
@@ -76,6 +77,9 @@ float getADCValue(unsigned char channel){
 }
 
 void sleep(unsigned int milliseconds){
+	
+	sleepMs(milliseconds);
+	return;
         
     // Divide the value by the amount of loops we need to do
     milliseconds = (unsigned int) (milliseconds / (128 + 128));
@@ -117,7 +121,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleep(10000);
+	sleep(5000);
 }
 
 

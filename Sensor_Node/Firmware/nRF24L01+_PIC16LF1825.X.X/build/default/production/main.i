@@ -10827,6 +10827,8 @@ void enableInterrupts(unsigned char enable);
 
 void exception(unsigned char exception);
 
+void sleepMs(unsigned int milliseconds);
+
 # 42 "nRF24L01_Types.h"
 typedef union{
 struct {
@@ -11048,6 +11050,7 @@ PIR0bits.INTF = 0;
 }
 }
 
+
 void doWDTSleep(unsigned char wdtps){
 
 
@@ -11107,6 +11110,9 @@ return adcSum;
 
 void sleep(unsigned int milliseconds){
 
+sleepMs(milliseconds);
+return;
+
 
 milliseconds = (unsigned int) (milliseconds / (128 + 128));
 
@@ -11116,10 +11122,10 @@ milliseconds++;
 
 while (--milliseconds){
 
-# 93
+# 97
 doWDTSleep(0b00111);
 
-# 99
+# 103
 doWDTSleep(0b00111);
 
 }
@@ -11141,7 +11147,7 @@ packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
-sleep(10000);
+sleep(5000);
 }
 
 
@@ -11151,7 +11157,7 @@ nrf24l01Packet_t packet;
 
 sendMessage(&packet, "DBG1", counter);
 
-# 134
+# 138
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
 
@@ -11159,7 +11165,7 @@ sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
 sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 
-# 145
+# 149
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
@@ -11216,7 +11222,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 206
+# 210
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 

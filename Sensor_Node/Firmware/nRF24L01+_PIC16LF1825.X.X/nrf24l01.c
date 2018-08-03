@@ -219,17 +219,15 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
-    while (status.TX != statuses.TX.Idle){
-        delayUs(500);
-        nrf24l01Service();
-    }
-    
     strcpy(TXPacket.Message, txPacket->Message);
     TXPacket.packetData = txPacket->packetData;
     
     status.TX = statuses.TX.Ready;
 
-    nrf24l01Service();
+    while (status.TX != statuses.TX.Idle){
+        sleepMs(10);
+        nrf24l01Service();
+    }
 }
 
 void nrf24l01ISR(void){
