@@ -105,14 +105,12 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
     int status;
     
+    memset(packet->Message, 0, sizeof(packet->Message));
     strcpy(packet->Message, romData->name);
     strcat(packet->Message, "/");
     strcat(packet->Message, topic);
     strcat(packet->Message, "/");
     strcat(packet->Message, ftoa(value, &status));
-    
-    
-//    sprintf(packet->Message, "/%s/%s/%f", romData->name, topic, value);
     
     packet->packetData.byte = 0;
     packet->packetData.ACKRequest = 1;

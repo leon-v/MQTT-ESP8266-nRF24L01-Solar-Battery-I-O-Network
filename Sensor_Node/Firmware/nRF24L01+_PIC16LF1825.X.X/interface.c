@@ -41,7 +41,7 @@ void nrf24l01InterfaceInit(void){
 	
     SSP1CON1bits.CKP = 0;
     SSP1STATbits.CKE = 1;
-    SSP1CON1bits.SSPM = 0b0000;
+    SSP1CON1bits.SSPM = 0b0001;
     
     SSP1CON1bits.SSPEN = 1;
     

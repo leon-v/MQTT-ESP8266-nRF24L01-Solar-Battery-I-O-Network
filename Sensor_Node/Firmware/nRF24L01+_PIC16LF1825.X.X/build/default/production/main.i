@@ -11034,7 +11034,7 @@ void nrf24l01ISR(void);
 void nrf24l01Init(void);
 void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
-unsigned int nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
+void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
 
 # 10 "main.c"
 unsigned char sleepLoop = 0;
@@ -11129,14 +11129,12 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 
 int status;
 
+memset(packet->Message, 0, sizeof(packet->Message));
 strcpy(packet->Message, romData->name);
 strcat(packet->Message, "/");
 strcat(packet->Message, topic);
 strcat(packet->Message, "/");
 strcat(packet->Message, ftoa(value, &status));
-
-
-
 
 packet->packetData.byte = 0;
 packet->packetData.ACKRequest = 1;
@@ -11153,7 +11151,7 @@ nrf24l01Packet_t packet;
 
 sendMessage(&packet, "DBG1", counter);
 
-# 136
+# 134
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
 sendMessage(&packet, "DBG2", counter);
@@ -11221,7 +11219,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 208
+# 206
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 

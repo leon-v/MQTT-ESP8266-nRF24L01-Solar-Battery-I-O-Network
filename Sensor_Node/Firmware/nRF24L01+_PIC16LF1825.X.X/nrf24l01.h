@@ -40,7 +40,7 @@ void nrf24l01ISR(void);
 void nrf24l01Init(void);
 void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
-unsigned int nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
+void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
 
 #endif	/* NRF24L01_H_ */
 
