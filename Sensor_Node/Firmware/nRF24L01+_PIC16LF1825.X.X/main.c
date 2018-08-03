@@ -117,7 +117,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleep(2000);
+	sleep(10000);
 }
 
 
@@ -133,14 +133,14 @@ void loop(){
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
     sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     
-    sendMessage(&packet, "DBG2", counter);
+//    sendMessage(&packet, "DBG2", counter);
     
     
     sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
     
     
-    sendMessage(&packet, "DBG3", counter);
-    
+//    sendMessage(&packet, "DBG3", counter);
+//    
     
     FVRCONbits.TSEN = 1;
     float vt = (2.048 - getADCValue(0b111101)) / 2;
@@ -153,14 +153,14 @@ void loop(){
     
 	sendMessage(&packet, "TEMP", ta);
     
-    sendMessage(&packet, "DBG4", counter);
+//    sendMessage(&packet, "DBG4", counter);
     
     n_RF_SETUP_t rfSetup;
     rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
     
     sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     
-    sendMessage(&packet, "DBG5", counter);
+//    sendMessage(&packet, "DBG5", counter);
 }
 
  unsigned char nrf24l01GetPipe(char * name){

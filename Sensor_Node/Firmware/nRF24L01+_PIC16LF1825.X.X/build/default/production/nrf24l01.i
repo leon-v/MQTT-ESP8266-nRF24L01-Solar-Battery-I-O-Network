@@ -11202,6 +11202,9 @@ if (status.TX == statuses.TX.PendingACK){
 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
 status.TX = statuses.TX.Idle;
 status.RX = statuses.RX.Idle;
+
+nrf24l01SetRXMode(0);
+
 }
 }
 }

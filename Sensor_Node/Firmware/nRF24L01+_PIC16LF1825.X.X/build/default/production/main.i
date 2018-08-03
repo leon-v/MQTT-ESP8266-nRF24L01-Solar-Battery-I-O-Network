@@ -11141,7 +11141,7 @@ packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
-sleep(2000);
+sleep(10000);
 }
 
 
@@ -11154,15 +11154,12 @@ sendMessage(&packet, "DBG1", counter);
 # 134
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
-sendMessage(&packet, "DBG2", counter);
+
 
 
 sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 
-
-sendMessage(&packet, "DBG3", counter);
-
-
+# 145
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
@@ -11174,14 +11171,14 @@ float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 40;
 
 sendMessage(&packet, "TEMP", ta);
 
-sendMessage(&packet, "DBG4", counter);
+
 
 n_RF_SETUP_t rfSetup;
 rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 
 sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 
-sendMessage(&packet, "DBG5", counter);
+
 }
 
 unsigned char nrf24l01GetPipe(char * name){
@@ -11230,7 +11227,7 @@ _delay((unsigned long)((10)*(32000000/4000.0)));
 
 
 
-strcpy(romData->name, "UWT");
+strcpy(romData->name, "UH1");
 
 nrf24l01Init();
 
