@@ -123,7 +123,10 @@ void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const cha
     os_memcpy(dataBuf, data, data_len);
     dataBuf[data_len] = 0;
 
+    radioForwardPacket(topicBuf, dataBuf);
+
     INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
+    
     os_free(topicBuf);
     os_free(dataBuf);
 }
@@ -230,7 +233,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 
 		INFO("MQTT: Init: device_id %s\r\n", sysCfg.device_id);
 		INFO("MQTT: Init: mqtt_user %s\r\n", sysCfg.mqtt_user);
-		INFO("MQTT: Init: mqtt_keepalive %u\r\n", sysCfg.mqtt_keepalive);
+	
 
 		MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, 30, 1);
 

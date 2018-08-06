@@ -10708,9 +10708,13 @@ unsigned char wdtps;
 for (wdtps = 0; wdtps <= 0b10010; wdtps++){
 if ((milliseconds >> wdtps) & 0b1){
 WDTCONbits.WDTPS = wdtps;
+
+
+
 asm("sleep");
 __nop();
 __nop();
+
 
 }
 }
