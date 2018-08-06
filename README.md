@@ -93,5 +93,6 @@ MQTT topics:
 
 ## Licence is Beerware:
 Licenced under the Beerware Vwesion 42
+
 https://en.wikipedia.org/wiki/Beerware
 
