@@ -91,6 +91,6 @@ MQTT topics:
 |14.	|Vss|			|					| GND					|
 
 
-##Licence is Beerware:
+## Licence is Beerware:
 https://en.wikipedia.org/wiki/Beerware
 
