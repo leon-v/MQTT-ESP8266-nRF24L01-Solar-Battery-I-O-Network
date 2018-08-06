@@ -6,28 +6,25 @@
 
 This project will consist of:
 
-1. An ESP8266 with one or two nRF24L01+ modules which will act as an MQTT router for nRF24L01+.
+1. An ESP8266 with one nRF24L01+ module which will act as an MQTT router for nRF24L01+.
 
-2. Multiple nRF24L01+ nodes with a PIC16LF1503 to translate the radio to usable signals including PWM, ADC, DAC, I/O and Interrupt for real time detection.
-These will be battery powered from an 18650 and solar panels. The PIC will use responsible for not overcharging the 18650, it letting it trickle charge.
+2. Multiple nRF24L01+ nodes with a PIC16LF18325 to translate the radio to usable signals including PWM, ADC, DAC, I/O and Interrupt for real time detection.
+These will be battery powered from an 18650 and solar panels. The PIC will use responsible for battery management.
 
-All configuration will be done via MQTT.
-The two main parameters that need to be set before use are the short encryption key and the node name
+All user configuration will be done via MQTT.
 
 Each node will have a short name which will be part of the 32 bytes payload.
 
-
-### Packet format will be fixed length
-|MQTT Topic	| Command	| Value	|
-|:---------:|:---------:|:-----:|
-|20 Bytes	| 4 Bytes	| 8 Bytes|
+### Packet format
+Packet format will be dynamic width, up to 32 characters.
+With limits for each segment of 16 characters.
 
 
 
-### Output Commands:
+### Output Commands (for me to sandbox):
 |Control Name		| Description			| Limits			|
 |-------------------|-----------------------|------------------:|
-|ADC0_				| ADC Input				| (0- 1023)			|
+|ADC0_				|ADC Input				| (0- 1023)			|
 |INT__				|Interrupt Input		| (0 - 1)			|
 
 ### Inputs Commands:
@@ -43,8 +40,8 @@ Each node will have a short name which will be part of the 32 bytes payload.
 |RDOSK				| Radio Set Key			| (0 - 4294967295)	|
 
 
-Encryption will be used to prevent noise from any other sensors. 
-Encryption used is TEA
+Encryption May be used to prevent noise from any other sensors. 
+Encryption used is possibly TEA
 ```
 void encrypt (uint32_t* v, uint32_t* k) {
     uint32_t v0=v[0], v1=v[1], sum=0, i;           /* set up */
@@ -74,22 +71,8 @@ void decrypt (uint32_t* v, uint32_t* k) {
 All configuration (apart from the WiFi User / Pass and MQTT details) will be retained in the MQTT broker.
 MQTT topics:
 
-#List of all the radio node names:
-/radio/configuration/nodes
 
-#The encryption keys for the node:
-/radio/encryption/[NODE_TOPIC]/[INDEX]/[ASCII_KEY]
-[NODE_TOPIC] Is the node MQTT topic
-[INDEX] Is the key index, when changing key, the new key will be the next available index (0 to n), and the old / active key is 0.
-When the router gets a packet that was successfully decrypted with a key that is not 0, it will place that key in index 0 and clear all the others.
-
-#The real time log of raw unencrypted packet data
-/radio/stream/encrypted Strings if raw packet data
-
-
-I think ill make the MQTT sever handle all the decryption and re-publishing 
-
-### PIC16LF1505 Pin Functions
+### PIC16LF18325 Pin Functions
 |Pin	|IO	|Direction	|Secondary Function	|Primary Function		|
 |-------|---|-----------|-------------------|-----------------------|
 |1.		|Vdd| 			|					| 3.3V Input			|
