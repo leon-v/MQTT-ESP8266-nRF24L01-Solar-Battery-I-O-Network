@@ -89,3 +89,8 @@ MQTT topics:
 |12.	|RA1| Both		|ICSP CLK			| Radio Chip Select		|
 |13.	|RA0| Both		|ICSP DAT			| Radio Chip Enable		|
 |14.	|Vss|			|					| GND					|
+
+
+##Licence is Beerware:
+https://en.wikipedia.org/wiki/Beerware
+
