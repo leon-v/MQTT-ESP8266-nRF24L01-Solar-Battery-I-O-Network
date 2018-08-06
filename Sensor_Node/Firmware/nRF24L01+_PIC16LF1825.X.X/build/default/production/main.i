@@ -11094,10 +11094,10 @@ void sleepListren(unsigned int seconds){
 
 while(seconds--){
 
-
+nrf24l01SetRXMode(1);
 sleepMs(250);
 
-
+nrf24l01SetRXMode(0);
 sleepMs(750);
 
 }
