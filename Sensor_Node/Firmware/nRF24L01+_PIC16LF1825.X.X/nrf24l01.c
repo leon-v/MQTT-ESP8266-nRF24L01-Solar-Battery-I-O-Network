@@ -270,31 +270,37 @@ void nrf24l01ISR(void){
     nrf24l01Service();
 }
 
+void nrf24l01SetTXBuffer(nrf24l01Packet_t * txPacket){
+	
+	unsigned char i;
+	
+	// Set the radio into transmitter mode
+	nrf24l01SetRXMode(0);
+
+	// Setup the SPI bus to send data to the radio
+	nrf24l01SPIStart();
+
+	// Send the command to tell the radio we want to send data with no auto ACK.
+	nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
+
+	nrf24l01SPISend(txPacket->packetData.byte);
+
+	// Loop through each character of the name buffer and send it to the radio
+	for (i = 0; (i  < strlen(txPacket->Message)) && (i < 32); i++) {
+		nrf24l01SPISend(txPacket->Message[i]);
+	}
+
+	// Release the SPI bus from the radio
+	nrf24l01SPIEnd();
+}
 
 void nrf24l01Service(void){
     
     unsigned char i;
             
     if (status.TX == statuses.TX.Ready){
-
-        // Set the radio into transmitter mode
-        nrf24l01SetRXMode(0);
-
-        // Setup the SPI bus to send data to the radio
-        nrf24l01SPIStart();
-
-        // Send the command to tell the radio we want to send data with no auto ACK.
-        nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
-
-        nrf24l01SPISend(TXPacket.packetData.byte);
-
-        // Loop through each character of the name buffer and send it to the radio
-        for (i = 0; (i  < strlen(TXPacket.Message)) && (i < 32); i++) {
-            nrf24l01SPISend(TXPacket.Message[i]);
-        }
-
-        // Release the SPI bus from the radio
-        nrf24l01SPIEnd();
+		
+		nrf24l01SetTXBuffer(&TXPacket);
 
         // Setup the status as sending
         status.TX = statuses.TX.Sending;
@@ -363,12 +369,24 @@ void nrf24l01Service(void){
                 }
             }
         }
-        
-//        status.RX = statuses.RX.Idle;
     }
     
     if (status.RX == statuses.RX.Ready){
-        counter++;
+		
+		if (RXPacket.packetData.ACKRequest){
+			
+			RXPacket.packetData.ACKRequest = 0;
+			RXPacket.packetData.IsACK = 1;
+			nrf24l01SetTXBuffer(&RXPacket);
+			
+			nrf24l01CEHigh();
+			delayUs(12);
+			nrf24l01CELow();
+			
+			nrf24l01SetRXMode(1);
+		}
+		
+		counter++;
     }
     
     if (status.TX == statuses.TX.PendingACK){

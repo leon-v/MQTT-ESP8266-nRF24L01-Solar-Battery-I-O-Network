@@ -11115,12 +11115,9 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x07, status.statusRegister.byte
 nrf24l01Service();
 }
 
-
-void nrf24l01Service(void){
+void nrf24l01SetTXBuffer(nrf24l01Packet_t * txPacket){
 
 unsigned char i;
-
-if (status.TX == statuses.TX.Ready){
 
 
 nrf24l01SetRXMode(0);
@@ -11131,15 +11128,24 @@ nrf24l01SPIStart();
 
 nrf24l01SPISend((unsigned) 0b10110000);
 
-nrf24l01SPISend(TXPacket.packetData.byte);
+nrf24l01SPISend(txPacket->packetData.byte);
 
 
-for (i = 0; (i < strlen(TXPacket.Message)) && (i < 32); i++) {
-nrf24l01SPISend(TXPacket.Message[i]);
+for (i = 0; (i < strlen(txPacket->Message)) && (i < 32); i++) {
+nrf24l01SPISend(txPacket->Message[i]);
 }
 
 
 nrf24l01SPIEnd();
+}
+
+void nrf24l01Service(void){
+
+unsigned char i;
+
+if (status.TX == statuses.TX.Ready){
+
+nrf24l01SetTXBuffer(&TXPacket);
 
 
 status.TX = statuses.TX.Sending;
@@ -11208,11 +11214,23 @@ nrf24l01SetRXMode(0);
 }
 }
 }
-
-
 }
 
 if (status.RX == statuses.RX.Ready){
+
+if (RXPacket.packetData.ACKRequest){
+
+RXPacket.packetData.ACKRequest = 0;
+RXPacket.packetData.IsACK = 1;
+nrf24l01SetTXBuffer(&RXPacket);
+
+nrf24l01CEHigh();
+_delay((unsigned long)((12)*(32000000/4000000.0)));
+nrf24l01CELow();
+
+nrf24l01SetRXMode(1);
+}
+
 counter++;
 }
 

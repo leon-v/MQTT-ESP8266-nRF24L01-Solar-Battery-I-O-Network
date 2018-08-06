@@ -54,9 +54,13 @@ void sleepMs(unsigned int milliseconds){
 	for (wdtps = 0; wdtps <= 0b10010; wdtps++){
 		if ((milliseconds >> wdtps) & 0b1){
 			WDTCONbits.WDTPS = wdtps;
-			SLEEP();
-			NOP();
-			NOP();
+			
+			
+//			while ( (STATUSbits.nTO) || (STATUSbits.nPD) ){
+				SLEEP();
+				NOP();
+				NOP();
+//			}
 			
 		}
 	}

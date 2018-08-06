@@ -236,8 +236,8 @@ RESEND:
 	while (TXPacket->packetData.ACKRequest){
 		if (!--i) {
             delayUs(50000);
-            delayUs(50000);
             nrf24l01ChangeTXPower(1);
+            INFO("Radio Resend\r\n");
 			goto RESEND;
 		}
 		delayUs(100);

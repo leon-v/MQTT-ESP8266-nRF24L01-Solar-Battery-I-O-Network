@@ -7,30 +7,12 @@
 #include "interface.h"
 #include "../../../../shared.h"
 
-unsigned char sleepLoop = 0;
-
-
 void interrupt ISR(void){
     
     if (PIR0bits.INTF){
         nrf24l01ISR();
         PIR0bits.INTF = 0;
     }
-}
-
-
-void doWDTSleep(unsigned char wdtps){
-    
-    // Set watchdog
-    WDTCONbits.WDTPS = wdtps;
-        
-    // Start the sleep
-    SLEEP();
-    NOP();
-    NOP();
-    
-    WDTCONbits.WDTPS = 0b01101; // 8s
-    CLRWDT();
 }
 
 float getADCValue(unsigned char channel){
@@ -43,14 +25,14 @@ float getADCValue(unsigned char channel){
     FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
     ADCON0bits.ADON = 1;
     
-	doWDTSleep(0b00000); //1ms
+	sleepMs(1);
     
 	while (adcLoop--){
 		
 		ADCON0bits.ADGO = 1;
        
 		while (ADCON0bits.ADGO){
-            doWDTSleep(0b00000); //1ms
+            sleepMs(1);
 		}
 		
 		adcSum+= (ADRESL | (ADRESH << 8));
@@ -76,35 +58,18 @@ float getADCValue(unsigned char channel){
 	return adcSum;
 }
 
-void sleep(unsigned int milliseconds){
+void sleepListren(unsigned int seconds){
 	
-	sleepMs(milliseconds);
-	return;
-        
-    // Divide the value by the amount of loops we need to do
-    milliseconds = (unsigned int) (milliseconds / (128 + 128));
-
-    // Bump it up 1 to make sure we have at least 1
-    milliseconds++;
-            
-    // Loop 
-    while (--milliseconds){
-        
-        // Set the radio to RX mode to check for incoming packets
-//        nrf24l01SetRXMode(1);
-
-        // Listen for 128mS
-        doWDTSleep(0b00111);
-        
-        // Set the radio to TX mode to go into low power mode
-//        nrf24l01SetRXMode(0);
-        
-        // Listen for 128mS
-        doWDTSleep(0b00111);
-        
-    }
+	while(seconds--){
+		
+//		nrf24l01SetRXMode(1);
+		sleepMs(250);
+		
+//		nrf24l01SetRXMode(0);
+		sleepMs(750);
+		
+	}
 }
-
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
     int status;
@@ -121,7 +86,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleep(5000);
+	sleepListren(3);
 }
 
 

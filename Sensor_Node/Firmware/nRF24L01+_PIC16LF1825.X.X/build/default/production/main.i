@@ -11039,30 +11039,12 @@ void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
 
 # 10 "main.c"
-unsigned char sleepLoop = 0;
-
-
 void interrupt ISR(void){
 
 if (PIR0bits.INTF){
 nrf24l01ISR();
 PIR0bits.INTF = 0;
 }
-}
-
-
-void doWDTSleep(unsigned char wdtps){
-
-
-WDTCONbits.WDTPS = wdtps;
-
-
-asm("sleep");
-__nop();
-__nop();
-
-WDTCONbits.WDTPS = 0b01101;
-asm("clrwdt");
 }
 
 float getADCValue(unsigned char channel){
@@ -11075,14 +11057,14 @@ ADCON0bits.CHS = channel;
 FVRCONbits.FVREN = 1;
 ADCON0bits.ADON = 1;
 
-doWDTSleep(0b00000);
+sleepMs(1);
 
 while (adcLoop--){
 
 ADCON0bits.ADGO = 1;
 
 while (ADCON0bits.ADGO){
-doWDTSleep(0b00000);
+sleepMs(1);
 }
 
 adcSum+= (ADRESL | (ADRESH << 8));
@@ -11108,29 +11090,18 @@ break;
 return adcSum;
 }
 
-void sleep(unsigned int milliseconds){
+void sleepListren(unsigned int seconds){
 
-sleepMs(milliseconds);
-return;
-
-
-milliseconds = (unsigned int) (milliseconds / (128 + 128));
+while(seconds--){
 
 
-milliseconds++;
+sleepMs(250);
 
 
-while (--milliseconds){
-
-# 97
-doWDTSleep(0b00111);
-
-# 103
-doWDTSleep(0b00111);
+sleepMs(750);
 
 }
 }
-
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 
 int status;
@@ -11147,7 +11118,7 @@ packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
-sleep(5000);
+sleepListren(3);
 }
 
 
@@ -11157,7 +11128,7 @@ nrf24l01Packet_t packet;
 
 sendMessage(&packet, "DBG1", counter);
 
-# 138
+# 103
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
 
@@ -11165,7 +11136,7 @@ sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
 sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 
-# 149
+# 114
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
@@ -11222,7 +11193,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 210
+# 175
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
