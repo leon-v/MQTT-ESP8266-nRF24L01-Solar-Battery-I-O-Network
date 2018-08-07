@@ -11097,7 +11097,7 @@ while(seconds--){
 nrf24l01SetRXMode(1);
 sleepMs(250);
 
-nrf24l01SetRXMode(0);
+nrf24l01SetRXMode(1);
 sleepMs(750);
 
 }
@@ -11204,7 +11204,7 @@ _delay((unsigned long)((10)*(32000000/4000.0)));
 
 
 
-strcpy(romData->name, "UH1");
+strcpy(romData->name, "UWT");
 
 nrf24l01Init();
 

@@ -65,7 +65,7 @@ void sleepListren(unsigned int seconds){
 		nrf24l01SetRXMode(1);
 		sleepMs(250);
 		
-		nrf24l01SetRXMode(0);
+		nrf24l01SetRXMode(1);
 		sleepMs(750);
 		
 	}
