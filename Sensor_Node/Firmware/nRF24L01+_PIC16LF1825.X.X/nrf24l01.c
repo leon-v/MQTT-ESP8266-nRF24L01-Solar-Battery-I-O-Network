@@ -1,52 +1,15 @@
 #include "nrf24l01.h"
+#include "eeprom.h"
 
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
 nrf24l01Packet_t TXPacket;
 nrf24l01Packet_t RXPacket;
+nrf24l01Packet_t * lastTXPacket;
 
-
-typedef struct{
-    unsigned char TX    : 4;
-    unsigned char RX    : 4;
-    n_STATUS_t statusRegister;
-    n_CONFIG_t configRegister;
-    unsigned char retryCount;
-} nrf24l01State_t;
-
-typedef struct{
-    unsigned char Idle;
-    unsigned char Ready;
-    unsigned char Sending;
-    unsigned char PendingACK;
-} nrf24l01TXStates_t;
-
-typedef struct{
-    unsigned char Idle;
-    unsigned char Pending;
-    unsigned char Ready;
-    unsigned char CheckACKIn;
-    unsigned char CheckACKOut;
-    unsigned char UserProcess;
-} nrf24l01RXStates_t;
-
-typedef struct{
-    nrf24l01TXStates_t TX;
-    nrf24l01RXStates_t RX;
-} nrf24l01States_t;
-
-static const nrf24l01States_t statuses = {
-    {0, 1, 2, 3},
-    {0, 1, 2, 3, 4, 5}
-};
-
-volatile nrf24l01State_t status;
 
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
-    
-    // Disable interrupts to ensure we are not interrupted
-    enableInterrupts(0);
     
     // Start the SPI transaction and select the chip
     nrf24l01SPIStart();
@@ -59,9 +22,6 @@ unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
     // End the SPI Transaction and release the IC
     nrf24l01SPIEnd();
-    
-    // Re-enable interrupts
-    enableInterrupts(1);
     
     return data;
 }
@@ -90,19 +50,19 @@ void nrf24l01ChangeTXPower(int addPower){
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
-//    // If we want to change to RX mode
-//    if (rxMode){
-//        if (status.TX == statuses.TX.Sending){
-//            return;
-//        }
-//    }
-//    
-//    // If we want to change to TX mode
-//    if (!rxMode){
-//        if (status.TX == statuses.TX.PendingACK){
-//            return;
-//        }
-//    }
+    // If we want to change to RX mode
+    if (rxMode){
+        if (status.TX == TXSending){
+            return;
+        }
+    }
+    
+    // If we want to change to TX mode
+    if (!rxMode){
+        if (status.TX == TXPendingACK){
+            return;
+        }
+    }
 //    
     // Get the current IC configuration
 //    status.configRegister.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
@@ -112,7 +72,7 @@ void nrf24l01SetRXMode(unsigned char rxMode){
         
         // Disable the IC and wait for the IC to disable
         nrf24l01CELow();
-//        delayUs(120);
+        delayUs(120);
         
         // Change the mode of the IC to the mode requested
         status.configRegister.PRIM_RX = rxMode;
@@ -177,8 +137,6 @@ void nrf24l01SetRXMode(unsigned char rxMode){
 nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 	return &RXPacket;
 }
-
-
  
  void nrf24l01SetTXPipe(unsigned char pipe){
     
@@ -216,61 +174,64 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 
 
 
-
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
-    
+	
     strcpy(TXPacket.Message, txPacket->Message);
     TXPacket.packetData = txPacket->packetData;
     
-    status.TX = statuses.TX.Ready;
-
-    while (status.TX != statuses.TX.Idle){
+    status.TX = TXReady;
+	
+	while (status.TX != TXIdle){
         sleepMs(10);
         nrf24l01Service();
     }
 }
 
+unsigned int testCount = 0;
 void nrf24l01ISR(void){
     
     status.statusRegister.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
 	
-	if (status.statusRegister.TX_DS){
-        
-        if (status.TX == statuses.TX.Sending){
-            
-            if (TXPacket.packetData.ACKRequest){
-                status.TX = statuses.TX.PendingACK;
-                status.retryCount = 0xFF;
-                nrf24l01SetRXMode(1);
-            }else{
-                status.TX = statuses.TX.Idle;
-            }
-        }
-        
-        else{
-            status.statusRegister.TX_DS = 0;
-        }
-    }
-
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
         
-        if (status.RX == statuses.RX.Idle){
-            status.RX = statuses.RX.Pending;
+        if (status.RX == RXIdle){
+            status.RX = RXPending;
         }
         
         else{
             status.statusRegister.RX_DR = 0;
         }
+		
+		nrf24l01Service();
     }
+	
+	if (status.statusRegister.TX_DS){
+        
+		if (lastTXPacket->packetData.ACKRequest){
+			status.TX = TXPendingACK;
+			status.retryCount = 0xFF;
+			nrf24l01SetRXMode(1);
+		}else{
+			status.TX = TXIdle;
+		}
+		
+		if (lastTXPacket->packetData.IsACK){
+			nrf24l01SetRXMode(1);
+		}
+		
+		nrf24l01Service();
+    }
+
+
     
 	// Clear the interrupt on the nrf24l01
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.statusRegister.byte);
-    
-    nrf24l01Service();
 }
 
-void nrf24l01SetTXBuffer(nrf24l01Packet_t * txPacket){
+void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
+	
+	lastTXPacket = packet;
 	
 	unsigned char i;
 	
@@ -283,35 +244,45 @@ void nrf24l01SetTXBuffer(nrf24l01Packet_t * txPacket){
 	// Send the command to tell the radio we want to send data with no auto ACK.
 	nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
 
-	nrf24l01SPISend(txPacket->packetData.byte);
+	nrf24l01SPISend(lastTXPacket->packetData.byte);
 
 	// Loop through each character of the name buffer and send it to the radio
-	for (i = 0; (i  < strlen(txPacket->Message)) && (i < 32); i++) {
-		nrf24l01SPISend(txPacket->Message[i]);
+	
+	unsigned char width = strlen(lastTXPacket->Message);
+	
+	for (i = 0; i  < width; i++) {
+		nrf24l01SPISend(lastTXPacket->Message[i]);
 	}
 
 	// Release the SPI bus from the radio
 	nrf24l01SPIEnd();
+	
+	// Pull the CE pin high on the radio for at least 10us
+	nrf24l01CEHigh();
+	delayUs(12);
+	nrf24l01CELow();
 }
+
+
 
 void nrf24l01Service(void){
     
     unsigned char i;
             
-    if (status.TX == statuses.TX.Ready){
+    if (status.TX == TXReady){
 		
-		nrf24l01SetTXBuffer(&TXPacket);
-
-        // Setup the status as sending
-        status.TX = statuses.TX.Sending;
-
-        // Pull the CE pin high on the radio for at least 10us
-        nrf24l01CEHigh();
-        delayUs(12);
-        nrf24l01CELow();
+		// Setup the status as sending
+        status.TX = TXSending;	
+		nrf24l01SendTXBuffer(&TXPacket);
+    }
+	
+	if (status.TX == TXPendingACK){
+        if (!status.retryCount--){
+            status.TX = TXReady;
+        }
     }
     
-    if (status.RX == statuses.RX.Pending){
+    if (status.RX == RXPending){
         
         // Clear all the current RX buffers
         memset(RXPacket.Message, 0 ,sizeof(RXPacket.Message));
@@ -333,7 +304,7 @@ void nrf24l01Service(void){
         RXPacket.packetData.byte = nrf24l01SPISend(0);
         width--;
 
-        for (i = 0; (i < width) && (i < 32); i++){
+        for (i = 0; i < width; i++) {
             // Get the byte from the radio IC
             RXPacket.Message[i] = nrf24l01SPISend(0);
         }
@@ -350,19 +321,19 @@ void nrf24l01Service(void){
         // Get the Recieved Power Detector bit
 		RXPacket.packetData.RPD = nrf24l01Send(n_R_REGISTER | n_RPD, 0);
         
-        status.RX = statuses.RX.Ready;
+        status.RX = RXReady;
     }
     
-    if (status.RX == statuses.RX.Ready){
+    if (status.RX == RXReady){
         // If this RX packet required an ACK, send one
         
         if (RXPacket.packetData.IsACK){
             
-            if (status.TX == statuses.TX.PendingACK){
+            if (status.TX == TXPendingACK){
             
                 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
-                    status.TX = statuses.TX.Idle;
-                    status.RX = statuses.RX.Idle;
+                    status.TX = TXIdle;
+                    status.RX = RXIdle;
                     // Set the radio into transmitter mode to sleep
 					nrf24l01SetRXMode(0);
                     
@@ -371,29 +342,20 @@ void nrf24l01Service(void){
         }
     }
     
-    if (status.RX == statuses.RX.Ready){
+    if (status.RX == RXReady){
 		
 		if (RXPacket.packetData.ACKRequest){
 			
 			RXPacket.packetData.ACKRequest = 0;
 			RXPacket.packetData.IsACK = 1;
-			nrf24l01SetTXBuffer(&RXPacket);
 			
-			nrf24l01CEHigh();
-			delayUs(12);
-			nrf24l01CELow();
-			
-			nrf24l01SetRXMode(1);
+			nrf24l01SendTXBuffer(&RXPacket);
 		}
-		
-		counter++;
     }
-    
-    if (status.TX == statuses.TX.PendingACK){
-        if (!status.retryCount--){
-            status.TX = statuses.TX.Ready;
-        }
-    }
+	
+	if (status.RX == RXReady){
+		status.RX = RXIdle;
+	}
 }
 
 void nrf24l01InitRegisters(){
@@ -514,7 +476,7 @@ void nrf24l01Init(void){
 
     nrf24l01CEHigh();
     
-    status.TX = statuses.TX.Idle;
-    status.RX = statuses.RX.Idle;
+    status.TX = TXIdle;
+    status.RX = RXIdle;
 }
 

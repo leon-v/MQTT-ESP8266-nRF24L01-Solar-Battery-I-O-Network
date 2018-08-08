@@ -7,6 +7,7 @@
       <itemPath>interface.h</itemPath>
       <itemPath>nrf24l01.h</itemPath>
       <itemPath>nRF24L01_Types.h</itemPath>
+      <itemPath>eeprom.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -19,6 +20,7 @@
       <itemPath>interface.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>nrf24l01.c</itemPath>
+      <itemPath>eeprom.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -626,7 +628,7 @@
         <property key="stack-size-high" value="auto"/>
         <property key="stack-size-low" value="auto"/>
         <property key="stack-size-main" value="auto"/>
-        <property key="stack-type" value="compiled"/>
+        <property key="stack-type" value="hybrid"/>
         <property key="user-pack-device-support" value=""/>
       </XC8-config-global>
     </conf>

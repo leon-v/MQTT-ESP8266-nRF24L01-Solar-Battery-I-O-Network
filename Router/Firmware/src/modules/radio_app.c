@@ -3,7 +3,6 @@
 
 LOCAL MQTT_Client* mqttClient;
 
-#define OUT_PREFIX "/radio/out/"
 #define RADIO_TASK_PRIO             	1
 #define RADIO_TASK_QUEUE_SIZE        1
 os_event_t nrf24l01procTaskQueue[RADIO_TASK_QUEUE_SIZE];
@@ -11,6 +10,8 @@ os_event_t nrf24l01procTaskQueue[RADIO_TASK_QUEUE_SIZE];
 static os_timer_t spiTestTimer;
 
 uint8 enabled = 0;
+
+char outPrefix[32];
 
 void radioEnable(uint8 enable){
 	enabled = enable;
@@ -116,11 +117,11 @@ void ICACHE_FLASH_ATTR radioForwardPacket(char * mqttTopic, char * mqttValue){
 	TXPacket.packetData.byte = 0;
 	TXPacket.packetData.ACKRequest = 1;
 
-	mqttTopic+= strlen(OUT_PREFIX);
+	mqttTopic+= strlen(outPrefix) - 1;
 
 	os_sprintf(TXPacket.Message, "%s/%s", mqttTopic, mqttValue);
 
-	INFO("Radio Send: %s\r\n", TXPacket.Message);
+	INFO("Radio Send topic: %s\r\n", TXPacket.Message);
 
 	char* strings = strtok(mqttTopic, "/");
 
@@ -130,9 +131,6 @@ void ICACHE_FLASH_ATTR radioForwardPacket(char * mqttTopic, char * mqttValue){
 
 	char *topic = (char *) os_zalloc(strlen(strings) * sizeof(char));
 	strcpy(topic, strings);
-
-	INFO("Radio name: %s\r\n", name);
-	INFO("Radio topic: %s\r\n", topic);
 
 
 	unsigned char pipe = nrf24l01GetPipe(name);
@@ -149,15 +147,15 @@ void ICACHE_FLASH_ATTR radioForwardPacket(char * mqttTopic, char * mqttValue){
 	
 }
 
-
 void ICACHE_FLASH_ATTR radioInit(MQTT_Client* p_mqttClient){
 
+	os_sprintf(outPrefix, "/radio/out/%u/#", system_get_chip_id());
 
 	mqttClient = p_mqttClient;
 
 	os_printf("Radio Init\r\n");
 
-	MQTT_Subscribe(mqttClient, strcat(OUT_PREFIX, "#"), 0);
+	MQTT_Subscribe(mqttClient, outPrefix, 0);
 
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO5_U, FUNC_GPIO5); // CE
 

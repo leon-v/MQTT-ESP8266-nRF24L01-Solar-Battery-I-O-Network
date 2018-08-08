@@ -155,8 +155,8 @@ void nrf24l01ReceivePacket(void){
     // Get the packet data byte as the first byte
     RXPacket.packetData.byte = nrf24l01SPISend(0);
     width--;
-    
-    for (i = 0; (i < width) && (i < sizeof(RXPacket.Message) - 1); i++){
+
+    for (i = 0; i < width; i++) {
         // Get the byte from the radio IC
 		RXPacket.Message[i] = nrf24l01SPISend(0);
 	}
@@ -235,9 +235,8 @@ RESEND:
 	i = 0xFF;
 	while (TXPacket->packetData.ACKRequest){
 		if (!--i) {
-            delayUs(50000);
+			delayUs(1000);
             nrf24l01ChangeTXPower(1);
-            INFO("Radio Resend\r\n");
 			goto RESEND;
 		}
 		delayUs(100);
@@ -278,7 +277,7 @@ void nrf24l01ISR(void){
     if (status.RX_DR){
         
         // If the previous RX packet has been delt with
-        if (!nrf24l01.RXPending){
+        // if (!nrf24l01.RXPending){
 
         	// Flag the radio state as having a RX packet ready
         	nrf24l01.RXPending = 1;
@@ -292,14 +291,14 @@ void nrf24l01ISR(void){
 		    RXPacket.packetData.Pipe = status.RX_P_NO;
 
 	        nrf24l01CheckACK();
-        }
+        // }
 
         // If the MCU has not processed the last packet
-        else{
+        // else{
 
         	// We don't want to clear the interrupt so we can pick it up next time
-        	status.RX_DR = 0;
-        }
+        	// status.RX_DR = 0;
+        // }
         
     }
 	

@@ -10623,12 +10623,6 @@ extern void * memcpy(void *, const void *, size_t);
 extern void * memmove(void *, const void *, size_t);
 extern void * memset(void *, int, size_t);
 
-
-
-
-extern void * __builtin_memcpy(void *, const void *, size_t);
-#pragma intrinsic(__builtin_memcpy)
-
 # 36
 extern char * strcat(char *, const char *);
 extern char * strcpy(char *, const char *);
@@ -10789,6 +10783,10 @@ extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupport
 extern int sprintf(char *, const char *, ...);
 extern int printf(const char *, ...);
 
+# 6 "eeprom.h"
+void EEPROMWrite(unsigned int address, unsigned char data);
+unsigned char EEPROMRead(unsigned int address);
+
 # 12 "interface.h"
 typedef struct{
 unsigned char check;
@@ -10812,21 +10810,15 @@ unsigned char bytes[sizeof(romData_t)];
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 50
-void nrf24l01CELow(void);
-void nrf24l01CEHigh(void);
-void nrf24l01CSLow(void);
-void nrf24l01CSHigh(void);
-
+# 56
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
-void enableInterrupts(unsigned char enable);
-
 void exception(unsigned char exception);
 
+void resetWDT(void);
 void sleepMs(unsigned int milliseconds);
 
 # 42 "nRF24L01_Types.h"
@@ -11009,6 +11001,17 @@ extern const unsigned char n_ADDRESS_MUL;
 
 unsigned long counter = 0;
 
+typedef struct{
+unsigned char TX;
+unsigned char RX;
+n_STATUS_t statusRegister;
+n_CONFIG_t configRegister;
+unsigned char retryCount;
+} nrf24l01State_t;
+
+volatile nrf24l01State_t status;
+
+# 35
 typedef union{
 struct{
 unsigned int byte :8;
@@ -11027,7 +11030,7 @@ packetData_t packetData;
 char Message[32];
 } nrf24l01Packet_t;
 
-# 35
+# 57
 unsigned char nrf24l01Send(unsigned char command,unsigned char data);
 void nrf24l01SetRXPipe(unsigned char pipe);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -11038,8 +11041,10 @@ void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
 
-# 10 "main.c"
+# 11 "main.c"
 void interrupt ISR(void){
+
+resetWDT();
 
 if (PIR0bits.INTF){
 nrf24l01ISR();
@@ -11094,31 +11099,32 @@ void sleepListren(unsigned int seconds){
 
 while(seconds--){
 
-nrf24l01SetRXMode(1);
-sleepMs(250);
 
 nrf24l01SetRXMode(1);
-sleepMs(750);
+sleepMs(100);
+
+nrf24l01SetRXMode(1);
+sleepMs(900);
 
 }
 }
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 
-int status;
+int ftoaStatus;
 
 memset(packet->Message, 0, sizeof(packet->Message));
 strcpy(packet->Message, romData->name);
 strcat(packet->Message, "/");
 strcat(packet->Message, topic);
 strcat(packet->Message, "/");
-strcat(packet->Message, ftoa(value, &status));
+strcat(packet->Message, ftoa(value, &ftoaStatus));
 
 packet->packetData.byte = 0;
 packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
-sleepListren(3);
+sleepListren(2);
 }
 
 
@@ -11126,17 +11132,16 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
-sendMessage(&packet, "DBG1", counter);
+sendMessage(&packet, "COUNT", counter);
 
-# 103
+# 107
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
-
-
+EEPROMWrite(0, (unsigned char) 22);
 
 sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 
-# 114
+# 119
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
@@ -11193,24 +11198,24 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 175
+# 180
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
 OSCCON1bits.NOSC = 0b000;
 OSCCON1bits.NDIV = 0b000;
 
-_delay((unsigned long)((10)*(32000000/4000.0)));
+_delay((unsigned long)((1000)*(32000000/4000000.0)));
 
 
 
-strcpy(romData->name, "UWT");
+strcpy(romData->name, "UH1");
 
 nrf24l01Init();
 
 unsigned char pipe = nrf24l01GetPipe(romData->name);
 nrf24l01SetTXPipe(pipe);
-
+nrf24l01SetRXPipe(pipe);
 
 
 
@@ -11260,7 +11265,13 @@ INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-sendMessage(&packet, "BOOT", romData->bootMode);
+sendMessage(&packet, "BOOT0", EEPROMRead(0));
+sendMessage(&packet, "BOOT1", EEPROMRead(1));
+
+
+
+EEPROMWrite(0, 123);
+EEPROMWrite(1, 123);
 
 while(1){
 loop();

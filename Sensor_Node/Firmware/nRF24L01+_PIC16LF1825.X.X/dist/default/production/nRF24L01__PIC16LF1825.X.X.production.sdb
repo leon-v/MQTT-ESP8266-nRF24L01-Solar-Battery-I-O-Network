@@ -37,21 +37,16 @@
 [v ___lltoft __lltoft `(f  1 e 3 0 ]
 "5 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwmod.c
 [v ___lwmod __lwmod `(ui  1 e 2 0 ]
-"28 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwtoft.c
-[v ___lwtoft __lwtoft `(f  1 e 3 0 ]
 "8 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c
-[v _memset memset `(*.39v  1 e 1 0 ]
-[v i1_memset memset `(*.39v  1 e 1 0 ]
+[v _memset memset `R(*.39v  1 e 1 0 ]
 "8 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcat.c
 [v _strcat strcat `(*.39uc  1 e 1 0 ]
 "33 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcmp.c
-[v _strcmp strcmp `(i  1 e 2 0 ]
-[v i1_strcmp strcmp `(i  1 e 2 0 ]
+[v _strcmp strcmp `R(i  1 e 2 0 ]
 "8 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcpy.c
 [v _strcpy strcpy `(*.39uc  1 e 1 0 ]
 "4 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c
-[v _strlen strlen `(ui  1 e 2 0 ]
-[v i1_strlen strlen `(ui  1 e 2 0 ]
+[v _strlen strlen `R(ui  1 e 2 0 ]
 "15 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul16.c
 [v ___wmul __wmul `(ui  1 e 2 0 ]
 "4 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul8.c
@@ -60,73 +55,78 @@
 [v ___eecpymem __eecpymem `(v  1 e 1 0 ]
 "39
 [v ___memcpyee __memcpyee `(v  1 e 1 0 ]
-"7 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\interface.c
-[v _nrf24l01CELow nrf24l01CELow `(v  1 e 1 0 ]
-"12
-[v _nrf24l01CEHigh nrf24l01CEHigh `(v  1 e 1 0 ]
-"17
-[v _nrf24l01CSLow nrf24l01CSLow `(v  1 e 1 0 ]
-"22
-[v _nrf24l01CSHigh nrf24l01CSHigh `(v  1 e 1 0 ]
-"27
+"4 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\eeprom.c
+[v _EEPROMWrite EEPROMWrite `(v  1 e 1 0 ]
+"26
+[v _EEPROMRead EEPROMRead `(uc  1 e 1 0 ]
+"8 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\interface.c
 [v _nrf24l01InterfaceInit nrf24l01InterfaceInit `(v  1 e 1 0 ]
-"51
+"31
+[v _resetWDT resetWDT `R(v  1 e 1 0 ]
+"36
 [v _sleepMs sleepMs `(v  1 e 1 0 ]
-"73
-[v _nrf24l01SPISend nrf24l01SPISend `(uc  1 e 1 0 ]
-"86
-[v _nrf24l01SPIStart nrf24l01SPIStart `(v  1 e 1 0 ]
-"92
-[v _nrf24l01SPIEnd nrf24l01SPIEnd `(v  1 e 1 0 ]
-"98
-[v _enableInterrupts enableInterrupts `(v  1 e 1 0 ]
-"10 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
+"56
+[v _nrf24l01SPISend nrf24l01SPISend `R(uc  1 e 1 0 ]
+"68
+[v _nrf24l01SPIStart nrf24l01SPIStart `R(v  1 e 1 0 ]
+"74
+[v _nrf24l01SPIEnd nrf24l01SPIEnd `R(v  1 e 1 0 ]
+"11 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
 [v _ISR ISR `II(v  1 e 1 0 ]
-"18
+"21
 [v _getADCValue getADCValue `(f  1 e 3 0 ]
-"61
+"64
 [v _sleepListren sleepListren `(v  1 e 1 0 ]
-"73
+"77
 [v _sendMessage sendMessage `(v  1 e 1 0 ]
-"93
+"97
 [v _loop loop `(v  1 e 1 0 ]
-"135
+"140
 [v _nrf24l01GetPipe nrf24l01GetPipe `(uc  1 e 1 0 ]
-"147
+"152
 [v _main main `(v  1 e 1 0 ]
-"46 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
-[v _nrf24l01Send nrf24l01Send `(uc  1 e 1 0 ]
-[v i1_nrf24l01Send nrf24l01Send `(uc  1 e 1 0 ]
-"91
-[v _nrf24l01SetRXMode nrf24l01SetRXMode `(v  1 e 1 0 ]
-[v i1_nrf24l01SetRXMode nrf24l01SetRXMode `(v  1 e 1 0 ]
-"183
+"12 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+[v _nrf24l01Send nrf24l01Send `R(uc  1 e 1 0 ]
+"51
+[v _nrf24l01SetRXMode nrf24l01SetRXMode `R(v  1 e 1 0 ]
+"141
 [v _nrf24l01SetTXPipe nrf24l01SetTXPipe `(v  1 e 1 0 ]
-"196
+"154
 [v _nrf24l01SetRXPipe nrf24l01SetRXPipe `(v  1 e 1 0 ]
-"220
+"177
 [v _nrf24l01SendPacket nrf24l01SendPacket `(v  1 e 1 0 ]
-"233
+"191
 [v _nrf24l01ISR nrf24l01ISR `(v  1 e 1 0 ]
-"273
-[v _nrf24l01SetTXBuffer nrf24l01SetTXBuffer `(v  1 e 1 0 ]
-[v i1_nrf24l01SetTXBuffer nrf24l01SetTXBuffer `(v  1 e 1 0 ]
-"297
-[v _nrf24l01Service nrf24l01Service `(v  1 e 1 0 ]
-[v i1_nrf24l01Service nrf24l01Service `(v  1 e 1 0 ]
-"399
+"232
+[v _nrf24l01SendTXBuffer nrf24l01SendTXBuffer `R(v  1 e 1 0 ]
+"268
+[v _nrf24l01Service nrf24l01Service `R(v  1 e 1 0 ]
+"361
 [v _nrf24l01InitRegisters nrf24l01InitRegisters `(v  1 e 1 0 ]
-"499
+"461
 [v _nrf24l01Init nrf24l01Init `(v  1 e 1 0 ]
-[s S572 . 1 `uc 1 INTEDG 1 0 :1:0 
+[s S205 . 1 `uc 1 C 1 0 :1:0 
+`uc 1 DC 1 0 :1:1 
+`uc 1 Z 1 0 :1:2 
+`uc 1 nPD 1 0 :1:3 
+`uc 1 nTO 1 0 :1:4 
+]
+"131 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
+[s S211 . 1 `uc 1 CARRY 1 0 :1:0 
+`uc 1 . 1 0 :1:1 
+`uc 1 ZERO 1 0 :1:2 
+]
+[u S215 . 1 `S205 1 . 1 0 `S211 1 . 1 0 ]
+[v _STATUSbits STATUSbits `VES215  1 e 1 @3 ]
+[s S634 . 1 `uc 1 INTEDG 1 0 :1:0 
 `uc 1 . 1 0 :5:1 
 `uc 1 PEIE 1 0 :1:6 
 `uc 1 GIE 1 0 :1:7 
 ]
-"364 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
-[u S577 . 1 `S572 1 . 1 0 ]
-[v _INTCONbits INTCONbits `VES577  1 e 1 @11 ]
-[s S36 . 1 `uc 1 RA0 1 0 :1:0 
+"364
+[u S639 . 1 `S634 1 . 1 0 ]
+[v _INTCONbits INTCONbits `VES639  1 e 1 @11 ]
+[s S260 . 1 `uc 1 RA0 1 0 :1:0 
 `uc 1 RA1 1 0 :1:1 
 `uc 1 RA2 1 0 :1:2 
 `uc 1 RA3 1 0 :1:3 
@@ -134,9 +134,9 @@
 `uc 1 RA5 1 0 :1:5 
 ]
 "399
-[u S43 . 1 `S36 1 . 1 0 ]
-[v _PORTAbits PORTAbits `VES43  1 e 1 @12 ]
-[s S223 . 1 `uc 1 RC0 1 0 :1:0 
+[u S267 . 1 `S260 1 . 1 0 ]
+[v _PORTAbits PORTAbits `VES267  1 e 1 @12 ]
+[s S230 . 1 `uc 1 RC0 1 0 :1:0 
 `uc 1 RC1 1 0 :1:1 
 `uc 1 RC2 1 0 :1:2 
 `uc 1 RC3 1 0 :1:3 
@@ -144,17 +144,17 @@
 `uc 1 RC5 1 0 :1:5 
 ]
 "449
-[u S230 . 1 `S223 1 . 1 0 ]
-[v _PORTCbits PORTCbits `VES230  1 e 1 @14 ]
-[s S356 . 1 `uc 1 INTF 1 0 :1:0 
+[u S237 . 1 `S230 1 . 1 0 ]
+[v _PORTCbits PORTCbits `VES237  1 e 1 @14 ]
+[s S412 . 1 `uc 1 INTF 1 0 :1:0 
 `uc 1 . 1 0 :3:1 
 `uc 1 IOCIF 1 0 :1:4 
 `uc 1 TMR0IF 1 0 :1:5 
 ]
 "497
-[u S361 . 1 `S356 1 . 1 0 ]
-[v _PIR0bits PIR0bits `VES361  1 e 1 @16 ]
-[s S53 . 1 `uc 1 TRISA0 1 0 :1:0 
+[u S417 . 1 `S412 1 . 1 0 ]
+[v _PIR0bits PIR0bits `VES417  1 e 1 @16 ]
+[s S36 . 1 `uc 1 TRISA0 1 0 :1:0 
 `uc 1 TRISA1 1 0 :1:1 
 `uc 1 TRISA2 1 0 :1:2 
 `uc 1 . 1 0 :1:3 
@@ -162,9 +162,9 @@
 `uc 1 TRISA5 1 0 :1:5 
 ]
 "1514
-[u S60 . 1 `S53 1 . 1 0 ]
-[v _TRISAbits TRISAbits `VES60  1 e 1 @140 ]
-[s S70 . 1 `uc 1 TRISC0 1 0 :1:0 
+[u S43 . 1 `S36 1 . 1 0 ]
+[v _TRISAbits TRISAbits `VES43  1 e 1 @140 ]
+[s S53 . 1 `uc 1 TRISC0 1 0 :1:0 
 `uc 1 TRISC1 1 0 :1:1 
 `uc 1 TRISC2 1 0 :1:2 
 `uc 1 TRISC3 1 0 :1:3 
@@ -172,39 +172,39 @@
 `uc 1 TRISC5 1 0 :1:5 
 ]
 "1559
-[u S77 . 1 `S70 1 . 1 0 ]
-[v _TRISCbits TRISCbits `VES77  1 e 1 @142 ]
-[s S246 . 1 `uc 1 INTE 1 0 :1:0 
+[u S60 . 1 `S53 1 . 1 0 ]
+[v _TRISCbits TRISCbits `VES60  1 e 1 @142 ]
+[s S247 . 1 `uc 1 INTE 1 0 :1:0 
 `uc 1 . 1 0 :3:1 
 `uc 1 IOCIE 1 0 :1:4 
 `uc 1 TMR0IE 1 0 :1:5 
 ]
 "1607
-[u S251 . 1 `S246 1 . 1 0 ]
-[v _PIE0bits PIE0bits `VES251  1 e 1 @144 ]
-[s S194 . 1 `uc 1 SWDTEN 1 0 :1:0 
+[u S252 . 1 `S247 1 . 1 0 ]
+[v _PIE0bits PIE0bits `VES252  1 e 1 @144 ]
+[s S177 . 1 `uc 1 SWDTEN 1 0 :1:0 
 `uc 1 WDTPS 1 0 :5:1 
 ]
 "1894
-[s S197 . 1 `uc 1 . 1 0 :1:0 
+[s S180 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 WDTPS0 1 0 :1:1 
 `uc 1 WDTPS1 1 0 :1:2 
 `uc 1 WDTPS2 1 0 :1:3 
 `uc 1 WDTPS3 1 0 :1:4 
 `uc 1 WDTPS4 1 0 :1:5 
 ]
-[u S204 . 1 `S194 1 . 1 0 `S197 1 . 1 0 ]
-[v _WDTCONbits WDTCONbits `VES204  1 e 1 @151 ]
+[u S187 . 1 `S177 1 . 1 0 `S180 1 . 1 0 ]
+[v _WDTCONbits WDTCONbits `VES187  1 e 1 @151 ]
 "1941
 [v _ADRESL ADRESL `VEuc  1 e 1 @155 ]
 "1961
 [v _ADRESH ADRESH `VEuc  1 e 1 @156 ]
-[s S373 . 1 `uc 1 ADON 1 0 :1:0 
+[s S429 . 1 `uc 1 ADON 1 0 :1:0 
 `uc 1 GO_nDONE 1 0 :1:1 
 `uc 1 CHS 1 0 :6:2 
 ]
 "2007
-[s S377 . 1 `uc 1 . 1 0 :1:0 
+[s S433 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 ADGO 1 0 :1:1 
 `uc 1 CHS0 1 0 :1:2 
 `uc 1 CHS1 1 0 :1:3 
@@ -213,28 +213,28 @@
 `uc 1 CHS4 1 0 :1:6 
 `uc 1 CHS5 1 0 :1:7 
 ]
-[s S386 . 1 `uc 1 . 1 0 :1:0 
+[s S442 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 GO 1 0 :1:1 
 ]
-[u S389 . 1 `S373 1 . 1 0 `S377 1 . 1 0 `S386 1 . 1 0 ]
-[v _ADCON0bits ADCON0bits `VES389  1 e 1 @157 ]
-[s S441 . 1 `uc 1 ADPREF 1 0 :2:0 
+[u S445 . 1 `S429 1 . 1 0 `S433 1 . 1 0 `S442 1 . 1 0 ]
+[v _ADCON0bits ADCON0bits `VES445  1 e 1 @157 ]
+[s S497 . 1 `uc 1 ADPREF 1 0 :2:0 
 `uc 1 ADNREF 1 0 :1:2 
 `uc 1 . 1 0 :1:3 
 `uc 1 ADCS 1 0 :3:4 
 `uc 1 ADFM 1 0 :1:7 
 ]
 "2089
-[s S447 . 1 `uc 1 ADPREF0 1 0 :1:0 
+[s S503 . 1 `uc 1 ADPREF0 1 0 :1:0 
 `uc 1 ADPREF1 1 0 :1:1 
 `uc 1 . 1 0 :2:2 
 `uc 1 ADCS0 1 0 :1:4 
 `uc 1 ADCS1 1 0 :1:5 
 `uc 1 ADCS2 1 0 :1:6 
 ]
-[u S454 . 1 `S441 1 . 1 0 `S447 1 . 1 0 ]
-[v _ADCON1bits ADCON1bits `VES454  1 e 1 @158 ]
-[s S410 . 1 `uc 1 ADFVR 1 0 :2:0 
+[u S510 . 1 `S497 1 . 1 0 `S503 1 . 1 0 ]
+[v _ADCON1bits ADCON1bits `VES510  1 e 1 @158 ]
+[s S466 . 1 `uc 1 ADFVR 1 0 :2:0 
 `uc 1 CDAFVR 1 0 :2:2 
 `uc 1 TSRNG 1 0 :1:4 
 `uc 1 TSEN 1 0 :1:5 
@@ -242,16 +242,16 @@
 `uc 1 FVREN 1 0 :1:7 
 ]
 "2616
-[s S417 . 1 `uc 1 ADFVR0 1 0 :1:0 
+[s S473 . 1 `uc 1 ADFVR0 1 0 :1:0 
 `uc 1 ADFVR1 1 0 :1:1 
 `uc 1 CDAFVR0 1 0 :1:2 
 `uc 1 CDAFVR1 1 0 :1:3 
 ]
-[u S422 . 1 `S410 1 . 1 0 `S417 1 . 1 0 ]
-[v _FVRCONbits FVRCONbits `VES422  1 e 1 @279 ]
+[u S478 . 1 `S466 1 . 1 0 `S473 1 . 1 0 ]
+[v _FVRCONbits FVRCONbits `VES478  1 e 1 @279 ]
 "2779
 [v _ANSELA ANSELA `VEuc  1 e 1 @396 ]
-[s S676 . 1 `uc 1 ANSA0 1 0 :1:0 
+[s S743 . 1 `uc 1 ANSA0 1 0 :1:0 
 `uc 1 ANSA1 1 0 :1:1 
 `uc 1 ANSA2 1 0 :1:2 
 `uc 1 . 1 0 :1:3 
@@ -259,11 +259,11 @@
 `uc 1 ANSA5 1 0 :1:5 
 ]
 "2794
-[u S683 . 1 `S676 1 . 1 0 ]
-[v _ANSELAbits ANSELAbits `VES683  1 e 1 @396 ]
+[u S750 . 1 `S743 1 . 1 0 ]
+[v _ANSELAbits ANSELAbits `VES750  1 e 1 @396 ]
 "2824
 [v _ANSELC ANSELC `VEuc  1 e 1 @398 ]
-[s S693 . 1 `uc 1 ANSC0 1 0 :1:0 
+[s S760 . 1 `uc 1 ANSC0 1 0 :1:0 
 `uc 1 ANSC1 1 0 :1:1 
 `uc 1 ANSC2 1 0 :1:2 
 `uc 1 ANSC3 1 0 :1:3 
@@ -271,11 +271,11 @@
 `uc 1 ANSC5 1 0 :1:5 
 ]
 "2839
-[u S700 . 1 `S693 1 . 1 0 ]
-[v _ANSELCbits ANSELCbits `VES700  1 e 1 @398 ]
+[u S767 . 1 `S760 1 . 1 0 ]
+[v _ANSELCbits ANSELCbits `VES767  1 e 1 @398 ]
 "3719
 [v _WPUA WPUA `VEuc  1 e 1 @524 ]
-[s S642 . 1 `uc 1 WPUA0 1 0 :1:0 
+[s S709 . 1 `uc 1 WPUA0 1 0 :1:0 
 `uc 1 WPUA1 1 0 :1:1 
 `uc 1 WPUA2 1 0 :1:2 
 `uc 1 WPUA3 1 0 :1:3 
@@ -283,13 +283,13 @@
 `uc 1 WPUA5 1 0 :1:5 
 ]
 "3734
-[u S649 . 1 `S642 1 . 1 0 ]
-[v _WPUAbits WPUAbits `VES649  1 e 1 @524 ]
+[u S716 . 1 `S709 1 . 1 0 ]
+[v _WPUAbits WPUAbits `VES716  1 e 1 @524 ]
 "3769
 [v _WPUC WPUC `VEuc  1 e 1 @526 ]
 "3819
 [v _SSP1BUF SSP1BUF `VEuc  1 e 1 @529 ]
-[s S173 . 1 `uc 1 BF 1 0 :1:0 
+[s S156 . 1 `uc 1 BF 1 0 :1:0 
 `uc 1 UA 1 0 :1:1 
 `uc 1 R_nW 1 0 :1:2 
 `uc 1 S 1 0 :1:3 
@@ -299,25 +299,25 @@
 `uc 1 SMP 1 0 :1:7 
 ]
 "4603
-[u S182 . 1 `S173 1 . 1 0 ]
-[v _SSP1STATbits SSP1STATbits `VES182  1 e 1 @532 ]
-[s S87 . 1 `uc 1 SSPM 1 0 :4:0 
+[u S165 . 1 `S156 1 . 1 0 ]
+[v _SSP1STATbits SSP1STATbits `VES165  1 e 1 @532 ]
+[s S70 . 1 `uc 1 SSPM 1 0 :4:0 
 `uc 1 CKP 1 0 :1:4 
 `uc 1 SSPEN 1 0 :1:5 
 `uc 1 SSPOV 1 0 :1:6 
 `uc 1 WCOL 1 0 :1:7 
 ]
 "4736
-[s S93 . 1 `uc 1 SSPM0 1 0 :1:0 
+[s S76 . 1 `uc 1 SSPM0 1 0 :1:0 
 `uc 1 SSPM1 1 0 :1:1 
 `uc 1 SSPM2 1 0 :1:2 
 `uc 1 SSPM3 1 0 :1:3 
 ]
-[u S98 . 1 `S87 1 . 1 0 `S93 1 . 1 0 ]
-[v _SSP1CON1bits SSP1CON1bits `VES98  1 e 1 @533 ]
+[u S81 . 1 `S70 1 . 1 0 `S76 1 . 1 0 ]
+[v _SSP1CON1bits SSP1CON1bits `VES81  1 e 1 @533 ]
 "5925
 [v _ODCONA ODCONA `VEuc  1 e 1 @652 ]
-[s S659 . 1 `uc 1 ODCA0 1 0 :1:0 
+[s S726 . 1 `uc 1 ODCA0 1 0 :1:0 
 `uc 1 ODCA1 1 0 :1:1 
 `uc 1 ODCA2 1 0 :1:2 
 `uc 1 . 1 0 :1:3 
@@ -325,19 +325,41 @@
 `uc 1 ODCA5 1 0 :1:5 
 ]
 "5940
-[u S666 . 1 `S659 1 . 1 0 ]
-[v _ODCONAbits ODCONAbits `VES666  1 e 1 @652 ]
+[u S733 . 1 `S726 1 . 1 0 ]
+[v _ODCONAbits ODCONAbits `VES733  1 e 1 @652 ]
 "5970
 [v _ODCONC ODCONC `VEuc  1 e 1 @654 ]
 "6835
 [v _INLVLA INLVLA `VEuc  1 e 1 @908 ]
 "6885
 [v _INLVLC INLVLC `VEuc  1 e 1 @910 ]
-[s S585 . 1 `uc 1 NDIV 1 0 :4:0 
+"10236
+[v _NVMADRL NVMADRL `VEuc  1 e 1 @2193 ]
+"10488
+[v _NVMADRH NVMADRH `VEuc  1 e 1 @2194 ]
+"10738
+[v _NVMDATL NVMDATL `VEuc  1 e 1 @2195 ]
+[s S1429 . 1 `uc 1 RD 1 0 :1:0 
+`uc 1 WR 1 0 :1:1 
+`uc 1 WREN 1 0 :1:2 
+`uc 1 WRERR 1 0 :1:3 
+`uc 1 FREE 1 0 :1:4 
+`uc 1 LWLO 1 0 :1:5 
+`uc 1 NVMREGS 1 0 :1:6 
+]
+"11235
+[s S1437 . 1 `uc 1 . 1 0 :6:0 
+`uc 1 CFGS 1 0 :1:6 
+]
+[u S1440 . 1 `S1429 1 . 1 0 `S1437 1 . 1 0 ]
+[v _NVMCON1bits NVMCON1bits `VES1440  1 e 1 @2197 ]
+"11395
+[v _NVMCON2 NVMCON2 `VEuc  1 e 1 @2198 ]
+[s S647 . 1 `uc 1 NDIV 1 0 :4:0 
 `uc 1 NOSC 1 0 :3:4 
 ]
 "11926
-[s S588 . 1 `uc 1 NDIV0 1 0 :1:0 
+[s S650 . 1 `uc 1 NDIV0 1 0 :1:0 
 `uc 1 NDIV1 1 0 :1:1 
 `uc 1 NDIV2 1 0 :1:2 
 `uc 1 NDIV3 1 0 :1:3 
@@ -345,41 +367,41 @@
 `uc 1 NOSC1 1 0 :1:5 
 `uc 1 NOSC2 1 0 :1:6 
 ]
-[u S596 . 1 `S585 1 . 1 0 `S588 1 . 1 0 ]
-[v _OSCCON1bits OSCCON1bits `VES596  1 e 1 @2329 ]
-[s S153 . 1 `uc 1 RC0PPS 1 0 :5:0 
+[u S658 . 1 `S647 1 . 1 0 `S650 1 . 1 0 ]
+[v _OSCCON1bits OSCCON1bits `VES658  1 e 1 @2329 ]
+[s S136 . 1 `uc 1 RC0PPS 1 0 :5:0 
 ]
 "13970
-[s S155 . 1 `uc 1 RC0PPS0 1 0 :1:0 
+[s S138 . 1 `uc 1 RC0PPS0 1 0 :1:0 
 `uc 1 RC0PPS1 1 0 :1:1 
 `uc 1 RC0PPS2 1 0 :1:2 
 `uc 1 RC0PPS3 1 0 :1:3 
 `uc 1 RC0PPS4 1 0 :1:4 
 ]
-[u S161 . 1 `S153 1 . 1 0 `S155 1 . 1 0 ]
-[v _RC0PPSbits RC0PPSbits `VES161  1 e 1 @3744 ]
-[s S113 . 1 `uc 1 RC1PPS 1 0 :5:0 
+[u S144 . 1 `S136 1 . 1 0 `S138 1 . 1 0 ]
+[v _RC0PPSbits RC0PPSbits `VES144  1 e 1 @3744 ]
+[s S96 . 1 `uc 1 RC1PPS 1 0 :5:0 
 ]
 "14022
-[s S115 . 1 `uc 1 RC1PPS0 1 0 :1:0 
+[s S98 . 1 `uc 1 RC1PPS0 1 0 :1:0 
 `uc 1 RC1PPS1 1 0 :1:1 
 `uc 1 RC1PPS2 1 0 :1:2 
 `uc 1 RC1PPS3 1 0 :1:3 
 `uc 1 RC1PPS4 1 0 :1:4 
 ]
-[u S121 . 1 `S113 1 . 1 0 `S115 1 . 1 0 ]
-[v _RC1PPSbits RC1PPSbits `VES121  1 e 1 @3745 ]
-[s S133 . 1 `uc 1 RC2PPS 1 0 :5:0 
+[u S104 . 1 `S96 1 . 1 0 `S98 1 . 1 0 ]
+[v _RC1PPSbits RC1PPSbits `VES104  1 e 1 @3745 ]
+[s S116 . 1 `uc 1 RC2PPS 1 0 :5:0 
 ]
 "14074
-[s S135 . 1 `uc 1 RC2PPS0 1 0 :1:0 
+[s S118 . 1 `uc 1 RC2PPS0 1 0 :1:0 
 `uc 1 RC2PPS1 1 0 :1:1 
 `uc 1 RC2PPS2 1 0 :1:2 
 `uc 1 RC2PPS3 1 0 :1:3 
 `uc 1 RC2PPS4 1 0 :1:4 
 ]
-[u S141 . 1 `S133 1 . 1 0 `S135 1 . 1 0 ]
-[v _RC2PPSbits RC2PPSbits `VES141  1 e 1 @3746 ]
+[u S124 . 1 `S116 1 . 1 0 `S118 1 . 1 0 ]
+[v _RC2PPSbits RC2PPSbits `VES124  1 e 1 @3746 ]
 "358 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\doprnt.c
 [v _dpowers dpowers `DC[10]ul  1 s 40 dpowers ]
 [s S22 . 28 `uc 1 check 1 0 `[16]uc 1 name 16 1 `ui 1 bootMode 2 17 `f 1 tempCalVf 3 19 `f 1 tempCalTc 3 22 `f 1 tempCalOffset 3 25 ]
@@ -389,40 +411,39 @@
 [u S33 . 28 `S29 1 . 28 0 `S31 1 . 28 0 ]
 [v _romDataMap romDataMap `S33  1 e 28 0 ]
 "32
-[v _romData romData `*.6S22  1 e 1 0 ]
-"3 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+[v _romData romData `*.5S22  1 e 1 0 ]
+"4 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
 [v _n_ADDRESS_P0 n_ADDRESS_P0 `DC[5]uc  1 e 5 0 ]
-"4
+"5
 [v _n_ADDRESS_MUL n_ADDRESS_MUL `DCuc  1 e 1 0 ]
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
+[s S379 . 1 `uc 1 byte 1 0 :8:0 
 ]
-"6
-[s S478 . 1 `uc 1 RPD 1 0 :1:0 
+"7
+[s S534 . 1 `uc 1 RPD 1 0 :1:0 
 `uc 1 ACKRPD 1 0 :1:1 
 `uc 1 ACKRequest 1 0 :1:2 
 `uc 1 IsACK 1 0 :1:3 
 `uc 1 Pipe 1 0 :3:4 
 ]
-[u S484 . 1 `S476 1 . 1 0 `S478 1 . 1 0 ]
-[s S487 . 33 `S484 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
-[v _TXPacket TXPacket `S487  1 e 33 0 ]
-"7
-[v _RXPacket RXPacket `S487  1 e 33 0 ]
-[s S913 . 4 `uc 1 Idle 1 0 `uc 1 Ready 1 1 `uc 1 Sending 1 2 `uc 1 PendingACK 1 3 ]
-"39
-[s S918 . 6 `uc 1 Idle 1 0 `uc 1 Pending 1 1 `uc 1 Ready 1 2 `uc 1 CheckACKIn 1 3 `uc 1 CheckACKOut 1 4 `uc 1 UserProcess 1 5 ]
-[s S925 . 10 `S913 1 TX 4 0 `S918 1 RX 6 4 ]
-[v _statuses statuses `DCS925  1 s 10 statuses ]
-"44
-[s S930 . 1 `uc 1 TX_FULL 1 0 :1:0 
+[u S540 . 1 `S379 1 . 1 0 `S534 1 . 1 0 ]
+[s S543 . 33 `S540 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
+[v _TXPacket TXPacket `S543  1 e 33 0 ]
+"8
+[v _RXPacket RXPacket `S543  1 e 33 0 ]
+"9
+[v _lastTXPacket lastTXPacket `*.5S543  1 e 1 0 ]
+"11 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.h
+[v _counter counter `ul  1 e 4 0 ]
+"21
+[s S381 . 1 `uc 1 TX_FULL 1 0 :1:0 
 `uc 1 RX_P_NO 1 0 :3:1 
 `uc 1 MAX_RT 1 0 :1:4 
 `uc 1 TX_DS 1 0 :1:5 
 `uc 1 RX_DR 1 0 :1:6 
 `uc 1 Reserved 1 0 :1:7 
 ]
-[u S937 . 1 `S476 1 . 1 0 `S930 1 . 1 0 ]
-[s S942 . 1 `uc 1 PRIM_RX 1 0 :1:0 
+[u S388 . 1 `S379 1 . 1 0 `S381 1 . 1 0 ]
+[s S393 . 1 `uc 1 PRIM_RX 1 0 :1:0 
 `uc 1 PWR_UP 1 0 :1:1 
 `uc 1 CRCO 1 0 :1:2 
 `uc 1 EN_CRC 1 0 :1:3 
@@ -431,51 +452,47 @@
 `uc 1 MASK_RX_DR 1 0 :1:6 
 `uc 1 Reserved 1 0 :1:7 
 ]
-[u S951 . 1 `S476 1 . 1 0 `S942 1 . 1 0 ]
-[s S954 . 4 `uc 1 TX 1 0 :4:0 
-`uc 1 RX 1 0 :4:4 
-`S937 1 statusRegister 1 1 `S951 1 configRegister 1 2 `uc 1 retryCount 1 3 ]
-[v _status status `VES954  1 e 4 0 ]
-"11 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.h
-[v _counter counter `ul  1 e 4 0 ]
-"147 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
+[u S402 . 1 `S379 1 . 1 0 `S393 1 . 1 0 ]
+[s S405 . 5 `uc 1 TX 1 0 `uc 1 RX 1 1 `S388 1 statusRegister 1 2 `S402 1 configRegister 1 3 `uc 1 retryCount 1 4 ]
+[v _status status `VES405  1 e 5 0 ]
+"152 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
 [v _main main `(v  1 e 1 0 ]
 {
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
+[s S379 . 1 `uc 1 byte 1 0 :8:0 
 ]
-"239
-[s S478 . 1 `uc 1 RPD 1 0 :1:0 
+"244
+[s S534 . 1 `uc 1 RPD 1 0 :1:0 
 `uc 1 ACKRPD 1 0 :1:1 
 `uc 1 ACKRequest 1 0 :1:2 
 `uc 1 IsACK 1 0 :1:3 
 `uc 1 Pipe 1 0 :3:4 
 ]
-[u S484 . 1 `S476 1 . 1 0 `S478 1 . 1 0 ]
-[s S487 . 33 `S484 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
-[v main@packet packet `S487  1 a 33 38 ]
-"189
-[v main@pipe pipe `uc  1 a 1 37 ]
-"248
+[u S540 . 1 `S379 1 . 1 0 `S534 1 . 1 0 ]
+[s S543 . 33 `S540 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
+[v main@packet packet `S543  1 a 33 28 ]
+"194
+[v main@pipe pipe `uc  1 a 1 27 ]
+"259
 } 0
-"499 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+"461 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
 [v _nrf24l01Init nrf24l01Init `(v  1 e 1 0 ]
 {
-"519
+"481
 } 0
-"27 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\interface.c
+"8 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\interface.c
 [v _nrf24l01InterfaceInit nrf24l01InterfaceInit `(v  1 e 1 0 ]
 {
-"48
+"29
 } 0
-"399 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+"361 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
 [v _nrf24l01InitRegisters nrf24l01InitRegisters `(v  1 e 1 0 ]
 {
-"457
-[v nrf24l01InitRegisters@i i `ui  1 a 2 15 ]
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
+"419
+[v nrf24l01InitRegisters@i i `ui  1 a 2 14 ]
+[s S379 . 1 `uc 1 byte 1 0 :8:0 
 ]
-"446
-[s S1049 . 1 `uc 1 DPL_P0 1 0 :1:0 
+"408
+[s S1140 . 1 `uc 1 DPL_P0 1 0 :1:0 
 `uc 1 DPL_P1 1 0 :1:1 
 `uc 1 DPL_P2 1 0 :1:2 
 `uc 1 DPL_P3 1 0 :1:3 
@@ -483,10 +500,10 @@
 `uc 1 DPL_P5 1 0 :1:5 
 `uc 1 Reserved 1 0 :2:6 
 ]
-[u S1057 . 1 `S476 1 . 1 0 `S1049 1 . 1 0 ]
-[v nrf24l01InitRegisters@DynPD DynPD `S1057  1 a 1 14 ]
-"428
-[s S1026 . 1 `uc 1 ENAA_P0 1 0 :1:0 
+[u S1148 . 1 `S379 1 . 1 0 `S1140 1 . 1 0 ]
+[v nrf24l01InitRegisters@DynPD DynPD `S1148  1 a 1 13 ]
+"390
+[s S1117 . 1 `uc 1 ENAA_P0 1 0 :1:0 
 `uc 1 ENAA_P1 1 0 :1:1 
 `uc 1 ENAA_P2 1 0 :1:2 
 `uc 1 ENAA_P3 1 0 :1:3 
@@ -494,10 +511,10 @@
 `uc 1 ENAA_P5 1 0 :1:5 
 `uc 1 Reserved 1 0 :2:6 
 ]
-[u S1034 . 1 `S476 1 . 1 0 `S1026 1 . 1 0 ]
-[v nrf24l01InitRegisters@enAA enAA `S1034  1 a 1 13 ]
-"417
-[s S522 . 1 `uc 1 Obsolete 1 0 :1:0 
+[u S1125 . 1 `S379 1 . 1 0 `S1117 1 . 1 0 ]
+[v nrf24l01InitRegisters@enAA enAA `S1125  1 a 1 12 ]
+"379
+[s S584 . 1 `uc 1 Obsolete 1 0 :1:0 
 `uc 1 RF_PWR 1 0 :2:1 
 `uc 1 RF_DR_HIGH 1 0 :1:3 
 `uc 1 PLL_LOCK 1 0 :1:4 
@@ -505,60 +522,60 @@
 `uc 1 Reserved 1 0 :1:6 
 `uc 1 CONT_WAVE 1 0 :1:7 
 ]
-[u S530 . 1 `S476 1 . 1 0 `S522 1 . 1 0 ]
-[v nrf24l01InitRegisters@rfSetup rfSetup `S530  1 a 1 12 ]
-"440
-[s S1039 . 1 `uc 1 EN_DYN_ACK 1 0 :1:0 
+[u S592 . 1 `S379 1 . 1 0 `S584 1 . 1 0 ]
+[v nrf24l01InitRegisters@rfSetup rfSetup `S592  1 a 1 11 ]
+"402
+[s S1130 . 1 `uc 1 EN_DYN_ACK 1 0 :1:0 
 `uc 1 EN_ACK_PAY 1 0 :1:1 
 `uc 1 EN_DPL 1 0 :1:2 
 `uc 1 Reserved 1 0 :5:3 
 ]
-[u S1044 . 1 `S476 1 . 1 0 `S1039 1 . 1 0 ]
-[v nrf24l01InitRegisters@feature feature `S1044  1 a 1 11 ]
-"406
-[s S1010 . 1 `uc 1 AW 1 0 :2:0 
+[u S1135 . 1 `S379 1 . 1 0 `S1130 1 . 1 0 ]
+[v nrf24l01InitRegisters@feature feature `S1135  1 a 1 10 ]
+"368
+[s S1101 . 1 `uc 1 AW 1 0 :2:0 
 `uc 1 Reserved 1 0 :6:2 
 ]
-[u S1013 . 1 `S476 1 . 1 0 `S1010 1 . 1 0 ]
-[v nrf24l01InitRegisters@setupAW setupAW `S1013  1 a 1 10 ]
-"412
-[s S1018 . 1 `uc 1 RF_CH 1 0 :7:0 
+[u S1104 . 1 `S379 1 . 1 0 `S1101 1 . 1 0 ]
+[v nrf24l01InitRegisters@setupAW setupAW `S1104  1 a 1 9 ]
+"374
+[s S1109 . 1 `uc 1 RF_CH 1 0 :7:0 
 `uc 1 Reserved 1 0 :1:7 
 ]
-[u S1021 . 1 `S476 1 . 1 0 `S1018 1 . 1 0 ]
-[v nrf24l01InitRegisters@channel channel `S1021  1 a 1 9 ]
-"497
+[u S1112 . 1 `S379 1 . 1 0 `S1109 1 . 1 0 ]
+[v nrf24l01InitRegisters@channel channel `S1112  1 a 1 8 ]
+"459
 } 0
-"183
+"141
 [v _nrf24l01SetTXPipe nrf24l01SetTXPipe `(v  1 e 1 0 ]
 {
 [v nrf24l01SetTXPipe@pipe pipe `uc  1 a 1 wreg ]
 [v nrf24l01SetTXPipe@pipe pipe `uc  1 a 1 wreg ]
-"186
+"144
 [v nrf24l01SetTXPipe@pipe pipe `uc  1 a 1 6 ]
-"194
+"152
 } 0
 "4 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\Umul8.c
 [v ___bmul __bmul `(uc  1 e 1 0 ]
 {
 [v ___bmul@multiplier multiplier `uc  1 a 1 wreg ]
 "6
-[v ___bmul@product product `uc  1 a 1 2 ]
+[v ___bmul@product product `uc  1 a 1 1 ]
 "4
 [v ___bmul@multiplier multiplier `uc  1 a 1 wreg ]
 [v ___bmul@multiplicand multiplicand `uc  1 p 1 0 ]
 "6
-[v ___bmul@multiplier multiplier `uc  1 a 1 3 ]
+[v ___bmul@multiplier multiplier `uc  1 a 1 2 ]
 "51
 } 0
-"196 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+"154 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
 [v _nrf24l01SetRXPipe nrf24l01SetRXPipe `(v  1 e 1 0 ]
 {
 [v nrf24l01SetRXPipe@pipe pipe `uc  1 a 1 wreg ]
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
+[s S379 . 1 `uc 1 byte 1 0 :8:0 
 ]
-"198
-[s S983 . 1 `uc 1 ERX_P0 1 0 :1:0 
+"156
+[s S1074 . 1 `uc 1 ERX_P0 1 0 :1:0 
 `uc 1 ERX_P1 1 0 :1:1 
 `uc 1 ERX_P2 1 0 :1:2 
 `uc 1 ERX_P3 1 0 :1:3 
@@ -566,58 +583,58 @@
 `uc 1 ERX_P5 1 0 :1:5 
 `uc 1 Reserved 1 0 :2:6 
 ]
-[u S991 . 1 `S476 1 . 1 0 `S983 1 . 1 0 ]
-[v nrf24l01SetRXPipe@enRXAddr enRXAddr `S991  1 a 1 6 ]
-"196
+[u S1082 . 1 `S379 1 . 1 0 `S1074 1 . 1 0 ]
+[v nrf24l01SetRXPipe@enRXAddr enRXAddr `S1082  1 a 1 2 ]
+"154
 [v nrf24l01SetRXPipe@pipe pipe `uc  1 a 1 wreg ]
-"200
-[v nrf24l01SetRXPipe@pipe pipe `uc  1 a 1 5 ]
-"215
+"158
+[v nrf24l01SetRXPipe@pipe pipe `uc  1 a 1 1 ]
+"173
 } 0
-"135 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
+"140 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
 [v _nrf24l01GetPipe nrf24l01GetPipe `(uc  1 e 1 0 ]
 {
-[v nrf24l01GetPipe@name name `*.6uc  1 a 1 wreg ]
-"137
+[v nrf24l01GetPipe@name name `*.5uc  1 a 1 wreg ]
+"142
 [v nrf24l01GetPipe@i i `uc  1 a 1 10 ]
-"136
+"141
 [v nrf24l01GetPipe@pipe pipe `uc  1 a 1 8 ]
-"135
-[v nrf24l01GetPipe@name name `*.6uc  1 a 1 wreg ]
-[v nrf24l01GetPipe@name name `*.6uc  1 a 1 9 ]
-"145
+"140
+[v nrf24l01GetPipe@name name `*.5uc  1 a 1 wreg ]
+[v nrf24l01GetPipe@name name `*.5uc  1 a 1 9 ]
+"150
 } 0
 "5 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwmod.c
 [v ___lwmod __lwmod `(ui  1 e 2 0 ]
 {
 "10
-[v ___lwmod@counter counter `uc  1 a 1 5 ]
+[v ___lwmod@counter counter `uc  1 a 1 6 ]
 "5
 [v ___lwmod@divisor divisor `ui  1 p 2 0 ]
 [v ___lwmod@dividend dividend `ui  1 p 2 2 ]
 "25
 } 0
-"93 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
+"97 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
 [v _loop loop `(v  1 e 1 0 ]
 {
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
+[s S379 . 1 `uc 1 byte 1 0 :8:0 
 ]
-"95
-[s S478 . 1 `uc 1 RPD 1 0 :1:0 
+"99
+[s S534 . 1 `uc 1 RPD 1 0 :1:0 
 `uc 1 ACKRPD 1 0 :1:1 
 `uc 1 ACKRequest 1 0 :1:2 
 `uc 1 IsACK 1 0 :1:3 
 `uc 1 Pipe 1 0 :3:4 
 ]
-[u S484 . 1 `S476 1 . 1 0 `S478 1 . 1 0 ]
-[s S487 . 33 `S484 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
-[v loop@packet packet `S487  1 a 33 16 ]
-"121
+[u S540 . 1 `S379 1 . 1 0 `S534 1 . 1 0 ]
+[s S543 . 33 `S540 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
+[v loop@packet packet `S543  1 a 33 16 ]
+"126
 [v loop@ta ta `f  1 a 3 3 ]
-"115
+"120
 [v loop@vt vt `f  1 a 3 0 ]
-"127
-[s S522 . 1 `uc 1 Obsolete 1 0 :1:0 
+"132
+[s S584 . 1 `uc 1 Obsolete 1 0 :1:0 
 `uc 1 RF_PWR 1 0 :2:1 
 `uc 1 RF_DR_HIGH 1 0 :1:3 
 `uc 1 PLL_LOCK 1 0 :1:4 
@@ -625,167 +642,190 @@
 `uc 1 Reserved 1 0 :1:6 
 `uc 1 CONT_WAVE 1 0 :1:7 
 ]
-[u S530 . 1 `S476 1 . 1 0 `S522 1 . 1 0 ]
-[v loop@rfSetup rfSetup `S530  1 a 1 15 ]
-"133
+[u S592 . 1 `S379 1 . 1 0 `S584 1 . 1 0 ]
+[v loop@rfSetup rfSetup `S592  1 a 1 15 ]
+"138
 } 0
-"73
+"77
 [v _sendMessage sendMessage `(v  1 e 1 0 ]
 {
-"75
-[v sendMessage@status status `i  1 a 2 33 ]
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
+"79
+[v sendMessage@ftoaStatus ftoaStatus `i  1 a 2 24 ]
+[s S379 . 1 `uc 1 byte 1 0 :8:0 
 ]
-"73
-[s S478 . 1 `uc 1 RPD 1 0 :1:0 
+"77
+[s S534 . 1 `uc 1 RPD 1 0 :1:0 
 `uc 1 ACKRPD 1 0 :1:1 
 `uc 1 ACKRequest 1 0 :1:2 
 `uc 1 IsACK 1 0 :1:3 
 `uc 1 Pipe 1 0 :3:4 
 ]
-[u S484 . 1 `S476 1 . 1 0 `S478 1 . 1 0 ]
-[s S487 . 33 `S484 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
-[v sendMessage@packet packet `*.39S487  1 p 2 25 ]
-[v sendMessage@topic topic `*.25DCuc  1 p 2 27 ]
-[v sendMessage@value value `f  1 p 3 29 ]
-"90
+[u S540 . 1 `S379 1 . 1 0 `S534 1 . 1 0 ]
+[s S543 . 33 `S540 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
+[v sendMessage@packet packet `*.39S543  1 p 2 17 ]
+[v sendMessage@topic topic `*.25DCuc  1 p 2 19 ]
+[v sendMessage@value value `f  1 p 3 21 ]
+"94
 } 0
 "8 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcat.c
 [v _strcat strcat `(*.39uc  1 e 1 0 ]
 {
 "15
-[v strcat@cp cp `*.39uc  1 a 2 23 ]
+[v strcat@cp cp `*.39uc  1 a 2 66 ]
 "8
-[v strcat@to to `*.39uc  1 p 2 19 ]
-[v strcat@from from `*.26DCuc  1 p 2 21 ]
+[v strcat@to to `*.39uc  1 p 2 13 ]
+[v strcat@from from `*.26DCuc  1 p 2 15 ]
 "26
 } 0
-"61 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
+"64 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
 [v _sleepListren sleepListren `(v  1 e 1 0 ]
 {
-[v sleepListren@seconds seconds `ui  1 p 2 5 ]
-"72
+[v sleepListren@seconds seconds `ui  1 p 2 6 ]
+"76
 } 0
-"220 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+"177 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
 [v _nrf24l01SendPacket nrf24l01SendPacket `(v  1 e 1 0 ]
 {
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
+[s S379 . 1 `uc 1 byte 1 0 :8:0 
 ]
-[s S478 . 1 `uc 1 RPD 1 0 :1:0 
+[s S534 . 1 `uc 1 RPD 1 0 :1:0 
 `uc 1 ACKRPD 1 0 :1:1 
 `uc 1 ACKRequest 1 0 :1:2 
 `uc 1 IsACK 1 0 :1:3 
 `uc 1 Pipe 1 0 :3:4 
 ]
-[u S484 . 1 `S476 1 . 1 0 `S478 1 . 1 0 ]
-[s S487 . 33 `S484 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
-[v nrf24l01SendPacket@txPacket txPacket `*.39S487  1 p 2 13 ]
-"231
+[u S540 . 1 `S379 1 . 1 0 `S534 1 . 1 0 ]
+[s S543 . 33 `S540 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
+[v nrf24l01SendPacket@txPacket txPacket `*.39S543  1 p 2 8 ]
+"188
 } 0
 "8 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcpy.c
 [v _strcpy strcpy `(*.39uc  1 e 1 0 ]
 {
 "15
-[v strcpy@cp cp `*.39uc  1 a 2 4 ]
+[v strcpy@cp cp `*.39uc  1 a 2 6 ]
 "8
 [v strcpy@to to `*.39uc  1 p 2 0 ]
 [v strcpy@from from `*.26DCuc  1 p 2 2 ]
 "24
 } 0
-"297 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
-[v _nrf24l01Service nrf24l01Service `(v  1 e 1 0 ]
+"268 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+[v _nrf24l01Service nrf24l01Service `R(v  1 e 1 0 ]
 {
-"321
-[v nrf24l01Service@width width `uc  1 a 1 11 ]
-"299
-[v nrf24l01Service@i i `uc  1 a 1 12 ]
-"397
-} 0
+"292
+[v nrf24l01Service@width width `uc  1 a 1 0 ]
+"270
+[v nrf24l01Service@i i `uc  1 a 1 1 ]
+"359
+} 2
 "33 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcmp.c
-[v _strcmp strcmp `(i  1 e 2 0 ]
+[v _strcmp strcmp `R(i  1 e 2 0 ]
 {
 [v strcmp@s1 s1 `*.5DCuc  1 a 1 wreg ]
 "35
-[v strcmp@r r `c  1 a 1 3 ]
+[v strcmp@r r `c  1 a 1 1 ]
 "33
 [v strcmp@s1 s1 `*.5DCuc  1 a 1 wreg ]
-[v strcmp@s2 s2 `*.5DCuc  1 p 1 0 ]
-[v strcmp@s1 s1 `*.5DCuc  1 a 1 4 ]
+[v strcmp@s2 s2 `*.5DCuc  1 p 1 -1 ]
+[v strcmp@s1 s1 `*.5DCuc  1 a 1 0 ]
 "42
-} 0
-"273 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
-[v _nrf24l01SetTXBuffer nrf24l01SetTXBuffer `(v  1 e 1 0 ]
+} 2
+"232 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+[v _nrf24l01SendTXBuffer nrf24l01SendTXBuffer `R(v  1 e 1 0 ]
 {
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
+[s S379 . 1 `uc 1 byte 1 0 :8:0 
 ]
-[s S478 . 1 `uc 1 RPD 1 0 :1:0 
+[s S534 . 1 `uc 1 RPD 1 0 :1:0 
 `uc 1 ACKRPD 1 0 :1:1 
 `uc 1 ACKRequest 1 0 :1:2 
 `uc 1 IsACK 1 0 :1:3 
 `uc 1 Pipe 1 0 :3:4 
 ]
-[u S484 . 1 `S476 1 . 1 0 `S478 1 . 1 0 ]
-[s S487 . 33 `S484 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
-[v nrf24l01SetTXBuffer@txPacket txPacket `*.5S487  1 a 1 wreg ]
-"275
-[v nrf24l01SetTXBuffer@i i `uc  1 a 1 9 ]
-"273
-[v nrf24l01SetTXBuffer@txPacket txPacket `*.5S487  1 a 1 wreg ]
-"278
-"273
-[v nrf24l01SetTXBuffer@txPacket txPacket `*.5S487  1 a 1 8 ]
-"295
-} 0
+[u S540 . 1 `S379 1 . 1 0 `S534 1 . 1 0 ]
+[s S543 . 33 `S540 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
+[v nrf24l01SendTXBuffer@packet packet `*.5S543  1 a 1 wreg ]
+"236
+[v nrf24l01SendTXBuffer@i i `uc  1 a 1 1 ]
+"251
+[v nrf24l01SendTXBuffer@width width `uc  1 a 1 2 ]
+"232
+[v nrf24l01SendTXBuffer@packet packet `*.5S543  1 a 1 wreg ]
+"234
+"232
+[v nrf24l01SendTXBuffer@packet packet `*.5S543  1 a 1 0 ]
+"264
+} 3
 "4 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c
-[v _strlen strlen `(ui  1 e 2 0 ]
+[v _strlen strlen `R(ui  1 e 2 0 ]
 {
+[v strlen@s s `*.5DCuc  1 a 1 wreg ]
 "6
-[v strlen@cp cp `*.39DCuc  1 a 2 4 ]
+[v strlen@cp cp `*.5DCuc  1 a 1 1 ]
 "4
-[v strlen@s s `*.39DCuc  1 p 2 0 ]
+[v strlen@s s `*.5DCuc  1 a 1 wreg ]
+"8
+[v strlen@s s `*.5DCuc  1 a 1 0 ]
 "13
-} 0
-"91 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
-[v _nrf24l01SetRXMode nrf24l01SetRXMode `(v  1 e 1 0 ]
+} 2
+"51 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+[v _nrf24l01SetRXMode nrf24l01SetRXMode `R(v  1 e 1 0 ]
 {
 [v nrf24l01SetRXMode@rxMode rxMode `uc  1 a 1 wreg ]
 [v nrf24l01SetRXMode@rxMode rxMode `uc  1 a 1 wreg ]
-"111
-[v nrf24l01SetRXMode@rxMode rxMode `uc  1 a 1 4 ]
-"130
-} 0
-"46
-[v _nrf24l01Send nrf24l01Send `(uc  1 e 1 0 ]
+"54
+[v nrf24l01SetRXMode@rxMode rxMode `uc  1 a 1 0 ]
+"90
+} 1
+"12
+[v _nrf24l01Send nrf24l01Send `R(uc  1 e 1 0 ]
 {
 [v nrf24l01Send@command command `uc  1 a 1 wreg ]
 [v nrf24l01Send@command command `uc  1 a 1 wreg ]
-[v nrf24l01Send@data data `uc  1 p 1 0 ]
-"49
-[v nrf24l01Send@command command `uc  1 a 1 2 ]
-"67
+[v nrf24l01Send@data data `uc  1 p 1 -1 ]
+"15
+[v nrf24l01Send@command command `uc  1 a 1 0 ]
+"27
+} 1
+"68 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\interface.c
+[v _nrf24l01SPIStart nrf24l01SPIStart `R(v  1 e 1 0 ]
+{
+"72
+} 0
+"56
+[v _nrf24l01SPISend nrf24l01SPISend `R(uc  1 e 1 0 ]
+{
+[v nrf24l01SPISend@data data `uc  1 a 1 wreg ]
+[v nrf24l01SPISend@data data `uc  1 a 1 wreg ]
+[v nrf24l01SPISend@data data `uc  1 a 1 0 ]
+"66
+} 1
+"74
+[v _nrf24l01SPIEnd nrf24l01SPIEnd `R(v  1 e 1 0 ]
+{
+"78
 } 0
 "8 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c
-[v _memset memset `(*.39v  1 e 1 0 ]
+[v _memset memset `R(*.39v  1 e 1 0 ]
 {
 "15
-[v memset@p p `*.39uc  1 a 2 6 ]
+[v memset@p p `*.39uc  1 a 2 0 ]
 "8
-[v memset@p1 p1 `*.39v  1 p 2 0 ]
-[v memset@c c `i  1 p 2 2 ]
-[v memset@n n `ui  1 p 2 4 ]
+[v memset@p1 p1 `*.39v  1 p 2 -2 ]
+[v memset@c c `i  1 p 2 -4 ]
+[v memset@n n `ui  1 p 2 -6 ]
 "22
-} 0
+} 2
 "6 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftoa.c
 [v _ftoa ftoa `(*.5uc  1 e 1 0 ]
 {
 "10
-[v ftoa@l l `ul  1 a 4 14 ]
-[v ftoa@rem rem `ul  1 a 4 10 ]
+[v ftoa@l l `ul  1 a 4 8 ]
+[v ftoa@rem rem `ul  1 a 4 4 ]
 "9
-[v ftoa@cp cp `*.5uc  1 a 1 18 ]
+[v ftoa@cp cp `*.5uc  1 a 1 12 ]
 "6
-[v ftoa@f f `f  1 p 3 6 ]
-[v ftoa@status status `*.4i  1 p 1 9 ]
+[v ftoa@f f `f  1 p 3 0 ]
+[v ftoa@status status `*.4i  1 p 1 3 ]
 "8
 [v ftoa@buf buf `[17]uc  1 s 17 buf ]
 "21
@@ -795,22 +835,22 @@
 {
 [v sprintf@sp sp `*.5uc  1 a 1 wreg ]
 "540
-[v sprintf@val val `ul  1 a 4 42 ]
+[v sprintf@val val `ul  1 a 4 43 ]
 "512
-[v sprintf@prec prec `i  1 a 2 49 ]
+[v sprintf@prec prec `i  1 a 2 50 ]
 "509
-[v sprintf@width width `i  1 a 2 47 ]
+[v sprintf@width width `i  1 a 2 48 ]
 "507
-[v sprintf@c c `uc  1 a 1 51 ]
+[v sprintf@c c `uc  1 a 1 52 ]
 "502
-[v sprintf@ap ap `[1]*.4v  1 a 1 41 ]
+[v sprintf@ap ap `[1]*.4v  1 a 1 42 ]
 "520
-[v sprintf@flag flag `uc  1 a 1 40 ]
+[v sprintf@flag flag `uc  1 a 1 41 ]
 "500
 [v sprintf@sp sp `*.5uc  1 a 1 wreg ]
-[v sprintf@f f `*.25DCuc  1 p 2 24 ]
+[v sprintf@f f `*.25DCuc  1 p 2 27 ]
 "545
-[v sprintf@sp sp `*.5uc  1 a 1 46 ]
+[v sprintf@sp sp `*.5uc  1 a 1 47 ]
 "1560
 } 0
 "8 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\isdigit.c
@@ -826,7 +866,7 @@
 [v ___wmul __wmul `(ui  1 e 2 0 ]
 {
 "17
-[v ___wmul@product product `ui  1 a 2 4 ]
+[v ___wmul@product product `ui  1 a 2 6 ]
 "15
 [v ___wmul@multiplier multiplier `ui  1 p 2 0 ]
 [v ___wmul@multiplicand multiplicand `ui  1 p 2 2 ]
@@ -836,135 +876,140 @@
 [v ___llmod __llmod `(ul  1 e 4 0 ]
 {
 "10
-[v ___llmod@counter counter `uc  1 a 1 23 ]
+[v ___llmod@counter counter `uc  1 a 1 0 ]
 "5
-[v ___llmod@divisor divisor `ul  1 p 4 14 ]
-[v ___llmod@dividend dividend `ul  1 p 4 18 ]
+[v ___llmod@divisor divisor `ul  1 p 4 19 ]
+[v ___llmod@dividend dividend `ul  1 p 4 23 ]
 "25
 } 0
 "5 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\__lldiv.c
 [v ___lldiv __lldiv `(ul  1 e 4 0 ]
 {
 "10
-[v ___lldiv@quotient quotient `ul  1 a 4 9 ]
+[v ___lldiv@quotient quotient `ul  1 a 4 14 ]
 "11
-[v ___lldiv@counter counter `uc  1 a 1 13 ]
+[v ___lldiv@counter counter `uc  1 a 1 18 ]
 "5
-[v ___lldiv@divisor divisor `ul  1 p 4 0 ]
-[v ___lldiv@dividend dividend `ul  1 p 4 4 ]
+[v ___lldiv@divisor divisor `ul  1 p 4 6 ]
+[v ___lldiv@dividend dividend `ul  1 p 4 10 ]
 "30
 } 0
 "35 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lltoft.c
 [v ___lltoft __lltoft `(f  1 e 3 0 ]
 {
 "37
-[v ___lltoft@exp exp `uc  1 a 1 13 ]
+[v ___lltoft@exp exp `uc  1 a 1 11 ]
 "35
-[v ___lltoft@c c `ul  1 p 4 8 ]
+[v ___lltoft@c c `ul  1 p 4 0 ]
 "46
 } 0
 "44 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\fttol.c
 [v ___fttol __fttol `(l  1 e 4 0 ]
 {
 "47
-[v ___fttol@lval lval `ul  1 a 4 1 ]
+[v ___fttol@lval lval `ul  1 a 4 61 ]
 "46
-[v ___fttol@exp1 exp1 `uc  1 a 1 5 ]
-[v ___fttol@sign1 sign1 `uc  1 a 1 0 ]
+[v ___fttol@exp1 exp1 `uc  1 a 1 65 ]
+[v ___fttol@sign1 sign1 `uc  1 a 1 60 ]
 "44
-[v ___fttol@f1 f1 `f  1 p 3 71 ]
+[v ___fttol@f1 f1 `f  1 p 3 56 ]
 "73
 } 0
 "17 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftsub.c
 [v ___ftsub __ftsub `(f  1 e 3 0 ]
 {
-[v ___ftsub@f2 f2 `f  1 p 3 27 ]
-[v ___ftsub@f1 f1 `f  1 p 3 30 ]
+[v ___ftsub@f2 f2 `f  1 p 3 21 ]
+[v ___ftsub@f1 f1 `f  1 p 3 24 ]
 "26
 } 0
 "15 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftneg.c
 [v ___ftneg __ftneg `(f  1 e 3 0 ]
 {
-[v ___ftneg@f1 f1 `f  1 p 3 55 ]
+[v ___ftneg@f1 f1 `f  1 p 3 44 ]
 "20
 } 0
 "62 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftmul.c
 [v ___ftmul __ftmul `(f  1 e 3 0 ]
 {
 "65
-[v ___ftmul@f3_as_product f3_as_product `um  1 a 3 66 ]
+[v ___ftmul@f3_as_product f3_as_product `um  1 a 3 51 ]
 "64
-[v ___ftmul@sign sign `uc  1 a 1 70 ]
-[v ___ftmul@cntr cntr `uc  1 a 1 69 ]
-[v ___ftmul@exp exp `uc  1 a 1 65 ]
+[v ___ftmul@sign sign `uc  1 a 1 55 ]
+[v ___ftmul@cntr cntr `uc  1 a 1 54 ]
+[v ___ftmul@exp exp `uc  1 a 1 50 ]
 "62
-[v ___ftmul@f1 f1 `f  1 p 3 55 ]
-[v ___ftmul@f2 f2 `f  1 p 3 58 ]
+[v ___ftmul@f1 f1 `f  1 p 3 44 ]
+[v ___ftmul@f2 f2 `f  1 p 3 47 ]
 "157
 } 0
 "4 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftge.c
 [v ___ftge __ftge `(b  1 e 0 0 ]
 {
-[v ___ftge@ff1 ff1 `f  1 p 3 0 ]
-[v ___ftge@ff2 ff2 `f  1 p 3 3 ]
+[v ___ftge@ff1 ff1 `f  1 p 3 6 ]
+[v ___ftge@ff2 ff2 `f  1 p 3 9 ]
 "13
 } 0
-"18 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
+"21 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
 [v _getADCValue getADCValue `(f  1 e 3 0 ]
 {
 [v getADCValue@channel channel `uc  1 a 1 wreg ]
+"24
+[v getADCValue@adcSum adcSum `f  1 a 3 41 ]
+"25
+[v getADCValue@adcLoop adcLoop `ui  1 a 2 39 ]
 "21
-[v getADCValue@adcSum adcSum `f  1 a 3 52 ]
-"22
-[v getADCValue@adcLoop adcLoop `ui  1 a 2 49 ]
-"18
 [v getADCValue@channel channel `uc  1 a 1 wreg ]
-"21
-[v getADCValue@channel channel `uc  1 a 1 51 ]
-"59
+"24
+[v getADCValue@channel channel `uc  1 a 1 38 ]
+"62
 } 0
-"51 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\interface.c
+"36 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\interface.c
 [v _sleepMs sleepMs `(v  1 e 1 0 ]
 {
-"53
-[v sleepMs@wdtps wdtps `uc  1 a 1 4 ]
-"51
+"38
+[v sleepMs@wdtps wdtps `uc  1 a 1 3 ]
+"36
 [v sleepMs@milliseconds milliseconds `ui  1 p 2 0 ]
-"70
+"54
+} 0
+"31
+[v _resetWDT resetWDT `R(v  1 e 1 0 ]
+{
+"34
 } 0
 "56 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftdiv.c
 [v ___ftdiv __ftdiv `(f  1 e 3 0 ]
 {
 "60
-[v ___ftdiv@f3 f3 `f  1 a 3 38 ]
+[v ___ftdiv@f3 f3 `f  1 a 3 29 ]
 "59
-[v ___ftdiv@sign sign `uc  1 a 1 42 ]
-[v ___ftdiv@exp exp `uc  1 a 1 41 ]
-[v ___ftdiv@cntr cntr `uc  1 a 1 37 ]
+[v ___ftdiv@sign sign `uc  1 a 1 33 ]
+[v ___ftdiv@exp exp `uc  1 a 1 32 ]
+[v ___ftdiv@cntr cntr `uc  1 a 1 28 ]
 "56
-[v ___ftdiv@f2 f2 `f  1 p 3 27 ]
-[v ___ftdiv@f1 f1 `f  1 p 3 30 ]
+[v ___ftdiv@f2 f2 `f  1 p 3 21 ]
+[v ___ftdiv@f1 f1 `f  1 p 3 24 ]
 "86
 } 0
 "86 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\ftadd.c
 [v ___ftadd __ftadd `(f  1 e 3 0 ]
 {
 "88
-[v ___ftadd@exp1 exp1 `uc  1 a 1 26 ]
-[v ___ftadd@exp2 exp2 `uc  1 a 1 25 ]
-[v ___ftadd@sign sign `uc  1 a 1 24 ]
+[v ___ftadd@exp1 exp1 `uc  1 a 1 20 ]
+[v ___ftadd@exp2 exp2 `uc  1 a 1 19 ]
+[v ___ftadd@sign sign `uc  1 a 1 18 ]
 "86
-[v ___ftadd@f1 f1 `f  1 p 3 14 ]
-[v ___ftadd@f2 f2 `f  1 p 3 17 ]
+[v ___ftadd@f1 f1 `f  1 p 3 11 ]
+[v ___ftadd@f2 f2 `f  1 p 3 14 ]
 "148
 } 0
 "32 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\awtoft.c
 [v ___awtoft __awtoft `(f  1 e 3 0 ]
 {
 "34
-[v ___awtoft@sign sign `uc  1 a 1 13 ]
+[v ___awtoft@sign sign `uc  1 a 1 3 ]
 "32
-[v ___awtoft@c c `i  1 p 2 8 ]
+[v ___awtoft@c c `i  1 p 2 0 ]
 "42
 } 0
 "27 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lbtoft.c
@@ -973,149 +1018,40 @@
 [v ___lbtoft@c c `uc  1 a 1 wreg ]
 [v ___lbtoft@c c `uc  1 a 1 wreg ]
 "29
-[v ___lbtoft@c c `uc  1 a 1 15 ]
+[v ___lbtoft@c c `uc  1 a 1 11 ]
 "30
-} 0
-"28 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\lwtoft.c
-[v ___lwtoft __lwtoft `(f  1 e 3 0 ]
-{
-[v ___lwtoft@c c `ui  1 p 2 8 ]
-"31
 } 0
 "62 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\float.c
 [v ___ftpack __ftpack `(f  1 e 3 0 ]
 {
-[v ___ftpack@arg arg `um  1 p 3 0 ]
-[v ___ftpack@exp exp `uc  1 p 1 3 ]
-[v ___ftpack@sign sign `uc  1 p 1 4 ]
+[v ___ftpack@arg arg `um  1 p 3 6 ]
+[v ___ftpack@exp exp `uc  1 p 1 9 ]
+[v ___ftpack@sign sign `uc  1 p 1 10 ]
 "86
 } 0
-"10 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
+"4 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\eeprom.c
+[v _EEPROMWrite EEPROMWrite `(v  1 e 1 0 ]
+{
+"6
+[v EEPROMWrite@GIEBitValue GIEBitValue `uc  1 a 1 3 ]
+"4
+[v EEPROMWrite@address address `ui  1 p 2 0 ]
+[v EEPROMWrite@data data `uc  1 p 1 2 ]
+"24
+} 0
+"26
+[v _EEPROMRead EEPROMRead `(uc  1 e 1 0 ]
+{
+[v EEPROMRead@address address `ui  1 p 2 0 ]
+"45
+} 0
+"11 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\main.c
 [v _ISR ISR `II(v  1 e 1 0 ]
-{
-"16
-} 0
-"233 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
-[v _nrf24l01ISR nrf24l01ISR `(v  1 e 1 0 ]
-{
-"271
-} 0
-"297
-[v i1_nrf24l01Service nrf24l01Service `(v  1 e 1 0 ]
-{
-[v i1nrf24l01Service@i nrf24l01Service `uc  1 a 1 12 ]
-[v i1nrf24l01Service@width nrf24l01Service `uc  1 a 1 11 ]
-"397
-} 0
-"33 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strcmp.c
-[v i1_strcmp strcmp `(i  1 e 2 0 ]
-{
-[v i1strcmp@s1 s1 `*.5DCuc  1 a 1 wreg ]
-[v i1strcmp@r strcmp `c  1 a 1 3 ]
-[v i1strcmp@s1 s1 `*.5DCuc  1 a 1 wreg ]
-[v i1strcmp@s2 s2 `*.5DCuc  1 p 1 0 ]
-[v i1strcmp@s1 s1 `*.5DCuc  1 a 1 4 ]
-"42
-} 0
-"273 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
-[v i1_nrf24l01SetTXBuffer nrf24l01SetTXBuffer `(v  1 e 1 0 ]
-{
-[s S476 . 1 `uc 1 byte 1 0 :8:0 
-]
-[s S478 . 1 `uc 1 RPD 1 0 :1:0 
-`uc 1 ACKRPD 1 0 :1:1 
-`uc 1 ACKRequest 1 0 :1:2 
-`uc 1 IsACK 1 0 :1:3 
-`uc 1 Pipe 1 0 :3:4 
-]
-[u S484 . 1 `S476 1 . 1 0 `S478 1 . 1 0 ]
-[s S487 . 33 `S484 1 packetData 1 0 `[32]uc 1 Message 32 1 ]
-[v i1nrf24l01SetTXBuffer@txPacket txPacket `*.5S487  1 a 1 wreg ]
-[v i1nrf24l01SetTXBuffer@i nrf24l01SetTXBuffer `uc  1 a 1 9 ]
-[v i1nrf24l01SetTXBuffer@txPacket txPacket `*.5S487  1 a 1 wreg ]
-"278
-"273
-[v i1nrf24l01SetTXBuffer@txPacket txPacket `*.5S487  1 a 1 8 ]
-"295
-} 0
-"4 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\strlen.c
-[v i1_strlen strlen `(ui  1 e 2 0 ]
-{
-[v i1strlen@cp strlen `*.39DCuc  1 a 2 4 ]
-[v i1strlen@s s `*.39DCuc  1 p 2 0 ]
-"13
-} 0
-"91 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
-[v i1_nrf24l01SetRXMode nrf24l01SetRXMode `(v  1 e 1 0 ]
-{
-[v i1nrf24l01SetRXMode@rxMode rxMode `uc  1 a 1 wreg ]
-[v i1nrf24l01SetRXMode@rxMode rxMode `uc  1 a 1 wreg ]
-"111
-[v i1nrf24l01SetRXMode@rxMode rxMode `uc  1 a 1 5 ]
-"130
-} 0
-"46
-[v i1_nrf24l01Send nrf24l01Send `(uc  1 e 1 0 ]
-{
-[v i1nrf24l01Send@command command `uc  1 a 1 wreg ]
-[v i1nrf24l01Send@command command `uc  1 a 1 wreg ]
-[v i1nrf24l01Send@data data `uc  1 p 1 1 ]
-"49
-[v i1nrf24l01Send@command command `uc  1 a 1 3 ]
-"67
-} 0
-"86 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\interface.c
-[v _nrf24l01SPIStart nrf24l01SPIStart `(v  1 e 1 0 ]
-{
-"89
-} 0
-"17
-[v _nrf24l01CSLow nrf24l01CSLow `(v  1 e 1 0 ]
 {
 "19
 } 0
-"73
-[v _nrf24l01SPISend nrf24l01SPISend `(uc  1 e 1 0 ]
+"191 C:\Users\Leon\Documents\GitHub\MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network\Sensor_Node\Firmware\nRF24L01+_PIC16LF1825.X.X\nrf24l01.c
+[v _nrf24l01ISR nrf24l01ISR `(v  1 e 1 0 ]
 {
-[v nrf24l01SPISend@data data `uc  1 a 1 wreg ]
-[v nrf24l01SPISend@data data `uc  1 a 1 wreg ]
-[v nrf24l01SPISend@data data `uc  1 a 1 0 ]
-"83
-} 0
-"92
-[v _nrf24l01SPIEnd nrf24l01SPIEnd `(v  1 e 1 0 ]
-{
-"95
-} 0
-"22
-[v _nrf24l01CSHigh nrf24l01CSHigh `(v  1 e 1 0 ]
-{
-"24
-} 0
-"98
-[v _enableInterrupts enableInterrupts `(v  1 e 1 0 ]
-{
-[v enableInterrupts@enable enable `uc  1 a 1 wreg ]
-[v enableInterrupts@enable enable `uc  1 a 1 wreg ]
-[v enableInterrupts@enable enable `uc  1 a 1 0 ]
-"100
-} 0
-"7
-[v _nrf24l01CELow nrf24l01CELow `(v  1 e 1 0 ]
-{
-"9
-} 0
-"12
-[v _nrf24l01CEHigh nrf24l01CEHigh `(v  1 e 1 0 ]
-{
-"14
-} 0
-"8 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\sources\c90\common\memset.c
-[v i1_memset memset `(*.39v  1 e 1 0 ]
-{
-[v i1memset@p memset `*.39uc  1 a 2 6 ]
-[v i1memset@p1 p1 `*.39v  1 p 2 0 ]
-[v i1memset@c c `i  1 p 2 2 ]
-[v i1memset@n n `ui  1 p 2 4 ]
-"22
+"230
 } 0

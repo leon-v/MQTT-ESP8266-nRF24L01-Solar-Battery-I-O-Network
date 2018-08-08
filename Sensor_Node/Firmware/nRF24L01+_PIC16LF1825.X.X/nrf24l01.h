@@ -10,6 +10,29 @@ extern const unsigned char n_ADDRESS_MUL;
 
 unsigned long counter = 0;
 
+typedef struct{
+    unsigned char TX;
+    unsigned char RX;
+    n_STATUS_t statusRegister;
+    n_CONFIG_t configRegister;
+    unsigned char retryCount;
+} nrf24l01State_t;
+
+volatile nrf24l01State_t status;
+
+#define TXIdle 0
+#define TXReady 1
+#define TXSending 2
+#define TXSent 3
+#define TXPendingACK 4
+
+#define RXIdle 0
+#define RXPending 1
+#define RXReady 2
+#define RXCheckACKIn 3
+#define RXCheckACKOut 4
+#define RXUserProcess 5
+
 typedef union{
     struct{
         unsigned int byte       :8;

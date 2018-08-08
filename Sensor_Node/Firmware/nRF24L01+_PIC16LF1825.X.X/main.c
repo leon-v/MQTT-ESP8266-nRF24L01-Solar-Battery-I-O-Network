@@ -3,12 +3,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "eeprom.h"
 #include "nrf24l01.h"
 #include "interface.h"
 #include "../../../../shared.h"
 
 void interrupt ISR(void){
     
+	resetWDT();
+	
     if (PIR0bits.INTF){
         nrf24l01ISR();
         PIR0bits.INTF = 0;
@@ -62,31 +65,32 @@ void sleepListren(unsigned int seconds){
 	
 	while(seconds--){
 		
-		nrf24l01SetRXMode(1);
-		sleepMs(250);
 		
 		nrf24l01SetRXMode(1);
-		sleepMs(750);
+		sleepMs(100);
+		
+		nrf24l01SetRXMode(1);
+		sleepMs(900);
 		
 	}
 }
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
-    int status;
+    int ftoaStatus;
     
     memset(packet->Message, 0, sizeof(packet->Message));
     strcpy(packet->Message, romData->name);
     strcat(packet->Message, "/");
     strcat(packet->Message, topic);
     strcat(packet->Message, "/");
-    strcat(packet->Message, ftoa(value, &status));
+    strcat(packet->Message, ftoa(value, &ftoaStatus));
     
     packet->packetData.byte = 0;
     packet->packetData.ACKRequest = 1;
     
 	nrf24l01SendPacket(packet);
     
-	sleepListren(3);
+	sleepListren(2);
 }
 
 
@@ -94,7 +98,7 @@ void loop(){
     
     nrf24l01Packet_t packet;
     
-    sendMessage(&packet, "DBG1", counter);
+    sendMessage(&packet, "COUNT", counter);
     
     // 19.086
     //Resistor divider on Vbatt
@@ -102,11 +106,12 @@ void loop(){
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
     sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     
-//    sendMessage(&packet, "DBG2", counter);
-    
+	EEPROMWrite(0, (unsigned char) 22);
     
     sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
     
+//	EEPROMWrite(0, status.TX);//0
+//	EEPROMWrite(1, status.RX);//0
     
 //    sendMessage(&packet, "DBG3", counter);
 //    
@@ -178,7 +183,7 @@ void main(void) {
     OSCCON1bits.NOSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
     OSCCON1bits.NDIV = 0b000;
     
-    delayMs(10);
+    delayUs(1000);
     
 //    memcpy(romDataMap.bytes, resetRomData.bytes, sizeof(romDataMap_t.bytes));
     
@@ -188,7 +193,7 @@ void main(void) {
     
     unsigned char pipe = nrf24l01GetPipe(romData->name);
     nrf24l01SetTXPipe(pipe);
-//    nrf24l01SetRXPipe(pipe);
+    nrf24l01SetRXPipe(pipe);
     
 
     /* Setup ADC */
@@ -237,8 +242,14 @@ void main(void) {
     INTCONbits.GIE = 1;
     
     nrf24l01Packet_t packet;
-        
-    sendMessage(&packet, "BOOT", romData->bootMode);
+	
+    sendMessage(&packet, "BOOT0", EEPROMRead(0));
+	sendMessage(&packet, "BOOT1", EEPROMRead(1));
+//	sendMessage(&packet, "BOOT2", EEPROMRead(2));
+//	sendMessage(&packet, "BOOT3", EEPROMRead(3));
+	
+	EEPROMWrite(0, 123);//0
+	EEPROMWrite(1, 123);//0
     
     while(1){
         loop();
