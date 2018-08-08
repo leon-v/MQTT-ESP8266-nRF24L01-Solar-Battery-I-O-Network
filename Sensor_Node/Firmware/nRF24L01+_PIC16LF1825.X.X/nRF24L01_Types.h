@@ -90,7 +90,7 @@ typedef union{
 	};
 } n_EN_RXADDR_t;
 
-#define n_SETUP_AW		(unsigned) 0x02
+#define n_SETUP_AW		(unsigned) 0x03
 typedef union{
     struct {
 		unsigned byte : 8;

@@ -18,4 +18,4 @@
  /opt/Espressif/crosstool-NG/builds/xtensa-lx106-elf/xtensa-lx106-elf/include/sys/string.h \
  ../../include/os_type.h ../../include/ets_sys.h ../../include/c_types.h \
  ../../include/eagle_soc.h ../include/user_config.h ../../include/gpio.h \
- ../include/modules/nRF24L01_Types.h
+ ../include/modules/nRF24L01_Types.h ../include/mqtt/debug.h

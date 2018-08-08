@@ -10635,48 +10635,21 @@ unsigned char bytes[sizeof(romData_t)];
 } romDataMap_t;
 
 
-
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 51
-void nrf24l01CELow(void);
-void nrf24l01CEHigh(void);
-void nrf24l01CSLow(void);
-void nrf24l01CSHigh(void);
-
+# 56
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
-void enableInterrupts(unsigned char enable);
-
 void exception(unsigned char exception);
 
+void resetWDT(void);
+void sleepMs(unsigned int milliseconds);
 
-# 6 "interface.c"
-#pragma interrupt_level 1
-void nrf24l01CELow(void){
-PORTAbits.RA0 = 0;
-}
-
-#pragma interrupt_level 1
-void nrf24l01CEHigh(void){
-PORTAbits.RA0 = 1;
-}
-
-#pragma interrupt_level 1
-void nrf24l01CSLow(void){
-PORTAbits.RA1 = 0;
-}
-
-#pragma interrupt_level 1
-void nrf24l01CSHigh(void){
-PORTAbits.RA1 = 1;
-}
-
-#pragma interrupt_level 1
+# 8 "interface.c"
 void nrf24l01InterfaceInit(void){
 
 TRISAbits.TRISA0 = 0;
@@ -10694,13 +10667,37 @@ RC0PPSbits.RC0PPS = 0b11000;
 
 SSP1CON1bits.CKP = 0;
 SSP1STATbits.CKE = 1;
-SSP1CON1bits.SSPM = 0b0000;
+SSP1CON1bits.SSPM = 0b0001;
 
 SSP1CON1bits.SSPEN = 1;
 
 }
 
-#pragma interrupt_level 1
+void resetWDT(void){
+WDTCONbits.WDTPS = 0b01101;
+asm("clrwdt");
+}
+
+void sleepMs(unsigned int milliseconds){
+
+unsigned char wdtps;
+for (wdtps = 0; wdtps <= 0b10010; wdtps++){
+if ((milliseconds >> wdtps) & 0b1){
+START_SLEEP:
+WDTCONbits.WDTPS = wdtps;
+asm("sleep");
+__nop();
+__nop();
+
+if( STATUSbits.nTO || STATUSbits.nPD){
+goto START_SLEEP;
+}
+}
+}
+
+resetWDT();
+}
+
 unsigned char nrf24l01SPISend(unsigned char data){
 SSP1BUF = data;
 
@@ -10713,21 +10710,16 @@ __nop();
 return SSP1BUF;
 }
 
-#pragma interrupt_level 1
 void nrf24l01SPIStart(void){
-nrf24l01CSLow();
+PIE0bits.INTE = 0;
+PORTAbits.RA1 = 0;
 _delay((unsigned long)((10)*(32000000/4000000.0)));
 }
 
-#pragma interrupt_level 1
 void nrf24l01SPIEnd(void){
 _delay((unsigned long)((10)*(32000000/4000000.0)));
-nrf24l01CSHigh();
-}
-
-#pragma interrupt_level 1
-void enableInterrupts(unsigned char enable){
-PIE0bits.INTE = enable;
+PORTAbits.RA1 = 1;
+PIE0bits.INTE = 1;
 }
 
 void exception(unsigned char exception){

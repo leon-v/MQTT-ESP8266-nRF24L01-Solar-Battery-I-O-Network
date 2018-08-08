@@ -10623,12 +10623,6 @@ extern void * memcpy(void *, const void *, size_t);
 extern void * memmove(void *, const void *, size_t);
 extern void * memset(void *, int, size_t);
 
-
-
-
-extern void * __builtin_memcpy(void *, const void *, size_t);
-#pragma intrinsic(__builtin_memcpy)
-
 # 36
 extern char * strcat(char *, const char *);
 extern char * strcpy(char *, const char *);
@@ -10729,6 +10723,70 @@ extern char * ultoa(char * buf, unsigned long val, int base);
 
 extern char * ftoa(float f, int * status);
 
+# 7 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdarg.h"
+typedef void * va_list[1];
+
+#pragma intrinsic(__va_start)
+extern void * __va_start(void);
+
+#pragma intrinsic(__va_arg)
+extern void * __va_arg(void *, ...);
+
+# 43 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdio.h"
+struct __prbuf
+{
+char * ptr;
+void (* func)(char);
+};
+
+# 29 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\errno.h"
+extern int errno;
+
+# 12 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\conio.h"
+extern void init_uart(void);
+
+extern char getch(void);
+extern char getche(void);
+extern void putch(char);
+extern void ungetch(char);
+
+extern __bit kbhit(void);
+
+# 23
+extern char * cgets(char *);
+extern void cputs(const char *);
+
+# 88 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdio.h"
+extern int cprintf(char *, ...);
+#pragma printf_check(cprintf)
+
+
+
+extern int _doprnt(struct __prbuf *, const register char *, register va_list);
+
+
+# 180
+#pragma printf_check(vprintf) const
+#pragma printf_check(vsprintf) const
+
+extern char * gets(char *);
+extern int puts(const char *);
+extern int scanf(const char *, ...) __attribute__((unsupported("scanf() is not supported by this compiler")));
+extern int sscanf(const char *, const char *, ...) __attribute__((unsupported("sscanf() is not supported by this compiler")));
+extern int vprintf(const char *, va_list) __attribute__((unsupported("vprintf() is not supported by this compiler")));
+extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
+extern int vscanf(const char *, va_list ap) __attribute__((unsupported("vscanf() is not supported by this compiler")));
+extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
+
+#pragma printf_check(printf) const
+#pragma printf_check(sprintf) const
+extern int sprintf(char *, const char *, ...);
+extern int printf(const char *, ...);
+
+# 6 "eeprom.h"
+void EEPROMWrite(unsigned int address, unsigned char data);
+unsigned char EEPROMRead(unsigned int address);
+
 # 12 "interface.h"
 typedef struct{
 unsigned char check;
@@ -10749,24 +10807,19 @@ unsigned char bytes[sizeof(romData_t)];
 } romDataMap_t;
 
 
-
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
 
-# 51
-void nrf24l01CELow(void);
-void nrf24l01CEHigh(void);
-void nrf24l01CSLow(void);
-void nrf24l01CSHigh(void);
-
+# 56
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
-void enableInterrupts(unsigned char enable);
-
 void exception(unsigned char exception);
+
+void resetWDT(void);
+void sleepMs(unsigned int milliseconds);
 
 # 42 "nRF24L01_Types.h"
 typedef union{
@@ -10946,13 +10999,19 @@ unsigned Reserved : 5;
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+unsigned long counter = 0;
+
 typedef struct{
-unsigned TXBusy : 1;
-unsigned RXPending : 1;
-unsigned RXMode : 1;
-} nrf24l01_t;
+unsigned char TX;
+unsigned char RX;
+n_STATUS_t statusRegister;
+n_CONFIG_t configRegister;
+unsigned char retryCount;
+} nrf24l01State_t;
 
+volatile nrf24l01State_t status;
 
+# 35
 typedef union{
 struct{
 unsigned int byte :8;
@@ -10971,53 +11030,25 @@ packetData_t packetData;
 char Message[32];
 } nrf24l01Packet_t;
 
-volatile nrf24l01_t nrf24l01;
+# 57
+unsigned char nrf24l01Send(unsigned char command,unsigned char data);
+void nrf24l01SetRXPipe(unsigned char pipe);
+void nrf24l01SetRXMode(unsigned char rxMode);
 
-# 42
 void nrf24l01ISR(void);
 void nrf24l01Init(void);
-
-void nrf24l01SendPacket(nrf24l01Packet_t * Packet);
-void nrf24l01SetRXMode(unsigned char rxMode);
-nrf24l01Packet_t *nrf24l01GetRXPacket(void);
-void nrf24l01SendACK(nrf24l01Packet_t * packet);
-void nrf24l01ChangeTXPower(int addPower);
-unsigned char nrf24l01Send(unsigned char command, unsigned char data);
+void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
-void nrf24l01SetRXPipe(unsigned char pipe);
+void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
 
-# 9 "main.c"
-unsigned char sleepLoop = 0;
-unsigned long counter = 0;
-
-
-
+# 11 "main.c"
 void interrupt ISR(void){
+
+resetWDT();
 
 if (PIR0bits.INTF){
 nrf24l01ISR();
 PIR0bits.INTF = 0;
-}
-}
-
-void sleep(unsigned char wdps){
-
-WDTCONbits.WDTPS = wdps;
-
-while (1){
-
-asm("sleep");
-__nop();
-__nop();
-
-if (!STATUSbits.nTO && !STATUSbits.nPD) {
-
-
-WDTCONbits.WDTPS = 13;
-asm("clrwdt");
-
-return;
-}
 }
 }
 
@@ -11031,18 +11062,14 @@ ADCON0bits.CHS = channel;
 FVRCONbits.FVREN = 1;
 ADCON0bits.ADON = 1;
 
-sleep(0);
-
-counter = 0;
+sleepMs(1);
 
 while (adcLoop--){
-
-counter++;
 
 ADCON0bits.ADGO = 1;
 
 while (ADCON0bits.ADGO){
-sleep(0);
+sleepMs(1);
 }
 
 adcSum+= (ADRESL | (ADRESH << 8));
@@ -11054,66 +11081,67 @@ ADCON0bits.ADON = 0;
 
 
 adcSum/= 1000;
+
+
+if (ADCON1bits.ADPREF == 0b11){
+switch (FVRCONbits.ADFVR){
+case 0b10:
 adcSum/= 500;
+break;
+}
+}
+
 
 return adcSum;
 }
 
+void sleepListren(unsigned int seconds){
 
+while(seconds--){
 
-void checkRxData(void){
 
 nrf24l01SetRXMode(1);
+sleepMs(100);
 
-sleep(10);
-
-if (!nrf24l01.RXPending){
-return;
-}
+nrf24l01SetRXMode(1);
+sleepMs(900);
 
 }
+}
+void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 
-void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
+int ftoaStatus;
+
 memset(packet->Message, 0, sizeof(packet->Message));
-
-strcat(packet->Message, romData->name);
-
+strcpy(packet->Message, romData->name);
 strcat(packet->Message, "/");
 strcat(packet->Message, topic);
-
-int status;
 strcat(packet->Message, "/");
-strcat(packet->Message, ftoa(value, &status));
+strcat(packet->Message, ftoa(value, &ftoaStatus));
+
+packet->packetData.byte = 0;
+packet->packetData.ACKRequest = 1;
+
+nrf24l01SendPacket(packet);
+
+sleepListren(2);
 }
 
-void checkTXPower(){
-nrf24l01Packet_t * rxPacket = nrf24l01GetRXPacket();
-
-if (rxPacket->packetData.ACKRPD){
-nrf24l01ChangeTXPower(-1);
-}
-}
 
 void loop(){
 
 nrf24l01Packet_t packet;
 
-# 131
-setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
-nrf24l01SendPacket(&packet);
-checkTXPower();
-sleep(10);
+sendMessage(&packet, "COUNT", counter);
 
+# 107
+sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
-setMessage(&packet, "ANC3mV", getADCValue(0b010011));
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
-nrf24l01SendPacket(&packet);
-checkTXPower();
-sleep(10);
+EEPROMWrite(0, (unsigned char) 22);
 
+sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
+
+# 119
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
@@ -11121,26 +11149,16 @@ FVRCONbits.TSEN = 0;
 
 
 
-float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 27;
+float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 40;
 
-setMessage(&packet, "TEMP", ta);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
-nrf24l01SendPacket(&packet);
-checkTXPower();
-sleep(10);
+sendMessage(&packet, "TEMP", ta);
+
 
 
 n_RF_SETUP_t rfSetup;
 rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
 
-setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 1;
-nrf24l01SendPacket(&packet);
-checkTXPower();
-sleep(10);
-
+sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 
 
 }
@@ -11180,14 +11198,14 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 217
+# 180
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
 OSCCON1bits.NOSC = 0b000;
 OSCCON1bits.NDIV = 0b000;
 
-_delay((unsigned long)((10)*(32000000/4000.0)));
+_delay((unsigned long)((1000)*(32000000/4000000.0)));
 
 
 
@@ -11247,11 +11265,13 @@ INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-setMessage(&packet, "BOOT", romData->bootMode);
-packet.packetData.byte = 0;
-packet.packetData.ACKRequest = 0;
-nrf24l01SendPacket(&packet);
-sleep(10);
+sendMessage(&packet, "BOOT0", EEPROMRead(0));
+sendMessage(&packet, "BOOT1", EEPROMRead(1));
+
+
+
+EEPROMWrite(0, 123);
+EEPROMWrite(1, 123);
 
 while(1){
 loop();

@@ -3,27 +3,8 @@
 
 
 /* nrf24l01 Interfaces */
-#pragma interrupt_level 1
-void nrf24l01CELow(void){
-    PORTAbits.RA0 = 0;
-}
 
-#pragma interrupt_level 1
-void nrf24l01CEHigh(void){
-    PORTAbits.RA0 = 1;
-}
 
-#pragma interrupt_level 1
-void nrf24l01CSLow(void){
-    PORTAbits.RA1 = 0;
-}
-
-#pragma interrupt_level 1
-void nrf24l01CSHigh(void){
-    PORTAbits.RA1 = 1;
-}
-
-#pragma interrupt_level 1
 void nrf24l01InterfaceInit(void){
     
     TRISAbits.TRISA0 = 0; // CE out
@@ -41,13 +22,37 @@ void nrf24l01InterfaceInit(void){
 	
     SSP1CON1bits.CKP = 0;
     SSP1STATbits.CKE = 1;
-    SSP1CON1bits.SSPM = 0b0000;
+    SSP1CON1bits.SSPM = 0b0001;
     
     SSP1CON1bits.SSPEN = 1;
     
 }
 
-#pragma interrupt_level 1
+void resetWDT(void){
+	WDTCONbits.WDTPS = 0b01101; // 8s
+    CLRWDT();
+}
+
+void sleepMs(unsigned int milliseconds){
+	
+	unsigned char wdtps;
+	for (wdtps = 0; wdtps <= 0b10010; wdtps++){
+		if ((milliseconds >> wdtps) & 0b1){
+START_SLEEP:
+			WDTCONbits.WDTPS = wdtps;
+			SLEEP();
+			NOP();
+			NOP();
+
+			if( STATUSbits.nTO || STATUSbits.nPD){
+				goto START_SLEEP;
+			}
+		}
+	}
+	
+	resetWDT();
+}
+
 unsigned char nrf24l01SPISend(unsigned char data){
     SSP1BUF = data;
     
@@ -60,21 +65,16 @@ unsigned char nrf24l01SPISend(unsigned char data){
     return SSP1BUF;
 }
 
-#pragma interrupt_level 1
 void nrf24l01SPIStart(void){
+	enableInterrupts(0);
     nrf24l01CSLow();
     delayUs(10);
 }
 
-#pragma interrupt_level 1
 void nrf24l01SPIEnd(void){
     delayUs(10);
     nrf24l01CSHigh();
-}
-
-#pragma interrupt_level 1
-void enableInterrupts(unsigned char enable){
-    PIE0bits.INTE = enable;
+	enableInterrupts(1);
 }
 
 void exception(unsigned char exception){

@@ -1,43 +1,21 @@
 #include <xc.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
+#include "eeprom.h"
 #include "nrf24l01.h"
 #include "interface.h"
 #include "../../../../shared.h"
 
-unsigned char sleepLoop = 0;
-unsigned long counter = 0;
-
-// Cahnge ISR to trigger super loop code to do its bidding
-
-void interrupt ISR(void){    
+void interrupt ISR(void){
     
+	resetWDT();
+	
     if (PIR0bits.INTF){
         nrf24l01ISR();
         PIR0bits.INTF = 0;
     }
-}
-
-void sleep(unsigned char wdps){
-    
-    WDTCONbits.WDTPS = wdps; //9=500ms, 10=1S, 11=2S, 12=4S
-    
-	while (1){
-        
-		SLEEP();
-		NOP();
-		NOP();
-
-		if (!STATUSbits.nTO && !STATUSbits.nPD) {
-            
-            //Reset WDT to wait for IC failure
-            WDTCONbits.WDTPS = 13;
-            CLRWDT();
-            
-			return;
-		}
-	}
 }
 
 float getADCValue(unsigned char channel){
@@ -50,18 +28,14 @@ float getADCValue(unsigned char channel){
     FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
     ADCON0bits.ADON = 1;
     
-	sleep(0);
-	
-    counter = 0;
+	sleepMs(1);
     
 	while (adcLoop--){
-        
-        counter++;
 		
 		ADCON0bits.ADGO = 1;
        
 		while (ADCON0bits.ADGO){
-            sleep(0);
+            sleepMs(1);
 		}
 		
 		adcSum+= (ADRESL | (ADRESH << 8));
@@ -73,105 +47,94 @@ float getADCValue(unsigned char channel){
     
     
 	adcSum/= ADC_COUNT; // Adjust to get average
-    adcSum/= 500; // adjust for FVR +REF @ 2.048 to get volts
+	
+	// adjust for FVR +REF @ 2.048 to get volts
+	if (ADCON1bits.ADPREF == 0b11){
+		switch (FVRCONbits.ADFVR){
+			case 0b10:
+				adcSum/= 500;
+				break;		
+		}
+	}
+    
 	
 	return adcSum;
 }
 
-
-
-void checkRxData(void){
+void sleepListren(unsigned int seconds){
 	
-	nrf24l01SetRXMode(1);
-	
-	sleep(10);
-	
-	if (!nrf24l01.RXPending){
-		return;
+	while(seconds--){
+		
+		
+		nrf24l01SetRXMode(1);
+		sleepMs(100);
+		
+		nrf24l01SetRXMode(1);
+		sleepMs(900);
+		
 	}
-
 }
-
-void setMessage(nrf24l01Packet_t * packet, const char * topic, float value){
+void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
+    
+    int ftoaStatus;
+    
     memset(packet->Message, 0, sizeof(packet->Message));
-    
-    strcat(packet->Message, romData->name);
-    
+    strcpy(packet->Message, romData->name);
     strcat(packet->Message, "/");
     strcat(packet->Message, topic);
-    
-	int status;
     strcat(packet->Message, "/");
-    strcat(packet->Message, ftoa(value, &status));
+    strcat(packet->Message, ftoa(value, &ftoaStatus));
+    
+    packet->packetData.byte = 0;
+    packet->packetData.ACKRequest = 1;
+    
+	nrf24l01SendPacket(packet);
+    
+	sleepListren(2);
 }
 
-void checkTXPower(){
-    nrf24l01Packet_t * rxPacket = nrf24l01GetRXPacket();
-    
-    if (rxPacket->packetData.ACKRPD){
-        nrf24l01ChangeTXPower(-1);
-    }
-}
 
 void loop(){
     
     nrf24l01Packet_t packet;
     
-//    setMessage(&packet, "DBG", counter);
-//    packet.packetData.byte = 0;
-//    packet.packetData.ACKRequest = 0;
-//	nrf24l01SendPacket(&packet);
-//    checkTXPower();
-//	sleep(10);
+    sendMessage(&packet, "COUNT", counter);
     
-//	19.086
+    // 19.086
     //Resistor divider on Vbatt
     // 10K / 4.7K  = 2.127659574468085
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
-    setMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep(10);
+    sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     
+	EEPROMWrite(0, (unsigned char) 22);
     
-    setMessage(&packet, "ANC3mV", getADCValue(0b010011));
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep(10);
+    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
+    
+//	EEPROMWrite(0, status.TX);//0
+//	EEPROMWrite(1, status.RX);//0
+    
+//    sendMessage(&packet, "DBG3", counter);
+//    
     
     FVRCONbits.TSEN = 1;
     float vt = (2.048 - getADCValue(0b111101)) / 2;
     FVRCONbits.TSEN = 0;
-    
-	#define tempOffset 27
+//    
+	#define tempOffset 40
     #define vf 0.6063
     #define tc -0.00132
     float ta = (vt / tc) - (vf / tc) - tempOffset;
     
-	setMessage(&packet, "TEMP", ta);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep(10);
+	sendMessage(&packet, "TEMP", ta);
     
+//    sendMessage(&packet, "DBG4", counter);
     
     n_RF_SETUP_t rfSetup;
     rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
     
-    setMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 1;
-	nrf24l01SendPacket(&packet);
-    checkTXPower();
-	sleep(10);
+    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     
-	
-//	checkRxData();
+//    sendMessage(&packet, "DBG5", counter);
 }
 
  unsigned char nrf24l01GetPipe(char * name){
@@ -220,7 +183,7 @@ void main(void) {
     OSCCON1bits.NOSC = 0b000; // HFINTOSC with 2x PLL (32 MHz)
     OSCCON1bits.NDIV = 0b000;
     
-    delayMs(10);
+    delayUs(1000);
     
 //    memcpy(romDataMap.bytes, resetRomData.bytes, sizeof(romDataMap_t.bytes));
     
@@ -279,12 +242,14 @@ void main(void) {
     INTCONbits.GIE = 1;
     
     nrf24l01Packet_t packet;
-        
-    setMessage(&packet, "BOOT", romData->bootMode);
-    packet.packetData.byte = 0;
-    packet.packetData.ACKRequest = 0;
-	nrf24l01SendPacket(&packet);
-	sleep(10);
+	
+    sendMessage(&packet, "BOOT0", EEPROMRead(0));
+	sendMessage(&packet, "BOOT1", EEPROMRead(1));
+//	sendMessage(&packet, "BOOT2", EEPROMRead(2));
+//	sendMessage(&packet, "BOOT3", EEPROMRead(3));
+	
+	EEPROMWrite(0, 123);//0
+	EEPROMWrite(1, 123);//0
     
     while(1){
         loop();

@@ -27,7 +27,6 @@ typedef union{
     };
 } romDataMap_t;
 
-#warning "romData_s = " sizeof(romData_t)
 
 romDataMap_t romDataMap;
 romData_t * romData = &romDataMap.RomData;
@@ -46,21 +45,23 @@ romData_t * romData = &romDataMap.RomData;
 #define delayUs(x) __delay_us(x)
 #define delayMs(x) __delay_ms(x)
 
-#define append(x) x + strlen(x)
+#define enableInterrupts(x) PIE0bits.INTE = x
 
-void nrf24l01CELow(void);
-void nrf24l01CEHigh(void);
-void nrf24l01CSLow(void);
-void nrf24l01CSHigh(void);
+#define nrf24l01CELow() PORTAbits.RA0 = 0
+#define nrf24l01CEHigh() PORTAbits.RA0 = 1
+
+#define nrf24l01CSLow() PORTAbits.RA1 = 0
+#define nrf24l01CSHigh() PORTAbits.RA1 = 1
 
 void nrf24l01InterfaceInit(void);
 unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 
-void enableInterrupts(unsigned char enable);
-
 void exception(unsigned char exception);
+
+void resetWDT(void);
+void sleepMs(unsigned int milliseconds);
 
 #endif	/* INTERFACE_H */
 
