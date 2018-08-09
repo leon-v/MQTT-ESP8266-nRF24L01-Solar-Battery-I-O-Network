@@ -208,7 +208,10 @@ void nrf24l01ISR(void){
 	
 	if (status.statusRegister.TX_DS){
         
+		status.TX = TXSent;
+		
 		if (lastTXPacket->packetData.ACKRequest){
+			
 			status.TX = TXPendingACK;
 			status.retryCount = 0xFF;
 			nrf24l01SetRXMode(1);

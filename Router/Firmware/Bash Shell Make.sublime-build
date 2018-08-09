@@ -1,0 +1,7 @@
+{
+  "cmd": "..\\bash_shell_make.bat 1",//& cmd /C upload.bat
+  "working_dir": "$project_path",
+  "windows" : {
+      "shell": true
+  }
+}

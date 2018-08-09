@@ -1,4 +1,1 @@
-
-*.d
-*.i
-*.p1
+/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5
