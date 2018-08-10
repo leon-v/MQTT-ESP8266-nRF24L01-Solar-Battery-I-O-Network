@@ -1,6 +1,3 @@
-#include "esp_log.h"
-#include "esp_event_loop.h"
-
 #include "wifi.h"
 #include "wifiAccessPoint.h"
 
@@ -8,33 +5,7 @@
 
 static const char *TAG = "wifiAccessPoint";
 
-static esp_err_t wifiAccessPointEventHandler(void *ctx, system_event_t *event){
-	switch(event->event_id) {
-		case SYSTEM_EVENT_STA_START:
-			esp_wifi_connect();
-			break;
-
-		case SYSTEM_EVENT_AP_STACONNECTED:
-			xEventGroupSetBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT);
-			ESP_LOGI(TAG, "station:"MACSTR" join, AID=%d", MAC2STR(event->event_info.sta_connected.mac), event->event_info.sta_connected.aid);
-			break;
-
-		case SYSTEM_EVENT_AP_STADISCONNECTED:
-			ESP_LOGI(TAG, "station:"MACSTR" leave, AID=%d", MAC2STR(event->event_info.sta_disconnected.mac), event->event_info.sta_disconnected.aid);
-			break;
-
-		default:
-		break;
-	}
-
-	return ESP_OK;
-}
-
 void wifiAccessPointInit(void) {
-
-    tcpip_adapter_init();
-
-    ESP_ERROR_CHECK(esp_event_loop_init(wifiAccessPointEventHandler, NULL));
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
 

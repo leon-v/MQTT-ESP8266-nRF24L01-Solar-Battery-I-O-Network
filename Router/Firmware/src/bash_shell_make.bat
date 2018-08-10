@@ -1,13 +1,14 @@
-REM @ECHO OFF &SETLOCAL
+@ECHO OFF &SETLOCAL
 
 set LinuxPath=%~dp0
 set LinuxPath=%LinuxPath:C:=/mnt/c%
 set LinuxPath=%LinuxPath:\=/%
 set LinuxPath=%LinuxPath%
 bash -c "cd %LinuxPath%; dos2unix  ./bash_shell_make.sh; ./bash_shell_make.sh %1"
-echo "Result: %ERRORLEVEL%"
 
 if %errorlevel% neq 0 exit /b %errorlevel%
+
+echo Build Success, Uploading....
 
 set comport=COM3
 

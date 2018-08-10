@@ -11,10 +11,13 @@
 #include "esp_wifi.h"
 #include "esp_wifi_types.h"
 
+#include "esp_log.h"
+#include "esp_event_loop.h"
+
 /* The event group allows multiple bits for each event,
    but we only care about one event - are we connected
    to the AP with an IP? */
-#define WIFI_CONNECTED_BIT 1
+#define WIFI_CONNECTED_BIT BIT0
 
 void wifiInit(void);
 

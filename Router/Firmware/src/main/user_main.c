@@ -12,6 +12,9 @@
 
 #include "wifi.h"
 #include "wifiAccessPoint.h"
+#include "httpServer.h"
+#include "wifiClient.h"
+#include "configFlash.h"
 
 void app_main() {
     //Initialize NVS
@@ -22,9 +25,18 @@ void app_main() {
       	ret = nvs_flash_init();
 	}
     ESP_ERROR_CHECK(ret);
+
+    configFlashInit();
+
+    // configFlashSave();
+
+    printf("CF SSID %s\n", configFlash.wifiSSID);
+    printf("CF PASS %s\n", configFlash.wifiPassword);
     
     wifiInit();
     // wifiStationScanStart();
-	wifiAccessPointInit();
+
+	// wifiAccessPointInit();
+	wifiClientInit();
 	httpServerInit();
 }

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <strings.h>
 
@@ -14,10 +15,25 @@
 
 #include "wifi.h"
 
-#include "httpServerIndex.h";
+#include "httpServer.h"
+#include "httpServerPage.h"
 
 #include <sys/socket.h>
 
+const char httpServerOK[] = "HTTP/1.1 200 OK\r\n\r\n";
+const char httpServerNotFound[] = "HTTP/1.1 404 Not Found\r\n\r\n";
+
+header_t reqhdr[32] = { {"\0", "\0"} };
+
+char *request_header(const char* name)
+{
+    header_t *h = reqhdr;
+    while(h->name) {
+        if (strcmp(h->name, name) == 0) return h->value;
+        h++;
+    }
+    return NULL;
+}
 
 void httpServerTask(){
 
@@ -61,17 +77,17 @@ void httpServerTask(){
 
     if (ret) {
         printf("failed\n");
-        goto failed2;
+        goto failed1;
     }
     printf("OK\n");
 
-    char http_header[4096];
+    char * html = NULL;
 
 reconnect:
-	
-	strcpy(http_header, "HTTP/1.1 200 OK\r\n\r\n");
 
-	strcat(http_header, httpServerIndex);
+	// strcpy(http_header, "HTTP/1.1 200 OK\r\n\r\n");
+
+	// strcat(http_header, );
 
 
     printf("HTTP server socket accept client ......");
@@ -79,20 +95,95 @@ reconnect:
 
     if (new_sockfd < 0) {
         printf("failed\n");
-        goto failed3;
+        goto failed2;
     }
     printf("OK\n");
 
-    send(new_sockfd, http_header, strlen(http_header), 0);
 
+    char buffer[1024];
+
+    recv_bytes = recv(new_sockfd, &buffer, sizeof(buffer), 0);
+
+    buffer[recv_bytes] = '\0';
+
+	char * method = strtok(buffer	,  " \t\r\n");
+	char * uri    = strtok(NULL	, " \t");
+	char * prot   = strtok(NULL	, " \t\r\n");
+
+	printf("M: %s, U: %s, P:%s", method, uri, prot);
+
+	header_t *h = reqhdr;
+
+	char *k,*v,*t;
+    while (h < ( reqhdr + sizeof(reqhdr) - 1)) {
+
+        k = strtok(NULL, "\r\n: \t");
+        if (!k){
+        	break;
+        }
+
+        v = strtok(NULL, "\r\n");
+
+        while(*v && *v==' '){
+        	v++;
+        }
+
+        h->name  = k;
+        h->value = v;
+        h++;
+
+        printf("[H] %s: %s\n", k, v);
+
+        t = v + 1 + strlen(v);
+
+        if (t[1] == '\r' && t[2] == '\n'){
+        	printf("[H] END\n");
+        	break;
+        }
+    }
+
+    char * t2 = request_header("Content-Length"); // and the related header if there is  
+
+	printf("payload_size s %s\n", t2);
+
+    // t++; // now the *t shall be the beginning of user payload
+
+    // printf("payload s %s\n", t);
+
+	
+
+	// char * payload = t;
+
+	// int payload_size = t2 ? atol(t2) : (recv_bytes - (t - buffer));
+
+	// printf("payload_size i %i\n", payload_size);
+
+	// printf("payload %s\n", payload);
+
+    // char  *body = malloc(8192);
+    // recv_bytes = recv(new_sockfd, &body, 8192, 0);
+
+    // printf("body_s %i\n", recv_bytes);
+    // printf("body %s\n", body);
+    // free(body);
+
+    html = httpServerPageGet(uri);
+
+    if (html == NULL){
+    	send(new_sockfd, httpServerNotFound, strlen(httpServerNotFound), 0);
+    }
+    else{
+    	send(new_sockfd, httpServerOK, strlen(httpServerOK), 0);
+    	send(new_sockfd, html, strlen(html), 0);
+    	free(html);
+    }
+    
+    printf("Close Socket\n");
     close(new_sockfd);
-
-failed3:
-	goto reconnect;
+    new_sockfd = -1;
 
 failed2:
-    close(sockfd);
-    sockfd = -1;
+	goto reconnect;
 
 failed1:
     close(sockfd);
