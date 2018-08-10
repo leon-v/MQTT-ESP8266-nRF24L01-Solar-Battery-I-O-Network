@@ -80,7 +80,7 @@ Discarded input sections
  .text.bootloader_flash_erase_sector
                 0x0000000000000000       0x15 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
  .xt.lit        0x0000000000000000       0x30 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- .xt.prop       0x0000000000000000      0x1f8 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ .xt.prop       0x0000000000000000      0x204 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
  .text          0x0000000000000000        0x0 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
  .data          0x0000000000000000        0x0 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
  .bss           0x0000000000000000        0x0 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
@@ -127,7 +127,7 @@ LOAD /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-
 LOAD /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcov.a
 END GROUP
 
-.text           0x0000000040100000     0x10f7
+.text           0x0000000040100000     0x10ef
                 0x0000000040100000                _stext = .
                 0x0000000040100000                _text_start = ABSOLUTE (.)
                 0x0000000040100000                . = ALIGN (0x10)
@@ -263,104 +263,104 @@ END GROUP
                 0x0000000040100700                bootloader_utility_load_boot_image
  *fill*         0x00000000401007d5        0x3 
  .text.bootloader_utility_load_image
-                0x00000000401007d8       0x73 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+                0x00000000401007d8       0x69 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
                 0x00000000401007d8                bootloader_utility_load_image
- *fill*         0x000000004010084b        0x1 
+ *fill*         0x0000000040100841        0x3 
  .text.bootloader_common_ota_select_crc
-                0x000000004010084c       0x18 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
-                0x000000004010084c                bootloader_common_ota_select_crc
+                0x0000000040100844       0x18 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+                0x0000000040100844                bootloader_common_ota_select_crc
  .text.bootloader_common_ota_select_valid
-                0x0000000040100864       0x2c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
-                0x0000000040100864                bootloader_common_ota_select_valid
+                0x000000004010085c       0x2c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+                0x000000004010085c                bootloader_common_ota_select_valid
  .text.esp_partition_table_basic_verify
-                0x0000000040100890       0xef /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
-                0x0000000040100890                esp_partition_table_basic_verify
- *fill*         0x000000004010097f        0x1 
+                0x0000000040100888       0xef /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+                0x0000000040100888                esp_partition_table_basic_verify
+ *fill*         0x0000000040100977        0x1 
  .text.should_map
-                0x0000000040100980       0x15 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
- *fill*         0x0000000040100995        0x3 
+                0x0000000040100978       0x15 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+ *fill*         0x000000004010098d        0x3 
  .text.should_load
-                0x0000000040100998       0x19 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x0000000040100990       0x19 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                          0x1d (size before relaxing)
- *fill*         0x00000000401009b1        0x3 
+ *fill*         0x00000000401009a9        0x3 
  .text.verify_image_header
-                0x00000000401009b4       0x7d /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x00000000401009ac       0x7d /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                          0x85 (size before relaxing)
- *fill*         0x0000000040100a31        0x3 
+ *fill*         0x0000000040100a29        0x3 
  .text.verify_checksum
-                0x0000000040100a34       0x88 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x0000000040100a2c       0x88 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                          0x8c (size before relaxing)
  .text.process_segment_data
-                0x0000000040100abc       0x64 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x0000000040100ab4       0x64 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                          0x68 (size before relaxing)
  .text.process_segment
-                0x0000000040100b20      0x117 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x0000000040100b18      0x117 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                         0x127 (size before relaxing)
- *fill*         0x0000000040100c37        0x1 
+ *fill*         0x0000000040100c2f        0x1 
  .text.esp_image_load
-                0x0000000040100c38      0x194 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x0000000040100c30      0x194 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                         0x1a8 (size before relaxing)
-                0x0000000040100c38                esp_image_load
+                0x0000000040100c30                esp_image_load
  .text.bootloader_flash_read_no_decrypt
-                0x0000000040100dcc       0x15 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- *fill*         0x0000000040100de1        0x3 
+                0x0000000040100dc4       0x15 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ *fill*         0x0000000040100dd9        0x3 
  .text.bootloader_mmap
-                0x0000000040100de4       0x63 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+                0x0000000040100ddc       0x63 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
                                          0x67 (size before relaxing)
-                0x0000000040100de4                bootloader_mmap
- *fill*         0x0000000040100e47        0x1 
+                0x0000000040100ddc                bootloader_mmap
+ *fill*         0x0000000040100e3f        0x1 
  .text.bootloader_munmap
-                0x0000000040100e48       0x23 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
-                0x0000000040100e48                bootloader_munmap
- *fill*         0x0000000040100e6b        0x1 
+                0x0000000040100e40       0x23 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+                0x0000000040100e40                bootloader_munmap
+ *fill*         0x0000000040100e63        0x1 
  .text.bootloader_flash_read
-                0x0000000040100e6c       0x68 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
-                0x0000000040100e6c                bootloader_flash_read
+                0x0000000040100e64       0x68 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+                0x0000000040100e64                bootloader_flash_read
  .text.crc32_le
-                0x0000000040100ed4       0x2f /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
-                0x0000000040100ed4                crc32_le
- *fill*         0x0000000040100f03        0x0 
- *fill*         0x0000000040100f03        0x0 
- *fill*         0x0000000040100f03        0x0 
- *fill*         0x0000000040100f03        0x1 
+                0x0000000040100ecc       0x2f /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
+                0x0000000040100ecc                crc32_le
+ *fill*         0x0000000040100efb        0x0 
+ *fill*         0x0000000040100efb        0x0 
+ *fill*         0x0000000040100efb        0x0 
+ *fill*         0x0000000040100efb        0x1 
  .text.index_to_partition
-                0x0000000040100f04       0x4b /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
- *fill*         0x0000000040100f4f        0x0 
- *fill*         0x0000000040100f4f        0x0 
- *fill*         0x0000000040100f4f        0x0 
- *fill*         0x0000000040100f4f        0x0 
- *fill*         0x0000000040100f4f        0x0 
- *fill*         0x0000000040100f4f        0x1 
+                0x0000000040100efc       0x4b /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+ *fill*         0x0000000040100f47        0x0 
+ *fill*         0x0000000040100f47        0x0 
+ *fill*         0x0000000040100f47        0x0 
+ *fill*         0x0000000040100f47        0x0 
+ *fill*         0x0000000040100f47        0x0 
+ *fill*         0x0000000040100f47        0x1 
  .text.verify_segment_header
-                0x0000000040100f50        0x4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
- *fill*         0x0000000040100f54        0x0 
- *fill*         0x0000000040100f54        0x0 
- *fill*         0x0000000040100f54        0x0 
- *fill*         0x0000000040100f54        0x0 
- *fill*         0x0000000040100f54        0x0 
- *fill*         0x0000000040100f54        0x0 
- *fill*         0x0000000040100f54        0x0 
- *fill*         0x0000000040100f54        0x0 
- .text          0x0000000040100f54       0x4c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_udivsi3.o)
-                0x0000000040100f54                __udivsi3
- .text          0x0000000040100fa0       0x39 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_umodsi3.o)
-                0x0000000040100fa0                __umodsi3
+                0x0000000040100f48        0x4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+ *fill*         0x0000000040100f4c        0x0 
+ *fill*         0x0000000040100f4c        0x0 
+ *fill*         0x0000000040100f4c        0x0 
+ *fill*         0x0000000040100f4c        0x0 
+ *fill*         0x0000000040100f4c        0x0 
+ *fill*         0x0000000040100f4c        0x0 
+ *fill*         0x0000000040100f4c        0x0 
+ *fill*         0x0000000040100f4c        0x0 
+ .text          0x0000000040100f4c       0x4c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_udivsi3.o)
+                0x0000000040100f4c                __udivsi3
+ .text          0x0000000040100f98       0x39 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_umodsi3.o)
+                0x0000000040100f98                __umodsi3
  *(.iram1 .iram1.*)
- *fill*         0x0000000040100fd9        0x3 
- .iram1         0x0000000040100fdc       0xaa /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+ *fill*         0x0000000040100fd1        0x3 
+ .iram1         0x0000000040100fd4       0xaa /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
                                          0xb8 (size before relaxing)
-                0x0000000040100ff4                esp_early_log_write
- *fill*         0x0000000040101086        0x2 
- .iram1         0x0000000040101088       0x6f /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
-                0x0000000040101088                ets_putc
-                0x00000000401010ac                ets_vprintf
-                0x00000000401010d0                ets_printf
- *fill*         0x00000000401010f7        0x0 
+                0x0000000040100fec                esp_early_log_write
+ *fill*         0x000000004010107e        0x2 
+ .iram1         0x0000000040101080       0x6f /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
+                0x0000000040101080                ets_putc
+                0x00000000401010a4                ets_vprintf
+                0x00000000401010c8                ets_printf
+ *fill*         0x00000000401010ef        0x0 
  *(.fini.literal)
  *(.fini)
  *(.gnu.version)
-                0x00000000401010f7                _text_end = ABSOLUTE (.)
-                0x00000000401010f7                _etext = .
+                0x00000000401010ef                _text_end = ABSOLUTE (.)
+                0x00000000401010ef                _etext = .
 
 .bss            0x000000003ffe8000        0x8
                 0x000000003ffe8000                . = ALIGN (0x8)
@@ -398,75 +398,75 @@ END GROUP
  *(.jcr)
                 0x000000003ffe8008                _data_end = ABSOLUTE (.)
 
-.rodata         0x000000003ffe8008      0xd64
+.rodata         0x000000003ffe8008      0xd60
                 0x000000003ffe8008                _rodata_start = ABSOLUTE (.)
  *(.rodata)
  *(.rodata.*)
  .rodata.str1.4
                 0x000000003ffe8008       0x24 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
  .rodata.str1.4
-                0x000000003ffe802c      0x102 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
-                                        0x10a (size before relaxing)
- *fill*         0x000000003ffe812e        0x2 
+                0x000000003ffe802c       0xfe /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+                                        0x106 (size before relaxing)
+ *fill*         0x000000003ffe812a        0x2 
  .rodata.print_flash_info
-                0x000000003ffe8130       0x28 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+                0x000000003ffe812c       0x28 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
  .rodata.str1.4
-                0x000000003ffe8158      0x38a /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+                0x000000003ffe8154      0x38a /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
                                         0x392 (size before relaxing)
- *fill*         0x000000003ffe84e2        0x2 
+ *fill*         0x000000003ffe84de        0x2 
  .rodata.str1.4
-                0x000000003ffe84e4       0xb4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+                0x000000003ffe84e0       0xb4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
  .rodata.str1.4
-                0x000000003ffe8598      0x217 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x000000003ffe8594      0x217 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                         0x23f (size before relaxing)
- *fill*         0x000000003ffe87af        0x1 
+ *fill*         0x000000003ffe87ab        0x1 
  .rodata.str1.4
-                0x000000003ffe87b0      0x17b /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- *fill*         0x000000003ffe892b        0x1 
+                0x000000003ffe87ac      0x17b /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ *fill*         0x000000003ffe8927        0x1 
  .rodata.str1.4
-                0x000000003ffe892c       0x20 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+                0x000000003ffe8928       0x20 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
                                          0x22 (size before relaxing)
  .rodata.s_log_prefix
-                0x000000003ffe894c        0x6 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
- *fill*         0x000000003ffe8952        0x2 
+                0x000000003ffe8948        0x6 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+ *fill*         0x000000003ffe894e        0x2 
  .rodata.s_log_color
-                0x000000003ffe8954       0x18 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+                0x000000003ffe8950       0x18 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
  .rodata.crc32_le_table
-                0x000000003ffe896c      0x400 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
+                0x000000003ffe8968      0x400 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
  *(.gnu.linkonce.r.*)
  *(.rodata1)
-                0x000000003ffe8d6c                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
+                0x000000003ffe8d68                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
  *(.xt_except_table)
  *(.gcc_except_table)
  *(.gnu.linkonce.e.*)
  *(.gnu.version_r)
  *(.eh_frame)
-                0x000000003ffe8d6c                . = ((. + 0x3) & 0xfffffffffffffffc)
-                0x000000003ffe8d6c                __init_array_start = ABSOLUTE (.)
+                0x000000003ffe8d68                . = ((. + 0x3) & 0xfffffffffffffffc)
+                0x000000003ffe8d68                __init_array_start = ABSOLUTE (.)
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x000000003ffe8d6c                __init_array_end = ABSOLUTE (.)
+                0x000000003ffe8d68                __init_array_end = ABSOLUTE (.)
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x000000003ffe8d6c                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
+                0x000000003ffe8d68                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
  *(.xt_except_desc)
  *(.gnu.linkonce.h.*)
-                0x000000003ffe8d6c                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
+                0x000000003ffe8d68                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
  *(.xt_except_desc_end)
  *(.dynamic)
  *(.gnu.version_d)
-                0x000000003ffe8d6c                _rodata_end = ABSOLUTE (.)
-                0x000000003ffe8d6c                _lit4_start = ABSOLUTE (.)
+                0x000000003ffe8d68                _rodata_end = ABSOLUTE (.)
+                0x000000003ffe8d68                _lit4_start = ABSOLUTE (.)
  *(*.lit4)
  *(.lit4.*)
  *(.gnu.linkonce.lit4.*)
-                0x000000003ffe8d6c                _lit4_end = ABSOLUTE (.)
-                0x000000003ffe8d6c                . = ALIGN (0x4)
-                0x000000003ffe8d6c                _heap_start = ABSOLUTE (.)
+                0x000000003ffe8d68                _lit4_end = ABSOLUTE (.)
+                0x000000003ffe8d68                . = ALIGN (0x4)
+                0x000000003ffe8d68                _heap_start = ABSOLUTE (.)
                 [!provide]                        PROVIDE (SPI_sector_erase, 0x400040c0)
                 [!provide]                        PROVIDE (SPI_page_program, 0x40004174)
                 [!provide]                        PROVIDE (SPI_read_data, 0x400042ac)
@@ -526,45 +526,45 @@ END GROUP
                 0x000000004000dd38                PROVIDE (xthal_get_ccount, 0x4000dd38)
 OUTPUT(/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader.elf elf32-xtensa-le)
 
-.debug_frame    0x0000000000000000      0x568
+.debug_frame    0x0000000000000000      0x564
  .debug_frame   0x0000000000000000       0x74 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
  .debug_frame   0x0000000000000074       0x70 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
- .debug_frame   0x00000000000000e4      0x104 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
- .debug_frame   0x00000000000001e8       0x50 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
- .debug_frame   0x0000000000000238       0x38 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
- .debug_frame   0x0000000000000270      0x138 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
- .debug_frame   0x00000000000003a8       0xd8 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- .debug_frame   0x0000000000000480       0x58 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
- .debug_frame   0x00000000000004d8       0x60 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
- .debug_frame   0x0000000000000538       0x30 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
+ .debug_frame   0x00000000000000e4      0x100 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+ .debug_frame   0x00000000000001e4       0x50 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+ .debug_frame   0x0000000000000234       0x38 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+ .debug_frame   0x000000000000026c      0x138 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+ .debug_frame   0x00000000000003a4       0xd8 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ .debug_frame   0x000000000000047c       0x58 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+ .debug_frame   0x00000000000004d4       0x60 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
+ .debug_frame   0x0000000000000534       0x30 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
 
-.debug_info     0x0000000000000000     0x36d5
- .debug_info    0x0000000000000000      0x541 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
- .debug_info    0x0000000000000541      0x436 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
- .debug_info    0x0000000000000977      0xdfb /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
- .debug_info    0x0000000000001772      0x199 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
- .debug_info    0x000000000000190b      0x382 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
- .debug_info    0x0000000000001c8d      0xcce /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
- .debug_info    0x000000000000295b      0x5e5 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- .debug_info    0x0000000000002f40      0x2c0 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
- .debug_info    0x0000000000003200      0x1d7 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
- .debug_info    0x00000000000033d7      0x14c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
- .debug_info    0x0000000000003523       0xd9 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_udivsi3.o)
- .debug_info    0x00000000000035fc       0xd9 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_umodsi3.o)
+.debug_info     0x0000000000000000     0x3544
+ .debug_info    0x0000000000000000      0x4fc /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
+ .debug_info    0x00000000000004fc      0x43e /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+ .debug_info    0x000000000000093a      0xd3c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+ .debug_info    0x0000000000001676      0x18f /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+ .debug_info    0x0000000000001805      0x367 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+ .debug_info    0x0000000000001b6c      0xcce /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+ .debug_info    0x000000000000283a      0x575 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ .debug_info    0x0000000000002daf      0x2c0 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+ .debug_info    0x000000000000306f      0x1d7 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
+ .debug_info    0x0000000000003246      0x14c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
+ .debug_info    0x0000000000003392       0xd9 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_udivsi3.o)
+ .debug_info    0x000000000000346b       0xd9 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_umodsi3.o)
 
-.debug_abbrev   0x0000000000000000     0x1027
- .debug_abbrev  0x0000000000000000      0x1f8 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
- .debug_abbrev  0x00000000000001f8      0x1b8 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
- .debug_abbrev  0x00000000000003b0      0x28b /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
- .debug_abbrev  0x000000000000063b       0xfc /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
- .debug_abbrev  0x0000000000000737      0x19b /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
- .debug_abbrev  0x00000000000008d2      0x207 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
- .debug_abbrev  0x0000000000000ad9      0x1d5 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- .debug_abbrev  0x0000000000000cae      0x194 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
- .debug_abbrev  0x0000000000000e42      0x10e /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
- .debug_abbrev  0x0000000000000f50       0xaf /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
- .debug_abbrev  0x0000000000000fff       0x14 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_udivsi3.o)
- .debug_abbrev  0x0000000000001013       0x14 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_umodsi3.o)
+.debug_abbrev   0x0000000000000000      0xfc0
+ .debug_abbrev  0x0000000000000000      0x1dc /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
+ .debug_abbrev  0x00000000000001dc      0x1af /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+ .debug_abbrev  0x000000000000038b      0x279 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+ .debug_abbrev  0x0000000000000604       0xe2 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+ .debug_abbrev  0x00000000000006e6      0x188 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+ .debug_abbrev  0x000000000000086e      0x207 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+ .debug_abbrev  0x0000000000000a75      0x1d2 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ .debug_abbrev  0x0000000000000c47      0x194 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+ .debug_abbrev  0x0000000000000ddb      0x10e /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
+ .debug_abbrev  0x0000000000000ee9       0xaf /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
+ .debug_abbrev  0x0000000000000f98       0x14 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_udivsi3.o)
+ .debug_abbrev  0x0000000000000fac       0x14 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_umodsi3.o)
 
 .debug_loc      0x0000000000000000     0x182f
  .debug_loc     0x0000000000000000       0x76 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
@@ -616,40 +616,40 @@ OUTPUT(/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-
  .debug_ranges  0x00000000000001a8       0x20 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
  .debug_ranges  0x00000000000001c8       0x18 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
 
-.debug_line     0x0000000000000000     0x37da
- .debug_line    0x0000000000000000      0x5a9 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
- .debug_line    0x00000000000005a9      0x4e4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
- .debug_line    0x0000000000000a8d      0xa61 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
- .debug_line    0x00000000000014ee      0x29a /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
- .debug_line    0x0000000000001788      0x460 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
- .debug_line    0x0000000000001be8      0x9dc /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
- .debug_line    0x00000000000025c4      0x559 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- .debug_line    0x0000000000002b1d      0x4e0 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
- .debug_line    0x0000000000002ffd      0x38f /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
- .debug_line    0x000000000000338c      0x246 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
- .debug_line    0x00000000000035d2      0x11c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_udivsi3.o)
- .debug_line    0x00000000000036ee       0xec /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_umodsi3.o)
+.debug_line     0x0000000000000000     0x3a21
+ .debug_line    0x0000000000000000      0x5b3 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
+ .debug_line    0x00000000000005b3      0x67c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+ .debug_line    0x0000000000000c2f      0xa80 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+ .debug_line    0x00000000000016af      0x32f /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+ .debug_line    0x00000000000019de      0x452 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+ .debug_line    0x0000000000001e30      0x9dc /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+ .debug_line    0x000000000000280c      0x559 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ .debug_line    0x0000000000002d65      0x4df /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+ .debug_line    0x0000000000003244      0x38f /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
+ .debug_line    0x00000000000035d3      0x246 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
+ .debug_line    0x0000000000003819      0x11c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_udivsi3.o)
+ .debug_line    0x0000000000003935       0xec /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5/xtensa-lx106-elf/bin/../lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a(_umodsi3.o)
 
-.debug_str      0x0000000000000000     0x13cd
- .debug_str     0x0000000000000000      0x4f2 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
-                                        0x563 (size before relaxing)
- .debug_str     0x00000000000004f2      0x325 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
-                                        0x5a4 (size before relaxing)
- .debug_str     0x0000000000000817      0x2bb /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
-                                        0x768 (size before relaxing)
- .debug_str     0x0000000000000ad2       0xd4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
+.debug_str      0x0000000000000000     0x13c7
+ .debug_str     0x0000000000000000      0x4f8 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
+                                        0x569 (size before relaxing)
+ .debug_str     0x00000000000004f8      0x32c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+                                        0x5b1 (size before relaxing)
+ .debug_str     0x0000000000000824      0x2a8 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+                                        0x762 (size before relaxing)
+ .debug_str     0x0000000000000acc       0xd4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_common.o)
                                         0x2c1 (size before relaxing)
- .debug_str     0x0000000000000ba6       0xdd /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+ .debug_str     0x0000000000000ba0       0xdd /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
                                         0x3c5 (size before relaxing)
- .debug_str     0x0000000000000c83      0x209 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+ .debug_str     0x0000000000000c7d      0x209 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                         0x813 (size before relaxing)
- .debug_str     0x0000000000000e8c      0x1c3 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ .debug_str     0x0000000000000e86      0x1c3 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
                                         0x470 (size before relaxing)
- .debug_str     0x000000000000104f      0x19c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+ .debug_str     0x0000000000001049      0x19c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
                                         0x33c (size before relaxing)
- .debug_str     0x00000000000011eb      0x13c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
+ .debug_str     0x00000000000011e5      0x13c /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/esp8266/libesp8266.a(ets_printf.o)
                                         0x277 (size before relaxing)
- .debug_str     0x0000000000001327       0xa6 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
+ .debug_str     0x0000000000001321       0xa6 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
                                         0x19f (size before relaxing)
 
 .comment        0x0000000000000000       0x3a

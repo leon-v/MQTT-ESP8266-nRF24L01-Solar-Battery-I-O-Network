@@ -16,6 +16,9 @@ src/esp_image_format.o: \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/lock.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/cdefs.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdlib.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/stdlib.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/alloca.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/param.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/syslimits.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/endian.h \
@@ -33,15 +36,14 @@ src/esp_image_format.o: \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/spi_flash/include/esp_flash_data_types.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/bootloader_support/include/esp_secure_boot.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/log/include/esp_log.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/esp8266/include/rom/ets_sys.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/esp8266/include/esp8266/eagle_soc.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/log/include/esp_log_internal.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/spi_flash/include/esp_spi_flash.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/spi_flash/include/spi_flash.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/bootloader_support/include_priv/bootloader_flash.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/bootloader_support/include_priv/bootloader_random.h \
- /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/bootloader_support/include_priv/bootloader_sha.h \
- /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdlib.h \
- /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/stdlib.h \
- /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/alloca.h
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/bootloader_support/include_priv/bootloader_sha.h
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/include/sdkconfig.h:
 
@@ -74,6 +76,12 @@ src/esp_image_format.o: \
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/cdefs.h:
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdlib.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/stdlib.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/alloca.h:
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/param.h:
 
@@ -109,6 +117,10 @@ src/esp_image_format.o: \
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/log/include/esp_log.h:
 
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/esp8266/include/rom/ets_sys.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/esp8266/include/esp8266/eagle_soc.h:
+
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/log/include/esp_log_internal.h:
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/spi_flash/include/esp_spi_flash.h:
@@ -120,10 +132,4 @@ src/esp_image_format.o: \
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/bootloader_support/include_priv/bootloader_random.h:
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/bootloader_support/include_priv/bootloader_sha.h:
-
-/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdlib.h:
-
-/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/machine/stdlib.h:
-
-/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/alloca.h:
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/bootloader_support/src/esp_image_format.c:

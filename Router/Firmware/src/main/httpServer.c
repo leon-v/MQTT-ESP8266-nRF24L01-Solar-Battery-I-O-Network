@@ -23,6 +23,8 @@
 const char httpServerOK[] = "HTTP/1.1 200 OK\r\n\r\n";
 const char httpServerNotFound[] = "HTTP/1.1 404 Not Found\r\n\r\n";
 
+//https://gist.github.com/laobubu/d6d0e9beb934b60b2e552c2d03e1409e
+
 header_t reqhdr[32] = { {"\0", "\0"} };
 
 char *request_header(const char* name)
@@ -104,6 +106,13 @@ reconnect:
 
     recv_bytes = recv(new_sockfd, &buffer, sizeof(buffer), 0);
 
+    printf("R Bytes: %i\n", recv_bytes);
+
+    if (recv_bytes <= 0){
+    	printf("No Data\n");
+        goto failed3;
+    }
+
     buffer[recv_bytes] = '\0';
 
 	char * method = strtok(buffer	,  " \t\r\n");
@@ -113,8 +122,9 @@ reconnect:
 	printf("M: %s, U: %s, P:%s", method, uri, prot);
 
 	header_t *h = reqhdr;
+	char *t = NULL;
 
-	char *k,*v,*t;
+	char *k, *v;
     while (h < ( reqhdr + sizeof(reqhdr) - 1)) {
 
         k = strtok(NULL, "\r\n: \t");
@@ -142,30 +152,17 @@ reconnect:
         }
     }
 
-    char * t2 = request_header("Content-Length"); // and the related header if there is  
 
-	printf("payload_size s %s\n", t2);
+	t++; // now the *t shall be the beginning of user payload
+	char * t2 = request_header("Content-Length"); // and the related header if there is  
+	char * payload = t;
+	int payload_size = t2 ? atol(t2) : (recv_bytes - (t - buffer));
 
-    // t++; // now the *t shall be the beginning of user payload
+	printf("payload_size: %i\n", payload_size);
 
-    // printf("payload s %s\n", t);
+	printf("data length: %i\n", strlen(payload));
 
-	
-
-	// char * payload = t;
-
-	// int payload_size = t2 ? atol(t2) : (recv_bytes - (t - buffer));
-
-	// printf("payload_size i %i\n", payload_size);
-
-	// printf("payload %s\n", payload);
-
-    // char  *body = malloc(8192);
-    // recv_bytes = recv(new_sockfd, &body, 8192, 0);
-
-    // printf("body_s %i\n", recv_bytes);
-    // printf("body %s\n", body);
-    // free(body);
+	printf("Data: %s\n", payload);
 
     html = httpServerPageGet(uri);
 
@@ -177,7 +174,7 @@ reconnect:
     	send(new_sockfd, html, strlen(html), 0);
     	free(html);
     }
-    
+failed3:
     printf("Close Socket\n");
     close(new_sockfd);
     new_sockfd = -1;
