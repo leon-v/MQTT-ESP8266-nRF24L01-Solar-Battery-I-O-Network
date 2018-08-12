@@ -164,7 +164,7 @@ reconnect:
 
 	printf("Data: %s\n", payload);
 
-    html = httpServerPageGet(uri);
+    html = httpServerPageGet(method, uri, payload);
 
     if (html == NULL){
     	send(new_sockfd, httpServerNotFound, strlen(httpServerNotFound), 0);
@@ -195,3 +195,5 @@ void httpServerInit(void) {
 	ESP_ERROR_CHECK(nvs_flash_init());
     xTaskCreate(&httpServerTask, "httpServer", 8192, NULL, 6, NULL);
 }
+
+

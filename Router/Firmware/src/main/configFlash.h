@@ -6,13 +6,12 @@ typedef struct{
 
 	char wifiSSID[64];
 	char wifiPassword[64];
+	char mqttHost[64];
+	int mqttPort;
+	int mqttKeepalive;
+	char mqttUsername[64];
+	char mqttPassword[64];
 	unsigned int sta_type;
-
-	char mqtt_host[64];
-	unsigned int mqtt_port;
-	char mqtt_user[32];
-	char mqtt_pass[32];
-	unsigned int mqtt_keepalive;
 } configFlash_t;
 
 
