@@ -11,11 +11,11 @@ bash -c "cd %LinuxPath%; dos2unix  ./bash_shell_make.sh; ./bash_shell_make.sh %1
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 ECHO Killing previous PIDs......
-tasklist /v /fo csv | findstr /i "ESP8266_Build-Upload" > ./pid.csv
+tasklist /v /fo csv | findstr /i "ESP8266_Build-Upload" > pid.csv
 FOR /F "tokens=1,2* delims=,? " %%a in (pid.csv) do (
 	Taskkill /PID %%b /F
 )
-
+del pid.csv
 
 title=ESP8266_Build-Upload
 
