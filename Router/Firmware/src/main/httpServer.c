@@ -25,16 +25,59 @@ const char httpServerNotFound[] = "HTTP/1.1 404 Not Found\r\n\r\n";
 
 //https://gist.github.com/laobubu/d6d0e9beb934b60b2e552c2d03e1409e
 
-header_t reqhdr[32] = { {"\0", "\0"} };
 
-char *request_header(const char* name)
-{
-    header_t *h = reqhdr;
-    while(h->name) {
-        if (strcmp(h->name, name) == 0) return h->value;
-        h++;
-    }
-    return NULL;
+char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowDelimiter, const char * valueDelimiter, const char * endMatch){
+
+	tokens->length = 0;
+
+	// Start parsing the values by creating a new string from the payload 
+	char * token = strtok(buffer, rowDelimiter);
+
+	char * end = buffer + strlen(buffer);
+
+	// break apart the string getting all the parts delimited by &
+	while (token != NULL) {
+
+		if (strlen(endMatch) > 0){
+			end = token + strlen(token) + 1;
+
+			if (strncmp(end, endMatch, strlen(endMatch)) == 0) {
+				end+= strlen(endMatch);
+				break;
+			}
+		}
+
+		tokens->tokens[tokens->length++].key = token;
+
+		token = strtok(NULL, rowDelimiter);
+	}
+
+	// Re-parse the strigns and break them apart into key / value pairs
+	for (unsigned int index = 0; index < tokens->length; index++){
+
+		tokens->tokens[index].key = strtok(tokens->tokens[index].key, valueDelimiter);
+
+		tokens->tokens[index].value = strtok(NULL, valueDelimiter);
+
+		// If the value is NULL, make it point to an empty string.
+		if (tokens->tokens[index].value == NULL){
+			tokens->tokens[index].value = tokens->tokens[index].key + strlen(tokens->tokens[index].key);
+		}
+	}
+
+	return end;
+}
+
+char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
+
+	for (unsigned int index = 0; index < tokens->length; index++){
+
+		if (strcmp(tokens->tokens[index].key, key) == 0){
+			return tokens->tokens[index].value;
+		}
+	}
+
+	return NULL;
 }
 
 void httpServerTask(){
@@ -119,50 +162,19 @@ reconnect:
 	char * uri    = strtok(NULL	, " \t");
 	char * prot   = strtok(NULL	, " \t\r\n");
 
-	printf("M: %s, U: %s, P:%s", method, uri, prot);
+	char * headStart = strtok(NULL	, "");
 
-	header_t *h = reqhdr;
-	char *t = NULL;
+	tokens_t header;
 
-	char *k, *v;
-    while (h < ( reqhdr + sizeof(reqhdr) - 1)) {
+	char * payload = httpServerParseValues(&header, headStart, "\t\r\n", ": ", "\n\r\n");
 
-        k = strtok(NULL, "\r\n: \t");
-        if (!k){
-        	break;
-        }
+	char * contentLengthString = httpServerGetTokenValue(&header, "Content-Length");
 
-        v = strtok(NULL, "\r\n");
+	int contentLength = contentLengthString ? atol(contentLengthString) : strlen(payload);
 
-        while(*v && *v==' '){
-        	v++;
-        }
+	printf("Content Length: %i\n", contentLength);
 
-        h->name  = k;
-        h->value = v;
-        h++;
-
-        printf("[H] %s: %s\n", k, v);
-
-        t = v + 1 + strlen(v);
-
-        if (t[1] == '\r' && t[2] == '\n'){
-        	printf("[H] END\n");
-        	break;
-        }
-    }
-
-
-	t++; // now the *t shall be the beginning of user payload
-	char * t2 = request_header("Content-Length"); // and the related header if there is  
-	char * payload = t;
-	int payload_size = t2 ? atol(t2) : (recv_bytes - (t - buffer));
-
-	printf("payload_size: %i\n", payload_size);
-
-	printf("data length: %i\n", strlen(payload));
-
-	printf("Data: %s\n", payload);
+	printf("Payload Length: %i\n", strlen(payload));
 
     html = httpServerPageGet(method, uri, payload);
 
@@ -174,6 +186,7 @@ reconnect:
     	send(new_sockfd, html, strlen(html), 0);
     	free(html);
     }
+
 failed3:
     printf("Close Socket\n");
     close(new_sockfd);

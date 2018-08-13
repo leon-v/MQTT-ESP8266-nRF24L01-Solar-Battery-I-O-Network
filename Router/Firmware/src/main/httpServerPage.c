@@ -4,70 +4,57 @@
 #include <strings.h>
 
 #include "configFlash.h"
+#include "httpServer.h"
 
-
-typedef struct{
-	char * key;
-	char * value;
-} token_t;
-
-typedef struct{
-	token_t tokens[8];
-	unsigned int length;
-} tokens_t;
-
-tokens_t * httpServerPageParsePost(char * payload){
-	
-	tokens_t post;
-	post.length = 0;
-
-	printf("Data: %s\n", payload);
-
-	char * token = strtok(payload, "&");
-
-	while (token != NULL){
-		post.tokens[post.length++].key = token;
-		token = strtok(NULL, "&");
-	}
-
-	unsigned int index;
-	for (index = 0; index < post.length; index++){
-		post.tokens[index].key = strtok(post.tokens[index].key, "=");
-		post.tokens[index].value = strtok(NULL, "=");
-
-		if (post.tokens[index].value == NULL){
-			post.tokens[index].value = post.tokens[index].key + strlen(post.tokens[index].key);
-		}
-		printf("Key: %s, Value: %s\n", post.tokens[index].key, post.tokens[index].value);
-	}
-}
 void httpServerPagePostIndex(char * payload){
 
 	tokens_t post;
-	post.length = 0;
 
-	printf("Data: %s\n", payload);
+	httpServerParseValues(&post, payload, "&", "=", "");
 
-	char * token = strtok(payload, "&");
+	char * value;
 
-	while (token != NULL){
-		post.tokens[post.length++].key = token;
-		token = strtok(NULL, "&");
+	value = httpServerGetTokenValue(&post, "wifiSSID");
+	if (value){
+		strcpy(configFlash.wifiSSID, value);
 	}
 
-	unsigned int index;
-	for (index = 0; index < post.length; index++){
-		post.tokens[index].key = strtok(post.tokens[index].key, "=");
-		post.tokens[index].value = strtok(NULL, "=");
-
-		if (post.tokens[index].value == NULL){
-			post.tokens[index].value = post.tokens[index].key + strlen(post.tokens[index].key);
-		}
-		printf("Key: %s, Value: %s\n", post.tokens[index].key, post.tokens[index].value);
+	value = httpServerGetTokenValue(&post, "wifiPassword");
+	if (value){
+		strcpy(configFlash.wifiPassword, value);
 	}
-	
+
+	value = httpServerGetTokenValue(&post, "mqttHost");
+	if (value){
+		strcpy(configFlash.mqttHost, value);
+	}
+
+	value = httpServerGetTokenValue(&post, "mqttPort");
+	if (value){
+		configFlash.mqttPort = atoi(value);
+	}
+
+	value = httpServerGetTokenValue(&post, "mqttKeepalive");
+	if (value){
+		configFlash.mqttKeepalive = atoi(value);
+	}
+
+	value = httpServerGetTokenValue(&post, "mqttUsername");
+	if (value){
+		strcpy(configFlash.mqttUsername, value);
+	}
+
+	value = httpServerGetTokenValue(&post, "mqttPassword");
+	if (value){
+		strcpy(configFlash.mqttPassword, value);
+	}
+
+
+	configFlashSave();
 }
 char * httpServerPageGetIndex(void){
+
+	configFlashLoad();
 
 	static const char PageIndex[] = "\
 		<!DOCTYPE html>\

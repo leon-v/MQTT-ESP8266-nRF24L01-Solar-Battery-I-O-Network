@@ -28,15 +28,23 @@ void app_main() {
 
     configFlashInit();
 
-    // configFlashSave();
+    configFlashSave();
 
     printf("CF SSID %s\n", configFlash.wifiSSID);
     printf("CF PASS %s\n", configFlash.wifiPassword);
     
     wifiInit();
+
+    
     // wifiStationScanStart();
 
-	// wifiAccessPointInit();
-	wifiClientInit();
+    unsigned char configMode = 0;
+    if (configMode){
+		wifiAccessPointInit();
+    }
+    else{
+		wifiClientInit();
+    }
+	
 	httpServerInit();
 }
