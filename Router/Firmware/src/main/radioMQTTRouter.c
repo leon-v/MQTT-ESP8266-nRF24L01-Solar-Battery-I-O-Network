@@ -46,7 +46,7 @@ void radioMQTTRouterTask(){
 
     MQTTClientInit(&client, &network, 30000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
 
-    if ((rc = NetworkConnect(&network, configFlash.mqttHost, configFlash.mqttPort)) != 0) {
+    if ((rc = NetworkConnect(&network, "valkenb.org", 1883)) != 0) {
         printf("Return code from network connect is %d\n", rc);
     }
 
@@ -62,6 +62,8 @@ void radioMQTTRouterTask(){
 
     connectData.MQTTVersion = 3;
     connectData.clientID.cstring = "NRF24L01+ Router ESP8266 Test";
+    connectData.keepAliveInterval = 10;
+    connectData.cleansession = 0;
     //sprintf(connectData.clientID.cstring, "NRF24L01+ Router ESP8266 %u", system_get_chip_id());
     //connectData.clientID.lenstring = strlen(connectData.clientID.cstring);
 
