@@ -63,7 +63,7 @@ reconnect:
 	#endif
 
     connectData.MQTTVersion = 4; // 3 = 3.1 4 = 3.1.1
-    connectData.clientID.cstring = "NRF24L01+ Router ESP8266 Test1";
+    connectData.clientID.cstring = "NRF24L01+ Router ESP8266 TestH";
     //sprintf(connectData.clientID.cstring, "NRF24L01+ Router ESP8266 %u", system_get_chip_id());
     //connectData.clientID.lenstring = strlen(connectData.clientID.cstring);
     // connectData.keepAliveInterval = 30;

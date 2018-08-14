@@ -10,11 +10,13 @@ static xQueueHandle gpio_evt_queue = NULL;
 static void gpio_isr_handler(void *arg){
     uint32_t gpio_num = (uint32_t) arg;
     xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+    // printf("gpio_isr_handler\n");
 }
 
 static void gpio_task_example(void *arg){
     uint32_t io_num;
 
+    // printf("gpio_task_example\n");
     for (;;) {
         if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
             printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
@@ -29,16 +31,15 @@ void nrf24l01InterfaceInit(void){
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTCK_U, FUNC_GPIO13); // MOSI
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTMS_U, FUNC_GPIO14); // CLK
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDO_U, FUNC_GPIO15); // CS
-
 	PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO5_U, FUNC_GPIO5); // INT
 
 	// Configure Inputs
 	gpio_config_t inputs;
-	inputs.pin_bit_mask	= (1ULL << MISOPIN) | (1ULL << INTPIN);
+	inputs.pin_bit_mask	= (1ULL << MISOPIN);
 	inputs.mode			= GPIO_MODE_INPUT;
-	inputs.pull_up_en		= GPIO_PULLUP_DISABLE;
+	inputs.pull_up_en	= GPIO_PULLUP_DISABLE;
 	inputs.pull_down_en	= GPIO_PULLDOWN_DISABLE;
-	inputs.intr_type		= GPIO_INTR_DISABLE;
+	inputs.intr_type	= GPIO_INTR_DISABLE;
 	gpio_config(&inputs);
 
 
@@ -46,18 +47,26 @@ void nrf24l01InterfaceInit(void){
 	gpio_config_t output;
 	output.pin_bit_mask	= (1ULL << MOSIPIN) | (1ULL << CLKPIN) | (1ULL << CEPIN) | (1ULL << CSPIN);
 	output.mode			= GPIO_MODE_OUTPUT;
-	output.pull_up_en		= GPIO_PULLUP_DISABLE;
+	output.pull_up_en	= GPIO_PULLUP_DISABLE;
 	output.pull_down_en	= GPIO_PULLDOWN_DISABLE;
-	output.intr_type		= GPIO_INTR_DISABLE;
+	output.intr_type	= GPIO_INTR_DISABLE;
 	gpio_config(&output);
+
+	// Configure Interrupts
+	gpio_config_t interrupt;
+	interrupt.pin_bit_mask	= (1ULL << INTPIN);
+	interrupt.mode			= GPIO_MODE_INPUT;
+	interrupt.pull_up_en	= GPIO_PULLUP_ENABLE;
+	interrupt.pull_down_en	= GPIO_PULLDOWN_DISABLE;
+	interrupt.intr_type		= GPIO_INTR_NEGEDGE;
+	gpio_config(&interrupt);
 
 	//create a queue to handle gpio event from isr
     gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
+
     //start gpio task
     xTaskCreate(gpio_task_example, "gpio_task_example", 2048, NULL, 10, NULL);
 
-	//change gpio intrrupt type for one pin
-    gpio_set_intr_type(INTPIN, GPIO_INTR_NEGEDGE);
 	// Setup interrupt pin
     gpio_install_isr_service(0);
     //hook isr handler for specific gpio pin

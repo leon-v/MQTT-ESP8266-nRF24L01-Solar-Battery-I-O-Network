@@ -6,12 +6,13 @@
 
 #define delayUs(x) os_delay_us(x)
 
+#define CEPIN	4
+#define INTPIN	5
 #define MISOPIN	12
 #define MOSIPIN	13
 #define CLKPIN	14
-#define CEPIN	4
 #define CSPIN	15
-#define INTPIN	5
+
 
 #define nrf24l01CELow() gpio_set_level(CEPIN, 0); // (high, low, out, in)
 #define nrf24l01CEHigh() gpio_set_level(CEPIN, 1); // (high, low, out, in)

@@ -357,6 +357,7 @@ void nrf24l01Service(void){
     }
 	
 	if (status.RX == RXReady){
+		printf("RX Packet: %s", RXPacket.Message);
 		status.RX = RXIdle;
 	}
 }
@@ -454,12 +455,15 @@ void nrf24l01InitRegisters(){
     nrf24l01Send(n_FLUSH_RX, 0);
     
     // Enable 2-byte CRC and power up in receive mode.
-	status.configRegister.PRIM_RX = 0;
+	status.configRegister.PRIM_RX = 1;
 	status.configRegister.EN_CRC = 1;
     status.configRegister.CRCO = 1;
 	status.configRegister.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
 
+	status.configRegister.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
+
+	printf("nrf24L01 Status: %d\n", status.configRegister.byte);
 
 }
 
