@@ -16,6 +16,7 @@
 #include "wifiClient.h"
 #include "configFlash.h"
 #include "mqtt.h"
+#include "radio.h"
 #include "radioToMQTT.h"
 
 void app_main() {
@@ -51,6 +52,9 @@ void app_main() {
 	httpServerInit();
 
     mqttInt();
-	
+
+    radioInit();
 	radioToMQTTInit();
+
+
 }
