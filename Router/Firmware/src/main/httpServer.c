@@ -135,14 +135,15 @@ reconnect:
 	// strcat(http_header, );
 
 
-    printf("HTTP server socket accept client ......");
+    printf("HTTP server socket listening.\n");
     new_sockfd = accept(sockfd, (struct sockaddr*)&sock_addr, &addr_len);
 
     if (new_sockfd < 0) {
-        printf("failed\n");
+        printf("HTTP server socket listen failed.\n");
         goto failed2;
     }
-    printf("OK\n");
+
+    printf("HTTP server socket got connection.\n");
 
 
     char buffer[1024];

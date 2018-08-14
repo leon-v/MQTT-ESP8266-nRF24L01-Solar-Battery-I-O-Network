@@ -15,7 +15,8 @@
 #include "httpServer.h"
 #include "wifiClient.h"
 #include "configFlash.h"
-#include "radioMQTTRouter.h"
+#include "mqtt.h"
+#include "radioToMQTT.h"
 
 void app_main() {
     //Initialize NVS
@@ -49,5 +50,7 @@ void app_main() {
 	
 	httpServerInit();
 
-	radioMQTTRouterInt();
+    mqttInt();
+	
+	radioToMQTTInit();
 }
