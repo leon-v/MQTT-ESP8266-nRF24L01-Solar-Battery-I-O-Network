@@ -32,31 +32,33 @@ void mqttTask(){
 
 reconnect:
 
-    printf("mqtt client thread starts\n");
+    printf("MQTT Client - Connection - Thread start.\n");
 
-    vTaskDelay(500 / portTICK_RATE_MS);  //send every 10 seconds
+    vTaskDelay(5000 / portTICK_RATE_MS);  //send every 10 seconds
 
 	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
 	NetworkInit(&network);
 
-	MQTTClientInit(&client, &network, 30000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
+	MQTTClientInit(&client, &network, (configFlash.mqttKeepalive * 1000), sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
 
 	char * address = (char *) &configFlash.mqttHost;
 	
     if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
-        printf("Return code from network connect is %d\n", rc);
+    	printf("MQTT Client - Connection - Failed to connect to %s:%d with error %d.\n", address, configFlash.mqttPort, rc);
         goto fail2;
     }
+
+    printf("MQTT Client - Connection - Socket connected.");
 
     #if defined(MQTT_TASK)
 
     if ((rc = MQTTStartTask(&client)) != pdPASS) {
-        printf("Return code from start tasks is %d\n", rc);
+        printf("MQTT Client - Connection - Task thread start failed with error %d.\n", rc);
         goto fail1;
-    } else {
-        printf("Use MQTTStartTask\n");
     }
+
+    printf("MQTT Client - Connection - Task thread started.");
 
 	#endif
 
@@ -66,45 +68,26 @@ reconnect:
     //connectData.clientID.lenstring = strlen(connectData.clientID.cstring);
     // connectData.keepAliveInterval = 30;
     // connectData.cleansession = 0;
-    connectData.username.cstring = "mqtt";
-    connectData.password.cstring = "mqttgrl7";
+    connectData.username.cstring = (char *) &configFlash.mqttUsername;
+    connectData.password.cstring = (char *) &configFlash.mqttPassword;
 
     if ((rc = MQTTConnect(&client, &connectData)) != 0) {
-        printf("Return code from MQTT connect is %d\n", rc);
+        printf("MQTT Client - Connection - Failed to authenticate with MQTT server with error code %d.\n", rc);
         goto fail1;
     }
 	
-	printf("MQTT Connected\n");
+	printf("MQTT Client - Connection - Connected.");
 
 	xEventGroupSetBits(mqttEventGroup, MQTT_CONNECTED_BIT);
 
-    unsigned int tick = 0;
-    while (true){
+    for (;;){
 
     	vTaskDelay(10000 / portTICK_RATE_MS);  //send every 10 seconds
 
     	if ((rc = MQTTIsConnected(&client)) != 1) {
-    		printf("Return from MQTTIsConnected is %d\n", rc);
+    		printf("MQTT Client - Connection - Connected check failed with error code %d.\n", rc);
     		goto fail1;
     	}
-
-
-    	MQTTMessage message;
-        char payload[30];
-
-    	message.qos = QOS2;
-        message.retained = 0;
-        message.payload = payload;
-        sprintf(payload, "%d", tick++);
-        message.payloadlen = strlen(payload);
-
-        if ((rc = MQTTPublish(&client, "radio/status/me/tick", &message)) != 0) {
-            printf("Return code from MQTT publish is %d\n", rc);
-        } else {
-            printf("MQTT publish topic \"radio/status/me/tick\", message number is %d\n", tick);
-        }
-
-    	
     }
 
 fail1:

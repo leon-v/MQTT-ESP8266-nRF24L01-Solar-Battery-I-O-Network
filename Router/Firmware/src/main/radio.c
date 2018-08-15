@@ -38,10 +38,14 @@ static void radioInterruptTask(void *arg){
 static void radioTimerTask(void *arg){
 
 	for (;;) {
+
 		nrf24l01ISR();
+
 		nrf24l01Service();
+
 		nrf24l01SetRXMode(1);
-	    vTaskDelay(1000 / portTICK_RATE_MS);
+		
+	    vTaskDelay(10000 / portTICK_RATE_MS);
 	}
 }
 
