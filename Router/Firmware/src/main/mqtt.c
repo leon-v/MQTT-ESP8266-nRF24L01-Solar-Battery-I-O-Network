@@ -7,6 +7,7 @@
 #include "mqtt.h"
 #include "configFlash.h"
 #include "wifi.h"
+#include "esp_system.h"
 
 #define MQTT_TASK 1
 
@@ -62,8 +63,16 @@ reconnect:
 
 	#endif
 
+    uint8_t mac[6];
+    esp_efuse_mac_get_default(mac);
+    char clientID[48];
+
+    sprintf(clientID, "NRF24L01+ Router ESP8266 MAC:"MACSTR"\n", MAC2STR(mac));
+
+    printf("MQTT Client - Connection - Client ID set to %s.\n", clientID);
+
     connectData.MQTTVersion = 4; // 3 = 3.1 4 = 3.1.1
-    connectData.clientID.cstring = "NRF24L01+ Router ESP8266 TestW";
+    connectData.clientID.cstring = clientID;
     //sprintf(connectData.clientID.cstring, "NRF24L01+ Router ESP8266 %u", system_get_chip_id());
     //connectData.clientID.lenstring = strlen(connectData.clientID.cstring);
     // connectData.keepAliveInterval = 30;

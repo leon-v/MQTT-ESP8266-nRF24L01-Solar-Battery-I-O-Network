@@ -25,7 +25,7 @@ static esp_err_t wifiEventHandler(void *ctx, system_event_t *event){
         	break;
 
 		case SYSTEM_EVENT_AP_STACONNECTED:
-			printf("WiFi - Event - Client connected to out access point: "MACSTR".\n", MAC2STR(event->event_info.sta_disconnected.mac));
+			printf("WiFi - Event - Client connected to out access point: "MACSTR".\n", MAC2STR(event->event_info.sta_connected.mac));
 			xEventGroupSetBits(wifiEventGroup, WIFI_CONNECTED_BIT);
 			break;
 
