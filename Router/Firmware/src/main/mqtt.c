@@ -16,8 +16,14 @@ static EventGroupHandle_t mqttEventGroup;
 
 MQTTClient client;
 
+char uniqueID[16];
+
 EventGroupHandle_t mqttGetEventGroup(void){
 	return mqttEventGroup;
+}
+
+char * mqttGetUniqueID(void){
+	return uniqueID;
 }
 
 MQTTClient * mqttGetClient(void){
@@ -63,11 +69,10 @@ reconnect:
 
 	#endif
 
-    uint8_t mac[6];
-    esp_efuse_mac_get_default(mac);
+    
     char clientID[48];
 
-    sprintf(clientID, "NRF24L01+ Router ESP8266 MAC:"MACSTR"\n", MAC2STR(mac));
+    sprintf(clientID, "NRF24L01+ Router ESP8266 %s", mqttGetUniqueID());
 
     printf("MQTT Client - Connection - Client ID set to %s.\n", clientID);
 
@@ -116,6 +121,11 @@ fail2:
 }
 
 void mqttInt(){
+
+	uint8_t mac[6];
+    esp_efuse_mac_get_default(mac);
+
+	sprintf(uniqueID, "%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
 	mqttEventGroup = xEventGroupCreate();
 

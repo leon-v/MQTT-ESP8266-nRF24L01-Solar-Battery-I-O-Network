@@ -15,6 +15,7 @@
 
 MQTTClient * mqttGetClient(void);
 EventGroupHandle_t mqttGetEventGroup(void);
+char * mqttGetUniqueID(void);
 
 void mqttInt();
 

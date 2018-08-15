@@ -33,7 +33,7 @@ void radioToMQTTTask(){
 	xEventGroupWaitBits(mqttGetEventGroup(), MQTT_CONNECTED_BIT, false, true, portMAX_DELAY);
 
 	MQTTMessage message;
-    char mqttTopic[32];
+    char mqttTopic[64];
     int rc = 0;
 
 	message.qos = QOS2;
@@ -52,8 +52,9 @@ void radioToMQTTTask(){
 		sensor = strtok(NULL, "/");
 		value = strtok(NULL, "/");
 
-		sprintf(mqttTopic, "%s/%s", name, sensor);
+		sprintf(mqttTopic, "radio/out/%s/%s/%s", mqttGetUniqueID(), name, sensor);
 		
+		printf("MQTT Publish: %s. Value: %s", mqttTopic, value);
 		message.payload = value;
 
 		message.payloadlen = strlen(message.payload);
