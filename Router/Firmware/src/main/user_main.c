@@ -33,13 +33,8 @@ void app_main() {
 
     configFlashSave();
 
-    printf("CF SSID %s\n", configFlash.wifiSSID);
-    printf("CF PASS %s\n", configFlash.wifiPassword);
-    
-    wifiInit();
 
-    
-    // wifiStationScanStart();
+    wifiInit();
 
     unsigned char configMode = 0;
     if (configMode){
@@ -48,13 +43,12 @@ void app_main() {
     else{
 		wifiClientInit();
     }
-	
-	httpServerInit();
 
     mqttInt();
 
     radioInit();
-	radioToMQTTInit();
+    radioToMQTTInit();
+    
 
-
+    httpServerInit();
 }

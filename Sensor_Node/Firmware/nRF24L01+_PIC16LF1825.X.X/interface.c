@@ -29,7 +29,7 @@ void nrf24l01InterfaceInit(void){
 }
 
 void resetWDT(void){
-	WDTCONbits.WDTPS = 0b01101; // 8s
+	WDTCONbits.WDTPS = 0b01011; // 2s
     CLRWDT();
 }
 

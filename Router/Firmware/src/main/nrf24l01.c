@@ -181,8 +181,7 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     status.TX = TXReady;
 	
 	while (status.TX != TXIdle){
-        delayUs(50000);
-        delayUs(50000);
+        delayUs(10000);
         nrf24l01Service();
     }
 }
@@ -194,6 +193,7 @@ void nrf24l01ISR(void){
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
+    	// printf("Radio: TX_DS\n");
         
         if (status.RX == RXIdle){
             status.RX = RXPending;
@@ -207,6 +207,7 @@ void nrf24l01ISR(void){
     }
 	
 	if (status.statusRegister.TX_DS){
+		// printf("Radio: TX_DS\n");
         
 		status.TX = TXSent;
 		
@@ -356,10 +357,6 @@ void nrf24l01Service(void){
 		}
     }
 	
-	if (status.RX == RXReady){
-		printf("RX Packet: %s", RXPacket.Message);
-		status.RX = RXIdle;
-	}
 }
 
 void nrf24l01InitRegisters(){
@@ -461,10 +458,6 @@ void nrf24l01InitRegisters(){
 	status.configRegister.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
 
-	status.configRegister.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
-
-	printf("nrf24L01 Status: %d\n", status.configRegister.byte);
-
 }
 
 void nrf24l01Init(void){
@@ -477,19 +470,15 @@ void nrf24l01Init(void){
     
     nrf24l01CELow();
     
-    delayUs(50000);
+    delayUs(1000);
     
     nrf24l01InitRegisters();    
     
-    delayUs(50000);
+    delayUs(1000);
 
     nrf24l01CEHigh();
     
     status.TX = TXIdle;
     status.RX = RXIdle;
-
-    status.configRegister.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
-
-    printf("nrd24L01 status: %u\n", status.configRegister.byte);
 }
 

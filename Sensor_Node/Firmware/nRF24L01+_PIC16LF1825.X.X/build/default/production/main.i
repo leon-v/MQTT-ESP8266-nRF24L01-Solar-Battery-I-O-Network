@@ -11011,7 +11011,7 @@ unsigned char retryCount;
 
 volatile nrf24l01State_t status;
 
-# 35
+# 36
 typedef union{
 struct{
 unsigned int byte :8;
@@ -11030,7 +11030,7 @@ packetData_t packetData;
 char Message[32];
 } nrf24l01Packet_t;
 
-# 57
+# 58
 unsigned char nrf24l01Send(unsigned char command,unsigned char data);
 void nrf24l01SetRXPipe(unsigned char pipe);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -11097,13 +11097,13 @@ return adcSum;
 
 void sleepListren(unsigned int seconds){
 
-while(seconds--){
 
+while(seconds--){
 
 nrf24l01SetRXMode(1);
 sleepMs(100);
 
-nrf24l01SetRXMode(1);
+nrf24l01SetRXMode(0);
 sleepMs(900);
 
 }
@@ -11124,7 +11124,7 @@ packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
-sleepListren(2);
+sleepListren(1);
 }
 
 
@@ -11209,7 +11209,7 @@ _delay((unsigned long)((1000)*(32000000/4000000.0)));
 
 
 
-strcpy(romData->name, "UH1");
+strcpy(romData->name, "UWT");
 
 nrf24l01Init();
 

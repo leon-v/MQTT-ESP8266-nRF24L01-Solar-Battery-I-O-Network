@@ -56,7 +56,8 @@ interface.o: \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/nrf24l01.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/nRF24L01_Types.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/string.h \
- /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radio.h
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -171,4 +172,6 @@ interface.o: \
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/string.h:
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/sys/string.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radio.h:
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/./interface.c:

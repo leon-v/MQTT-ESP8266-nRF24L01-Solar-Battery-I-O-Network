@@ -7348,9 +7348,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.c: 31: void resetWDT(void){
 [e :U _resetWDT ]
 [f ]
-[; ;interface.c: 32: WDTCONbits.WDTPS = 0b01101;
+[; ;interface.c: 32: WDTCONbits.WDTPS = 0b01011;
 "32
-[e = . . _WDTCONbits 0 1 -> -> 13 `i `uc ]
+[e = . . _WDTCONbits 0 1 -> -> 11 `i `uc ]
 [; ;interface.c: 33: asm("clrwdt");
 "33
 [; <" clrwdt ;# ">

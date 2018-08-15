@@ -4,25 +4,14 @@
 
 #include "interface.h"
 #include "nrf24l01.h"
+#include "radio.h"
 
-static xQueueHandle gpio_evt_queue = NULL;
 
 static void gpio_isr_handler(void *arg){
-    uint32_t gpio_num = (uint32_t) arg;
-    xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
-    // printf("gpio_isr_handler\n");
-}
 
-static void gpio_task_example(void *arg){
-    uint32_t io_num;
+	uint32_t gp_io = (uint32_t) arg;
 
-    // printf("gpio_task_example\n");
-    for (;;) {
-        if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
-            printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
-            nrf24l01ISR();
-        }
-    }
+    xQueueSendFromISR(radioGetEventQueue(), &gp_io, NULL);
 }
 
 void nrf24l01InterfaceInit(void){
@@ -60,12 +49,6 @@ void nrf24l01InterfaceInit(void){
 	interrupt.pull_down_en	= GPIO_PULLDOWN_DISABLE;
 	interrupt.intr_type		= GPIO_INTR_NEGEDGE;
 	gpio_config(&interrupt);
-
-	//create a queue to handle gpio event from isr
-    gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
-
-    //start gpio task
-    xTaskCreate(gpio_task_example, "gpio_task_example", 2048, NULL, 10, NULL);
 
 	// Setup interrupt pin
     gpio_install_isr_service(0);

@@ -10674,7 +10674,7 @@ SSP1CON1bits.SSPEN = 1;
 }
 
 void resetWDT(void){
-WDTCONbits.WDTPS = 0b01101;
+WDTCONbits.WDTPS = 0b01011;
 asm("clrwdt");
 }
 

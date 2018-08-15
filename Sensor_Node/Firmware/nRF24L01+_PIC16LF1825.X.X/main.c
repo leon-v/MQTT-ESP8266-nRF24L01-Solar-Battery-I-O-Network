@@ -63,13 +63,13 @@ float getADCValue(unsigned char channel){
 
 void sleepListren(unsigned int seconds){
 	
+    
 	while(seconds--){
-		
 		
 		nrf24l01SetRXMode(1);
 		sleepMs(100);
-		
-		nrf24l01SetRXMode(1);
+//		
+		nrf24l01SetRXMode(0);
 		sleepMs(900);
 		
 	}
@@ -90,7 +90,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepListren(2);
+	sleepListren(1);
 }
 
 

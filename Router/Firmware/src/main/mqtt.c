@@ -9,8 +9,6 @@
 #include "wifi.h"
 
 #define MQTT_TASK 1
-#define MQTT_CLIENT_THREAD_STACK_WORDS  2048
-#define MQTT_CLIENT_THREAD_PRIO         8
 
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t mqttEventGroup;
@@ -36,17 +34,17 @@ reconnect:
 
     printf("mqtt client thread starts\n");
 
-	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
+    vTaskDelay(500 / portTICK_RATE_MS);  //send every 10 seconds
 
-	vTaskDelay(1000 / portTICK_RATE_MS);  //send every 1 seconds
+	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
 	NetworkInit(&network);
 
 	MQTTClientInit(&client, &network, 30000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
 
-    char* address = "valkenb.org";
-
-    if ((rc = NetworkConnect(&network, address, 1883)) != 0) {
+	char * address = (char *) &configFlash.mqttHost;
+	
+    if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
         printf("Return code from network connect is %d\n", rc);
         goto fail2;
     }
@@ -63,7 +61,7 @@ reconnect:
 	#endif
 
     connectData.MQTTVersion = 4; // 3 = 3.1 4 = 3.1.1
-    connectData.clientID.cstring = "NRF24L01+ Router ESP8266 TestH";
+    connectData.clientID.cstring = "NRF24L01+ Router ESP8266 TestW";
     //sprintf(connectData.clientID.cstring, "NRF24L01+ Router ESP8266 %u", system_get_chip_id());
     //connectData.clientID.lenstring = strlen(connectData.clientID.cstring);
     // connectData.keepAliveInterval = 30;
@@ -83,7 +81,13 @@ reconnect:
     unsigned int tick = 0;
     while (true){
 
-    	vTaskDelay(1000 / portTICK_RATE_MS);  //send every 10 seconds
+    	vTaskDelay(10000 / portTICK_RATE_MS);  //send every 10 seconds
+
+    	if ((rc = MQTTIsConnected(&client)) != 1) {
+    		printf("Return from MQTTIsConnected is %d\n", rc);
+    		goto fail1;
+    	}
+
 
     	MQTTMessage message;
         char payload[30];
@@ -100,12 +104,7 @@ reconnect:
             printf("MQTT publish topic \"radio/status/me/tick\", message number is %d\n", tick);
         }
 
-        vTaskDelay(1000 / portTICK_RATE_MS);  //send every 10 seconds
-
-    	if ((rc = MQTTIsConnected(&client)) != 1) {
-    		printf("Return from MQTTIsConnected is %d\n", rc);
-    		goto fail1;
-    	}
+    	
     }
 
 fail1:
@@ -126,5 +125,5 @@ void mqttInt(){
 
 	mqttEventGroup = xEventGroupCreate();
 
-	xTaskCreate(&mqttTask, "mqtt", MQTT_CLIENT_THREAD_STACK_WORDS, NULL, MQTT_CLIENT_THREAD_PRIO, NULL);
+	xTaskCreate(&mqttTask, "mqtt", 2048, NULL, 9, NULL);
 }
