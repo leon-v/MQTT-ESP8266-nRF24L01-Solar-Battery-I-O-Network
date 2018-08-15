@@ -11050,6 +11050,10 @@ if (PIR0bits.INTF){
 nrf24l01ISR();
 PIR0bits.INTF = 0;
 }
+
+if (PIR1bits.ADIF){
+PIR1bits.ADIF = 0;
+}
 }
 
 float getADCValue(unsigned char channel){
@@ -11120,7 +11124,7 @@ strcat(packet->Message, "/");
 strcat(packet->Message, ftoa(value, &ftoaStatus));
 
 packet->packetData.byte = 0;
-packet->packetData.ACKRequest = 1;
+packet->packetData.ACKRequest = 0;
 
 nrf24l01SendPacket(packet);
 
@@ -11134,14 +11138,14 @@ nrf24l01Packet_t packet;
 
 sendMessage(&packet, "COUNT", counter);
 
-# 107
+# 111
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
 EEPROMWrite(0, (unsigned char) 22);
 
 sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 
-# 119
+# 123
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
@@ -11198,7 +11202,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 180
+# 184
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11244,6 +11248,7 @@ ADCON1bits.ADCS = 0b111;
 ADCON1bits.ADFM = 1;
 ADCON1bits.ADPREF = 0b11;
 ADCON1bits.ADNREF = 0b00;
+PIE1bits.ADIE = 1;
 
 
 ADCON0bits.CHS = 3;

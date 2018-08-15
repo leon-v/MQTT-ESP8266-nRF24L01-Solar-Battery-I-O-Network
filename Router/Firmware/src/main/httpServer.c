@@ -91,18 +91,18 @@ void httpServerTask(){
 
 	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
-	printf("create socket ......");
+	printf("HTTP Server - Connection - Creating socket.\n");
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0) {
-        printf("failed\n");
+        printf("HTTP Server - Connection - Failed to create socket.\n");
         goto failed1;
     }
 
-    printf("OK\n");
+    printf("HTTP Server - Connection - Successfully created socket.\n");
 
 	
-	printf("socket bind ......");
+	printf("HTTP Server - Connection - Binding socket.\n");
     memset(&sock_addr, 0, sizeof(sock_addr));
     sock_addr.sin_family = AF_INET;
     sock_addr.sin_addr.s_addr = 0;
@@ -111,20 +111,21 @@ void httpServerTask(){
     ret = bind(sockfd, (struct sockaddr*)&sock_addr, sizeof(sock_addr));
 
     if (ret) {
-        printf("bind failed\n");
+        printf("HTTP Server - Connection - Failed to bind socket.\n");
         goto failed1;
     }
 
-    printf("OK\n");
+    printf("HTTP Server - Connection - Successfully bound socket.\n");
 
-    printf("server socket listen ......");
+    printf("HTTP Server - Connection - Listening for connection.\n");
     ret = listen(sockfd, 4);
 
     if (ret) {
-        printf("failed\n");
+        printf("HTTP Server - Connection - Failed to listen for connection.\n");
         goto failed1;
     }
-    printf("OK\n");
+
+    printf("HTTP Server - Connection - Got connection.\n");
 
     char * html = NULL;
 
@@ -135,25 +136,22 @@ reconnect:
 	// strcat(http_header, );
 
 
-    printf("HTTP server socket listening.\n");
+    printf("HTTP Server - Connection - Accepting connection.\n");
     new_sockfd = accept(sockfd, (struct sockaddr*)&sock_addr, &addr_len);
 
     if (new_sockfd < 0) {
-        printf("HTTP server socket listen failed.\n");
+        printf("HTTP Server - Connection - Failed to accept connection.\n");
         goto failed2;
     }
 
-    printf("HTTP server socket got connection.\n");
-
+    printf("HTTP Server - Connection - Successfully accepted connection.\n");
 
     char buffer[1024];
 
     recv_bytes = recv(new_sockfd, &buffer, sizeof(buffer), 0);
 
-    printf("R Bytes: %i\n", recv_bytes);
-
     if (recv_bytes <= 0){
-    	printf("No Data\n");
+    	printf("HTTP Server - Connection - No data received from connection.\n");
         goto failed3;
     }
 
@@ -173,9 +171,7 @@ reconnect:
 
 	int contentLength = contentLengthString ? atol(contentLengthString) : strlen(payload);
 
-	printf("Content Length: %i\n", contentLength);
-
-	printf("Payload Length: %i\n", strlen(payload));
+	// Check if contentLength matches buffer, and if not, wait for more data
 
     html = httpServerPageGet(method, uri, payload);
 
@@ -189,7 +185,7 @@ reconnect:
     }
 
 failed3:
-    printf("Close Socket\n");
+    printf("HTTP Server - Connection - Closing connection.\n");
     close(new_sockfd);
     new_sockfd = -1;
 
@@ -197,10 +193,11 @@ failed2:
 	goto reconnect;
 
 failed1:
+	
+	printf("HTTP Server - Connection - Fatal error. Closing socket and ending.\n");
     close(sockfd);
     sockfd = -1;
     vTaskDelete(NULL);
-    printf("task exit\n");
 
     return ;
 }

@@ -49,7 +49,7 @@ reconnect:
         goto fail2;
     }
 
-    printf("MQTT Client - Connection - Socket connected.");
+    printf("MQTT Client - Connection - Socket connected.\n");
 
     #if defined(MQTT_TASK)
 
@@ -58,7 +58,7 @@ reconnect:
         goto fail1;
     }
 
-    printf("MQTT Client - Connection - Task thread started.");
+    printf("MQTT Client - Connection - Task thread started.\n");
 
 	#endif
 
@@ -76,7 +76,7 @@ reconnect:
         goto fail1;
     }
 	
-	printf("MQTT Client - Connection - Connected.");
+	printf("MQTT Client - Connection - Connected.\n");
 
 	xEventGroupSetBits(mqttEventGroup, MQTT_CONNECTED_BIT);
 
@@ -97,6 +97,8 @@ fail1:
 	MQTTDisconnect(&client);
 
 fail2:
+	
+	printf("MQTT Client - Connection - Reconnecting.\n");
 
 	goto reconnect;
     // printf("mqtt_client_thread going to be deleted\n");

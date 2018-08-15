@@ -16,6 +16,10 @@ void interrupt ISR(void){
         nrf24l01ISR();
         PIR0bits.INTF = 0;
     }
+    
+    if (PIR1bits.ADIF){
+        PIR1bits.ADIF = 0;
+    }
 }
 
 float getADCValue(unsigned char channel){
@@ -68,7 +72,7 @@ void sleepListren(unsigned int seconds){
 		
 		nrf24l01SetRXMode(1);
 		sleepMs(100);
-//		
+
 		nrf24l01SetRXMode(0);
 		sleepMs(900);
 		
@@ -86,7 +90,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     strcat(packet->Message, ftoa(value, &ftoaStatus));
     
     packet->packetData.byte = 0;
-    packet->packetData.ACKRequest = 1;
+    packet->packetData.ACKRequest = 0;
     
 	nrf24l01SendPacket(packet);
     
@@ -222,6 +226,7 @@ void main(void) {
     ADCON1bits.ADFM = 1;
     ADCON1bits.ADPREF = 0b11; // FVR used as + ref
     ADCON1bits.ADNREF = 0b00; // GND used as - ref
+    PIE1bits.ADIE = 1;
     
     
     ADCON0bits.CHS = 3;
