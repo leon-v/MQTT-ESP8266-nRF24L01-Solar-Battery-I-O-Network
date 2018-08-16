@@ -10735,6 +10735,7 @@ count++;
 }
 }
 
+
 average/= count;
 
 return average;

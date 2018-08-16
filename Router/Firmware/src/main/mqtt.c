@@ -72,7 +72,7 @@ reconnect:
     
     char clientID[48];
 
-    sprintf(clientID, "NRF24L01+ Router ESP8266 %s", mqttGetUniqueID());
+    sprintf(clientID, "V-Router %s", mqttGetUniqueID());
 
     printf("MQTT Client - Connection - Client ID set to %s.\n", clientID);
 
@@ -88,17 +88,14 @@ reconnect:
 	
 	printf("MQTT Client - Connection - Connected.\n");
 
-	xEventGroupSetBits(mqttEventGroup, MQTT_CONNECTED_BIT);
+	
 
-    for (;;){
-
-    	vTaskDelay(10000 / portTICK_RATE_MS);  //send every 10 seconds
-
-    	if ((rc = MQTTIsConnected(&client)) != 1) {
-    		printf("MQTT Client - Connection - Connected check failed with error code %d.\n", rc);
-    		goto fail1;
-    	}
+    while(MQTTIsConnected(&client)){
+    	vTaskDelay(1000 / portTICK_RATE_MS);  //send every 10 seconds
+    	xEventGroupSetBits(mqttEventGroup, MQTT_CONNECTED_BIT);
     }
+
+    printf("MQTT Client - Connection - Connected check failed.\n");
 
 fail1:
 	
@@ -125,5 +122,5 @@ void mqttInt(){
 
 	mqttEventGroup = xEventGroupCreate();
 
-	xTaskCreate(&mqttTask, "mqtt", 2048, NULL, 9, NULL);
+	xTaskCreate(&mqttTask, "mqtt", 4096, NULL, 9, NULL);
 }

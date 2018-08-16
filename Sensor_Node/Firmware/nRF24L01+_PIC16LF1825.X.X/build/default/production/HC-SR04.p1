@@ -7406,27 +7406,27 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U 925 ]
 [; ;HC-SR04.c: 79: }
 [; ;HC-SR04.c: 80: }
-[; ;HC-SR04.c: 82: average/= count;
-"82
+[; ;HC-SR04.c: 83: average/= count;
+"83
 [e =/ _average -> _count `f ]
-[; ;HC-SR04.c: 84: return average;
-"84
+[; ;HC-SR04.c: 85: return average;
+"85
 [e ) _average ]
 [e $UE 922  ]
-[; ;HC-SR04.c: 85: }
-"85
+[; ;HC-SR04.c: 86: }
+"86
 [e :UE 922 ]
 }
-"87
+"88
 [v _hcsr04ISR `(v ~T0 @X0 1 ef ]
 {
-[; ;HC-SR04.c: 87: void hcsr04ISR(void){
+[; ;HC-SR04.c: 88: void hcsr04ISR(void){
 [e :U _hcsr04ISR ]
 [f ]
-[; ;HC-SR04.c: 88: T1CONbits.TMR1ON = 0;
-"88
-[e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 89: }
+[; ;HC-SR04.c: 89: T1CONbits.TMR1ON = 0;
 "89
+[e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 90: }
+"90
 [e :UE 931 ]
 }

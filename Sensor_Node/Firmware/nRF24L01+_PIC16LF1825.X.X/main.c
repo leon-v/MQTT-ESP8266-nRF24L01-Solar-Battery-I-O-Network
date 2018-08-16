@@ -76,11 +76,11 @@ void sleepListren(unsigned int seconds){
     
 	while(seconds--){
 		
-		nrf24l01SetRXMode(0);
-		sleepMs(200);
+//		nrf24l01SetRXMode(0);
+		sleepMs(100);
 
-		nrf24l01SetRXMode(0);
-		sleepMs(200);
+//		nrf24l01SetRXMode(0);
+		sleepMs(900);
 		
 	}
 }
@@ -100,7 +100,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepListren(1);
+	sleepListren(2);
 }
 
 
@@ -108,11 +108,9 @@ void loop(){
     
     nrf24l01Packet_t packet;
     
-    sendMessage(&packet, "DIST", hcsr04GetAerage());
+//    sendMessage(&packet, "DIST", hcsr04GetAerage());
     
-    hcsr04Trigger();
-    
-    sendMessage(&packet, "COUNT", counter);
+//    sendMessage(&packet, "COUNT", counter);
     
     
     // 19.086
