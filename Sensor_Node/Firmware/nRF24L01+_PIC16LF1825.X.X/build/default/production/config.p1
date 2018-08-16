@@ -10,7 +10,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "11
 [p x FCMEN=ON ]
 "14
-[p x MCLRE=ON ]
+[p x MCLRE=OFF ]
 "15
 [p x PWRTE=ON ]
 "16
@@ -30,7 +30,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "25
 [p x WRT=OFF ]
 "26
-[p x LVP=ON ]
+[p x LVP=OFF ]
 "29
 [p x CP=OFF ]
 "30

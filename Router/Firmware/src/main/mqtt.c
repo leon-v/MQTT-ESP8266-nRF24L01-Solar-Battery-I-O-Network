@@ -76,12 +76,8 @@ reconnect:
 
     printf("MQTT Client - Connection - Client ID set to %s.\n", clientID);
 
-    connectData.MQTTVersion = 4; // 3 = 3.1 4 = 3.1.1
+    connectData.MQTTVersion = configFlash.mqttVersion; // 3 = 3.1 4 = 3.1.1
     connectData.clientID.cstring = clientID;
-    //sprintf(connectData.clientID.cstring, "NRF24L01+ Router ESP8266 %u", system_get_chip_id());
-    //connectData.clientID.lenstring = strlen(connectData.clientID.cstring);
-    // connectData.keepAliveInterval = 30;
-    // connectData.cleansession = 0;
     connectData.username.cstring = (char *) &configFlash.mqttUsername;
     connectData.password.cstring = (char *) &configFlash.mqttPassword;
 

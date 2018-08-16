@@ -88,6 +88,10 @@ void httpServerTask(){
     int sockfd, new_sockfd;
     int recv_bytes = 0;
     socklen_t addr_len;
+    char * html = NULL;
+    char buffer[1024];
+
+    printf("HTTP Server - Connection - Thread start. Waiting for network.\n");
 
 	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
@@ -127,17 +131,10 @@ void httpServerTask(){
 
     printf("HTTP Server - Connection - Got connection.\n");
 
-    char * html = NULL;
-
 reconnect:
 
-	// strcpy(http_header, "HTTP/1.1 200 OK\r\n\r\n");
-
-	// strcat(http_header, );
-
-
     printf("HTTP Server - Connection - Accepting connection.\n");
-    new_sockfd = accept(sockfd, (struct sockaddr*)&sock_addr, &addr_len);
+    new_sockfd = accept(sockfd, (struct sockaddr*) &sock_addr, &addr_len);
 
     if (new_sockfd < 0) {
         printf("HTTP Server - Connection - Failed to accept connection.\n");
@@ -146,14 +143,14 @@ reconnect:
 
     printf("HTTP Server - Connection - Successfully accepted connection.\n");
 
-    char buffer[1024];
-
     recv_bytes = recv(new_sockfd, &buffer, sizeof(buffer), 0);
 
     if (recv_bytes <= 0){
     	printf("HTTP Server - Connection - No data received from connection.\n");
         goto failed3;
     }
+
+    printf("HTTP Server - Connection - Got %d bytes from client.\n", recv_bytes);
 
     buffer[recv_bytes] = '\0';
 
@@ -170,6 +167,9 @@ reconnect:
 	char * contentLengthString = httpServerGetTokenValue(&header, "Content-Length");
 
 	int contentLength = contentLengthString ? atol(contentLengthString) : strlen(payload);
+
+	printf("contentLength %d\n", contentLength);
+	printf("buffer Length %d\n", strlen(buffer));
 
 	// Check if contentLength matches buffer, and if not, wait for more data
 
@@ -203,7 +203,9 @@ failed1:
 }
 
 void httpServerInit(void) {
+
 	ESP_ERROR_CHECK(nvs_flash_init());
+
     xTaskCreate(&httpServerTask, "httpServer", 8192, NULL, 6, NULL);
 }
 

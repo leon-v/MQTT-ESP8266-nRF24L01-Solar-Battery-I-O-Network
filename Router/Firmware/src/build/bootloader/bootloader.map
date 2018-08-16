@@ -398,75 +398,75 @@ END GROUP
  *(.jcr)
                 0x000000003ffe8008                _data_end = ABSOLUTE (.)
 
-.rodata         0x000000003ffe8008      0xd60
+.rodata         0x000000003ffe8008      0xd64
                 0x000000003ffe8008                _rodata_start = ABSOLUTE (.)
  *(.rodata)
  *(.rodata.*)
  .rodata.str1.4
                 0x000000003ffe8008       0x24 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/main/libmain.a(bootloader_start.o)
  .rodata.str1.4
-                0x000000003ffe802c       0xfe /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
-                                        0x106 (size before relaxing)
- *fill*         0x000000003ffe812a        0x2 
+                0x000000003ffe802c      0x102 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+                                        0x10a (size before relaxing)
+ *fill*         0x000000003ffe812e        0x2 
  .rodata.print_flash_info
-                0x000000003ffe812c       0x28 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
+                0x000000003ffe8130       0x28 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_init.o)
  .rodata.str1.4
-                0x000000003ffe8154      0x38a /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
+                0x000000003ffe8158      0x38a /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_utility.o)
                                         0x392 (size before relaxing)
- *fill*         0x000000003ffe84de        0x2 
+ *fill*         0x000000003ffe84e2        0x2 
  .rodata.str1.4
-                0x000000003ffe84e0       0xb4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
+                0x000000003ffe84e4       0xb4 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(flash_partitions.o)
  .rodata.str1.4
-                0x000000003ffe8594      0x217 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
+                0x000000003ffe8598      0x217 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(esp_image_format.o)
                                         0x23f (size before relaxing)
- *fill*         0x000000003ffe87ab        0x1 
+ *fill*         0x000000003ffe87af        0x1 
  .rodata.str1.4
-                0x000000003ffe87ac      0x17b /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
- *fill*         0x000000003ffe8927        0x1 
+                0x000000003ffe87b0      0x17b /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/bootloader_support/libbootloader_support.a(bootloader_flash.o)
+ *fill*         0x000000003ffe892b        0x1 
  .rodata.str1.4
-                0x000000003ffe8928       0x20 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+                0x000000003ffe892c       0x20 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
                                          0x22 (size before relaxing)
  .rodata.s_log_prefix
-                0x000000003ffe8948        0x6 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
- *fill*         0x000000003ffe894e        0x2 
+                0x000000003ffe894c        0x6 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+ *fill*         0x000000003ffe8952        0x2 
  .rodata.s_log_color
-                0x000000003ffe8950       0x18 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
+                0x000000003ffe8954       0x18 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/log/liblog.a(log.o)
  .rodata.crc32_le_table
-                0x000000003ffe8968      0x400 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
+                0x000000003ffe896c      0x400 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/build/bootloader/util/libutil.a(crc.o)
  *(.gnu.linkonce.r.*)
  *(.rodata1)
-                0x000000003ffe8d68                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
+                0x000000003ffe8d6c                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
  *(.xt_except_table)
  *(.gcc_except_table)
  *(.gnu.linkonce.e.*)
  *(.gnu.version_r)
  *(.eh_frame)
-                0x000000003ffe8d68                . = ((. + 0x3) & 0xfffffffffffffffc)
-                0x000000003ffe8d68                __init_array_start = ABSOLUTE (.)
+                0x000000003ffe8d6c                . = ((. + 0x3) & 0xfffffffffffffffc)
+                0x000000003ffe8d6c                __init_array_start = ABSOLUTE (.)
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x000000003ffe8d68                __init_array_end = ABSOLUTE (.)
+                0x000000003ffe8d6c                __init_array_end = ABSOLUTE (.)
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x000000003ffe8d68                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
+                0x000000003ffe8d6c                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
  *(.xt_except_desc)
  *(.gnu.linkonce.h.*)
-                0x000000003ffe8d68                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
+                0x000000003ffe8d6c                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
  *(.xt_except_desc_end)
  *(.dynamic)
  *(.gnu.version_d)
-                0x000000003ffe8d68                _rodata_end = ABSOLUTE (.)
-                0x000000003ffe8d68                _lit4_start = ABSOLUTE (.)
+                0x000000003ffe8d6c                _rodata_end = ABSOLUTE (.)
+                0x000000003ffe8d6c                _lit4_start = ABSOLUTE (.)
  *(*.lit4)
  *(.lit4.*)
  *(.gnu.linkonce.lit4.*)
-                0x000000003ffe8d68                _lit4_end = ABSOLUTE (.)
-                0x000000003ffe8d68                . = ALIGN (0x4)
-                0x000000003ffe8d68                _heap_start = ABSOLUTE (.)
+                0x000000003ffe8d6c                _lit4_end = ABSOLUTE (.)
+                0x000000003ffe8d6c                . = ALIGN (0x4)
+                0x000000003ffe8d6c                _heap_start = ABSOLUTE (.)
                 [!provide]                        PROVIDE (SPI_sector_erase, 0x400040c0)
                 [!provide]                        PROVIDE (SPI_page_program, 0x40004174)
                 [!provide]                        PROVIDE (SPI_read_data, 0x400042ac)

@@ -1,5 +1,5 @@
 
-# 1 "nrf24l01.c"
+# 1 "HC-SR04.c"
 
 # 18 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\xc.h"
 extern const char __xc8_OPTIM_SPEED;
@@ -10615,6 +10615,14 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
+# 4 "HC-SR04.h"
+void hcsr04Init(void);
+void hcsr04ISR(void);
+void hcsr04Trigger(void);
+float hcsr04GetAerage(void);
+
+unsigned long counter = 0;
+
 # 12 "interface.h"
 typedef struct{
 unsigned char check;
@@ -10649,693 +10657,90 @@ void exception(unsigned char exception);
 void resetWDT(void);
 void sleepMs(unsigned int milliseconds);
 
-# 42 "nRF24L01_Types.h"
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned PRIM_RX : 1;
-unsigned PWR_UP : 1;
-unsigned CRCO : 1;
-unsigned EN_CRC : 1;
-unsigned MASK_MAX_RT: 1;
-unsigned MASK_TX_DS : 1;
-unsigned MASK_RX_DR : 1;
-unsigned Reserved : 1;
+# 5 "HC-SR04.c"
+unsigned int distance = 0;
 
-};
-} n_CONFIG_t;
+void hcsr04Init(void){
 
 
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned ENAA_P0 : 1;
-unsigned ENAA_P1 : 1;
-unsigned ENAA_P2 : 1;
-unsigned ENAA_P3 : 1;
-unsigned ENAA_P4 : 1;
-unsigned ENAA_P5 : 1;
-unsigned Reserved : 2;
-
-};
-} n_EN_AA_t;
+IOCAPbits.IOCAP3 = 1;
+PIE0bits.IOCIE = 1;
 
 
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned ERX_P0 : 1;
-unsigned ERX_P1 : 1;
-unsigned ERX_P2 : 1;
-unsigned ERX_P3 : 1;
-unsigned ERX_P4 : 1;
-unsigned ERX_P5 : 1;
-unsigned Reserved : 2;
-
-};
-} n_EN_RXADDR_t;
+TRISCbits.TRISC4 = 0;
+PORTCbits.RC4 = 0;
+WPUAbits.WPUA3 = 0;
 
 
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned AW : 2;
-unsigned Reserved : 6;
-};
-} n_SETUP_AW_t;
-
-
-
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned ARC : 4;
-unsigned ARD : 4;
-
-};
-} n_SETUP_RETR_t;
-
-
-typedef union {
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned RF_CH : 7;
-unsigned Reserved : 1;
-};
-} n_RF_CH_t;
-
-
-typedef union {
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned Obsolete : 1;
-unsigned RF_PWR : 2;
-unsigned RF_DR_HIGH : 1;
-unsigned PLL_LOCK : 1;
-unsigned RF_DR_LOW : 1;
-unsigned Reserved : 1;
-unsigned CONT_WAVE : 1;
-};
-} n_RF_SETUP_t;
-
-
-
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned TX_FULL : 1;
-unsigned RX_P_NO : 3;
-unsigned MAX_RT : 1;
-unsigned TX_DS : 1;
-unsigned RX_DR : 1;
-unsigned Reserved : 1;
-
-};
-} n_STATUS_t;
-
-
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned RPD : 1;
-
-};
-} n_RPD_t;
-
-# 187
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned RX_PW : 6;
-unsigned Reserved : 2;
-
-};
-} n_RX_PW_t;
-
-# 207
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned DPL_P0 : 1;
-unsigned DPL_P1 : 1;
-unsigned DPL_P2 : 1;
-unsigned DPL_P3 : 1;
-unsigned DPL_P4 : 1;
-unsigned DPL_P5 : 1;
-unsigned Reserved : 2;
-
-};
-} n_DYNPD_t;
-
-
-
-typedef union{
-struct {
-unsigned byte : 8;
-};
-struct {
-unsigned EN_DYN_ACK : 1;
-unsigned EN_ACK_PAY : 1;
-unsigned EN_DPL : 1;
-unsigned Reserved : 5;
-};
-} n_FEATURE_t;
-
-# 4 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\__size_t.h"
-typedef unsigned size_t;
-
-# 14 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h"
-extern void * memcpy(void *, const void *, size_t);
-extern void * memmove(void *, const void *, size_t);
-extern void * memset(void *, int, size_t);
-
-# 36
-extern char * strcat(char *, const char *);
-extern char * strcpy(char *, const char *);
-extern char * strncat(char *, const char *, size_t);
-extern char * strncpy(char *, const char *, size_t);
-extern char * strdup(const char *);
-extern char * strtok(char *, const char *);
-
-
-extern int memcmp(const void *, const void *, size_t);
-extern int strcmp(const char *, const char *);
-extern int stricmp(const char *, const char *);
-extern int strncmp(const char *, const char *, size_t);
-extern int strnicmp(const char *, const char *, size_t);
-extern void * memchr(const void *, int, size_t);
-extern size_t strcspn(const char *, const char *);
-extern char * strpbrk(const char *, const char *);
-extern size_t strspn(const char *, const char *);
-extern char * strstr(const char *, const char *);
-extern char * stristr(const char *, const char *);
-extern char * strerror(int);
-extern size_t strlen(const char *);
-extern char * strchr(const char *, int);
-extern char * strichr(const char *, int);
-extern char * strrchr(const char *, int);
-extern char * strrichr(const char *, int);
-
-# 8 "nrf24l01.h"
-extern const unsigned char n_ADDRESS_P0[];
-extern const unsigned char n_ADDRESS_MUL;
-
-
-typedef struct{
-unsigned char TX;
-unsigned char RX;
-n_STATUS_t statusRegister;
-n_CONFIG_t configRegister;
-unsigned char retryCount;
-} nrf24l01State_t;
-
-volatile nrf24l01State_t status;
-
-# 35
-typedef union{
-struct{
-unsigned int byte :8;
-};
-struct{
-unsigned RPD : 1;
-unsigned ACKRPD : 1;
-unsigned ACKRequest : 1;
-unsigned IsACK : 1;
-unsigned Pipe : 3;
-};
-} packetData_t;
-
-typedef struct{
-packetData_t packetData;
-char Message[32];
-} nrf24l01Packet_t;
-
-# 57
-unsigned char nrf24l01Send(unsigned char command,unsigned char data);
-void nrf24l01SetRXPipe(unsigned char pipe);
-void nrf24l01SetRXMode(unsigned char rxMode);
-
-void nrf24l01ISR(void);
-void nrf24l01Init(void);
-void nrf24l01Service(void);
-void nrf24l01SetTXPipe(unsigned char pipe);
-void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
-
-# 3 "nrf24l01.c"
-const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
-const unsigned char n_ADDRESS_MUL = 33;
-
-nrf24l01Packet_t TXPacket;
-nrf24l01Packet_t RXPacket;
-nrf24l01Packet_t * lastTXPacket;
-
-
-unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
-
-
-nrf24l01SPIStart();
-
-
-nrf24l01SPISend(command);
-
-
-data = nrf24l01SPISend(data);
-
-
-nrf24l01SPIEnd();
-
-return data;
-}
-
-
-void nrf24l01ChangeTXPower(int addPower){
-
-n_RF_SETUP_t rfSetup;
-rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
-
-if (addPower > 0){
-if (rfSetup.RF_PWR < 3){
-rfSetup.RF_PWR++;
-}
-}
-
-if (addPower < 0){
-if (rfSetup.RF_PWR > 0){
-rfSetup.RF_PWR--;
-}
-}
-
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x06, rfSetup.byte);
+T1CONbits.TMR1ON = 0;
+T1CONbits.TMR1CS = 0b01;
+T1CONbits.T1CKPS = 0b00;
+T1CONbits.T1SYNC = 1;
+T1GCONbits.TMR1GE = 0;
 
 }
 
-void nrf24l01SetRXMode(unsigned char rxMode){
 
 
-if (rxMode){
-if (status.TX == 2){
-return;
-}
-}
+
+void hcsr04Trigger(void){
+
+counter++;
 
 
-if (!rxMode){
-if (status.TX == 4){
-return;
-}
+
+
 }
 
-# 70
-if (status.configRegister.PRIM_RX != rxMode){
+float hcsr04GetAerage(void){
+
+unsigned char loop = 10;
+unsigned char limit = 0;
+unsigned char count = 0;
+float average = 0;
+
+while (--loop){
 
 
-PORTAbits.RA0 = 0;
-_delay((unsigned long)((120)*(32000000/4000000.0)));
+TMR1L = 0x00;
+TMR1H = 0x00;
 
 
-status.configRegister.PRIM_RX = rxMode;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x00, status.configRegister.byte);
+PORTCbits.RC4 = 1;
+_delay((unsigned long)((10)*(32000000/4000000.0)));
+PORTCbits.RC4 = 0;
 
 
-_delay((unsigned long)((120)*(32000000/4000000.0)));
+T1CONbits.TMR1ON = 1;
 
 
-if (rxMode){
-PORTAbits.RA0 = 1;
-_delay((unsigned long)((120)*(32000000/4000000.0)));
-}
-}
-}
-
-# 136
-nrf24l01Packet_t *nrf24l01GetRXPacket(void){
-return &RXPacket;
-}
-
-void nrf24l01SetTXPipe(unsigned char pipe){
+limit = 10;
 
 
-nrf24l01SPIStart();
-nrf24l01SPISend((unsigned) 0b00100000 | (unsigned) 0x10);
-nrf24l01SPISend(n_ADDRESS_P0[4] + (unsigned) (pipe * n_ADDRESS_MUL));
-nrf24l01SPISend(n_ADDRESS_P0[3]);
-nrf24l01SPISend(n_ADDRESS_P0[2]);
-nrf24l01SPISend(n_ADDRESS_P0[1]);
-nrf24l01SPISend(n_ADDRESS_P0[0]);
-nrf24l01SPIEnd();
-}
+while (T1CONbits.TMR1ON){
 
-void nrf24l01SetRXPipe(unsigned char pipe){
 
-n_EN_RXADDR_t enRXAddr;
-
-if (pipe > 5){
-enRXAddr.ERX_P0 = 1;
-enRXAddr.ERX_P1 = 1;
-enRXAddr.ERX_P2 = 1;
-enRXAddr.ERX_P3 = 1;
-enRXAddr.ERX_P4 = 1;
-enRXAddr.ERX_P5 = 1;
-}
-
-else{
-enRXAddr.ERX_P0 = 1;
-enRXAddr.byte = (unsigned) enRXAddr.byte << pipe;
-}
-
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x02, enRXAddr.byte);
+if (!(--limit)) {
+break;
 }
 
 
-
-void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
-
-strcpy(TXPacket.Message, txPacket->Message);
-TXPacket.packetData = txPacket->packetData;
-
-status.TX = 1;
-
-while (status.TX != 0){
 sleepMs(1);
-nrf24l01Service();
-}
-}
-
-unsigned int testCount = 0;
-void nrf24l01ISR(void){
-
-status.statusRegister.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x07, 0);
-
-
-if (status.statusRegister.RX_DR){
-
-
-if (status.RX == 0){
-status.RX = 1;
-}
-
-else{
-status.statusRegister.RX_DR = 0;
-}
-
-nrf24l01Service();
-}
-
-if (status.statusRegister.TX_DS){
-
-
-status.TX = 3;
-
-if (lastTXPacket->packetData.ACKRequest){
-
-status.TX = 4;
-status.retryCount = 0xFF;
-nrf24l01SetRXMode(1);
-}else{
-status.TX = 0;
-}
-
-if (lastTXPacket->packetData.IsACK){
-nrf24l01SetRXMode(1);
-}
-
-nrf24l01Service();
 }
 
 
-
-
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x07, status.statusRegister.byte);
-}
-
-void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
-
-lastTXPacket = packet;
-
-unsigned char i;
-
-
-nrf24l01SetRXMode(0);
-
-
-nrf24l01SPIStart();
-
-
-nrf24l01SPISend((unsigned) 0b10110000);
-
-nrf24l01SPISend(lastTXPacket->packetData.byte);
-
-
-
-unsigned char width = strlen(lastTXPacket->Message);
-
-for (i = 0; i < width; i++) {
-nrf24l01SPISend(lastTXPacket->Message[i]);
-}
-
-
-nrf24l01SPIEnd();
-
-
-PORTAbits.RA0 = 1;
-_delay((unsigned long)((12)*(32000000/4000000.0)));
-PORTAbits.RA0 = 0;
-}
-
-
-
-void nrf24l01Service(void){
-
-unsigned char i;
-
-if (status.TX == 1){
-
-
-status.TX = 2;
-nrf24l01SendTXBuffer(&TXPacket);
-}
-
-if (status.TX == 4){
-if (!status.retryCount--){
-status.TX = 1;
+if (limit > 0){
+average+= TMR1L + (unsigned) (TMR1H << 8);
+count++;
 }
 }
 
-if (status.RX == 1){
+average/= count;
 
-
-memset(RXPacket.Message, 0 ,sizeof(RXPacket.Message));
-RXPacket.packetData.byte = 0x00;
-
-
-unsigned char width = nrf24l01Send((unsigned) 0b01100000, 0);
-
-
-PORTAbits.RA0 = 0;
-
-
-nrf24l01SPIStart();
-
-
-nrf24l01SPISend((unsigned) 0b01100001);
-
-
-RXPacket.packetData.byte = nrf24l01SPISend(0);
-width--;
-
-for (i = 0; i < width; i++) {
-
-RXPacket.Message[i] = nrf24l01SPISend(0);
+return average;
 }
 
-
-nrf24l01SPIEnd();
-
-
-PORTAbits.RA0 = 1;
-
-
-RXPacket.packetData.Pipe = status.statusRegister.RX_P_NO;
-
-
-RXPacket.packetData.RPD = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x09, 0);
-
-status.RX = 2;
-}
-
-if (status.RX == 2){
-
-
-if (RXPacket.packetData.IsACK){
-
-if (status.TX == 4){
-
-if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
-status.TX = 0;
-status.RX = 0;
-
-nrf24l01SetRXMode(0);
-
-}
-}
-}
-}
-
-if (status.RX == 2){
-
-if (RXPacket.packetData.ACKRequest){
-
-RXPacket.packetData.ACKRequest = 0;
-RXPacket.packetData.IsACK = 1;
-
-nrf24l01SendTXBuffer(&RXPacket);
-}
-}
-
-}
-
-void nrf24l01InitRegisters(){
-
-status.configRegister.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x00, 0);
-
-status.configRegister.PWR_UP = 0;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x00, status.configRegister.byte);
-
-n_SETUP_AW_t setupAW;
-setupAW.byte = 0x00;
-setupAW.AW = 0b11;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x03, setupAW.byte);
-
-
-n_RF_CH_t channel;
-channel.RF_CH = 2;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x05, channel.byte);
-
-
-n_RF_SETUP_t rfSetup;
-rfSetup.byte = 0x00;
-rfSetup.RF_DR_LOW = 0;
-rfSetup.RF_DR_HIGH = 1;
-rfSetup.RF_PWR = 3;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x06, rfSetup.byte);
-
-
-nrf24l01SetRXPipe(0xFF);
-
-
-n_EN_AA_t enAA;
-enAA.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x01, 0);
-enAA.ENAA_P0 = 0;
-enAA.ENAA_P1 = 0;
-enAA.ENAA_P2 = 0;
-enAA.ENAA_P3 = 0;
-enAA.ENAA_P4 = 0;
-enAA.ENAA_P5 = 0;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x01, enAA.byte);
-
-
-
-n_FEATURE_t feature;
-feature.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x1D, 0);
-feature.EN_DPL = 1;
-feature.EN_DYN_ACK = 1;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x1D, feature.byte);
-
-n_DYNPD_t DynPD;
-DynPD.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x1C, 0);
-DynPD.DPL_P0 = 1;
-DynPD.DPL_P1 = 1;
-DynPD.DPL_P2 = 1;
-DynPD.DPL_P3 = 1;
-DynPD.DPL_P4 = 1;
-DynPD.DPL_P5 = 1;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x1C, DynPD.byte);
-
-
-unsigned int i;
-for (i = 0; i < 6; i++){
-
-nrf24l01SPIStart();
-nrf24l01SPISend((unsigned) 0b00100000 | ((unsigned) 0x0A + i));
-
-nrf24l01SPISend(n_ADDRESS_P0[4] + (n_ADDRESS_MUL * i));
-
-if (i < 2){
-nrf24l01SPISend(n_ADDRESS_P0[3]);
-nrf24l01SPISend(n_ADDRESS_P0[2]);
-nrf24l01SPISend(n_ADDRESS_P0[1]);
-nrf24l01SPISend(n_ADDRESS_P0[0]);
-}
-
-nrf24l01SPIEnd();
-}
-
-nrf24l01SetTXPipe(0);
-
-
-
-status.statusRegister.byte = 0x00;
-status.statusRegister.RX_DR = 1;
-status.statusRegister.TX_DS = 1;
-status.statusRegister.MAX_RT = 1;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x07, status.statusRegister.byte);
-
-status.statusRegister.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x07, 0);
-
-
-nrf24l01Send((unsigned) 0b11100001, 0);
-nrf24l01Send((unsigned) 0b11100010, 0);
-
-
-status.configRegister.PRIM_RX = 1;
-status.configRegister.EN_CRC = 1;
-status.configRegister.CRCO = 1;
-status.configRegister.PWR_UP = 1;
-nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x00, status.configRegister.byte);
-
-}
-
-void nrf24l01Init(void){
-
-
-nrf24l01InterfaceInit();
-
-
-
-
-PORTAbits.RA0 = 0;
-
-_delay((unsigned long)((1000)*(32000000/4000000.0)));
-
-nrf24l01InitRegisters();
-
-_delay((unsigned long)((1000)*(32000000/4000000.0)));
-
-PORTAbits.RA0 = 1;
-
-status.TX = 0;
-status.RX = 0;
+void hcsr04ISR(void){
+T1CONbits.TMR1ON = 0;
 }
 

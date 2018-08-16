@@ -93,18 +93,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "31 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic.h
 [v ___nop `(v ~T0 @X0 0 ef ]
 [p i ___nop ]
-"118 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
-[s S8 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S8 . C DC Z nPD nTO ]
-"125
-[s S9 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S9 . CARRY . ZERO ]
-"117
-[u S7 `S8 1 `S9 1 ]
-[n S7 . . . ]
-"131
-[v _STATUSbits `VS7 ~T0 @X0 0 e@3 ]
-"3819
+"3819 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
 [v _SSP1BUF `Vuc ~T0 @X0 0 e@529 ]
 "440
 [s S30 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -7348,9 +7337,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.c: 31: void resetWDT(void){
 [e :U _resetWDT ]
 [f ]
-[; ;interface.c: 32: WDTCONbits.WDTPS = 0b01011;
+[; ;interface.c: 32: WDTCONbits.WDTPS = 0b01100;
 "32
-[e = . . _WDTCONbits 0 1 -> -> 11 `i `uc ]
+[e = . . _WDTCONbits 0 1 -> -> 12 `i `uc ]
 [; ;interface.c: 33: asm("clrwdt");
 "33
 [; <" clrwdt ;# ">
@@ -7380,9 +7369,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 "40
 [e $ ! != & >> _milliseconds _wdtps -> -> 1 `i `ui -> -> 0 `i `ui 926  ]
 {
-[; ;interface.c: 41: START_SLEEP:
-"41
-[e :U 927 ]
 [; ;interface.c: 42: WDTCONbits.WDTPS = wdtps;
 "42
 [e = . . _WDTCONbits 0 1 _wdtps ]
@@ -7395,16 +7381,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.c: 45: __nop();
 "45
 [e ( ___nop ..  ]
-[; ;interface.c: 47: if( STATUSbits.nTO || STATUSbits.nPD){
-"47
-[e $ ! || != -> . . _STATUSbits 0 4 `i -> -> -> 0 `i `Vuc `i != -> . . _STATUSbits 0 3 `i -> -> -> 0 `i `Vuc `i 928  ]
-{
-[; ;interface.c: 48: goto START_SLEEP;
-"48
-[e $U 927  ]
-"49
-}
-[e :U 928 ]
 "50
 }
 [e :U 926 ]
@@ -7416,7 +7392,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U 924 ]
 "51
 }
-[; ;interface.c: 49: }
 [; ;interface.c: 50: }
 [; ;interface.c: 51: }
 [; ;interface.c: 53: resetWDT();
@@ -7441,26 +7416,26 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
 [; ;interface.c: 61: while (!SSP1STATbits.BF){
 "61
-[e $U 930  ]
-[e :U 931 ]
+[e $U 928  ]
+[e :U 929 ]
 {
 [; ;interface.c: 62: __nop();
 "62
 [e ( ___nop ..  ]
 "63
 }
-[e :U 930 ]
+[e :U 928 ]
 "61
-[e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 931  ]
-[e :U 932 ]
+[e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 929  ]
+[e :U 930 ]
 [; ;interface.c: 63: }
 [; ;interface.c: 65: return SSP1BUF;
 "65
 [e ) _SSP1BUF ]
-[e $UE 929  ]
+[e $UE 927  ]
 [; ;interface.c: 66: }
 "66
-[e :UE 929 ]
+[e :UE 927 ]
 }
 "68
 [v _nrf24l01SPIStart `(v ~T0 @X0 1 ef ]
@@ -7479,7 +7454,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 [; ;interface.c: 72: }
 "72
-[e :UE 933 ]
+[e :UE 931 ]
 }
 "74
 [v _nrf24l01SPIEnd `(v ~T0 @X0 1 ef ]
@@ -7498,7 +7473,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _PIE0bits 0 0 -> -> 1 `i `uc ]
 [; ;interface.c: 78: }
 "78
-[e :UE 934 ]
+[e :UE 932 ]
 }
 "80
 [v _exception `(v ~T0 @X0 1 ef1`uc ]
@@ -7512,5 +7487,5 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; <" reset ;# ">
 [; ;interface.c: 82: }
 "82
-[e :UE 935 ]
+[e :UE 933 ]
 }

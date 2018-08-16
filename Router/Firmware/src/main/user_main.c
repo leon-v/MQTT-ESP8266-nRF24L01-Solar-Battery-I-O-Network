@@ -44,11 +44,9 @@ void app_main() {
 		wifiClientInit();
     }
 
-    mqttInt();
+    httpServerInit();
 
+    mqttInt();
     radioInit();
     radioToMQTTInit();
-    
-
-    httpServerInit();
 }

@@ -11,7 +11,7 @@
 #pragma config FCMEN = ON       // Fail-Safe Clock Monitor Enable (Fail-Safe Clock Monitor is enabled)
 
 // CONFIG2
-#pragma config MCLRE = ON       // Master Clear Enable bit (MCLR/VPP pin function is MCLR; Weak pull-up enabled)
+#pragma config MCLRE = OFF      // Master Clear Enable bit (MCLR/VPP pin function is digital input; MCLR internally disabled; Weak pull-up under control of port pin's WPU control bit.)
 #pragma config PWRTE = ON       // Power-up Timer Enable bit (PWRT enabled)
 #pragma config WDTE = ON        // Watchdog Timer Enable bits (WDT enabled, SWDTEN is ignored)
 #pragma config LPBOREN = OFF    // Low-power BOR enable bit (ULPBOR disabled)
@@ -23,7 +23,7 @@
 
 // CONFIG3
 #pragma config WRT = OFF        // User NVM self-write protection bits (Write protection off)
-#pragma config LVP = ON         // Low Voltage Programming Enable bit (Low Voltage programming enabled. MCLR/VPP pin function is MCLR. MCLRE configuration bit is ignored.)
+#pragma config LVP = OFF        // Low Voltage Programming Enable bit (High Voltage on MCLR/VPP must be used for programming.)
 
 // CONFIG4
 #pragma config CP = OFF         // User NVM Program Memory Code Protection bit (User NVM code protection disabled)

@@ -1,5 +1,4 @@
 #include "nrf24l01.h"
-#include "eeprom.h"
 
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
@@ -182,7 +181,7 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     status.TX = TXReady;
 	
 	while (status.TX != TXIdle){
-        sleepMs(10);
+        sleepMs(1);
         nrf24l01Service();
     }
 }
@@ -194,6 +193,7 @@ void nrf24l01ISR(void){
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
+    	// printf("Radio: TX_DS\n");
         
         if (status.RX == RXIdle){
             status.RX = RXPending;
@@ -207,6 +207,7 @@ void nrf24l01ISR(void){
     }
 	
 	if (status.statusRegister.TX_DS){
+		// printf("Radio: TX_DS\n");
         
 		status.TX = TXSent;
 		
@@ -356,9 +357,6 @@ void nrf24l01Service(void){
 		}
     }
 	
-	if (status.RX == RXReady){
-		status.RX = RXIdle;
-	}
 }
 
 void nrf24l01InitRegisters(){
@@ -454,11 +452,12 @@ void nrf24l01InitRegisters(){
     nrf24l01Send(n_FLUSH_RX, 0);
     
     // Enable 2-byte CRC and power up in receive mode.
-	status.configRegister.PRIM_RX = 0;
+	status.configRegister.PRIM_RX = 1;
 	status.configRegister.EN_CRC = 1;
     status.configRegister.CRCO = 1;
 	status.configRegister.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
+
 }
 
 void nrf24l01Init(void){
@@ -471,11 +470,11 @@ void nrf24l01Init(void){
     
     nrf24l01CELow();
     
-    delayUs(50000);
+    delayUs(1000);
     
     nrf24l01InitRegisters();    
     
-    delayUs(50000);
+    delayUs(1000);
 
     nrf24l01CEHigh();
     

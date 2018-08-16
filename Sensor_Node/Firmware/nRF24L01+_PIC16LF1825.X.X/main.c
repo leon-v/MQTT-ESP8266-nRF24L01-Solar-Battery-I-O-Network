@@ -8,9 +8,14 @@
 #include "interface.h"
 #include "../../../../shared.h"
 
+#include "HC-SR04.h"
+
 void interrupt ISR(void){
     
-	resetWDT();
+    if (IOCAFbits.IOCAF3){
+        hcsr04ISR();
+        IOCAFbits.IOCAF3 = 0;
+    }
 	
     if (PIR0bits.INTF){
         nrf24l01ISR();
@@ -20,6 +25,7 @@ void interrupt ISR(void){
     if (PIR1bits.ADIF){
         PIR1bits.ADIF = 0;
     }
+    
 }
 
 float getADCValue(unsigned char channel){
@@ -70,11 +76,11 @@ void sleepListren(unsigned int seconds){
     
 	while(seconds--){
 		
-		nrf24l01SetRXMode(1);
-		sleepMs(100);
+		nrf24l01SetRXMode(0);
+		sleepMs(200);
 
 		nrf24l01SetRXMode(0);
-		sleepMs(900);
+		sleepMs(200);
 		
 	}
 }
@@ -102,7 +108,12 @@ void loop(){
     
     nrf24l01Packet_t packet;
     
+    sendMessage(&packet, "DIST", hcsr04GetAerage());
+    
+    hcsr04Trigger();
+    
     sendMessage(&packet, "COUNT", counter);
+    
     
     // 19.086
     //Resistor divider on Vbatt
@@ -110,9 +121,9 @@ void loop(){
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
     sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     
-	EEPROMWrite(0, (unsigned char) 22);
+//	EEPROMWrite(0, (unsigned char) 22);
     
-    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
+//    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
     
 //	EEPROMWrite(0, status.TX);//0
 //	EEPROMWrite(1, status.RX);//0
@@ -123,7 +134,7 @@ void loop(){
     FVRCONbits.TSEN = 1;
     float vt = (2.048 - getADCValue(0b111101)) / 2;
     FVRCONbits.TSEN = 0;
-//    
+    
 	#define tempOffset 40
     #define vf 0.6063
     #define tc -0.00132
@@ -133,10 +144,10 @@ void loop(){
     
 //    sendMessage(&packet, "DBG4", counter);
     
-    n_RF_SETUP_t rfSetup;
-    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
-    
-    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
+//    n_RF_SETUP_t rfSetup;
+//    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+//    
+//    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     
 //    sendMessage(&packet, "DBG5", counter);
 }
@@ -155,6 +166,7 @@ void loop(){
 
 void main(void) {
     
+            
     // I Always forget to reset that damn ADC
     ANSELA = 0x00;
     ANSELC = 0x00;
@@ -242,19 +254,21 @@ void main(void) {
     TRISAbits.TRISA5 = 0;
     PORTAbits.RA5 = 0;
     
+    hcsr04Init();
+    
     /* Start Interrupts */
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
     
     nrf24l01Packet_t packet;
 	
-    sendMessage(&packet, "BOOT0", EEPROMRead(0));
-	sendMessage(&packet, "BOOT1", EEPROMRead(1));
+    sendMessage(&packet, "BOOT0", 123);
+	sendMessage(&packet, "BOOT1", 456);
 //	sendMessage(&packet, "BOOT2", EEPROMRead(2));
 //	sendMessage(&packet, "BOOT3", EEPROMRead(3));
 	
-	EEPROMWrite(0, 123);//0
-	EEPROMWrite(1, 123);//0
+//	EEPROMWrite(0, 123);//0
+//	EEPROMWrite(1, 123);//0
     
     while(1){
         loop();

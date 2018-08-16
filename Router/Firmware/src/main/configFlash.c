@@ -10,7 +10,7 @@ configFlashSaveFlag_t saveFlag;
 /*Please Keep the following configuration if you have no very deep understanding of ESP SSL/TLS*/
 #define CFG_LOCATION 0x79    /* Please don't change or if you know what you doing */
 
-#define currentVersion 0x00000001    /* Change this value to reset */
+#define currentVersion 0x00000002    /* Change this value to reset */
 
 void configFlashSave(void) {
 
