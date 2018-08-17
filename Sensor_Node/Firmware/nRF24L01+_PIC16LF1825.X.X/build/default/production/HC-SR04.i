@@ -10621,6 +10621,10 @@ void hcsr04ISR(void);
 void hcsr04Trigger(void);
 float hcsr04GetAerage(void);
 
+unsigned int rloop = 0;
+unsigned int rlimit = 0;
+unsigned int rcount = 0;
+
 unsigned long counter = 0;
 
 # 12 "interface.h"
@@ -10658,6 +10662,7 @@ void resetWDT(void);
 void sleepMs(unsigned int milliseconds);
 
 # 5 "HC-SR04.c"
+volatile unsigned char waiting = 0;
 unsigned int distance = 0;
 
 void hcsr04Init(void){
@@ -10694,12 +10699,13 @@ counter++;
 
 float hcsr04GetAerage(void){
 
-unsigned char loop = 10;
-unsigned char limit = 0;
-unsigned char count = 0;
+
 float average = 0;
 
-while (--loop){
+rloop = 0;
+rcount = 0;
+
+while (rloop++ < 1000){
 
 
 TMR1L = 0x00;
@@ -10707,41 +10713,41 @@ TMR1H = 0x00;
 
 
 PORTCbits.RC4 = 1;
+
+
 _delay((unsigned long)((10)*(32000000/4000000.0)));
-PORTCbits.RC4 = 0;
 
 
 T1CONbits.TMR1ON = 1;
+waiting = 1;
 
 
-limit = 10;
+PORTCbits.RC4 = 0;
 
 
-while (T1CONbits.TMR1ON){
 
+sleepMs(7);
 
-if (!(--limit)) {
+if (!waiting){
+average+= TMR1L + (unsigned) (TMR1H << 8);
+rcount++;
+}
+
+if (rcount >= 50){
 break;
 }
+}
 
+
+average/= rcount;
 
 sleepMs(1);
-}
-
-
-if (limit > 0){
-average+= TMR1L + (unsigned) (TMR1H << 8);
-count++;
-}
-}
-
-
-average/= count;
 
 return average;
 }
 
 void hcsr04ISR(void){
+waiting = 0;
 T1CONbits.TMR1ON = 0;
 }
 

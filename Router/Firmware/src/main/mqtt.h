@@ -12,6 +12,7 @@
 
 #define MQTT_CONNECTED_BIT BIT0
 
+#define MQTT_TASK 1
 
 MQTTClient * mqttGetClient(void);
 EventGroupHandle_t mqttGetEventGroup(void);

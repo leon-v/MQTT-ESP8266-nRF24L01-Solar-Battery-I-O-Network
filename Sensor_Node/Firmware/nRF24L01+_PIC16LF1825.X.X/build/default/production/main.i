@@ -11046,6 +11046,10 @@ void hcsr04ISR(void);
 void hcsr04Trigger(void);
 float hcsr04GetAerage(void);
 
+unsigned int rloop = 0;
+unsigned int rlimit = 0;
+unsigned int rcount = 0;
+
 unsigned long counter = 0;
 
 # 13 "main.c"
@@ -11139,7 +11143,7 @@ packet->packetData.ACKRequest = 0;
 
 nrf24l01SendPacket(packet);
 
-sleepListren(2);
+sleepMs(200);
 }
 
 
@@ -11147,10 +11151,13 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
-# 120
-sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
+sendMessage(&packet, "DIST", hcsr04GetAerage());
 
-# 132
+sendMessage(&packet, "rloop", rloop);
+
+sendMessage(&packet, "rcount", rcount);
+
+# 136
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
@@ -11162,7 +11169,7 @@ float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 40;
 
 sendMessage(&packet, "TEMP", ta);
 
-# 151
+# 155
 }
 
 unsigned char nrf24l01GetPipe(char * name){
@@ -11201,7 +11208,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 194
+# 198
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11212,7 +11219,7 @@ _delay((unsigned long)((1000)*(32000000/4000000.0)));
 
 
 
-strcpy(romData->name, "UH1");
+strcpy(romData->name, "UWT");
 
 nrf24l01Init();
 
@@ -11274,7 +11281,7 @@ nrf24l01Packet_t packet;
 sendMessage(&packet, "BOOT0", 123);
 sendMessage(&packet, "BOOT1", 456);
 
-# 271
+# 275
 while(1){
 loop();
 }

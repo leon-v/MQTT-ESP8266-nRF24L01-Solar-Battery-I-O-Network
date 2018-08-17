@@ -7215,11 +7215,29 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;HC-SR04.h: 6: void hcsr04Trigger(void);
 [; ;HC-SR04.h: 7: float hcsr04GetAerage(void);
 "9 HC-SR04.h
+[v _rloop `ui ~T0 @X0 1 e ]
+[i _rloop
+-> -> 0 `i `ui
+]
+[; ;HC-SR04.h: 9: unsigned int rloop = 0;
+"10
+[v _rlimit `ui ~T0 @X0 1 e ]
+[i _rlimit
+-> -> 0 `i `ui
+]
+[; ;HC-SR04.h: 10: unsigned int rlimit = 0;
+"11
+[v _rcount `ui ~T0 @X0 1 e ]
+[i _rcount
+-> -> 0 `i `ui
+]
+[; ;HC-SR04.h: 11: unsigned int rcount = 0;
+"13
 [v _counter `ul ~T0 @X0 1 e ]
 [i _counter
 -> -> -> 0 `i `l `ul
 ]
-[; ;HC-SR04.h: 9: unsigned long counter = 0;
+[; ;HC-SR04.h: 13: unsigned long counter = 0;
 [; ;interface.h: 12: typedef struct{
 [; ;interface.h: 13: unsigned char check;
 [; ;interface.h: 14: char name[16];
@@ -7253,180 +7271,174 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.h: 63: void resetWDT(void);
 [; ;interface.h: 64: void sleepMs(unsigned int milliseconds);
 "5 HC-SR04.c
+[v _waiting `Vuc ~T0 @X0 1 e ]
+[i _waiting
+-> -> 0 `i `uc
+]
+[; ;HC-SR04.c: 5: volatile unsigned char waiting = 0;
+"6
 [v _distance `ui ~T0 @X0 1 e ]
 [i _distance
 -> -> 0 `i `ui
 ]
-[; ;HC-SR04.c: 5: unsigned int distance = 0;
-"7
+[; ;HC-SR04.c: 6: unsigned int distance = 0;
+"8
 [v _hcsr04Init `(v ~T0 @X0 1 ef ]
 {
-[; ;HC-SR04.c: 7: void hcsr04Init(void){
+[; ;HC-SR04.c: 8: void hcsr04Init(void){
 [e :U _hcsr04Init ]
 [f ]
-[; ;HC-SR04.c: 10: IOCAPbits.IOCAP3 = 1;
-"10
-[e = . . _IOCAPbits 0 3 -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 11: PIE0bits.IOCIE = 1;
+[; ;HC-SR04.c: 11: IOCAPbits.IOCAP3 = 1;
 "11
+[e = . . _IOCAPbits 0 3 -> -> 1 `i `uc ]
+[; ;HC-SR04.c: 12: PIE0bits.IOCIE = 1;
+"12
 [e = . . _PIE0bits 0 2 -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 14: TRISCbits.TRISC4 = 0;
-"14
-[e = . . _TRISCbits 0 4 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 15: PORTCbits.RC4 = 0;
+[; ;HC-SR04.c: 15: TRISCbits.TRISC4 = 0;
 "15
-[e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 16: WPUAbits.WPUA3 = 0;
+[e = . . _TRISCbits 0 4 -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 16: PORTCbits.RC4 = 0;
 "16
+[e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 17: WPUAbits.WPUA3 = 0;
+"17
 [e = . . _WPUAbits 0 3 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 19: T1CONbits.TMR1ON = 0;
-"19
-[e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 20: T1CONbits.TMR1CS = 0b01;
+[; ;HC-SR04.c: 20: T1CONbits.TMR1ON = 0;
 "20
-[e = . . _T1CONbits 0 5 -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 21: T1CONbits.T1CKPS = 0b00;
+[e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 21: T1CONbits.TMR1CS = 0b01;
 "21
-[e = . . _T1CONbits 0 4 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 22: T1CONbits.T1SYNC = 1;
+[e = . . _T1CONbits 0 5 -> -> 1 `i `uc ]
+[; ;HC-SR04.c: 22: T1CONbits.T1CKPS = 0b00;
 "22
-[e = . . _T1CONbits 0 2 -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 23: T1GCONbits.TMR1GE = 0;
+[e = . . _T1CONbits 0 4 -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 23: T1CONbits.T1SYNC = 1;
 "23
+[e = . . _T1CONbits 0 2 -> -> 1 `i `uc ]
+[; ;HC-SR04.c: 24: T1GCONbits.TMR1GE = 0;
+"24
 [e = . . _T1GCONbits 0 6 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 25: }
-"25
+[; ;HC-SR04.c: 26: }
+"26
 [e :UE 920 ]
 }
-"30
+"31
 [v _hcsr04Trigger `(v ~T0 @X0 1 ef ]
 {
-[; ;HC-SR04.c: 30: void hcsr04Trigger(void){
+[; ;HC-SR04.c: 31: void hcsr04Trigger(void){
 [e :U _hcsr04Trigger ]
 [f ]
-[; ;HC-SR04.c: 32: counter++;
-"32
+[; ;HC-SR04.c: 33: counter++;
+"33
 [e ++ _counter -> -> -> 1 `i `l `ul ]
-[; ;HC-SR04.c: 37: }
-"37
+[; ;HC-SR04.c: 38: }
+"38
 [e :UE 921 ]
 }
-"39
+"40
 [v _hcsr04GetAerage `(f ~T0 @X0 1 ef ]
 {
-[; ;HC-SR04.c: 39: float hcsr04GetAerage(void){
+[; ;HC-SR04.c: 40: float hcsr04GetAerage(void){
 [e :U _hcsr04GetAerage ]
 [f ]
-"41
-[v _loop `uc ~T0 @X0 1 a ]
-[; ;HC-SR04.c: 41: unsigned char loop = 10;
-[e = _loop -> -> 10 `i `uc ]
-"42
-[v _limit `uc ~T0 @X0 1 a ]
-[; ;HC-SR04.c: 42: unsigned char limit = 0;
-[e = _limit -> -> 0 `i `uc ]
 "43
-[v _count `uc ~T0 @X0 1 a ]
-[; ;HC-SR04.c: 43: unsigned char count = 0;
-[e = _count -> -> 0 `i `uc ]
-"44
 [v _average `f ~T0 @X0 1 a ]
-[; ;HC-SR04.c: 44: float average = 0;
+[; ;HC-SR04.c: 43: float average = 0;
 [e = _average -> -> 0 `i `f ]
-[; ;HC-SR04.c: 46: while (--loop){
+[; ;HC-SR04.c: 45: rloop = 0;
+"45
+[e = _rloop -> -> 0 `i `ui ]
+[; ;HC-SR04.c: 46: rcount = 0;
 "46
+[e = _rcount -> -> 0 `i `ui ]
+[; ;HC-SR04.c: 48: while (rloop++ < 1000){
+"48
 [e $U 923  ]
 [e :U 924 ]
 {
-[; ;HC-SR04.c: 49: TMR1L = 0x00;
-"49
+[; ;HC-SR04.c: 51: TMR1L = 0x00;
+"51
 [e = _TMR1L -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 50: TMR1H = 0x00;
-"50
+[; ;HC-SR04.c: 52: TMR1H = 0x00;
+"52
 [e = _TMR1H -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 53: PORTCbits.RC4 = 1;
-"53
-[e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 54: _delay((unsigned long)((10)*(32000000/4000000.0)));
-"54
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
-[; ;HC-SR04.c: 55: PORTCbits.RC4 = 0;
+[; ;HC-SR04.c: 55: PORTCbits.RC4 = 1;
 "55
-[e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 58: T1CONbits.TMR1ON = 1;
+[e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
+[; ;HC-SR04.c: 58: _delay((unsigned long)((10)*(32000000/4000000.0)));
 "58
-[e = . . _T1CONbits 0 0 -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 61: limit = 10;
+[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
+[; ;HC-SR04.c: 61: T1CONbits.TMR1ON = 1;
 "61
-[e = _limit -> -> 10 `i `uc ]
-[; ;HC-SR04.c: 64: while (T1CONbits.TMR1ON){
-"64
-[e $U 926  ]
-[e :U 927 ]
-{
-[; ;HC-SR04.c: 67: if (!(--limit)) {
-"67
-[e $ ! ! != -> =- _limit -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 929  ]
-{
-[; ;HC-SR04.c: 68: break;
-"68
-[e $U 928  ]
+[e = . . _T1CONbits 0 0 -> -> 1 `i `uc ]
+[; ;HC-SR04.c: 62: waiting = 1;
+"62
+[e = _waiting -> -> 1 `i `uc ]
+[; ;HC-SR04.c: 65: PORTCbits.RC4 = 0;
+"65
+[e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 69: sleepMs(7);
 "69
-}
-[e :U 929 ]
-[; ;HC-SR04.c: 69: }
-[; ;HC-SR04.c: 72: sleepMs(1);
+[e ( _sleepMs (1 -> -> 7 `i `ui ]
+[; ;HC-SR04.c: 71: if (!waiting){
+"71
+[e $ ! ! != -> _waiting `i -> -> -> 0 `i `Vuc `i 926  ]
+{
+[; ;HC-SR04.c: 72: average+= TMR1L + (unsigned) (TMR1H << 8);
 "72
-[e ( _sleepMs (1 -> -> 1 `i `ui ]
+[e =+ _average -> + -> _TMR1L `ui -> << -> _TMR1H `i -> 8 `i `ui `f ]
+[; ;HC-SR04.c: 73: rcount++;
 "73
+[e ++ _rcount -> -> 1 `i `ui ]
+"74
 }
 [e :U 926 ]
-"64
-[e $ != -> . . _T1CONbits 0 0 `i -> -> -> 0 `i `Vuc `i 927  ]
-[e :U 928 ]
-[; ;HC-SR04.c: 73: }
-[; ;HC-SR04.c: 76: if (limit > 0){
+[; ;HC-SR04.c: 74: }
+[; ;HC-SR04.c: 76: if (rcount >= 50){
 "76
-[e $ ! > -> _limit `i -> 0 `i 930  ]
+[e $ ! >= _rcount -> -> 50 `i `ui 927  ]
 {
-[; ;HC-SR04.c: 77: average+= TMR1L + (unsigned) (TMR1H << 8);
+[; ;HC-SR04.c: 77: break;
 "77
-[e =+ _average -> + -> _TMR1L `ui -> << -> _TMR1H `i -> 8 `i `ui `f ]
-[; ;HC-SR04.c: 78: count++;
+[e $U 925  ]
 "78
-[e ++ _count -> -> 1 `i `uc ]
+}
+[e :U 927 ]
 "79
 }
-[e :U 930 ]
-"80
-}
 [e :U 923 ]
-"46
-[e $ != -> =- _loop -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 924  ]
+"48
+[e $ < ++ _rloop -> -> 1 `i `ui -> -> 1000 `i `ui 924  ]
 [e :U 925 ]
+[; ;HC-SR04.c: 78: }
 [; ;HC-SR04.c: 79: }
-[; ;HC-SR04.c: 80: }
-[; ;HC-SR04.c: 83: average/= count;
-"83
-[e =/ _average -> _count `f ]
-[; ;HC-SR04.c: 85: return average;
-"85
+[; ;HC-SR04.c: 82: average/= rcount;
+"82
+[e =/ _average -> _rcount `f ]
+[; ;HC-SR04.c: 84: sleepMs(1);
+"84
+[e ( _sleepMs (1 -> -> 1 `i `ui ]
+[; ;HC-SR04.c: 86: return average;
+"86
 [e ) _average ]
 [e $UE 922  ]
-[; ;HC-SR04.c: 86: }
-"86
+[; ;HC-SR04.c: 87: }
+"87
 [e :UE 922 ]
 }
-"88
+"89
 [v _hcsr04ISR `(v ~T0 @X0 1 ef ]
 {
-[; ;HC-SR04.c: 88: void hcsr04ISR(void){
+[; ;HC-SR04.c: 89: void hcsr04ISR(void){
 [e :U _hcsr04ISR ]
 [f ]
-[; ;HC-SR04.c: 89: T1CONbits.TMR1ON = 0;
-"89
-[e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 90: }
+[; ;HC-SR04.c: 90: waiting = 0;
 "90
-[e :UE 931 ]
+[e = _waiting -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 91: T1CONbits.TMR1ON = 0;
+"91
+[e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 92: }
+"92
+[e :UE 928 ]
 }

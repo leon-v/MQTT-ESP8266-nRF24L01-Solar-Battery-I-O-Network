@@ -9,8 +9,6 @@
 #include "wifi.h"
 #include "esp_system.h"
 
-#define MQTT_TASK 1
-
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t mqttEventGroup;
 

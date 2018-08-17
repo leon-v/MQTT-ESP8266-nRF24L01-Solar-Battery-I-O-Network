@@ -2,6 +2,7 @@
 #include "HC-SR04.h"
 #include "interface.h"
 
+volatile unsigned char waiting = 0;
 unsigned int distance = 0;
 
 void hcsr04Init(void){
@@ -35,57 +36,58 @@ void hcsr04Trigger(void){
     
     
 }
-
+    
 float hcsr04GetAerage(void){
     
-    unsigned char loop = 10;
-    unsigned char limit = 0;
-    unsigned char count = 0;
+    
     float average = 0;
     
-    while (--loop){
+    rloop = 0;
+    rcount = 0;
+    
+    while (rloop++ < 1000){
         
         // Reset Timer
         TMR1L = 0x00;
         TMR1H = 0x00;
         
-        // Trigger Module
+        // Get module ready to trigger
         PORTCbits.RC4 = 1;
+        
+        // Give the module time to get ready
         __delay_us(10);
+        
+        // Start time we and flag state as waiting for echo
+        T1CONbits.TMR1ON = 1;
+        waiting = 1;
+        
+        // Lower trigger to start the transmit
         PORTCbits.RC4 = 0;
         
-        // Start timer
-        T1CONbits.TMR1ON = 1;
+        // Sleep for 1ms or interrupt
+        //0.343 meters per millisecond
+        sleepMs(7);
         
-        // Set time limit
-        limit = 10;
-        
-        // Wait for timer to end
-        while (T1CONbits.TMR1ON){
-            
-            // Break if the limit reached
-            if (!(--limit)) {
-                break;
-            }
-            
-            // Sleep for 1ms or interrupt
-            sleepMs(1);
+        if (!waiting){
+            average+= TMR1L + (unsigned) (TMR1H << 8);
+            rcount++;
         }
         
-        // If the limit was not reached, sum the value
-        if (limit > 0){
-            average+= TMR1L + (unsigned) (TMR1H << 8);
-            count++;
+        if (rcount >= 50){
+            break;
         }
     }
     
     // Get the average by dividing the total by the count
-    average/= count;
+    average/= rcount;
+    
+    sleepMs(1);
     
     return average;
 }
 
 void hcsr04ISR(void){
+    waiting = 0;
     T1CONbits.TMR1ON = 0;
 }
 
