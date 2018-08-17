@@ -10683,15 +10683,15 @@ void sleepMs(unsigned int milliseconds){
 unsigned char wdtps;
 for (wdtps = 0; wdtps <= 0b10010; wdtps++){
 if ((milliseconds >> wdtps) & 0b1){
-
+START_SLEEP:
 WDTCONbits.WDTPS = wdtps;
 asm("sleep");
 __nop();
 __nop();
 
-
-
-
+if( STATUSbits.nTO || STATUSbits.nPD){
+goto START_SLEEP;
+}
 }
 }
 

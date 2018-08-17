@@ -11143,7 +11143,7 @@ packet->packetData.ACKRequest = 0;
 
 nrf24l01SendPacket(packet);
 
-sleepMs(200);
+sleepMs(2000);
 }
 
 
@@ -11153,9 +11153,8 @@ nrf24l01Packet_t packet;
 
 sendMessage(&packet, "DIST", hcsr04GetAerage());
 
-sendMessage(&packet, "rloop", rloop);
-
-sendMessage(&packet, "rcount", rcount);
+# 124
+sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
 # 136
 FVRCONbits.TSEN = 1;
@@ -11169,7 +11168,7 @@ float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 40;
 
 sendMessage(&packet, "TEMP", ta);
 
-# 155
+# 159
 }
 
 unsigned char nrf24l01GetPipe(char * name){
@@ -11208,7 +11207,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 198
+# 202
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11281,7 +11280,7 @@ nrf24l01Packet_t packet;
 sendMessage(&packet, "BOOT0", 123);
 sendMessage(&packet, "BOOT1", 456);
 
-# 275
+# 279
 while(1){
 loop();
 }

@@ -183,6 +183,80 @@ char * httpServerPageGetIndex(void){
     return html;
 }
 
+char * httpServerPageGetStatus(void){
+
+	static const char PageIndex[] = "\
+<!DOCTYPE html>\
+<html>\
+	<head>\
+		<title>ESP8266 Status</title>\
+		<style type='text/css'>\
+			*{\
+				box-sizing: border-box;\
+			}\
+			body{\
+				font-family: Arial;\
+				color: #ede5ff;\
+				background-color:#262626;\
+			}\
+			td{\
+				width:200px;\
+			}\
+			th{\
+				text-align: left;\
+				width:125px;\
+				font-size: 14px;\
+			}\
+			input, select, button{\
+				background-color:#262626;\
+				color: #ede5ff;\
+				border:1px solid #ffffff;\
+				padding:3px;\
+				margin:0px;\
+				margin-bottom:-4px;\
+				font-size: 14px;\
+				width:100%%;\
+			}\
+			button{\
+				margin-top:5px;\
+				\
+			}\
+			.roundTop{\
+				border-top-right-radius: 5px;\
+				border-top-left-radius: 5px;\
+			}\
+			.roundBotton{\
+				border-bottom-right-radius: 5px;\
+				border-bottom-left-radius: 5px;\
+			}\
+		</style>\
+	</head>\
+	<body>\
+		<h2>ESP8266 Status</h2>\
+		<form method='post'>\
+			<table>\
+				<tbody>\
+					<tr>\
+						<th colspan='2'><h3>MQTT Status</h3></th>\
+					</tr>\
+					<tr>\
+						<th>Connected</th>\
+						<td>Not sure</td>\
+					</tr>\
+				</tbody>\
+			</table>\
+	</body>\
+</html>";
+	#define PageStatusParams ,
+
+	size_t needed = snprintf(NULL, 0, PageIndex) + 1;
+	char  *html = malloc(needed);
+	snprintf(html, needed, PageIndex);
+    return html;
+}
+
+
+
 
 char * httpServerPageGet(char * method, char * uri, char * payload){
 
@@ -192,6 +266,10 @@ char * httpServerPageGet(char * method, char * uri, char * payload){
 			httpServerPagePostIndex(payload);
 		}
 		return httpServerPageGetIndex();
+	}
+
+	else if (strcmp(uri, "/status") == 0){
+		return httpServerPageGetStatus();
 	}
 
 	return NULL;

@@ -11,7 +11,7 @@ static void gpio_isr_handler(void *arg){
 
 	uint32_t gp_io = (uint32_t) arg;
 
-    xQueueSendFromISR(radioGetEventQueue(), &gp_io, NULL);
+    xQueueSendFromISR(radioGetInterruptQueue(), &gp_io, NULL);
 }
 
 void nrf24l01InterfaceInit(void){

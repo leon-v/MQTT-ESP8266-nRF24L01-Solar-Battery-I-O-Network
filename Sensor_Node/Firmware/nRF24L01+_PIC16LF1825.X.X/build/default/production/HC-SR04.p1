@@ -7345,13 +7345,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _average `f ~T0 @X0 1 a ]
 [; ;HC-SR04.c: 43: float average = 0;
 [e = _average -> -> 0 `i `f ]
-[; ;HC-SR04.c: 45: rloop = 0;
+[; ;HC-SR04.c: 45: rloop = 300;
 "45
-[e = _rloop -> -> 0 `i `ui ]
+[e = _rloop -> -> 300 `i `ui ]
 [; ;HC-SR04.c: 46: rcount = 0;
 "46
 [e = _rcount -> -> 0 `i `ui ]
-[; ;HC-SR04.c: 48: while (rloop++ < 1000){
+[; ;HC-SR04.c: 48: while (rloop--){
 "48
 [e $U 923  ]
 [e :U 924 ]
@@ -7377,9 +7377,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;HC-SR04.c: 65: PORTCbits.RC4 = 0;
 "65
 [e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 69: sleepMs(7);
+[; ;HC-SR04.c: 69: sleepMs(10);
 "69
-[e ( _sleepMs (1 -> -> 7 `i `ui ]
+[e ( _sleepMs (1 -> -> 10 `i `ui ]
 [; ;HC-SR04.c: 71: if (!waiting){
 "71
 [e $ ! ! != -> _waiting `i -> -> -> 0 `i `Vuc `i 926  ]
@@ -7394,9 +7394,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 926 ]
 [; ;HC-SR04.c: 74: }
-[; ;HC-SR04.c: 76: if (rcount >= 50){
+[; ;HC-SR04.c: 76: if (rcount >= 100){
 "76
-[e $ ! >= _rcount -> -> 50 `i `ui 927  ]
+[e $ ! >= _rcount -> -> 100 `i `ui 927  ]
 {
 [; ;HC-SR04.c: 77: break;
 "77
@@ -7408,37 +7408,53 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 923 ]
 "48
-[e $ < ++ _rloop -> -> 1 `i `ui -> -> 1000 `i `ui 924  ]
+[e $ != -- _rloop -> -> 1 `i `ui -> -> 0 `i `ui 924  ]
 [e :U 925 ]
 [; ;HC-SR04.c: 78: }
 [; ;HC-SR04.c: 79: }
-[; ;HC-SR04.c: 82: average/= rcount;
-"82
+[; ;HC-SR04.c: 81: if (rcount > 10){
+"81
+[e $ ! > _rcount -> -> 10 `i `ui 928  ]
+{
+[; ;HC-SR04.c: 83: average/= rcount;
+"83
 [e =/ _average -> _rcount `f ]
-[; ;HC-SR04.c: 84: sleepMs(1);
 "84
-[e ( _sleepMs (1 -> -> 1 `i `ui ]
-[; ;HC-SR04.c: 86: return average;
-"86
+}
+[; ;HC-SR04.c: 84: }
+[e $U 929  ]
+"87
+[e :U 928 ]
+[; ;HC-SR04.c: 87: else{
+{
+[; ;HC-SR04.c: 88: average = 0;
+"88
+[e = _average -> -> 0 `i `f ]
+"89
+}
+[e :U 929 ]
+[; ;HC-SR04.c: 89: }
+[; ;HC-SR04.c: 91: return average;
+"91
 [e ) _average ]
 [e $UE 922  ]
-[; ;HC-SR04.c: 87: }
-"87
-[e :UE 922 ]
-}
-"89
-[v _hcsr04ISR `(v ~T0 @X0 1 ef ]
-{
-[; ;HC-SR04.c: 89: void hcsr04ISR(void){
-[e :U _hcsr04ISR ]
-[f ]
-[; ;HC-SR04.c: 90: waiting = 0;
-"90
-[e = _waiting -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 91: T1CONbits.TMR1ON = 0;
-"91
-[e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
 [; ;HC-SR04.c: 92: }
 "92
-[e :UE 928 ]
+[e :UE 922 ]
+}
+"94
+[v _hcsr04ISR `(v ~T0 @X0 1 ef ]
+{
+[; ;HC-SR04.c: 94: void hcsr04ISR(void){
+[e :U _hcsr04ISR ]
+[f ]
+[; ;HC-SR04.c: 95: waiting = 0;
+"95
+[e = _waiting -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 96: T1CONbits.TMR1ON = 0;
+"96
+[e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
+[; ;HC-SR04.c: 97: }
+"97
+[e :UE 930 ]
 }

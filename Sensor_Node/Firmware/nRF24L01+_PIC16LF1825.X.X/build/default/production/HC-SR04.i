@@ -10702,10 +10702,10 @@ float hcsr04GetAerage(void){
 
 float average = 0;
 
-rloop = 0;
+rloop = 300;
 rcount = 0;
 
-while (rloop++ < 1000){
+while (rloop--){
 
 
 TMR1L = 0x00;
@@ -10726,22 +10726,27 @@ PORTCbits.RC4 = 0;
 
 
 
-sleepMs(7);
+sleepMs(10);
 
 if (!waiting){
 average+= TMR1L + (unsigned) (TMR1H << 8);
 rcount++;
 }
 
-if (rcount >= 50){
+if (rcount >= 100){
 break;
 }
 }
 
+if (rcount > 10){
 
 average/= rcount;
+}
 
-sleepMs(1);
+
+else{
+average = 0;
+}
 
 return average;
 }

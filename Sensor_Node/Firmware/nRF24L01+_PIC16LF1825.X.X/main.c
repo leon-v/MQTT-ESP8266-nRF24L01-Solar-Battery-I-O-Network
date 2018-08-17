@@ -100,7 +100,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepMs(200);
+	sleepMs(2000);
 }
 
 
@@ -110,9 +110,9 @@ void loop(){
     
     sendMessage(&packet, "DIST", hcsr04GetAerage());
     
-    sendMessage(&packet, "rloop", rloop);
+//    sendMessage(&packet, "rloop", rloop);
 //    sendMessage(&packet, "rlimit", rlimit);
-    sendMessage(&packet, "rcount", rcount);
+//    sendMessage(&packet, "rcount", rcount);
     
 //    sendMessage(&packet, "COUNT", counter);
     
@@ -121,7 +121,7 @@ void loop(){
     //Resistor divider on Vbatt
     // 10K / 4.7K  = 2.127659574468085
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
-//    sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
+    sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     
 //	EEPROMWrite(0, (unsigned char) 22);
     
@@ -151,7 +151,11 @@ void loop(){
 //    
 //    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     
-//    sendMessage(&packet, "DBG5", counter);
+//    sendMessage(&packet, "DBG1", 1);
+//    sendMessage(&packet, "DBG2", 2);
+//    sendMessage(&packet, "DBG3", 3);
+//    sendMessage(&packet, "DBG4", 4);
+//    sendMessage(&packet, "DBG5", 5);
 }
 
  unsigned char nrf24l01GetPipe(char * name){

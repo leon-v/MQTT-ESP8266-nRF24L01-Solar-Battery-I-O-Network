@@ -77,7 +77,8 @@ radioToMQTT.o: \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/x509_vfy.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_stack.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_pkey.h \
- /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radio.h
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radio.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radioToMQTT.h
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdio.h:
 
@@ -234,4 +235,6 @@ radioToMQTT.o: \
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_pkey.h:
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radio.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radioToMQTT.h:
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/./radioToMQTT.c:

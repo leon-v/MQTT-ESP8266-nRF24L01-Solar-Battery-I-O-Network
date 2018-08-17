@@ -7,94 +7,72 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
+
 #include "mqtt.h"
 #include "radio.h"
 
-#define MOTIFY_FORWARD (1UL << 0)
+#include "radioToMQTT.h"
 
-TaskHandle_t radioToMQTTTaskHandle = NULL;
+radioToMQTTStatus_t radioToMQTTStatus;
 
-char payloadOut[32];
-
-void radioToMQTTForward(char * payloadIn){
-
-	if (radioToMQTTTaskHandle == NULL){
-		return;
-	}
-
-	// char * payloadOut;
-	// malloc(payloadOut, (strlen(payloadIn) + 1) * sizeof(char) );
-
-	strcpy(payloadOut, payloadIn);
-
-	uint32_t notifyValue = MOTIFY_FORWARD;
-	xTaskNotify(radioToMQTTTaskHandle, notifyValue, eNoAction);
+radioToMQTTStatus_t radioToMQTTGetStatus(void){
+	return radioToMQTTStatus;
 }
-
 
 void radioToMQTTTask(){
 
-	radioToMQTTTaskHandle = xTaskGetCurrentTaskHandle();
+	// radioToMQTTTaskHandle = xTaskGetCurrentTaskHandle();
 
 	MQTTClient * client = mqttGetClient();
 
 	xEventGroupWaitBits(mqttGetEventGroup(), MQTT_CONNECTED_BIT, false, true, portMAX_DELAY);
 
     int rc = 0;
+	radioMessage_t radioMessage;
+	char mqttTopic[64];
 
-
-	uint32_t notifyValue;
     for (;;) {
 
-    	xTaskNotifyWait(0, 0, &notifyValue, portMAX_DELAY);
+    	if (xQueueReceive(radioGetRXQueue(), &radioMessage, portMAX_DELAY)) {
 
-		char * name;
-    	char * sensor;
-    	char * value;
+    		sprintf(mqttTopic, "radio/out/%s/%s/%s", mqttGetUniqueID(), radioMessage.name, radioMessage.sensor);
 
-    	name = strtok(payloadOut, "/");
-		sensor = strtok(NULL, "/");
-		value = strtok(NULL, "/");
+    		MQTTMessage message;
 
-		char * mqttTopic = NULL;
-		mqttTopic = malloc(64 * sizeof(char));
-		sprintf(mqttTopic, "radio/out/%s/%s/%s", mqttGetUniqueID(), name, sensor);
+			message.qos = QOS1;
+	    	message.retained = 0;
+			message.payload = &radioMessage.value;
+			message.payloadlen = strlen(message.payload);
 
-		char * mqttValue = NULL;
-		mqttValue = malloc( (strlen(value) + 1) * sizeof(char));
-		strcpy(mqttValue, value);
-		
-		printf("MQTT Publish: %s. Value: %s\n", mqttTopic, mqttValue);
+	    	if ((rc = MQTTPublish(client, mqttTopic, &message)) != 0) {
+		        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
+		    }
 
-		MQTTMessage message;
+		    radioToMQTTStatus.messagesOutAccum++;
 
-		message.qos = QOS1;
-    	message.retained = 0;
-		message.payload = mqttValue;
-		message.payloadlen = strlen(message.payload);
+		    // printf("Radio->MQTT - Task - Publish: %s. Value: %s\n", mqttTopic, (char *) message.payload);
 
-    	if ((rc = MQTTPublish(client, mqttTopic, &message)) != 0) {
-	        printf("Return code from MQTT publish is %d\n", rc);
-	    }
-
-	    free(mqttTopic);
-	    free(mqttValue);
+    	}
 
 	}
-    // message.payload = payload;
-    // sprintf(payload, "Hello World1");
-    // message.payloadlen = strlen(payload);
-
-    // if ((rc = MQTTPublish(client, "radio/value/me/yay", &message)) != 0) {
-    //     printf("Return code from MQTT publish is %d\n", rc);
-    // } else {
-    //     printf("MQTT publish topic \"radio/status/me/tick\"\n");
-    // }
-
     vTaskDelete(NULL);
     return;
 }
 
+
+void radioToMQTTTimerTask(){
+
+	vTaskDelay(60000 / portTICK_RATE_MS);
+
+    radioToMQTTStatus.messagesOutCount = radioToMQTTStatus.messagesOutAccum;
+    radioToMQTTStatus.messagesOutAccum = 0;
+
+    printf("Radio->MQTT - Timer Forwarded %d messages in the last 60 seconds.\n", radioToMQTTStatus.messagesOutCount);
+}
+
+
 void radioToMQTTInit(void){
-	xTaskCreate(&radioToMQTTTask, "radioToMQTT", 2048, NULL, 9, NULL);
+	xTaskCreate(&radioToMQTTTask, "radioToMQTT", 2048, NULL, 10, NULL);
+
+	// xTaskCreate(&radioToMQTTTimerTask, "radioToMQTTTimerTask", 2048, NULL, 7, NULL);
 }

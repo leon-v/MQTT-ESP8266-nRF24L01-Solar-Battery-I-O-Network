@@ -42,10 +42,10 @@ float hcsr04GetAerage(void){
     
     float average = 0;
     
-    rloop = 0;
+    rloop = 300;
     rcount = 0;
     
-    while (rloop++ < 1000){
+    while (rloop--){
         
         // Reset Timer
         TMR1L = 0x00;
@@ -66,22 +66,27 @@ float hcsr04GetAerage(void){
         
         // Sleep for 1ms or interrupt
         //0.343 meters per millisecond
-        sleepMs(7);
+        sleepMs(10);
         
         if (!waiting){
             average+= TMR1L + (unsigned) (TMR1H << 8);
             rcount++;
         }
         
-        if (rcount >= 50){
+        if (rcount >= 100){
             break;
         }
     }
     
-    // Get the average by dividing the total by the count
-    average/= rcount;
+    if (rcount > 10){
+        // Get the average by dividing the total by the count
+        average/= rcount;
+    }
     
-    sleepMs(1);
+    // If the loop ran out, WE must have got no res
+    else{
+        average = 0;
+    }
     
     return average;
 }
