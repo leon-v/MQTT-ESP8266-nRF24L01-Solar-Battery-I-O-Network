@@ -39,7 +39,7 @@ reconnect:
 
     printf("MQTT Client - Connection - Thread start.\n");
 
-    vTaskDelay(5000 / portTICK_RATE_MS);  //send every 10 seconds
+    vTaskDelay(1000 / portTICK_RATE_MS);  //send every 10 seconds
 
 	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
@@ -51,7 +51,8 @@ reconnect:
 	
     if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
     	printf("MQTT Client - Connection - Failed to connect to %s:%d with error %d.\n", address, configFlash.mqttPort, rc);
-        goto fail2;
+    	close(network.my_socket);
+        goto fail1;
     }
 
     printf("MQTT Client - Connection - Socket connected.\n");
@@ -89,19 +90,19 @@ reconnect:
 	
 
     while(MQTTIsConnected(&client)){
-    	vTaskDelay(1000 / portTICK_RATE_MS);  //send every 10 seconds
+    	vTaskDelay(1000 / portTICK_RATE_MS);  //send every 1 seconds
     	xEventGroupSetBits(mqttEventGroup, MQTT_CONNECTED_BIT);
     }
+
+    xEventGroupClearBits(mqttEventGroup, MQTT_CONNECTED_BIT);
 
     printf("MQTT Client - Connection - Connected check failed.\n");
 
 fail1:
-	
-	xEventGroupClearBits(mqttEventGroup, MQTT_CONNECTED_BIT);
 
 	MQTTDisconnect(&client);
 
-fail2:
+// fail2:
 	
 	printf("MQTT Client - Connection - Reconnecting.\n");
 
@@ -120,5 +121,5 @@ void mqttInt(){
 
 	mqttEventGroup = xEventGroupCreate();
 
-	xTaskCreate(&mqttTask, "mqtt", 4096, NULL, 8, NULL);
+	xTaskCreate(&mqttTask, "mqtt", 2048, NULL, 8, NULL);
 }

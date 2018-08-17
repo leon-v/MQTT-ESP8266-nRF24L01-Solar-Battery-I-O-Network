@@ -4,6 +4,8 @@
 typedef struct{
 	unsigned int messagesOutCount;
 	unsigned int messagesOutAccum;
+	unsigned int messagesDumpCount;
+	unsigned int messagesDumpAccum;
 } radioToMQTTStatus_t;
 
 void radioToMQTTInit(void);

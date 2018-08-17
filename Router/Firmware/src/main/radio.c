@@ -30,7 +30,12 @@ static void radioInterruptTask(void *arg){
 
     radioMessage_t radioRxMessage;
 
-    printf("Radio - Interrupt Task - Stated.\n");
+
+	nrf24l01Init();
+	nrf24l01SetRXMode(1);
+
+
+    printf("Radio - Task - Stated.\n");
 
     for (;;) {
 
@@ -70,8 +75,6 @@ static void radioTimerTask(void *arg){
 
 		nrf24l01Service();
 
-		nrf24l01SetRXMode(1);
-
 	    vTaskDelay(60000 / portTICK_RATE_MS);
 
 	    radioStatus.messagesInCount = radioStatus.messagesInAccum;
@@ -82,19 +85,15 @@ static void radioTimerTask(void *arg){
 }
 
 void radioInit(void){
-
-	printf("Radio - Initialisation - Start.\n");
+	radioStatus.messagesInCount = 0;
+	radioStatus.messagesInAccum = 0;
 
 	//create a queue to handle gpio event from isr
-    radioInterruptQueue = xQueueCreate(4, sizeof(uint32_t));
+    radioInterruptQueue = xQueueCreate(256, sizeof(uint32_t));
 
-    radioRXQueue = xQueueCreate(8, sizeof(radioMessage_t));
+    radioRXQueue = xQueueCreate(256, sizeof(radioMessage_t));
 	
     xTaskCreate(&radioInterruptTask, "radioInterruptTask", 2048, NULL, 10, NULL);
-
-	printf("Radio - Initialisation - Initialising NRF24L01+\n");
-	nrf24l01Init();
-	printf("Radio - Initialisation - Initialised NRF24L01+\n");
 	
-    xTaskCreate(&radioTimerTask, "radioTimerTask", 1024, NULL, 7, NULL);
+    xTaskCreate(&radioTimerTask, "radioTimerTask", 2048, NULL, 9, NULL);
 }

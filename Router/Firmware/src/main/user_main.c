@@ -46,7 +46,10 @@ void app_main() {
 
     httpServerInit();
 
-    mqttInt();
-    radioInit();
     radioToMQTTInit();
+    
+    radioInit();
+    mqttInt();
+    
+    
 }

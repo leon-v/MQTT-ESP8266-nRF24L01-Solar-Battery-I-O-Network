@@ -12,10 +12,15 @@
 /* 4. Don't change any other seg.                                                                     */
 /* 5. user1.bin and user2.bin are same in this mode, so upgrade only need one of them.                */
 /*
+
  *
+
  * Automatically generated file; DO NOT EDIT.
+
  * Espressif IoT Development Framework Configuration
+
  *
+
  */
 MEMORY
 {
