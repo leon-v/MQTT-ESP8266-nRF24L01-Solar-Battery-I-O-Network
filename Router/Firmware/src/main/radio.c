@@ -1,9 +1,5 @@
 #include "nrf24l01.h"
 
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/queue.h"
-
 #include "configFlash.h"
 #include "radioToMQTT.h"
 
