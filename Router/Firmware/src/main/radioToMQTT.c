@@ -73,15 +73,20 @@ void radioToMQTTTask(){
 
 void radioToMQTTTimerTask(){
 
-	vTaskDelay(60000 / portTICK_RATE_MS);
+	for(;;){
+		vTaskDelay(60000 / portTICK_RATE_MS);
 
-    radioToMQTTStatus.messagesOutCount = radioToMQTTStatus.messagesOutAccum;
-    radioToMQTTStatus.messagesOutAccum = 0;
+	    radioToMQTTStatus.messagesOutCount = radioToMQTTStatus.messagesOutAccum;
+	    radioToMQTTStatus.messagesOutAccum = 0;
 
-    radioToMQTTStatus.messagesDumpCount = radioToMQTTStatus.messagesDumpAccum;
-    radioToMQTTStatus.messagesDumpAccum = 0;
+	    radioToMQTTStatus.messagesDumpCount = radioToMQTTStatus.messagesDumpAccum;
+	    radioToMQTTStatus.messagesDumpAccum = 0;
 
-    printf("Radio->MQTT - Timer - Sent %d, Dumped %d messages in the last 60 seconds.\n", radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpAccum);
+	    printf("Radio->MQTT - Timer - Sent %d, Dumped %d messages in the last 60 seconds.\n", radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpAccum);
+	}
+	
+	vTaskDelete(NULL);
+    return;
 }
 
 
@@ -91,5 +96,5 @@ void radioToMQTTInit(void){
 
 	xTaskCreate(&radioToMQTTTask, "radioToMQTT", 2048, NULL, 10, NULL);
 
-	// xTaskCreate(&radioToMQTTTimerTask, "radioMQTTTimer", 2048, NULL, 9, NULL);
+	xTaskCreate(&radioToMQTTTimerTask, "radioMQTTTimer", 2048, NULL, 9, NULL);
 }

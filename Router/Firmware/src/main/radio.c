@@ -89,9 +89,9 @@ void radioInit(void){
 	radioStatus.messagesInAccum = 0;
 
 	//create a queue to handle gpio event from isr
-    radioInterruptQueue = xQueueCreate(256, sizeof(uint32_t));
+    radioInterruptQueue = xQueueCreate(4, sizeof(uint32_t));
 
-    radioRXQueue = xQueueCreate(256, sizeof(radioMessage_t));
+    radioRXQueue = xQueueCreate(4, sizeof(radioMessage_t));
 	
     xTaskCreate(&radioInterruptTask, "radioInterruptTask", 2048, NULL, 10, NULL);
 	

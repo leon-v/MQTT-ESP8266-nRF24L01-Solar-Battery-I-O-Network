@@ -33,7 +33,6 @@ void app_main() {
 
     configFlashSave();
 
-
     wifiInit();
 
     unsigned char configMode = 0;
@@ -44,10 +43,10 @@ void app_main() {
 		wifiClientInit();
     }
 
-    httpServerInit();
+    // httpServerInit();
 
     radioToMQTTInit();
-    
+
     radioInit();
     mqttInt();
     
