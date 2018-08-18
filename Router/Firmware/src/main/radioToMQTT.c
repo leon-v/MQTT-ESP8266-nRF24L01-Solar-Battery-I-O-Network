@@ -99,7 +99,7 @@ void radioToMQTTTimerTask(){
 	    radioToMQTTStatus.messagesOutAccum = 0;
 
 	    radioToMQTTStatus.messagesDumpCount = radioToMQTTStatus.messagesDumpAccum;
-	    radioToMQTTStatus.messagesDumpTotal+= radioToMQTTStatus.messagesDumpTotal;
+	    radioToMQTTStatus.messagesDumpTotal+= radioToMQTTStatus.messagesDumpAccum;
 	    radioToMQTTStatus.messagesDumpAccum = 0;
 
 	    printf("Radio->MQTT - Timer - Sent %d, Dumped %d messages in the last 60 seconds.\n", radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpCount);
