@@ -193,7 +193,7 @@ void nrf24l01ISR(void){
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
-    	// printf("Radio: TX_DS\n");
+    	printf("Radio: RX_DR\n");
         
         if (status.RX == RXIdle){
             status.RX = RXPending;

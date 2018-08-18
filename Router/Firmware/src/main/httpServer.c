@@ -210,7 +210,7 @@ void httpServerInit(void) {
 
 	ESP_ERROR_CHECK(nvs_flash_init());
 
-    xTaskCreate(&httpServerTask, "httpServer", 8192, NULL, 8, NULL);
+    xTaskCreate(&httpServerTask, "httpServer", 2048, NULL, 8, NULL);
 }
 
 

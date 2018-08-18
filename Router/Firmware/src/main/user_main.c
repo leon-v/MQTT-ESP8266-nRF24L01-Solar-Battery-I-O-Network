@@ -66,9 +66,12 @@ void app_main() {
     }
     else{
 		wifiClientInit();
-		radioToMQTTInit();
+
 	    radioInit();
 	    mqttInt();
+	    
+	    radioToMQTTInit();
+	    
     }
 
     httpServerInit();

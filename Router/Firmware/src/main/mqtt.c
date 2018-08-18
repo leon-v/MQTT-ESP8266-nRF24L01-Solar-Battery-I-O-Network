@@ -127,5 +127,5 @@ void mqttInt(){
 
 	mqttEventGroup = xEventGroupCreate();
 
-	xTaskCreate(&mqttTask, "mqtt", 2048, NULL, 8, NULL);
+	xTaskCreate(&mqttTask, "mqtt", 2048, NULL, 9, NULL);
 }

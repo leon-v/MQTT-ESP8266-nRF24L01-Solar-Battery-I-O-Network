@@ -32,9 +32,12 @@ void radioToMQTTTask(){
 
 		if (xQueueReceive(radioGetRXQueue(), &radioMessage, portMAX_DELAY)) {
 
+			printf("Radio->MQTT - Task - Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+
 			mqttEventBits = xEventGroupWaitBits(mqttGetEventGroup(), MQTT_CONNECTED_BIT, false, true, 0);
 
 			if (mqttEventBits & MQTT_CONNECTED_BIT){
+
 				sprintf(mqttTopic, "radio/out/%s/%s/%s", mqttGetUniqueID(), radioMessage.name, radioMessage.sensor);
 
 	    		MQTTMessage message;
@@ -51,13 +54,13 @@ void radioToMQTTTask(){
 
 			    radioToMQTTStatus.messagesOutAccum++;
 
-			    // printf("Radio->MQTT - Task - Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+			    printf("Radio->MQTT - Task - Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
 			}
 			else{
 
 				radioToMQTTStatus.messagesDumpAccum++;
 
-				// printf("Radio->MQTT - Task - Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+				printf("Radio->MQTT - Task - Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
 			}
 
     		
@@ -82,7 +85,7 @@ void radioToMQTTTimerTask(){
 	    radioToMQTTStatus.messagesDumpCount = radioToMQTTStatus.messagesDumpAccum;
 	    radioToMQTTStatus.messagesDumpAccum = 0;
 
-	    printf("Radio->MQTT - Timer - Sent %d, Dumped %d messages in the last 60 seconds.\n", radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpAccum);
+	    printf("Radio->MQTT - Timer - Sent %d, Dumped %d messages in the last 60 seconds.\n", radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpCount);
 	}
 	
 	vTaskDelete(NULL);
