@@ -9,6 +9,8 @@
 
 #include <string.h>
 #include "nvs_flash.h"
+//#include "rom/ets_sys.h"
+#include "driver/gpio.h"
 
 #include "wifi.h"
 #include "wifiAccessPoint.h"
@@ -18,6 +20,8 @@
 #include "mqtt.h"
 #include "radio.h"
 #include "radioToMQTT.h"
+
+#define CONFIG_BUTTON_PIN 2
 
 void app_main() {
     //Initialize NVS
@@ -35,20 +39,39 @@ void app_main() {
 
     wifiInit();
 
-    unsigned char configMode = 0;
-    if (configMode){
+    unsigned char apMode = 0;
+
+    // Check if we have an SSID and go to AP mode if not;
+    if (strlen(configFlash.wifiSSID) == 0){
+    	apMode = 1;
+    }
+
+    // Check if GPIO2 is getting a button press
+    // Configure Inputs
+	gpio_config_t inputs;
+	inputs.pin_bit_mask	= (1ULL << CONFIG_BUTTON_PIN);
+	inputs.mode			= GPIO_MODE_INPUT;
+	inputs.pull_up_en	= GPIO_PULLUP_ENABLE;
+	inputs.pull_down_en	= GPIO_PULLDOWN_DISABLE;
+	inputs.intr_type	= GPIO_INTR_DISABLE;
+	gpio_config(&inputs);
+
+	// Check if button pressed down and shorting pin
+	if (!gpio_get_level(CONFIG_BUTTON_PIN)){
+		apMode = 1;
+	}
+    
+    if (apMode){
 		wifiAccessPointInit();
     }
     else{
 		wifiClientInit();
+		radioToMQTTInit();
+	    radioInit();
+	    mqttInt();
     }
 
-    // httpServerInit();
-
-    radioToMQTTInit();
-
-    radioInit();
-    mqttInt();
+    httpServerInit();
     
     
 }

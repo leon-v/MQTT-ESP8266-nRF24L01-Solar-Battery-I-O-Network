@@ -43,6 +43,12 @@ reconnect:
 
 	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
+	if ( (strlen(configFlash.mqttHost) == 0) || (configFlash.mqttPort == 0) ) {
+		printf("MQTT Client - Connection - No configuration set.\n");
+		vTaskDelay(10000 / portTICK_RATE_MS);  //send every 10 seconds
+		goto reconnect;
+	}
+
 	NetworkInit(&network);
 
 	MQTTClientInit(&client, &network, (configFlash.mqttKeepalive * 1000), sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));

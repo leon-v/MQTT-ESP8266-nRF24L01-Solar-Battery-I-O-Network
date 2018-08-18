@@ -95,6 +95,8 @@ void httpServerTask(){
 
 	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
+	vTaskDelay(500 / portTICK_RATE_MS);
+
 	printf("HTTP Server - Connection - Creating socket.\n");
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -132,6 +134,8 @@ void httpServerTask(){
     printf("HTTP Server - Connection - Got connection.\n");
 
 reconnect:
+
+	vTaskDelay(500 / portTICK_RATE_MS);
 
     printf("HTTP Server - Connection - Accepting connection.\n");
     new_sockfd = accept(sockfd, (struct sockaddr*) &sock_addr, &addr_len);
@@ -206,7 +210,7 @@ void httpServerInit(void) {
 
 	ESP_ERROR_CHECK(nvs_flash_init());
 
-    xTaskCreate(&httpServerTask, "httpServer", 8192, NULL, 6, NULL);
+    xTaskCreate(&httpServerTask, "httpServer", 8192, NULL, 8, NULL);
 }
 
 

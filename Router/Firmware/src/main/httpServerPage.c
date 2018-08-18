@@ -5,6 +5,7 @@
 
 #include "configFlash.h"
 #include "httpServer.h"
+#include "radioToMQTT.h"
 
 void httpServerPagePostIndex(char * payload){
 
@@ -240,18 +241,25 @@ char * httpServerPageGetStatus(void){
 						<th colspan='2'><h3>MQTT Status</h3></th>\
 					</tr>\
 					<tr>\
-						<th>Connected</th>\
-						<td>Not sure</td>\
+						<th>Published</th>\
+						<td>%d</td>\
+					</tr>\
+					<tr>\
+						<th>Dumped</th>\
+						<td>%d</td>\
 					</tr>\
 				</tbody>\
 			</table>\
 	</body>\
 </html>";
-	#define PageStatusParams ,
 
-	size_t needed = snprintf(NULL, 0, PageIndex) + 1;
+	radioToMQTTStatus_t radioToMQTTStatus = radioToMQTTGetStatus();
+
+	#define PageStatusParams ,radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpCount
+
+	size_t needed = snprintf(NULL, 0, PageIndex PageStatusParams) + 1;
 	char  *html = malloc(needed);
-	snprintf(html, needed, PageIndex);
+	snprintf(html, needed, PageIndex PageStatusParams);
     return html;
 }
 
