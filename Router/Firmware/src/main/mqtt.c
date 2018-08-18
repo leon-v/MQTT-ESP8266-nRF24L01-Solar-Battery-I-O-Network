@@ -51,7 +51,7 @@ reconnect:
 
 	NetworkInit(&network);
 
-	MQTTClientInit(&client, &network, (configFlash.mqttKeepalive * 1000), sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
+	MQTTClientInit(&client, &network, 2000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
 
 	char * address = (char *) &configFlash.mqttHost;
 	
@@ -85,6 +85,7 @@ reconnect:
     connectData.clientID.cstring = clientID;
     connectData.username.cstring = (char *) &configFlash.mqttUsername;
     connectData.password.cstring = (char *) &configFlash.mqttPassword;
+    connectData.keepAliveInterval = configFlash.mqttKeepalive;
 
     if ((rc = MQTTConnect(&client, &connectData)) != 0) {
         printf("MQTT Client - Connection - Failed to authenticate with MQTT server with error code %d.\n", rc);
@@ -96,8 +97,8 @@ reconnect:
 	
 
     while(MQTTIsConnected(&client)){
-    	vTaskDelay(1000 / portTICK_RATE_MS);  //send every 1 seconds
     	xEventGroupSetBits(mqttEventGroup, MQTT_CONNECTED_BIT);
+    	vTaskDelay(1000 / portTICK_RATE_MS);  //send every 1 seconds
     }
 
     xEventGroupClearBits(mqttEventGroup, MQTT_CONNECTED_BIT);
@@ -111,11 +112,11 @@ fail1:
 // fail2:
 	
 	printf("MQTT Client - Connection - Reconnecting.\n");
-
 	goto reconnect;
-    // printf("mqtt_client_thread going to be deleted\n");
-    // vTaskDelete(NULL);
-    // return;
+
+    printf("mqtt_client_thread going to be deleted\n");
+    vTaskDelete(NULL);
+    return;
 }
 
 void mqttInt(){

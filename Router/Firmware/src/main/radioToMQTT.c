@@ -8,6 +8,7 @@
 #include "freertos/queue.h"
 
 
+#include "configFlash.h"
 #include "mqtt.h"
 #include "radio.h"
 
@@ -28,17 +29,22 @@ void radioToMQTTTask(){
 	char mqttTopic[64];
 	EventBits_t mqttEventBits;
 
+	configASSERT();
+
 	for (;;) {
 
 		if (xQueueReceive(radioGetRXQueue(), &radioMessage, portMAX_DELAY)) {
-
-			printf("Radio->MQTT - Task - Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
 
 			mqttEventBits = xEventGroupWaitBits(mqttGetEventGroup(), MQTT_CONNECTED_BIT, false, true, 0);
 
 			if (mqttEventBits & MQTT_CONNECTED_BIT){
 
-				sprintf(mqttTopic, "radio/out/%s/%s/%s", mqttGetUniqueID(), radioMessage.name, radioMessage.sensor);
+				strcpy(mqttTopic, "radio/out/");
+				strcat(mqttTopic, mqttGetUniqueID());
+				strcat(mqttTopic, "/");
+				strcat(mqttTopic, radioMessage.name);
+				strcat(mqttTopic, "/");
+				strcat(mqttTopic, radioMessage.sensor);
 
 	    		MQTTMessage message;
 
@@ -48,19 +54,28 @@ void radioToMQTTTask(){
 				message.payloadlen = strlen(message.payload);
 
 		    	if ((rc = MQTTPublish(client, mqttTopic, &message)) != 0) {
-			        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
-			        break;
+		    		if (configFlash.debugLevel > 1){
+			        	printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
+			    	}
 			    }
 
-			    radioToMQTTStatus.messagesOutAccum++;
+			    else{
 
-			    printf("Radio->MQTT - Task - Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+			    	radioToMQTTStatus.messagesOutAccum++;
+
+			    	if (configFlash.debugLevel > 2){
+			    		printf("Radio->MQTT - Task - Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+			    	}
+			    }
+			    
 			}
 			else{
 
 				radioToMQTTStatus.messagesDumpAccum++;
 
-				printf("Radio->MQTT - Task - Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+				if (configFlash.debugLevel > 2){
+					printf("Radio->MQTT - Task - Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+				}
 			}
 
     		
@@ -80,9 +95,11 @@ void radioToMQTTTimerTask(){
 		vTaskDelay(60000 / portTICK_RATE_MS);
 
 	    radioToMQTTStatus.messagesOutCount = radioToMQTTStatus.messagesOutAccum;
+	    radioToMQTTStatus.messagesOutTotal+= radioToMQTTStatus.messagesOutAccum;
 	    radioToMQTTStatus.messagesOutAccum = 0;
 
 	    radioToMQTTStatus.messagesDumpCount = radioToMQTTStatus.messagesDumpAccum;
+	    radioToMQTTStatus.messagesDumpTotal+= radioToMQTTStatus.messagesDumpTotal;
 	    radioToMQTTStatus.messagesDumpAccum = 0;
 
 	    printf("Radio->MQTT - Timer - Sent %d, Dumped %d messages in the last 60 seconds.\n", radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpCount);
@@ -96,6 +113,12 @@ void radioToMQTTTimerTask(){
 void radioToMQTTInit(void){
 	radioToMQTTStatus.messagesOutCount = 0;
 	radioToMQTTStatus.messagesOutAccum = 0;
+	radioToMQTTStatus.messagesOutTotal = 0;
+
+	radioToMQTTStatus.messagesDumpCount = 0;
+	radioToMQTTStatus.messagesDumpAccum = 0;
+	radioToMQTTStatus.messagesDumpTotal = 0;
+	
 
 	xTaskCreate(&radioToMQTTTask, "radioToMQTT", 2048, NULL, 10, NULL);
 

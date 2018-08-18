@@ -4,9 +4,10 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
-#include "radio.h"
+#include "configFlash.h"
 #include "radioToMQTT.h"
 
+#include "radio.h"
 
 static xQueueHandle radioInterruptQueue = NULL;
 xQueueHandle radioGetInterruptQueue(void){
@@ -47,7 +48,9 @@ static void radioInterruptTask(void *arg){
 
     			nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
-    			printf("Radio - Task - RX: %s\n", RXPacket->Message);
+    			if (configFlash.debugLevel > 2){
+    				printf("Radio - Task - nrf24l01 RX: %s\n", RXPacket->Message);
+    			}
 
     			char * name = strtok(RXPacket->Message, "/");
 		    	char * sensor = strtok(NULL, "/");
@@ -78,14 +81,10 @@ static void radioTimerTask(void *arg){
 	    vTaskDelay(60000 / portTICK_RATE_MS);
 
 	    radioStatus.messagesInCount = radioStatus.messagesInAccum;
+	    radioStatus.messagesInTotal+= radioStatus.messagesInAccum;
 	    radioStatus.messagesInAccum = 0;
 
 	    printf("Radio - Timer - Forwarded %d messages in the last 60 seconds.\n", radioStatus.messagesInCount);
-
-	    printf("Radio - Timer - TX Status: %d\n", status.TX);
-	    printf("Radio - Timer - RX Status: %d\n", status.RX);
-	    printf("Radio - Timer - Status: %d\n", status.statusRegister.byte);
-	    
 
 	    nrf24l01SetRXMode(1);
 	}
@@ -94,11 +93,12 @@ static void radioTimerTask(void *arg){
 void radioInit(void){
 	radioStatus.messagesInCount = 0;
 	radioStatus.messagesInAccum = 0;
+	radioStatus.messagesInTotal = 0;
 
 	//create a queue to handle gpio event from isr
-    radioInterruptQueue = xQueueCreate(64, sizeof(uint32_t));
+    radioInterruptQueue = xQueueCreate(4, sizeof(uint32_t));
 
-    radioRXQueue = xQueueCreate(64, sizeof(radioMessage_t));
+    radioRXQueue = xQueueCreate(4, sizeof(radioMessage_t));
 	
     xTaskCreate(&radioInterruptTask, "radioInterruptTask", 2048, NULL, 10, NULL);
 	

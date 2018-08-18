@@ -5,6 +5,7 @@
 
 #include "configFlash.h"
 #include "httpServer.h"
+#include "radio.h"
 #include "radioToMQTT.h"
 
 void httpServerPagePostIndex(char * payload){
@@ -54,7 +55,12 @@ void httpServerPagePostIndex(char * payload){
 	if (value){
 		configFlash.mqttVersion = atoi(value);
 	}
-	
+
+	value = httpServerGetTokenValue(&post, "debugLevel");
+	if (value){
+		configFlash.debugLevel = atoi(value);
+	}
+
 
 
 	configFlashSave();
@@ -165,6 +171,16 @@ char * httpServerPageGetIndex(void){
 						</td>\
 					</tr>\
 					<tr>\
+						<td colspan='2'><hr></td>\
+					</tr>\
+					<tr>\
+						<th colspan='2'><h3>System Configuration</h3></th>\
+					</tr>\
+					<tr>\
+						<th>UART Debug Level</th>\
+						<td><input type='number' name='debugLevel' value='%d'></td>\
+					</tr>\
+					<tr>\
 						<td colspan='2'><button class='roundTop roundBotton'>Save</button></td>\
 					</tr>\
 				</tbody>\
@@ -176,7 +192,7 @@ char * httpServerPageGetIndex(void){
 		configFlash.mqttHost,\
 		configFlash.mqttPort, configFlash.mqttKeepalive,\
 		configFlash.mqttUsername, configFlash.mqttPassword,\
-		configFlash.mqttVersion
+		configFlash.mqttVersion, configFlash.debugLevel
 
 	size_t needed = snprintf(NULL, 0, PageIndex, PageIndexParams) + 1;
 	char  *html = malloc(needed);
@@ -238,15 +254,35 @@ char * httpServerPageGetStatus(void){
 			<table>\
 				<tbody>\
 					<tr>\
-						<th colspan='2'><h3>MQTT Status</h3></th>\
+						<th colspan='3'><h3>MQTT Status</h3></th>\
+					</tr>\
+					<tr>\
+						<th>&nbsp;</th>\
+						<th>Per Minute</th>\
+						<th>Total</th>\
 					</tr>\
 					<tr>\
 						<th>Published</th>\
-						<td>%d</td>\
+						<td>%u</td>\
+						<td>%lu</td>\
 					</tr>\
 					<tr>\
 						<th>Dumped</th>\
-						<td>%d</td>\
+						<td>%u</td>\
+						<td>%lu</td>\
+					</tr>\
+					<tr>\
+						<th colspan='3'><h3>Radio Status</h3></th>\
+					</tr>\
+					<tr>\
+						<th>&nbsp;</th>\
+						<th>Per Minute</th>\
+						<th>Total</th>\
+					</tr>\
+					<tr>\
+						<th>Received</th>\
+						<td>%u</td>\
+						<td>%lu</td>\
 					</tr>\
 				</tbody>\
 			</table>\
@@ -254,8 +290,12 @@ char * httpServerPageGetStatus(void){
 </html>";
 
 	radioToMQTTStatus_t radioToMQTTStatus = radioToMQTTGetStatus();
+	radioStatus_t radioStatus = radioGetStatus();
 
-	#define PageStatusParams ,radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpCount
+	#define PageStatusParams ,\
+		radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesOutTotal,\
+		radioToMQTTStatus.messagesDumpCount, radioToMQTTStatus.messagesDumpTotal,\
+		radioStatus.messagesInCount, radioStatus.messagesInTotal
 
 	size_t needed = snprintf(NULL, 0, PageIndex PageStatusParams) + 1;
 	char  *html = malloc(needed);

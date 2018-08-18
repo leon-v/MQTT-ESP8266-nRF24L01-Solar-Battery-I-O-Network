@@ -12,7 +12,7 @@ typedef struct{
 	char mqttUsername[64];
 	char mqttPassword[64];
 	int mqttVersion;
-	unsigned int sta_type;
+	int debugLevel;
 } configFlash_t;
 
 
