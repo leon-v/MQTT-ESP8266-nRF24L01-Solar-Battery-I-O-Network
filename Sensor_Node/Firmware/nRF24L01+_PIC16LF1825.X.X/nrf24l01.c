@@ -247,6 +247,7 @@ void nrf24l01Service(void){
 	
 	if (status.TX == TXPendingACK){
         if (!status.retryCount--){
+            counter++;
             status.TX = TXReady;
         }
     }

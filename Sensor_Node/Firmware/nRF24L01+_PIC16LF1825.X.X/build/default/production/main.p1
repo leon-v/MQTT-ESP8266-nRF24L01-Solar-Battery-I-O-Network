@@ -7949,9 +7949,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 98: packet->packetData.byte = 0;
 "98
 [e = . . . *U _packet 0 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 99: packet->packetData.ACKRequest = 0;
+[; ;main.c: 99: packet->packetData.ACKRequest = 1;
 "99
-[e = . . . *U _packet 0 1 2 -> -> 0 `i `uc ]
+[e = . . . *U _packet 0 1 2 -> -> 1 `i `uc ]
 [; ;main.c: 101: nrf24l01SendPacket(packet);
 "101
 [e ( _nrf24l01SendPacket (1 _packet ]
@@ -8193,7 +8193,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "269
 [v _packet `S965 ~T0 @X0 1 a ]
 [; ;main.c: 269: nrf24l01Packet_t packet;
-[; ;main.c: 271: sendMessage(&packet, "BOOT3", EEPROMRead(0));
+[; ;main.c: 271: sendMessage(&packet, "BOOT", EEPROMRead(0));
 "271
 [e ( _sendMessage (3 , , &U _packet :s 7C -> ( _EEPROMRead (1 -> -> 0 `i `ui `f ]
 [; ;main.c: 272: EEPROMWrite(0, 0);
@@ -8221,9 +8221,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :UE 992 ]
 }
 [a 6C 85 87 84 0 ]
+[a 7C 66 79 79 84 0 ]
 [a 3C 67 79 85 78 84 0 ]
 [a 4C 86 66 65 84 0 ]
 [a 5C 84 69 77 80 0 ]
-[a 7C 66 79 79 84 51 0 ]
 [a 1C 47 0 ]
 [a 2C 47 0 ]

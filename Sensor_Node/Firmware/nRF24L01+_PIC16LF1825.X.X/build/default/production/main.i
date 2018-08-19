@@ -11138,7 +11138,7 @@ strcat(packet->Message, "/");
 strcat(packet->Message, ftoa(value, &ftoaStatus));
 
 packet->packetData.byte = 0;
-packet->packetData.ACKRequest = 0;
+packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
@@ -11277,7 +11277,7 @@ INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-sendMessage(&packet, "BOOT3", EEPROMRead(0));
+sendMessage(&packet, "BOOT", EEPROMRead(0));
 EEPROMWrite(0, 0);
 
 

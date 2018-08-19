@@ -11149,6 +11149,7 @@ nrf24l01SendTXBuffer(&TXPacket);
 
 if (status.TX == 3){
 if (!status.retryCount--){
+counter++;
 status.TX = 1;
 }
 }
