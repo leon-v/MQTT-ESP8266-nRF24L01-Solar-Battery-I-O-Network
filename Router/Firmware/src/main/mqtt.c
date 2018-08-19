@@ -16,6 +16,12 @@ MQTTClient client;
 
 char uniqueID[16];
 
+mqttStatus_t mqttStatus = mqttStatus_r;
+
+mqttStatus_t mqttGetStatus(void){
+	return mqttStatus;
+}
+
 EventGroupHandle_t mqttGetEventGroup(void){
 	return mqttEventGroup;
 }
@@ -37,13 +43,13 @@ void mqttTask(){
     EventBits_t wifiEventBits;
     unsigned int threadStarted = 0;
 
+    char clientID[48];
+
+    char * address = (char *) &configFlash.mqttHost;
+
     printf("MQTT Client - Connection - Thread start.\n");
 
 reconnect:
-
-	
-
-	// vTaskDelay(1000 / portTICK_RATE_MS);  //send every 10 seconds
 
 	printf("MQTT Client - Connection - Waiting for WiFi.\n");
 	
@@ -65,8 +71,6 @@ reconnect:
 	NetworkInit(&network);
 
 	MQTTClientInit(&client, &network, 1000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
-
-	char * address = (char *) &configFlash.mqttHost;
 	
     if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
     	printf("MQTT Client - Connection - Failed to connect to %s:%d with error %d.\n", address, configFlash.mqttPort, rc);
@@ -95,9 +99,6 @@ reconnect:
 
 	#endif
 
-    
-    char clientID[48];
-
     sprintf(clientID, "V-Router %s", mqttGetUniqueID());
 
     printf("MQTT Client - Connection - Client ID set to %s.\n", clientID);
@@ -115,6 +116,8 @@ reconnect:
     }
 	
 	printf("MQTT Client - Connection - Connected.\n");
+
+	mqttStatus.connectionSuccessCount++;
 
 	int isConnected = 0;
 	for (;;){
@@ -143,6 +146,11 @@ fail1:
 fail2:
 	
 	printf("MQTT Client - Connection - Reconnecting.\n");
+
+	mqttStatus.connectionFailCount++;
+
+	vTaskDelay(5000 / portTICK_RATE_MS);  //send every 10 seconds
+
 	goto reconnect;
 
     printf("mqtt_client_thread going to be deleted\n");

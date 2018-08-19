@@ -55,7 +55,32 @@ httpServerPage.o: \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/task.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/private/list.h \
  /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/queue.h \
- /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radioToMQTT.h
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radioToMQTT.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/mqtt.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/event_groups.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/timers.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/task.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTClient-C/src/MQTTClient.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTPacket.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTConnect.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTPublish.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTSubscribe.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTUnsubscribe.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTFormat.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/StackTrace.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTPacket.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTClient-C/src/FreeRTOS/MQTTFreeRTOS.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/semphr.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/queue.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/openssl/ssl.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_x509.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_types.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_code.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl3.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/tls1.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/x509_vfy.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_stack.h \
+ /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_pkey.h
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/newlib/newlib/include/stdio.h:
 
@@ -168,4 +193,54 @@ httpServerPage.o: \
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/queue.h:
 
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/radioToMQTT.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/mqtt.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/event_groups.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/timers.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/task.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTClient-C/src/MQTTClient.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTPacket.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTConnect.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTPublish.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTSubscribe.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTUnsubscribe.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTFormat.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/StackTrace.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTPacket/src/MQTTPacket.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/mqtt/paho/MQTTClient-C/src/FreeRTOS/MQTTFreeRTOS.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/semphr.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/freertos/include/freertos/queue.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/openssl/ssl.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_x509.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_types.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_code.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl3.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/tls1.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/x509_vfy.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_stack.h:
+
+/mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/ESP8266_RTOS_SDK/components/ssl/mbedtls/port/openssl/include/internal/ssl_pkey.h:
 /mnt/c/Users/Leon/Documents/GitHub/MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network/Router/Firmware/src/main/./httpServerPage.c:

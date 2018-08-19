@@ -7,6 +7,7 @@
 #include "httpServer.h"
 #include "radio.h"
 #include "radioToMQTT.h"
+#include "mqtt.h"
 
 void httpServerPagePostIndex(char * payload){
 
@@ -254,7 +255,7 @@ char * httpServerPageGetStatus(void){
 			<table>\
 				<tbody>\
 					<tr>\
-						<th colspan='3'><h3>MQTT Status</h3></th>\
+						<th colspan='3'><h3>MQTT Message Status</h3></th>\
 					</tr>\
 					<tr>\
 						<th>&nbsp;</th>\
@@ -271,6 +272,27 @@ char * httpServerPageGetStatus(void){
 						<td>%u</td>\
 						<td>%lu</td>\
 					</tr>\
+					\
+					\
+					\
+					<tr>\
+						<th colspan='3'><h3>MQTT Connection Status</h3></th>\
+					</tr>\
+					<tr>\
+						<th>&nbsp;</th>\
+						<th>Count</th>\
+					</tr>\
+					\
+					<tr>\
+						<th>Success</th>\
+						<th>%u</th>\
+					</tr>\
+					\
+					<tr>\
+						<th>Fail</th>\
+						<th>%u</th>\
+					</tr>\
+					\
 					<tr>\
 						<th colspan='3'><h3>Radio Status</h3></th>\
 					</tr>\
@@ -291,10 +313,12 @@ char * httpServerPageGetStatus(void){
 
 	radioToMQTTStatus_t radioToMQTTStatus = radioToMQTTGetStatus();
 	radioStatus_t radioStatus = radioGetStatus();
+	mqttStatus_t mqttStatus = mqttGetStatus();
 
 	#define PageStatusParams ,\
 		radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesOutTotal,\
 		radioToMQTTStatus.messagesDumpCount, radioToMQTTStatus.messagesDumpTotal,\
+		mqttStatus.connectionSuccessCount, mqttStatus.connectionFailCount,\
 		radioStatus.messagesInCount, radioStatus.messagesInTotal
 
 	size_t needed = snprintf(NULL, 0, PageIndex PageStatusParams) + 1;

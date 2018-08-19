@@ -63,7 +63,7 @@ void app_main() {
     
     if (apMode){
 		wifiAccessPointInit();
-		
+
 		httpServerInit();
     }
     else{
