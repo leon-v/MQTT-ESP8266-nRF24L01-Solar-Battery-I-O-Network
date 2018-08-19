@@ -63,9 +63,13 @@ void app_main() {
     
     if (apMode){
 		wifiAccessPointInit();
+		
+		httpServerInit();
     }
     else{
 		wifiClientInit();
+
+		httpServerInit();
 
 	    radioInit();
 	    mqttInt();
@@ -74,7 +78,7 @@ void app_main() {
 	    
     }
 
-    httpServerInit();
+    
     
     
 }

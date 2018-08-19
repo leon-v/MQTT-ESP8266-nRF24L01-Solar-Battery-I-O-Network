@@ -91,6 +91,9 @@ void httpServerTask(){
     char * html = NULL;
     char buffer[1024];
 
+    struct timeval tv;
+    tv.tv_sec = 1;  /* 1 Secs Timeout */
+
     printf("HTTP Server - Connection - Thread start. Waiting for network.\n");
 
 	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
@@ -137,7 +140,7 @@ reconnect:
 
 	vTaskDelay(500 / portTICK_RATE_MS);
 
-    printf("HTTP Server - Connection - Accepting connection.\n");
+    printf("HTTP Server - Connection - Waiting for connection.\n");
     new_sockfd = accept(sockfd, (struct sockaddr*) &sock_addr, &addr_len);
 
     if (new_sockfd < 0) {
@@ -145,12 +148,14 @@ reconnect:
         goto failed2;
     }
 
-    printf("HTTP Server - Connection - Successfully accepted connection.\n");
+    printf("HTTP Server - Connection - Accepted connection.\n");
+
+	setsockopt(new_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof(struct timeval));
 
     recv_bytes = recv(new_sockfd, &buffer, sizeof(buffer), 0);
 
     if (recv_bytes <= 0){
-    	printf("HTTP Server - Connection - No data received from connection.\n");
+    	printf("HTTP Server - Connection - No data received from client.\n");
         goto failed3;
     }
 
@@ -172,8 +177,8 @@ reconnect:
 
 	int contentLength = contentLengthString ? atol(contentLengthString) : strlen(payload);
 
-	printf("contentLength %d\n", contentLength);
-	printf("buffer Length %d\n", strlen(buffer));
+	// printf("contentLength %d\n", contentLength);
+	// printf("buffer Length %d\n", strlen(buffer));
 
 	// Check if contentLength matches buffer, and if not, wait for more data
 

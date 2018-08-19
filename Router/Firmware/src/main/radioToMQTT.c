@@ -62,6 +62,7 @@ void radioToMQTTTask(){
 			    else{
 
 			    	radioToMQTTStatus.messagesOutAccum++;
+			    	radioToMQTTStatus.messagesOutTotal++;
 
 			    	if (configFlash.debugLevel > 2){
 			    		printf("Radio->MQTT - Task - Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
@@ -72,6 +73,7 @@ void radioToMQTTTask(){
 			else{
 
 				radioToMQTTStatus.messagesDumpAccum++;
+				radioToMQTTStatus.messagesDumpTotal++;radioToMQTTStatus.messagesDumpTotal+= radioToMQTTStatus.messagesDumpAccum;
 
 				if (configFlash.debugLevel > 2){
 					printf("Radio->MQTT - Task - Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
@@ -95,11 +97,9 @@ void radioToMQTTTimerTask(){
 		vTaskDelay(60000 / portTICK_RATE_MS);
 
 	    radioToMQTTStatus.messagesOutCount = radioToMQTTStatus.messagesOutAccum;
-	    radioToMQTTStatus.messagesOutTotal+= radioToMQTTStatus.messagesOutAccum;
 	    radioToMQTTStatus.messagesOutAccum = 0;
 
 	    radioToMQTTStatus.messagesDumpCount = radioToMQTTStatus.messagesDumpAccum;
-	    radioToMQTTStatus.messagesDumpTotal+= radioToMQTTStatus.messagesDumpAccum;
 	    radioToMQTTStatus.messagesDumpAccum = 0;
 
 	    printf("Radio->MQTT - Timer - Sent %d, Dumped %d messages in the last 60 seconds.\n", radioToMQTTStatus.messagesOutCount, radioToMQTTStatus.messagesDumpCount);
