@@ -10,7 +10,7 @@
 #pragma config FCMEN = ON
 
 
-#pragma config MCLRE = OFF
+#pragma config MCLRE = ON
 #pragma config PWRTE = ON
 #pragma config WDTE = ON
 #pragma config LPBOREN = OFF
@@ -22,7 +22,7 @@
 
 
 #pragma config WRT = OFF
-#pragma config LVP = OFF
+#pragma config LVP = ON
 
 
 #pragma config CP = OFF

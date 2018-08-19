@@ -10862,6 +10862,7 @@ extern char * strrichr(const char *, int);
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+unsigned int counter = 0;
 
 typedef struct{
 unsigned char TX;
@@ -10962,7 +10963,7 @@ return;
 
 
 if (!rxMode){
-if (status.TX == 4){
+if (status.TX == 3){
 return;
 }
 }
@@ -10989,7 +10990,7 @@ _delay((unsigned long)((120)*(32000000/4000000.0)));
 }
 }
 
-# 136
+
 nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 return &RXPacket;
 }
@@ -11032,15 +11033,20 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x02, enRXAddr.byte);
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
 
+unsigned int loopCount = 1000;
+while (status.TX != 0){
+sleepMs(1);
+nrf24l01Service();
+
+if (!loopCount--){
+exception(21);
+}
+}
+
 strcpy(TXPacket.Message, txPacket->Message);
 TXPacket.packetData = txPacket->packetData;
 
 status.TX = 1;
-
-while (status.TX != 0){
-sleepMs(1);
-nrf24l01Service();
-}
 }
 
 unsigned int testCount = 0;
@@ -11066,19 +11072,23 @@ nrf24l01Service();
 if (status.statusRegister.TX_DS){
 
 
-status.TX = 3;
+
 
 if (lastTXPacket->packetData.ACKRequest){
-
-status.TX = 4;
+status.TX = 3;
 status.retryCount = 0xFF;
 nrf24l01SetRXMode(1);
-}else{
-status.TX = 0;
 }
 
-if (lastTXPacket->packetData.IsACK){
+
+
+else if(lastTXPacket->packetData.IsACK){
 nrf24l01SetRXMode(1);
+}
+
+
+else{
+status.TX = 0;
 }
 
 nrf24l01Service();
@@ -11137,7 +11147,7 @@ status.TX = 2;
 nrf24l01SendTXBuffer(&TXPacket);
 }
 
-if (status.TX == 4){
+if (status.TX == 3){
 if (!status.retryCount--){
 status.TX = 1;
 }
@@ -11190,7 +11200,7 @@ if (status.RX == 2){
 
 if (RXPacket.packetData.IsACK){
 
-if (status.TX == 4){
+if (status.TX == 3){
 
 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
 status.TX = 0;

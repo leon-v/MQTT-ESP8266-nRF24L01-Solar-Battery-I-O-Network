@@ -73,7 +73,7 @@ void radioToMQTTTask(){
 			else{
 
 				radioToMQTTStatus.messagesDumpAccum++;
-				radioToMQTTStatus.messagesDumpTotal++;radioToMQTTStatus.messagesDumpTotal+= radioToMQTTStatus.messagesDumpAccum;
+				radioToMQTTStatus.messagesDumpTotal++;
 
 				if (configFlash.debugLevel > 2){
 					printf("Radio->MQTT - Task - Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);

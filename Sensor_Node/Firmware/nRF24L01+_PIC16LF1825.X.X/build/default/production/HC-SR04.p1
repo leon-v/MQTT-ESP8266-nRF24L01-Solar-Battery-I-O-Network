@@ -7232,12 +7232,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 0 `i `ui
 ]
 [; ;HC-SR04.h: 11: unsigned int rcount = 0;
-"13
-[v _counter `ul ~T0 @X0 1 e ]
-[i _counter
--> -> -> 0 `i `l `ul
-]
-[; ;HC-SR04.h: 13: unsigned long counter = 0;
 [; ;interface.h: 12: typedef struct{
 [; ;interface.h: 13: unsigned char check;
 [; ;interface.h: 14: char name[16];
@@ -7322,139 +7316,126 @@ Version 3.2 HI-TECH Software Intermediate Code
 "26
 [e :UE 920 ]
 }
-"31
-[v _hcsr04Trigger `(v ~T0 @X0 1 ef ]
-{
-[; ;HC-SR04.c: 31: void hcsr04Trigger(void){
-[e :U _hcsr04Trigger ]
-[f ]
-[; ;HC-SR04.c: 33: counter++;
-"33
-[e ++ _counter -> -> -> 1 `i `l `ul ]
-[; ;HC-SR04.c: 38: }
-"38
-[e :UE 921 ]
-}
-"40
+"32
 [v _hcsr04GetAerage `(f ~T0 @X0 1 ef ]
 {
-[; ;HC-SR04.c: 40: float hcsr04GetAerage(void){
+[; ;HC-SR04.c: 32: float hcsr04GetAerage(void){
 [e :U _hcsr04GetAerage ]
 [f ]
-"43
+"35
 [v _average `f ~T0 @X0 1 a ]
-[; ;HC-SR04.c: 43: float average = 0;
+[; ;HC-SR04.c: 35: float average = 0;
 [e = _average -> -> 0 `i `f ]
-[; ;HC-SR04.c: 45: rloop = 300;
-"45
+[; ;HC-SR04.c: 37: rloop = 300;
+"37
 [e = _rloop -> -> 300 `i `ui ]
-[; ;HC-SR04.c: 46: rcount = 0;
-"46
+[; ;HC-SR04.c: 38: rcount = 0;
+"38
 [e = _rcount -> -> 0 `i `ui ]
-[; ;HC-SR04.c: 48: while (rloop--){
-"48
-[e $U 923  ]
-[e :U 924 ]
+[; ;HC-SR04.c: 40: while (rloop--){
+"40
+[e $U 922  ]
+[e :U 923 ]
 {
-[; ;HC-SR04.c: 51: TMR1L = 0x00;
-"51
+[; ;HC-SR04.c: 43: TMR1L = 0x00;
+"43
 [e = _TMR1L -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 52: TMR1H = 0x00;
-"52
+[; ;HC-SR04.c: 44: TMR1H = 0x00;
+"44
 [e = _TMR1H -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 55: PORTCbits.RC4 = 1;
-"55
+[; ;HC-SR04.c: 47: PORTCbits.RC4 = 1;
+"47
 [e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 58: _delay((unsigned long)((10)*(32000000/4000000.0)));
-"58
+[; ;HC-SR04.c: 50: _delay((unsigned long)((10)*(32000000/4000000.0)));
+"50
 [e ( __delay (1 -> * -> -> 10 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
-[; ;HC-SR04.c: 61: T1CONbits.TMR1ON = 1;
-"61
+[; ;HC-SR04.c: 53: T1CONbits.TMR1ON = 1;
+"53
 [e = . . _T1CONbits 0 0 -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 62: waiting = 1;
-"62
+[; ;HC-SR04.c: 54: waiting = 1;
+"54
 [e = _waiting -> -> 1 `i `uc ]
-[; ;HC-SR04.c: 65: PORTCbits.RC4 = 0;
-"65
+[; ;HC-SR04.c: 57: PORTCbits.RC4 = 0;
+"57
 [e = . . _PORTCbits 0 4 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 69: sleepMs(10);
-"69
+[; ;HC-SR04.c: 61: sleepMs(10);
+"61
 [e ( _sleepMs (1 -> -> 10 `i `ui ]
-[; ;HC-SR04.c: 71: if (!waiting){
-"71
-[e $ ! ! != -> _waiting `i -> -> -> 0 `i `Vuc `i 926  ]
+[; ;HC-SR04.c: 63: if (!waiting){
+"63
+[e $ ! ! != -> _waiting `i -> -> -> 0 `i `Vuc `i 925  ]
 {
-[; ;HC-SR04.c: 72: average+= TMR1L + (unsigned) (TMR1H << 8);
-"72
+[; ;HC-SR04.c: 64: average+= TMR1L + (unsigned) (TMR1H << 8);
+"64
 [e =+ _average -> + -> _TMR1L `ui -> << -> _TMR1H `i -> 8 `i `ui `f ]
-[; ;HC-SR04.c: 73: rcount++;
-"73
+[; ;HC-SR04.c: 65: rcount++;
+"65
 [e ++ _rcount -> -> 1 `i `ui ]
-"74
+"66
+}
+[e :U 925 ]
+[; ;HC-SR04.c: 66: }
+[; ;HC-SR04.c: 68: if (rcount >= 100){
+"68
+[e $ ! >= _rcount -> -> 100 `i `ui 926  ]
+{
+[; ;HC-SR04.c: 69: break;
+"69
+[e $U 924  ]
+"70
 }
 [e :U 926 ]
-[; ;HC-SR04.c: 74: }
-[; ;HC-SR04.c: 76: if (rcount >= 100){
-"76
-[e $ ! >= _rcount -> -> 100 `i `ui 927  ]
-{
-[; ;HC-SR04.c: 77: break;
-"77
-[e $U 925  ]
-"78
+"71
 }
-[e :U 927 ]
-"79
-}
-[e :U 923 ]
-"48
-[e $ != -- _rloop -> -> 1 `i `ui -> -> 0 `i `ui 924  ]
-[e :U 925 ]
-[; ;HC-SR04.c: 78: }
-[; ;HC-SR04.c: 79: }
-[; ;HC-SR04.c: 81: if (rcount > 10){
-"81
-[e $ ! > _rcount -> -> 10 `i `ui 928  ]
+[e :U 922 ]
+"40
+[e $ != -- _rloop -> -> 1 `i `ui -> -> 0 `i `ui 923  ]
+[e :U 924 ]
+[; ;HC-SR04.c: 70: }
+[; ;HC-SR04.c: 71: }
+[; ;HC-SR04.c: 73: if (rcount > 10){
+"73
+[e $ ! > _rcount -> -> 10 `i `ui 927  ]
 {
-[; ;HC-SR04.c: 83: average/= rcount;
-"83
+[; ;HC-SR04.c: 75: average/= rcount;
+"75
 [e =/ _average -> _rcount `f ]
-"84
+"76
 }
-[; ;HC-SR04.c: 84: }
-[e $U 929  ]
-"87
-[e :U 928 ]
-[; ;HC-SR04.c: 87: else{
+[; ;HC-SR04.c: 76: }
+[e $U 928  ]
+"79
+[e :U 927 ]
+[; ;HC-SR04.c: 79: else{
 {
-[; ;HC-SR04.c: 88: average = 0;
-"88
+[; ;HC-SR04.c: 80: average = 0;
+"80
 [e = _average -> -> 0 `i `f ]
-"89
+"81
 }
-[e :U 929 ]
-[; ;HC-SR04.c: 89: }
-[; ;HC-SR04.c: 91: return average;
-"91
+[e :U 928 ]
+[; ;HC-SR04.c: 81: }
+[; ;HC-SR04.c: 83: return average;
+"83
 [e ) _average ]
-[e $UE 922  ]
-[; ;HC-SR04.c: 92: }
-"92
-[e :UE 922 ]
+[e $UE 921  ]
+[; ;HC-SR04.c: 84: }
+"84
+[e :UE 921 ]
 }
-"94
+"86
 [v _hcsr04ISR `(v ~T0 @X0 1 ef ]
 {
-[; ;HC-SR04.c: 94: void hcsr04ISR(void){
+[; ;HC-SR04.c: 86: void hcsr04ISR(void){
 [e :U _hcsr04ISR ]
 [f ]
-[; ;HC-SR04.c: 95: waiting = 0;
-"95
+[; ;HC-SR04.c: 87: waiting = 0;
+"87
 [e = _waiting -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 96: T1CONbits.TMR1ON = 0;
-"96
+[; ;HC-SR04.c: 88: T1CONbits.TMR1ON = 0;
+"88
 [e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
-[; ;HC-SR04.c: 97: }
-"97
-[e :UE 930 ]
+[; ;HC-SR04.c: 89: }
+"89
+[e :UE 929 ]
 }

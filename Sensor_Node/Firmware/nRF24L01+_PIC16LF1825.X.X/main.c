@@ -30,9 +30,9 @@ void interrupt ISR(void){
 
 float getADCValue(unsigned char channel){
     
-    #define ADC_COUNT 1000
+    #define ADC_COUNT 111
 	float adcSum = 0;
-	unsigned int adcLoop = ADC_COUNT;
+	unsigned char adcLoop = ADC_COUNT;
 	
 	ADCON0bits.CHS = channel;
     FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
@@ -100,7 +100,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepMs(2000);
+	sleepMs(500);
 }
 
 
@@ -108,13 +108,13 @@ void loop(){
     
     nrf24l01Packet_t packet;
     
-    sendMessage(&packet, "DIST", hcsr04GetAerage());
+//    sendMessage(&packet, "DIST", hcsr04GetAerage());
     
 //    sendMessage(&packet, "rloop", rloop);
 //    sendMessage(&packet, "rlimit", rlimit);
 //    sendMessage(&packet, "rcount", rcount);
     
-//    sendMessage(&packet, "COUNT", counter);
+    sendMessage(&packet, "COUNT", counter);
     
     
     // 19.086
@@ -268,12 +268,8 @@ void main(void) {
     
     nrf24l01Packet_t packet;
 	
-    sendMessage(&packet, "BOOT0", 123);
-	sendMessage(&packet, "BOOT1", 456);
-//	sendMessage(&packet, "BOOT2", EEPROMRead(2));
-//	sendMessage(&packet, "BOOT3", EEPROMRead(3));
-	
-//	EEPROMWrite(0, 123);//0
+	sendMessage(&packet, "BOOT3", EEPROMRead(0));
+	EEPROMWrite(0, 0);
 //	EEPROMWrite(1, 123);//0
     
     while(1){

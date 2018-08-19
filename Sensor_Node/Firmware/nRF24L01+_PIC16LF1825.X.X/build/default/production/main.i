@@ -10999,6 +10999,7 @@ unsigned Reserved : 5;
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+unsigned int counter = 0;
 
 typedef struct{
 unsigned char TX;
@@ -11050,8 +11051,6 @@ unsigned int rloop = 0;
 unsigned int rlimit = 0;
 unsigned int rcount = 0;
 
-unsigned long counter = 0;
-
 # 13 "main.c"
 void interrupt ISR(void){
 
@@ -11075,7 +11074,7 @@ float getADCValue(unsigned char channel){
 
 
 float adcSum = 0;
-unsigned int adcLoop = 1000;
+unsigned char adcLoop = 111;
 
 ADCON0bits.CHS = channel;
 FVRCONbits.FVREN = 1;
@@ -11099,7 +11098,7 @@ FVRCONbits.FVREN = 0;
 ADCON0bits.ADON = 0;
 
 
-adcSum/= 1000;
+adcSum/= 111;
 
 
 if (ADCON1bits.ADPREF == 0b11){
@@ -11143,7 +11142,7 @@ packet->packetData.ACKRequest = 0;
 
 nrf24l01SendPacket(packet);
 
-sleepMs(2000);
+sleepMs(500);
 }
 
 
@@ -11151,7 +11150,8 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
-sendMessage(&packet, "DIST", hcsr04GetAerage());
+# 117
+sendMessage(&packet, "COUNT", counter);
 
 # 124
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
@@ -11277,10 +11277,10 @@ INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-sendMessage(&packet, "BOOT0", 123);
-sendMessage(&packet, "BOOT1", 456);
+sendMessage(&packet, "BOOT3", EEPROMRead(0));
+EEPROMWrite(0, 0);
 
-# 279
+
 while(1){
 loop();
 }

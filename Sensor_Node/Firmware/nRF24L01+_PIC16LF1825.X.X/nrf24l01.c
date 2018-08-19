@@ -88,50 +88,6 @@ void nrf24l01SetRXMode(unsigned char rxMode){
     }
 }
 
-//void nrf24l01SendACK(nrf24l01Packet_t * packet){
-//	nrf24l01SetTXPipe(packet->packetData.Pipe);
-//	packet->packetData.ACKRequest = 0;
-//	packet->packetData.IsACK = 1;
-//	packet->packetData.ACKRPD = packet->packetData.RPD;
-//	
-//
-//	nrf24l01SendPacket(packet);
-//}
-
-
-
-//void nrf24l01CheckACK(void){
-//    /* Check if the RX packet is an ACK */
-//    
-//    // If the current RX packet is not an ACK, skip
-//    if (!RXPacket.packetData.IsACK){
-//        return;
-//    }
-//    
-//    // Clear RX Pending flag so we don't try process this packet as a real one
-////	nrf24l01.RXPending = 0;
-//    
-//    // If the current TX packet doesn't require an ACK, skip
-//    if (!TXPacket->packetData.ACKRequest){
-//        return;
-//    }
-//    
-//    // If the TX and RX do not match, skip.
-//    if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
-//        return;
-//    }
-//    
-//    // We have a valid ACK packet
-//    
-//    
-//    
-//    // Clear the ACKRequest to signal that we no longer need to wait
-//	TXPacket->packetData.ACKRequest = 0;
-//
-//    // Switch the radio back to TX mode so we don't sit there receiving.
-//	nrf24l01SetRXMode(0);
-//}
-
 
 nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 	return &RXPacket;
@@ -174,16 +130,21 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
+    
+    unsigned int loopCount = 1000;
+    while (status.TX != TXIdle){
+        sleepMs(1);
+        nrf24l01Service();
+        
+        if (!loopCount--){
+            exception(21);
+        }
+    }
 	
     strcpy(TXPacket.Message, txPacket->Message);
     TXPacket.packetData = txPacket->packetData;
     
     status.TX = TXReady;
-	
-	while (status.TX != TXIdle){
-        sleepMs(1);
-        nrf24l01Service();
-    }
 }
 
 unsigned int testCount = 0;
@@ -193,7 +154,7 @@ void nrf24l01ISR(void){
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
-    	// printf("Radio: TX_DS\n");
+        
         
         if (status.RX == RXIdle){
             status.RX = RXPending;
@@ -208,20 +169,24 @@ void nrf24l01ISR(void){
 	
 	if (status.statusRegister.TX_DS){
 		// printf("Radio: TX_DS\n");
-        
-		status.TX = TXSent;
 		
+        // If the last TX packet requested an ACK
+        // Setup the radio and status to wait for one
 		if (lastTXPacket->packetData.ACKRequest){
-			
 			status.TX = TXPendingACK;
 			status.retryCount = 0xFF;
 			nrf24l01SetRXMode(1);
-		}else{
-			status.TX = TXIdle;
 		}
-		
-		if (lastTXPacket->packetData.IsACK){
-			nrf24l01SetRXMode(1);
+        
+        // If the TX packet was an ACK, swap back in to RX mode since we would
+        // only send one if we were in RX mode
+        else if(lastTXPacket->packetData.IsACK){
+            nrf24l01SetRXMode(1);
+        }
+        
+        // If no special requirement was requested, the packet was sent
+        else{
+			status.TX = TXIdle;
 		}
 		
 		nrf24l01Service();

@@ -7156,141 +7156,129 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 137: extern __bank0 unsigned char __resetbits;
 [; ;pic.h: 138: extern __bank0 __bit __powerdown;
 [; ;pic.h: 139: extern __bank0 __bit __timeout;
+[; ;__size_t.h: 4: typedef unsigned size_t;
+[; ;string.h: 14: extern void * memcpy(void *, const void *, size_t);
+[; ;string.h: 15: extern void * memmove(void *, const void *, size_t);
+[; ;string.h: 16: extern void * memset(void *, int, size_t);
+[; ;string.h: 36: extern char * strcat(char *, const char *);
+[; ;string.h: 37: extern char * strcpy(char *, const char *);
+[; ;string.h: 38: extern char * strncat(char *, const char *, size_t);
+[; ;string.h: 39: extern char * strncpy(char *, const char *, size_t);
+[; ;string.h: 40: extern char * strdup(const char *);
+[; ;string.h: 41: extern char * strtok(char *, const char *);
+[; ;string.h: 44: extern int memcmp(const void *, const void *, size_t);
+[; ;string.h: 45: extern int strcmp(const char *, const char *);
+[; ;string.h: 46: extern int stricmp(const char *, const char *);
+[; ;string.h: 47: extern int strncmp(const char *, const char *, size_t);
+[; ;string.h: 48: extern int strnicmp(const char *, const char *, size_t);
+[; ;string.h: 49: extern void * memchr(const void *, int, size_t);
+[; ;string.h: 50: extern size_t strcspn(const char *, const char *);
+[; ;string.h: 51: extern char * strpbrk(const char *, const char *);
+[; ;string.h: 52: extern size_t strspn(const char *, const char *);
+[; ;string.h: 53: extern char * strstr(const char *, const char *);
+[; ;string.h: 54: extern char * stristr(const char *, const char *);
+[; ;string.h: 55: extern char * strerror(int);
+[; ;string.h: 56: extern size_t strlen(const char *);
+[; ;string.h: 57: extern char * strchr(const char *, int);
+[; ;string.h: 58: extern char * strichr(const char *, int);
+[; ;string.h: 59: extern char * strrchr(const char *, int);
+[; ;string.h: 60: extern char * strrichr(const char *, int);
 [; ;eeprom.h: 6: void EEPROMWrite(unsigned int address, unsigned char data);
 [; ;eeprom.h: 7: unsigned char EEPROMRead(unsigned int address);
-"4 eeprom.c
+"7 eeprom.c
 [v _EEPROMWrite `(v ~T0 @X0 1 ef2`ui`uc ]
 {
-[; ;eeprom.c: 4: void EEPROMWrite(unsigned int address, unsigned char data){
+[; ;eeprom.c: 7: void EEPROMWrite(unsigned int address, unsigned char data){
 [e :U _EEPROMWrite ]
 [v _address `ui ~T0 @X0 1 r1 ]
 [v _data `uc ~T0 @X0 1 r2 ]
 [f ]
-"6
-[v _GIEBitValue `uc ~T0 @X0 1 a ]
-[; ;eeprom.c: 6: unsigned char GIEBitValue = INTCONbits.GIE;
-[e = _GIEBitValue . . _INTCONbits 0 3 ]
-[; ;eeprom.c: 8: NVMADRH = ((address >> 8) & 0xFF);
-"8
-[e = _NVMADRH -> & >> _address -> 8 `i -> -> 255 `i `ui `uc ]
-[; ;eeprom.c: 9: NVMADRL = (address & 0xFF);
 "9
-[e = _NVMADRL -> & _address -> -> 255 `i `ui `uc ]
-[; ;eeprom.c: 10: NVMDATL = data;
-"10
-[e = _NVMDATL _data ]
-[; ;eeprom.c: 11: NVMCON1bits.NVMREGS = 1;
+[v _GIEBitValue `uc ~T0 @X0 1 a ]
+[; ;eeprom.c: 9: unsigned char GIEBitValue = INTCONbits.GIE;
+[e = _GIEBitValue . . _INTCONbits 0 3 ]
+[; ;eeprom.c: 11: NVMADRH = ((address >> 8) & 0xFF);
 "11
-[e = . . _NVMCON1bits 0 6 -> -> 1 `i `uc ]
-[; ;eeprom.c: 12: NVMCON1bits.WREN = 1;
+[e = _NVMADRH -> & >> _address -> 8 `i -> -> 255 `i `ui `uc ]
+[; ;eeprom.c: 12: NVMADRL = (address & 0xFF);
 "12
-[e = . . _NVMCON1bits 0 2 -> -> 1 `i `uc ]
-[; ;eeprom.c: 13: INTCONbits.GIE = 0;
+[e = _NVMADRL -> & _address -> -> 255 `i `ui `uc ]
+[; ;eeprom.c: 13: NVMDATL = data;
 "13
-[e = . . _INTCONbits 0 3 -> -> 0 `i `uc ]
-[; ;eeprom.c: 14: NVMCON2 = 0x55;
+[e = _NVMDATL _data ]
+[; ;eeprom.c: 14: NVMCON1bits.NVMREGS = 1;
 "14
-[e = _NVMCON2 -> -> 85 `i `uc ]
-[; ;eeprom.c: 15: NVMCON2 = 0xAA;
+[e = . . _NVMCON1bits 0 6 -> -> 1 `i `uc ]
+[; ;eeprom.c: 15: NVMCON1bits.WREN = 1;
 "15
-[e = _NVMCON2 -> -> 170 `i `uc ]
-[; ;eeprom.c: 16: NVMCON1bits.WR = 1;
+[e = . . _NVMCON1bits 0 2 -> -> 1 `i `uc ]
+[; ;eeprom.c: 16: INTCONbits.GIE = 0;
 "16
-[e = . . _NVMCON1bits 0 1 -> -> 1 `i `uc ]
-[; ;eeprom.c: 18: while (NVMCON1bits.WR){
+[e = . . _INTCONbits 0 3 -> -> 0 `i `uc ]
+[; ;eeprom.c: 17: NVMCON2 = 0x55;
+"17
+[e = _NVMCON2 -> -> 85 `i `uc ]
+[; ;eeprom.c: 18: NVMCON2 = 0xAA;
 "18
+[e = _NVMCON2 -> -> 170 `i `uc ]
+[; ;eeprom.c: 19: NVMCON1bits.WR = 1;
+"19
+[e = . . _NVMCON1bits 0 1 -> -> 1 `i `uc ]
+[; ;eeprom.c: 21: while (NVMCON1bits.WR){
+"21
 [e $U 917  ]
 [e :U 918 ]
 {
-[; ;eeprom.c: 19: __nop();
-"19
+[; ;eeprom.c: 22: __nop();
+"22
 [e ( ___nop ..  ]
-"20
+"23
 }
 [e :U 917 ]
-"18
+"21
 [e $ != -> . . _NVMCON1bits 0 1 `i -> -> -> 0 `i `Vuc `i 918  ]
 [e :U 919 ]
-[; ;eeprom.c: 20: }
-[; ;eeprom.c: 22: NVMCON1bits.WREN = 0;
-"22
+[; ;eeprom.c: 23: }
+[; ;eeprom.c: 25: NVMCON1bits.WREN = 0;
+"25
 [e = . . _NVMCON1bits 0 2 -> -> 0 `i `uc ]
-[; ;eeprom.c: 23: INTCONbits.GIE = GIEBitValue;
-"23
+[; ;eeprom.c: 26: INTCONbits.GIE = GIEBitValue;
+"26
 [e = . . _INTCONbits 0 3 _GIEBitValue ]
-[; ;eeprom.c: 24: }
-"24
+[; ;eeprom.c: 27: }
+"27
 [e :UE 916 ]
 }
-"26
+"29
 [v _EEPROMRead `(uc ~T0 @X0 1 ef1`ui ]
 {
-[; ;eeprom.c: 26: unsigned char EEPROMRead(unsigned int address){
+[; ;eeprom.c: 29: unsigned char EEPROMRead(unsigned int address){
 [e :U _EEPROMRead ]
 [v _address `ui ~T0 @X0 1 r1 ]
 [f ]
-[; ;eeprom.c: 27: NVMADRH = ((address >> 8) & 0xFF);
-"27
-[e = _NVMADRH -> & >> _address -> 8 `i -> -> 255 `i `ui `uc ]
-[; ;eeprom.c: 28: NVMADRL = (address & 0xFF);
-"28
-[e = _NVMADRL -> & _address -> -> 255 `i `ui `uc ]
-[; ;eeprom.c: 29: NVMCON1bits.NVMREGS = 1;
-"29
-[e = . . _NVMCON1bits 0 6 -> -> 1 `i `uc ]
-[; ;eeprom.c: 30: NVMCON1bits.RD = 1;
+[; ;eeprom.c: 30: NVMADRH = ((address >> 8) & 0xFF);
 "30
-[e = . . _NVMCON1bits 0 0 -> -> 1 `i `uc ]
-[; ;eeprom.c: 31: __nop();
+[e = _NVMADRH -> & >> _address -> 8 `i -> -> 255 `i `ui `uc ]
+[; ;eeprom.c: 31: NVMADRL = (address & 0xFF);
 "31
-[e ( ___nop ..  ]
-[; ;eeprom.c: 32: __nop();
+[e = _NVMADRL -> & _address -> -> 255 `i `ui `uc ]
+[; ;eeprom.c: 32: NVMCON1bits.NVMREGS = 1;
 "32
-[e ( ___nop ..  ]
-[; ;eeprom.c: 33: __nop();__nop();
+[e = . . _NVMCON1bits 0 6 -> -> 1 `i `uc ]
+[; ;eeprom.c: 33: NVMCON1bits.RD = 1;
 "33
-[e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 34: __nop();__nop();
+[e = . . _NVMCON1bits 0 0 -> -> 1 `i `uc ]
+[; ;eeprom.c: 34: __nop();
 "34
 [e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 35: __nop();__nop();
+[; ;eeprom.c: 35: __nop();
 "35
 [e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 36: __nop();__nop();
-"36
-[e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 37: __nop();__nop();
+[; ;eeprom.c: 37: return (NVMDATL);
 "37
-[e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 38: __nop();__nop();
-"38
-[e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 39: __nop();__nop();
-"39
-[e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 40: __nop();__nop();
-"40
-[e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 41: __nop();__nop();
-"41
-[e ( ___nop ..  ]
-[e ( ___nop ..  ]
-[; ;eeprom.c: 42: __nop();
-"42
-[e ( ___nop ..  ]
-[; ;eeprom.c: 44: return (NVMDATL);
-"44
 [e ) _NVMDATL ]
 [e $UE 920  ]
-[; ;eeprom.c: 45: }
-"45
+[; ;eeprom.c: 38: }
+"38
 [e :UE 920 ]
 }

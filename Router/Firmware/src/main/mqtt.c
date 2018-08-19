@@ -141,7 +141,7 @@ reconnect:
 
 fail1:
 
-	// MQTTDisconnect(&client);
+	MQTTDisconnect(&client);
 
 fail2:
 	

@@ -10,6 +10,4 @@ unsigned int rloop = 0;
 unsigned int rlimit = 0;
 unsigned int rcount = 0;
 
-unsigned long counter = 0;
-
 #endif

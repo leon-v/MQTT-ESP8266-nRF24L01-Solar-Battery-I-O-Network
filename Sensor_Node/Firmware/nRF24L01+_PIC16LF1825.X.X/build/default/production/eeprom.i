@@ -10615,11 +10615,46 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 
+# 4 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\__size_t.h"
+typedef unsigned size_t;
+
+# 14 "C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h"
+extern void * memcpy(void *, const void *, size_t);
+extern void * memmove(void *, const void *, size_t);
+extern void * memset(void *, int, size_t);
+
+# 36
+extern char * strcat(char *, const char *);
+extern char * strcpy(char *, const char *);
+extern char * strncat(char *, const char *, size_t);
+extern char * strncpy(char *, const char *, size_t);
+extern char * strdup(const char *);
+extern char * strtok(char *, const char *);
+
+
+extern int memcmp(const void *, const void *, size_t);
+extern int strcmp(const char *, const char *);
+extern int stricmp(const char *, const char *);
+extern int strncmp(const char *, const char *, size_t);
+extern int strnicmp(const char *, const char *, size_t);
+extern void * memchr(const void *, int, size_t);
+extern size_t strcspn(const char *, const char *);
+extern char * strpbrk(const char *, const char *);
+extern size_t strspn(const char *, const char *);
+extern char * strstr(const char *, const char *);
+extern char * stristr(const char *, const char *);
+extern char * strerror(int);
+extern size_t strlen(const char *);
+extern char * strchr(const char *, int);
+extern char * strichr(const char *, int);
+extern char * strrchr(const char *, int);
+extern char * strrichr(const char *, int);
+
 # 6 "eeprom.h"
 void EEPROMWrite(unsigned int address, unsigned char data);
 unsigned char EEPROMRead(unsigned int address);
 
-# 4 "eeprom.c"
+# 7 "eeprom.c"
 void EEPROMWrite(unsigned int address, unsigned char data){
 
 unsigned char GIEBitValue = INTCONbits.GIE;
@@ -10648,16 +10683,6 @@ NVMADRL = (address & 0xFF);
 NVMCON1bits.NVMREGS = 1;
 NVMCON1bits.RD = 1;
 __nop();
-__nop();
-__nop();__nop();
-__nop();__nop();
-__nop();__nop();
-__nop();__nop();
-__nop();__nop();
-__nop();__nop();
-__nop();__nop();
-__nop();__nop();
-__nop();__nop();
 __nop();
 
 return (NVMDATL);

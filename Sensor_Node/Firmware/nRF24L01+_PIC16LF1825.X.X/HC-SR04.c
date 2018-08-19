@@ -28,14 +28,6 @@ void hcsr04Init(void){
 // uS / 58 = centimeters 
 //100us = 3206
 // 32.06 per us
-void hcsr04Trigger(void){
-    
-    counter++;
-    
-    // Cycle trigger pin
-    
-    
-}
     
 float hcsr04GetAerage(void){
     

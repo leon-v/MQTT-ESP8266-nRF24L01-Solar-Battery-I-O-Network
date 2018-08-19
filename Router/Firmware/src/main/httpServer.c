@@ -17,6 +17,7 @@
 
 #include "httpServer.h"
 #include "httpServerPage.h"
+#include "configFlash.h"
 
 #include <sys/socket.h>
 
@@ -90,13 +91,15 @@ void httpServerTask(){
     socklen_t addr_len;
     char * html = NULL;
     char buffer[1024];
+    EventBits_t wifiEventBits;
 
     struct timeval tv;
     tv.tv_sec = 1;  /* 1 Secs Timeout */
 
+restart:
     printf("HTTP Server - Connection - Thread start. Waiting for network.\n");
 
-	xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
+    xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
 	vTaskDelay(500 / portTICK_RATE_MS);
 
@@ -140,7 +143,17 @@ reconnect:
 
 	vTaskDelay(500 / portTICK_RATE_MS);
 
+	wifiEventBits = xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, 10000);
+
+	if (!(wifiEventBits & WIFI_CONNECTED_BIT) ){
+		printf("HTTP Server - Connection - WiFi not ready.\n");
+		goto failed1;
+	}
+
     printf("HTTP Server - Connection - Waiting for connection.\n");
+
+    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof(struct timeval));
+    
     new_sockfd = accept(sockfd, (struct sockaddr*) &sock_addr, &addr_len);
 
     if (new_sockfd < 0) {
@@ -159,7 +172,9 @@ reconnect:
         goto failed3;
     }
 
-    printf("HTTP Server - Connection - Got %d bytes from client.\n", recv_bytes);
+    if (configFlash.debugLevel > 2){
+    	printf("HTTP Server - Connection - Got %d bytes from client.\n", recv_bytes);
+    }
 
     buffer[recv_bytes] = '\0';
 
@@ -177,9 +192,6 @@ reconnect:
 
 	int contentLength = contentLengthString ? atol(contentLengthString) : strlen(payload);
 
-	// printf("contentLength %d\n", contentLength);
-	// printf("buffer Length %d\n", strlen(buffer));
-
 	// Check if contentLength matches buffer, and if not, wait for more data
 
     html = httpServerPageGet(method, uri, payload);
@@ -194,7 +206,9 @@ reconnect:
     }
 
 failed3:
-    printf("HTTP Server - Connection - Closing connection.\n");
+	if (configFlash.debugLevel > 2){
+    	printf("HTTP Server - Connection - Closing connection.\n");
+    }
     close(new_sockfd);
     new_sockfd = -1;
 
@@ -206,6 +220,7 @@ failed1:
 	printf("HTTP Server - Connection - Fatal error. Closing socket and ending.\n");
     close(sockfd);
     sockfd = -1;
+    goto restart;
 
     vTaskDelete(NULL);
     return ;

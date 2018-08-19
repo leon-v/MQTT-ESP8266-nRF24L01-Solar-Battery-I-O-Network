@@ -10625,8 +10625,6 @@ unsigned int rloop = 0;
 unsigned int rlimit = 0;
 unsigned int rcount = 0;
 
-unsigned long counter = 0;
-
 # 12 "interface.h"
 typedef struct{
 unsigned char check;
@@ -10685,18 +10683,7 @@ T1GCONbits.TMR1GE = 0;
 
 }
 
-
-
-
-void hcsr04Trigger(void){
-
-counter++;
-
-
-
-
-}
-
+# 32
 float hcsr04GetAerage(void){
 
 
