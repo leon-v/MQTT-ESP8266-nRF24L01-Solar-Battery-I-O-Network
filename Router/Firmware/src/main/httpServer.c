@@ -21,8 +21,8 @@
 
 #include <sys/socket.h>
 
-const char httpServerOK[] = "HTTP/1.1 200 OK\r\n\r\n";
-const char httpServerNotFound[] = "HTTP/1.1 404 Not Found\r\n\r\n";
+const char httpServerOK[] = "HTTP/1.0 200 OK\r\n\r\n";
+const char httpServerNotFound[] = "HTTP/1.0 404 Not Found\r\n\r\n";
 
 //https://gist.github.com/laobubu/d6d0e9beb934b60b2e552c2d03e1409e
 
@@ -81,6 +81,7 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 	return NULL;
 }
 
+//https://github.com/starnight/MicroHttpServer/blob/master/c-version/lib/server.c
 void httpServerTask(){
 
 	int ret;
@@ -94,7 +95,7 @@ void httpServerTask(){
     EventBits_t wifiEventBits;
 
     struct timeval tv;
-    tv.tv_sec = 1;  /* 1 Secs Timeout */
+    tv.tv_sec = 2000;  /* 1 Secs Timeout */
 
 restart:
     printf("HTTP Server - Connection - Thread start. Waiting for network.\n");
@@ -129,6 +130,8 @@ restart:
 
     printf("HTTP Server - Connection - Successfully bound socket.\n");
 
+    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof(struct timeval));
+
     printf("HTTP Server - Connection - Listening for connection.\n");
     ret = listen(sockfd, 4);
 
@@ -152,7 +155,7 @@ reconnect:
 
     printf("HTTP Server - Connection - Waiting for connection.\n");
 
-    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof(struct timeval));
+
     
     new_sockfd = accept(sockfd, (struct sockaddr*) &sock_addr, &addr_len);
 
@@ -190,8 +193,15 @@ reconnect:
 
 	char * contentLengthString = httpServerGetTokenValue(&header, "Content-Length");
 
+	if (contentLengthString != NULL){
+		printf("contentLengthString %s\n", contentLengthString);
+	}
+
 	int contentLength = contentLengthString ? atol(contentLengthString) : strlen(payload);
 
+	printf("contentLength %d\n", contentLength);
+	printf("strlen(payload) %d\n", strlen(payload));
+	
 	// Check if contentLength matches buffer, and if not, wait for more data
 
     html = httpServerPageGet(method, uri, payload);
@@ -230,7 +240,7 @@ void httpServerInit(void) {
 
 	ESP_ERROR_CHECK(nvs_flash_init());
 
-    xTaskCreate(&httpServerTask, "httpServer", 8192, NULL, 8, NULL);
+    xTaskCreate(&httpServerTask, "httpServer", 8192, NULL, 9, NULL);
 }
 
 

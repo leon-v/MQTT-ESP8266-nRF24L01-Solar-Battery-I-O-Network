@@ -47,6 +47,16 @@ void mqttTask(){
 
     char * address = (char *) &configFlash.mqttHost;
 
+    sprintf(clientID, "V-Router %s", mqttGetUniqueID());
+
+    printf("MQTT Client - Connection - Client ID set to %s.\n", clientID);
+
+    connectData.MQTTVersion = configFlash.mqttVersion; // 3 = 3.1 4 = 3.1.1
+    connectData.clientID.cstring = clientID;
+    connectData.cleansession = 1;
+
+    NetworkInit(&network);
+
     printf("MQTT Client - Connection - Thread start.\n");
 
 reconnect:
@@ -68,7 +78,6 @@ reconnect:
 		goto reconnect;
 	}
 
-	NetworkInit(&network);
 
 	MQTTClientInit(&client, &network, 1000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
 	
@@ -94,26 +103,18 @@ reconnect:
 	else{
 		printf("MQTT Client - Connection - Task thread still running.\n");
 	}
-
-    
-
 	#endif
 
-    sprintf(clientID, "V-Router %s", mqttGetUniqueID());
-
-    printf("MQTT Client - Connection - Client ID set to %s.\n", clientID);
-
-    connectData.MQTTVersion = configFlash.mqttVersion; // 3 = 3.1 4 = 3.1.1
-    connectData.clientID.cstring = clientID;
-    connectData.username.cstring = (char *) &configFlash.mqttUsername;
+	connectData.username.cstring = (char *) &configFlash.mqttUsername;
     connectData.password.cstring = (char *) &configFlash.mqttPassword;
     connectData.keepAliveInterval = configFlash.mqttKeepalive;
-    connectData.cleansession = 1;
 
     if ((rc = MQTTConnect(&client, &connectData)) != 0) {
         printf("MQTT Client - Connection - Failed to authenticate with MQTT server with error code %d.\n", rc);
         goto fail1;
     }
+
+    connectData.cleansession = 0;
 	
 	printf("MQTT Client - Connection - Connected.\n");
 

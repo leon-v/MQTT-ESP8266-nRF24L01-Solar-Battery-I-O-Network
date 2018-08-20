@@ -5,12 +5,12 @@
 #include "interface.h"
 #include "nrf24l01.h"
 #include "radio.h"
+#include "configFlash.h"
 
 
 static void gpio_isr_handler(void *arg){
 
 	uint32_t gp_io = (uint32_t) arg;
-
     xQueueSendFromISR(radioGetInterruptQueue(), &gp_io, NULL);
 }
 
