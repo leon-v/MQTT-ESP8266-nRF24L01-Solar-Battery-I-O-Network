@@ -14,7 +14,7 @@
 
 #include "wifi.h"
 #include "wifiAccessPoint.h"
-#include "httpServer.h"
+// #include "httpServer.h"
 #include "wifiClient.h"
 #include "configFlash.h"
 #include "mqtt.h"
@@ -62,23 +62,17 @@ void app_main() {
 	}
     
     if (apMode){
-		wifiAccessPointInit();
-
-		httpServerInit();
+		wifiAccessPointInit();		
     }
     else{
-		wifiClientInit();
-
-		httpServerInit();
-
-	    radioInit();
-	    mqttInt();
-	    
-	    radioToMQTTInit();
+		wifiClientInit()
 	    
     }
 
+    radioInit();
+    mqttInt();
     
-    
+    radioToMQTTInit();
+    httpServerInit();
     
 }

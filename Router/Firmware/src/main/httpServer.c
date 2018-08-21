@@ -168,7 +168,8 @@ reconnect:
 
 	setsockopt(new_sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof(struct timeval));
 
-    recv_bytes = recv(new_sockfd, &buffer, sizeof(buffer), 0);
+	recv_bytes = read(new_sockfd, &buffer, sizeof(buffer));
+    // recv_bytes = recv(new_sockfd, &buffer, sizeof(buffer), 0);
 
     if (recv_bytes <= 0){
     	printf("HTTP Server - Connection - No data received from client.\n");
