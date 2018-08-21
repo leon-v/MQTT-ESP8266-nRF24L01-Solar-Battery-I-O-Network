@@ -1,5 +1,6 @@
 #include <xc.h>
 #include "interface.h"
+#include "eeprom.h"
 
 
 /* nrf24l01 Interfaces */
@@ -29,7 +30,7 @@ void nrf24l01InterfaceInit(void){
 }
 
 void resetWDT(void){
-	WDTCONbits.WDTPS = 0b01101; // 8s
+	WDTCONbits.WDTPS = 0b01100; // 4s
     CLRWDT();
 }
 
@@ -78,5 +79,6 @@ void nrf24l01SPIEnd(void){
 }
 
 void exception(unsigned char exception){
+    EEPROMWrite(0, exception);
     RESET();
 }

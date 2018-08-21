@@ -10999,7 +10999,7 @@ unsigned Reserved : 5;
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
-unsigned long counter = 0;
+unsigned int counter = 0;
 
 typedef struct{
 unsigned char TX;
@@ -11041,22 +11041,40 @@ void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
 
-# 11 "main.c"
+# 4 "HC-SR04.h"
+void hcsr04Init(void);
+void hcsr04ISR(void);
+void hcsr04Trigger(void);
+float hcsr04GetAerage(void);
+
+unsigned int rloop = 0;
+unsigned int rlimit = 0;
+unsigned int rcount = 0;
+
+# 13 "main.c"
 void interrupt ISR(void){
 
-resetWDT();
+if (IOCAFbits.IOCAF3){
+hcsr04ISR();
+IOCAFbits.IOCAF3 = 0;
+}
 
 if (PIR0bits.INTF){
 nrf24l01ISR();
 PIR0bits.INTF = 0;
 }
+
+if (PIR1bits.ADIF){
+PIR1bits.ADIF = 0;
+}
+
 }
 
 float getADCValue(unsigned char channel){
 
 
 float adcSum = 0;
-unsigned int adcLoop = 1000;
+unsigned char adcLoop = 111;
 
 ADCON0bits.CHS = channel;
 FVRCONbits.FVREN = 1;
@@ -11080,7 +11098,7 @@ FVRCONbits.FVREN = 0;
 ADCON0bits.ADON = 0;
 
 
-adcSum/= 1000;
+adcSum/= 111;
 
 
 if (ADCON1bits.ADPREF == 0b11){
@@ -11097,13 +11115,13 @@ return adcSum;
 
 void sleepListren(unsigned int seconds){
 
+
 while(seconds--){
 
 
-nrf24l01SetRXMode(1);
 sleepMs(100);
 
-nrf24l01SetRXMode(1);
+
 sleepMs(900);
 
 }
@@ -11124,7 +11142,7 @@ packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
-sleepListren(2);
+sleepMs(500);
 }
 
 
@@ -11132,16 +11150,13 @@ void loop(){
 
 nrf24l01Packet_t packet;
 
+# 117
 sendMessage(&packet, "COUNT", counter);
 
-# 107
+# 124
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 
-EEPROMWrite(0, (unsigned char) 22);
-
-sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
-
-# 119
+# 136
 FVRCONbits.TSEN = 1;
 float vt = (2.048 - getADCValue(0b111101)) / 2;
 FVRCONbits.TSEN = 0;
@@ -11153,14 +11168,7 @@ float ta = (vt / -0.00132) - (0.6063 / -0.00132) - 40;
 
 sendMessage(&packet, "TEMP", ta);
 
-
-
-n_RF_SETUP_t rfSetup;
-rfSetup.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x06, 0);
-
-sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-
-
+# 159
 }
 
 unsigned char nrf24l01GetPipe(char * name){
@@ -11176,6 +11184,7 @@ return (unsigned) pipe % 6;
 }
 
 void main(void) {
+
 
 
 ANSELA = 0x00;
@@ -11198,7 +11207,7 @@ TRISCbits.TRISC4 = 0;
 
 PORTCbits.RC4 = 0;
 
-# 180
+# 202
 INTCONbits.PEIE = 0;
 INTCONbits.GIE = 0;
 
@@ -11209,7 +11218,7 @@ _delay((unsigned long)((1000)*(32000000/4000000.0)));
 
 
 
-strcpy(romData->name, "UH1");
+strcpy(romData->name, "UWT");
 
 nrf24l01Init();
 
@@ -11244,6 +11253,7 @@ ADCON1bits.ADCS = 0b111;
 ADCON1bits.ADFM = 1;
 ADCON1bits.ADPREF = 0b11;
 ADCON1bits.ADNREF = 0b00;
+PIE1bits.ADIE = 1;
 
 
 ADCON0bits.CHS = 3;
@@ -11259,19 +11269,17 @@ INTCONbits.INTEDG = 0;
 TRISAbits.TRISA5 = 0;
 PORTAbits.RA5 = 0;
 
+hcsr04Init();
+
 
 INTCONbits.PEIE = 1;
 INTCONbits.GIE = 1;
 
 nrf24l01Packet_t packet;
 
-sendMessage(&packet, "BOOT0", EEPROMRead(0));
-sendMessage(&packet, "BOOT1", EEPROMRead(1));
+sendMessage(&packet, "BOOT", EEPROMRead(0));
+EEPROMWrite(0, 0);
 
-
-
-EEPROMWrite(0, 123);
-EEPROMWrite(1, 123);
 
 while(1){
 loop();

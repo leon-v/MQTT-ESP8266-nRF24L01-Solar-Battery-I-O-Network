@@ -1,4 +1,7 @@
 #include <xc.h>
+#include <string.h>
+//#include <stdlib.h>
+//#include <stdio.h>
 #include "eeprom.h"
 
 void EEPROMWrite(unsigned int address, unsigned char data){
@@ -30,16 +33,6 @@ unsigned char EEPROMRead(unsigned int address){
     NVMCON1bits.RD = 1;
     NOP();  // NOPs may be required for latency at high frequencies
     NOP();
-	NOP();NOP();
-	NOP();NOP();
-	NOP();NOP();
-	NOP();NOP();
-	NOP();NOP();
-	NOP();NOP();
-	NOP();NOP();
-	NOP();NOP();
-	NOP();NOP();
-	NOP();
 
     return (NVMDATL);
 }

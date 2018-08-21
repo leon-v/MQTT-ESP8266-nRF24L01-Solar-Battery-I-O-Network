@@ -8,7 +8,7 @@
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
-unsigned long counter = 0;
+unsigned int counter = 0;
 
 typedef struct{
     unsigned char TX;
@@ -23,8 +23,7 @@ volatile nrf24l01State_t status;
 #define TXIdle 0
 #define TXReady 1
 #define TXSending 2
-#define TXSent 3
-#define TXPendingACK 4
+#define TXPendingACK 3
 
 #define RXIdle 0
 #define RXPending 1

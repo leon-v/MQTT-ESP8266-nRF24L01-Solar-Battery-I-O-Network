@@ -8,21 +8,31 @@
 #include "interface.h"
 #include "../../../../shared.h"
 
+#include "HC-SR04.h"
+
 void interrupt ISR(void){
     
-	resetWDT();
+    if (IOCAFbits.IOCAF3){
+        hcsr04ISR();
+        IOCAFbits.IOCAF3 = 0;
+    }
 	
     if (PIR0bits.INTF){
         nrf24l01ISR();
         PIR0bits.INTF = 0;
     }
+    
+    if (PIR1bits.ADIF){
+        PIR1bits.ADIF = 0;
+    }
+    
 }
 
 float getADCValue(unsigned char channel){
     
-    #define ADC_COUNT 1000
+    #define ADC_COUNT 111
 	float adcSum = 0;
-	unsigned int adcLoop = ADC_COUNT;
+	unsigned char adcLoop = ADC_COUNT;
 	
 	ADCON0bits.CHS = channel;
     FVRCONbits.FVREN = 1; // Enable Voltage Reference Module
@@ -63,13 +73,13 @@ float getADCValue(unsigned char channel){
 
 void sleepListren(unsigned int seconds){
 	
+    
 	while(seconds--){
 		
-		
-		nrf24l01SetRXMode(1);
+//		nrf24l01SetRXMode(0);
 		sleepMs(100);
-		
-		nrf24l01SetRXMode(1);
+
+//		nrf24l01SetRXMode(0);
 		sleepMs(900);
 		
 	}
@@ -90,7 +100,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepListren(2);
+	sleepMs(500);
 }
 
 
@@ -98,7 +108,14 @@ void loop(){
     
     nrf24l01Packet_t packet;
     
+//    sendMessage(&packet, "DIST", hcsr04GetAerage());
+    
+//    sendMessage(&packet, "rloop", rloop);
+//    sendMessage(&packet, "rlimit", rlimit);
+//    sendMessage(&packet, "rcount", rcount);
+    
     sendMessage(&packet, "COUNT", counter);
+    
     
     // 19.086
     //Resistor divider on Vbatt
@@ -106,9 +123,9 @@ void loop(){
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
     sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     
-	EEPROMWrite(0, (unsigned char) 22);
+//	EEPROMWrite(0, (unsigned char) 22);
     
-    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
+//    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
     
 //	EEPROMWrite(0, status.TX);//0
 //	EEPROMWrite(1, status.RX);//0
@@ -119,7 +136,7 @@ void loop(){
     FVRCONbits.TSEN = 1;
     float vt = (2.048 - getADCValue(0b111101)) / 2;
     FVRCONbits.TSEN = 0;
-//    
+    
 	#define tempOffset 40
     #define vf 0.6063
     #define tc -0.00132
@@ -129,12 +146,16 @@ void loop(){
     
 //    sendMessage(&packet, "DBG4", counter);
     
-    n_RF_SETUP_t rfSetup;
-    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+//    n_RF_SETUP_t rfSetup;
+//    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+//    
+//    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     
-    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-    
-//    sendMessage(&packet, "DBG5", counter);
+//    sendMessage(&packet, "DBG1", 1);
+//    sendMessage(&packet, "DBG2", 2);
+//    sendMessage(&packet, "DBG3", 3);
+//    sendMessage(&packet, "DBG4", 4);
+//    sendMessage(&packet, "DBG5", 5);
 }
 
  unsigned char nrf24l01GetPipe(char * name){
@@ -151,6 +172,7 @@ void loop(){
 
 void main(void) {
     
+            
     // I Always forget to reset that damn ADC
     ANSELA = 0x00;
     ANSELC = 0x00;
@@ -222,6 +244,7 @@ void main(void) {
     ADCON1bits.ADFM = 1;
     ADCON1bits.ADPREF = 0b11; // FVR used as + ref
     ADCON1bits.ADNREF = 0b00; // GND used as - ref
+    PIE1bits.ADIE = 1;
     
     
     ADCON0bits.CHS = 3;
@@ -237,19 +260,17 @@ void main(void) {
     TRISAbits.TRISA5 = 0;
     PORTAbits.RA5 = 0;
     
+    hcsr04Init();
+    
     /* Start Interrupts */
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
     
     nrf24l01Packet_t packet;
 	
-    sendMessage(&packet, "BOOT0", EEPROMRead(0));
-	sendMessage(&packet, "BOOT1", EEPROMRead(1));
-//	sendMessage(&packet, "BOOT2", EEPROMRead(2));
-//	sendMessage(&packet, "BOOT3", EEPROMRead(3));
-	
-	EEPROMWrite(0, 123);//0
-	EEPROMWrite(1, 123);//0
+	sendMessage(&packet, "BOOT", EEPROMRead(0));
+	EEPROMWrite(0, 0);
+//	EEPROMWrite(1, 123);//0
     
     while(1){
         loop();

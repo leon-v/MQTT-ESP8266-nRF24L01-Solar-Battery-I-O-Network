@@ -134,6 +134,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 "92 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic.h
 [v __delay `JF6129 ~T0 @X0 0 e ]
 [p i __delay ]
+"6 eeprom.h
+[v _EEPROMWrite `(v ~T0 @X0 0 ef2`ui`uc ]
 [; ;xc.h: 18: extern const char __xc8_OPTIM_SPEED;
 [; ;xc.h: 20: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -7293,224 +7295,229 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interface.h: 61: void exception(unsigned char exception);
 [; ;interface.h: 63: void resetWDT(void);
 [; ;interface.h: 64: void sleepMs(unsigned int milliseconds);
-"8 interface.c
+[; ;eeprom.h: 6: void EEPROMWrite(unsigned int address, unsigned char data);
+[; ;eeprom.h: 7: unsigned char EEPROMRead(unsigned int address);
+"9 interface.c
 [v _nrf24l01InterfaceInit `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 8: void nrf24l01InterfaceInit(void){
+[; ;interface.c: 9: void nrf24l01InterfaceInit(void){
 [e :U _nrf24l01InterfaceInit ]
 [f ]
-[; ;interface.c: 10: TRISAbits.TRISA0 = 0;
-"10
-[e = . . _TRISAbits 0 0 -> -> 0 `i `uc ]
-[; ;interface.c: 11: TRISAbits.TRISA1 = 0;
+[; ;interface.c: 11: TRISAbits.TRISA0 = 0;
 "11
+[e = . . _TRISAbits 0 0 -> -> 0 `i `uc ]
+[; ;interface.c: 12: TRISAbits.TRISA1 = 0;
+"12
 [e = . . _TRISAbits 0 1 -> -> 0 `i `uc ]
-[; ;interface.c: 13: TRISCbits.TRISC1 = 1;
-"13
-[e = . . _TRISCbits 0 1 -> -> 1 `i `uc ]
-[; ;interface.c: 14: TRISCbits.TRISC2 = 0;
+[; ;interface.c: 14: TRISCbits.TRISC1 = 1;
 "14
-[e = . . _TRISCbits 0 2 -> -> 0 `i `uc ]
-[; ;interface.c: 15: TRISCbits.TRISC0 = 0;
+[e = . . _TRISCbits 0 1 -> -> 1 `i `uc ]
+[; ;interface.c: 15: TRISCbits.TRISC2 = 0;
 "15
+[e = . . _TRISCbits 0 2 -> -> 0 `i `uc ]
+[; ;interface.c: 16: TRISCbits.TRISC0 = 0;
+"16
 [e = . . _TRISCbits 0 0 -> -> 0 `i `uc ]
-[; ;interface.c: 17: SSP1CON1bits.SSPEN = 0;
-"17
+[; ;interface.c: 18: SSP1CON1bits.SSPEN = 0;
+"18
 [e = . . _SSP1CON1bits 0 2 -> -> 0 `i `uc ]
-[; ;interface.c: 19: RC1PPSbits.RC1PPS = 0b10001;
-"19
-[e = . . _RC1PPSbits 0 0 -> -> 17 `i `uc ]
-[; ;interface.c: 20: RC2PPSbits.RC2PPS = 0b11001;
+[; ;interface.c: 20: RC1PPSbits.RC1PPS = 0b10001;
 "20
-[e = . . _RC2PPSbits 0 0 -> -> 25 `i `uc ]
-[; ;interface.c: 21: RC0PPSbits.RC0PPS = 0b11000;
+[e = . . _RC1PPSbits 0 0 -> -> 17 `i `uc ]
+[; ;interface.c: 21: RC2PPSbits.RC2PPS = 0b11001;
 "21
+[e = . . _RC2PPSbits 0 0 -> -> 25 `i `uc ]
+[; ;interface.c: 22: RC0PPSbits.RC0PPS = 0b11000;
+"22
 [e = . . _RC0PPSbits 0 0 -> -> 24 `i `uc ]
-[; ;interface.c: 23: SSP1CON1bits.CKP = 0;
-"23
-[e = . . _SSP1CON1bits 0 1 -> -> 0 `i `uc ]
-[; ;interface.c: 24: SSP1STATbits.CKE = 1;
+[; ;interface.c: 24: SSP1CON1bits.CKP = 0;
 "24
-[e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
-[; ;interface.c: 25: SSP1CON1bits.SSPM = 0b0001;
+[e = . . _SSP1CON1bits 0 1 -> -> 0 `i `uc ]
+[; ;interface.c: 25: SSP1STATbits.CKE = 1;
 "25
+[e = . . _SSP1STATbits 0 6 -> -> 1 `i `uc ]
+[; ;interface.c: 26: SSP1CON1bits.SSPM = 0b0001;
+"26
 [e = . . _SSP1CON1bits 0 0 -> -> 1 `i `uc ]
-[; ;interface.c: 27: SSP1CON1bits.SSPEN = 1;
-"27
+[; ;interface.c: 28: SSP1CON1bits.SSPEN = 1;
+"28
 [e = . . _SSP1CON1bits 0 2 -> -> 1 `i `uc ]
-[; ;interface.c: 29: }
-"29
+[; ;interface.c: 30: }
+"30
 [e :UE 920 ]
 }
-"31
+"32
 [v _resetWDT `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 31: void resetWDT(void){
+[; ;interface.c: 32: void resetWDT(void){
 [e :U _resetWDT ]
 [f ]
-[; ;interface.c: 32: WDTCONbits.WDTPS = 0b01101;
-"32
-[e = . . _WDTCONbits 0 1 -> -> 13 `i `uc ]
-[; ;interface.c: 33: asm("clrwdt");
+[; ;interface.c: 33: WDTCONbits.WDTPS = 0b01100;
 "33
-[; <" clrwdt ;# ">
-[; ;interface.c: 34: }
+[e = . . _WDTCONbits 0 1 -> -> 12 `i `uc ]
+[; ;interface.c: 34: asm("clrwdt");
 "34
+[; <" clrwdt ;# ">
+[; ;interface.c: 35: }
+"35
 [e :UE 921 ]
 }
-"36
+"37
 [v _sleepMs `(v ~T0 @X0 1 ef1`ui ]
 {
-[; ;interface.c: 36: void sleepMs(unsigned int milliseconds){
+[; ;interface.c: 37: void sleepMs(unsigned int milliseconds){
 [e :U _sleepMs ]
 [v _milliseconds `ui ~T0 @X0 1 r1 ]
 [f ]
-"38
-[v _wdtps `uc ~T0 @X0 1 a ]
-[; ;interface.c: 38: unsigned char wdtps;
-[; ;interface.c: 39: for (wdtps = 0; wdtps <= 0b10010; wdtps++){
 "39
+[v _wdtps `uc ~T0 @X0 1 a ]
+[; ;interface.c: 39: unsigned char wdtps;
+[; ;interface.c: 40: for (wdtps = 0; wdtps <= 0b10010; wdtps++){
+"40
 {
 [e = _wdtps -> -> 0 `i `uc ]
 [e $ <= -> _wdtps `i -> 18 `i 923  ]
 [e $U 924  ]
 [e :U 923 ]
 {
-[; ;interface.c: 40: if ((milliseconds >> wdtps) & 0b1){
-"40
+[; ;interface.c: 41: if ((milliseconds >> wdtps) & 0b1){
+"41
 [e $ ! != & >> _milliseconds _wdtps -> -> 1 `i `ui -> -> 0 `i `ui 926  ]
 {
-[; ;interface.c: 41: START_SLEEP:
-"41
-[e :U 927 ]
-[; ;interface.c: 42: WDTCONbits.WDTPS = wdtps;
+[; ;interface.c: 42: START_SLEEP:
 "42
-[e = . . _WDTCONbits 0 1 _wdtps ]
-[; ;interface.c: 43: asm("sleep");
+[e :U 927 ]
+[; ;interface.c: 43: WDTCONbits.WDTPS = wdtps;
 "43
-[; <" sleep ;# ">
-[; ;interface.c: 44: __nop();
+[e = . . _WDTCONbits 0 1 _wdtps ]
+[; ;interface.c: 44: asm("sleep");
 "44
-[e ( ___nop ..  ]
+[; <" sleep ;# ">
 [; ;interface.c: 45: __nop();
 "45
 [e ( ___nop ..  ]
-[; ;interface.c: 47: if( STATUSbits.nTO || STATUSbits.nPD){
-"47
+[; ;interface.c: 46: __nop();
+"46
+[e ( ___nop ..  ]
+[; ;interface.c: 48: if( STATUSbits.nTO || STATUSbits.nPD){
+"48
 [e $ ! || != -> . . _STATUSbits 0 4 `i -> -> -> 0 `i `Vuc `i != -> . . _STATUSbits 0 3 `i -> -> -> 0 `i `Vuc `i 928  ]
 {
-[; ;interface.c: 48: goto START_SLEEP;
-"48
-[e $U 927  ]
+[; ;interface.c: 49: goto START_SLEEP;
 "49
-}
-[e :U 928 ]
+[e $U 927  ]
 "50
 }
-[e :U 926 ]
+[e :U 928 ]
 "51
 }
-"39
+[e :U 926 ]
+"52
+}
+"40
 [e ++ _wdtps -> -> 1 `i `uc ]
 [e $ <= -> _wdtps `i -> 18 `i 923  ]
 [e :U 924 ]
-"51
+"52
 }
-[; ;interface.c: 49: }
 [; ;interface.c: 50: }
 [; ;interface.c: 51: }
-[; ;interface.c: 53: resetWDT();
-"53
-[e ( _resetWDT ..  ]
-[; ;interface.c: 54: }
+[; ;interface.c: 52: }
+[; ;interface.c: 54: resetWDT();
 "54
+[e ( _resetWDT ..  ]
+[; ;interface.c: 55: }
+"55
 [e :UE 922 ]
 }
-"56
+"57
 [v _nrf24l01SPISend `(uc ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 56: unsigned char nrf24l01SPISend(unsigned char data){
+[; ;interface.c: 57: unsigned char nrf24l01SPISend(unsigned char data){
 [e :U _nrf24l01SPISend ]
 [v _data `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 57: SSP1BUF = data;
-"57
+[; ;interface.c: 58: SSP1BUF = data;
+"58
 [e = _SSP1BUF _data ]
-[; ;interface.c: 59: PORTCbits.RC4 = 1;
-"59
+[; ;interface.c: 60: PORTCbits.RC4 = 1;
+"60
 [e = . . _PORTCbits 0 4 -> -> 1 `i `uc ]
-[; ;interface.c: 61: while (!SSP1STATbits.BF){
-"61
+[; ;interface.c: 62: while (!SSP1STATbits.BF){
+"62
 [e $U 930  ]
 [e :U 931 ]
 {
-[; ;interface.c: 62: __nop();
-"62
-[e ( ___nop ..  ]
+[; ;interface.c: 63: __nop();
 "63
+[e ( ___nop ..  ]
+"64
 }
 [e :U 930 ]
-"61
+"62
 [e $ ! != -> . . _SSP1STATbits 0 0 `i -> -> -> 0 `i `Vuc `i 931  ]
 [e :U 932 ]
-[; ;interface.c: 63: }
-[; ;interface.c: 65: return SSP1BUF;
-"65
+[; ;interface.c: 64: }
+[; ;interface.c: 66: return SSP1BUF;
+"66
 [e ) _SSP1BUF ]
 [e $UE 929  ]
-[; ;interface.c: 66: }
-"66
+[; ;interface.c: 67: }
+"67
 [e :UE 929 ]
 }
-"68
+"69
 [v _nrf24l01SPIStart `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 68: void nrf24l01SPIStart(void){
+[; ;interface.c: 69: void nrf24l01SPIStart(void){
 [e :U _nrf24l01SPIStart ]
 [f ]
-[; ;interface.c: 69: PIE0bits.INTE = 0;
-"69
-[e = . . _PIE0bits 0 0 -> -> 0 `i `uc ]
-[; ;interface.c: 70: PORTAbits.RA1 = 0;
+[; ;interface.c: 70: PIE0bits.INTE = 0;
 "70
-[e = . . _PORTAbits 0 1 -> -> 0 `i `uc ]
-[; ;interface.c: 71: _delay((unsigned long)((10)*(32000000/4000000.0)));
+[e = . . _PIE0bits 0 0 -> -> 0 `i `uc ]
+[; ;interface.c: 71: PORTAbits.RA1 = 0;
 "71
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
-[; ;interface.c: 72: }
+[e = . . _PORTAbits 0 1 -> -> 0 `i `uc ]
+[; ;interface.c: 72: _delay((unsigned long)((10)*(32000000/4000000.0)));
 "72
+[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
+[; ;interface.c: 73: }
+"73
 [e :UE 933 ]
 }
-"74
+"75
 [v _nrf24l01SPIEnd `(v ~T0 @X0 1 ef ]
 {
-[; ;interface.c: 74: void nrf24l01SPIEnd(void){
+[; ;interface.c: 75: void nrf24l01SPIEnd(void){
 [e :U _nrf24l01SPIEnd ]
 [f ]
-[; ;interface.c: 75: _delay((unsigned long)((10)*(32000000/4000000.0)));
-"75
-[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
-[; ;interface.c: 76: PORTAbits.RA1 = 1;
+[; ;interface.c: 76: _delay((unsigned long)((10)*(32000000/4000000.0)));
 "76
-[e = . . _PORTAbits 0 1 -> -> 1 `i `uc ]
-[; ;interface.c: 77: PIE0bits.INTE = 1;
+[e ( __delay (1 -> * -> -> 10 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
+[; ;interface.c: 77: PORTAbits.RA1 = 1;
 "77
-[e = . . _PIE0bits 0 0 -> -> 1 `i `uc ]
-[; ;interface.c: 78: }
+[e = . . _PORTAbits 0 1 -> -> 1 `i `uc ]
+[; ;interface.c: 78: PIE0bits.INTE = 1;
 "78
+[e = . . _PIE0bits 0 0 -> -> 1 `i `uc ]
+[; ;interface.c: 79: }
+"79
 [e :UE 934 ]
 }
-"80
+"81
 [v _exception `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;interface.c: 80: void exception(unsigned char exception){
+[; ;interface.c: 81: void exception(unsigned char exception){
 [e :U _exception ]
 [v _exception `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;interface.c: 81: asm("reset");
-"81
-[; <" reset ;# ">
-[; ;interface.c: 82: }
+[; ;interface.c: 82: EEPROMWrite(0, exception);
 "82
+[e ( _EEPROMWrite (2 , -> -> 0 `i `ui _exception ]
+[; ;interface.c: 83: asm("reset");
+"83
+[; <" reset ;# ">
+[; ;interface.c: 84: }
+"84
 [e :UE 935 ]
 }

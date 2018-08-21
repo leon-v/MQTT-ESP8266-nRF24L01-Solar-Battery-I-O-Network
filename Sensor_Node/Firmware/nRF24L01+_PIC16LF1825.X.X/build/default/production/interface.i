@@ -10649,7 +10649,11 @@ void exception(unsigned char exception);
 void resetWDT(void);
 void sleepMs(unsigned int milliseconds);
 
-# 8 "interface.c"
+# 6 "eeprom.h"
+void EEPROMWrite(unsigned int address, unsigned char data);
+unsigned char EEPROMRead(unsigned int address);
+
+# 9 "interface.c"
 void nrf24l01InterfaceInit(void){
 
 TRISAbits.TRISA0 = 0;
@@ -10674,7 +10678,7 @@ SSP1CON1bits.SSPEN = 1;
 }
 
 void resetWDT(void){
-WDTCONbits.WDTPS = 0b01101;
+WDTCONbits.WDTPS = 0b01100;
 asm("clrwdt");
 }
 
@@ -10723,5 +10727,6 @@ PIE0bits.INTE = 1;
 }
 
 void exception(unsigned char exception){
+EEPROMWrite(0, exception);
 asm("reset");
 }
