@@ -21,6 +21,10 @@
 #include "radio.h"
 #include "radioToMQTT.h"
 
+#include "user_main.h"
+#include "lwip/apps/httpd.h"
+#include "lwip/apps/fs.h"
+
 #define CONFIG_BUTTON_PIN 2
 
 void app_main() {
@@ -65,14 +69,33 @@ void app_main() {
 		wifiAccessPointInit();		
     }
     else{
-		wifiClientInit()
+		wifiClientInit();
 	    
     }
+
+    httpd_init();
 
     radioInit();
     mqttInt();
     
     radioToMQTTInit();
-    httpServerInit();
+    // httpServerInit();
     
+}
+
+static char body[] = "this is leons test body";
+int fs_open_custom(struct fs_file *file, const char *name){
+
+	
+	if (strcmp(name, "index.html")){
+		file = &body;
+		return 1;
+	}
+
+	return 0;
+}
+
+void fs_close_custom(struct fs_file *file){
+
+
 }
