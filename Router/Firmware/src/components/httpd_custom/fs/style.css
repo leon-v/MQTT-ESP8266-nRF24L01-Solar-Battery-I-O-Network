@@ -1,0 +1,38 @@
+*{
+	box-sizing: border-box;
+}
+body{
+	font-family: Arial;
+	color: #ede5ff;
+	background-color:#262626;
+}
+td{
+	width:200px;
+}
+th{
+	text-align: left;
+	width:125px;
+	font-size: 14px;
+}
+input, select, button{
+	background-color:#262626;
+	color: #ede5ff;
+	border:1px solid #ffffff;
+	padding:3px;
+	margin:0px;
+	margin-bottom:-4px;
+	font-size: 14px;
+	width:100%%;
+}
+button{
+	margin-top:5px;
+	
+}
+.roundTop{
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+.roundBotton{
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}

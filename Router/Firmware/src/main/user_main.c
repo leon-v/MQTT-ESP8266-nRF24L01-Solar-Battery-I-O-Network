@@ -21,8 +21,6 @@
 #include "radio.h"
 #include "radioToMQTT.h"
 
-#include "user_main.h"
-#include "httpd_custom.h"
 #include "lwip/apps/httpd.h"
 
 #define CONFIG_BUTTON_PIN 2
