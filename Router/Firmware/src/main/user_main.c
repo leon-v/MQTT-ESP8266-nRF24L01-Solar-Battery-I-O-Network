@@ -24,7 +24,7 @@
 #include "httpd.h"
 #include "ssi_handeler.h"
 
-LWIP_HTTPD_SSI
+// LWIP_HTTPD_SSI
 
 #define CONFIG_BUTTON_PIN 2
 
