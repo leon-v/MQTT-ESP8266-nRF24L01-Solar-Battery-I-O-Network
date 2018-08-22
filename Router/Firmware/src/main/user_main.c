@@ -21,7 +21,10 @@
 #include "radio.h"
 #include "radioToMQTT.h"
 
-#include "lwip/apps/httpd.h"
+#include "httpd.h"
+#include "ssi_handeler.h"
+
+LWIP_HTTPD_SSI
 
 #define CONFIG_BUTTON_PIN 2
 
@@ -72,6 +75,7 @@ void app_main() {
     }
 
     httpd_init();
+    ssi_init();
 
     radioInit();
     mqttInt();
