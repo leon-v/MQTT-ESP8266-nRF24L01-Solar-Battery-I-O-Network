@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>MQTT Labyrinth Router Configuration</title>
+		<title>Beeline MQTT</title>
 		<link href="/style.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="/javascript.js"></script>
 	</head>
 	<body >
-		<h1>MQTT Labyrinth Router Configuration</h1>
+		<h1>Beeline MQTT Router Configuration</h1>
 		<form action="?a=save" method="post">
 		    <table class="table">
 		    	<tbody>
@@ -15,15 +15,39 @@
 		    		</tr>
 		    		<tr class="roundTop">
 		    			<th>SSID</th>
-		    			<td>
-		    				<input type="text" id="wifiSSID" name="wifiSSID" <!--#wifiPassword--> />
-		    			</td>
+		    			<td><div class="input"><!--#wifiSSID--></div></td>
 		    		</tr>
 		    		<tr class="roundBotton">
 		    			<th>Key / password</th>
-		    			<td>
-		    				<input type="password" id="wifiPassword" name="wifiPassword" <!--#wifiPassword--> />
-		    			</td>
+		    			<td><div class="input"><!--#wifiPassword--></div></td>
+		    		</tr>
+
+
+		    		<tr>
+		    			<th colspan="2"><h4>MQTT Configuration</h4></th>
+		    		</tr>
+		    		<tr class="roundTop">
+		    			<th>User Name</th>
+		    			<td><div class="input"><!--#mqttHost--></div></td>
+		    		</tr>
+		    		<tr>
+		    			<th>Port</th>
+		    			<td><div class="input"><!--#mqttPort--></div></td>
+		    		</tr>
+		    		<tr>
+		    			<th>Keepalive (sec)</th>
+		    			<td><div class="input"><!--#mqttKeepalive--></div></td>
+		    		</tr>
+		    		<tr>
+		    			<th>User Name</th>
+		    			<td><div class="input"><!--#mqttUsername--></div></td>
+		    		</tr>
+		    		<tr class="roundBotton">
+		    			<th>password</th>
+		    			<td><div class="input"><!--#mqttPassword--></div></td>
+		    		</tr>
+		    		<tr>
+		    			<th colspan="2"><button>Save</button></th>
 		    		</tr>
 		    	</tbody>
 		    </table>

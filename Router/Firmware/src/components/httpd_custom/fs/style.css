@@ -17,10 +17,9 @@ th{
 input, select, button{
 	background-color:#262626;
 	color: #ede5ff;
-	border:1px solid #ffffff;
-	padding:3px;
+	padding:0px;
 	margin:0px;
-	margin-bottom:-4px;
+	border: 0;
 	font-size: 14px;
 	width:100%%;
 }
@@ -28,11 +27,17 @@ button{
 	margin-top:5px;
 	
 }
-.roundTop input{
+
+.input{
+	border:1px solid #ffffff;
+	padding: 3px;
+    margin-bottom: -5px;
+}
+.roundTop .input{
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
 }
-.roundBotton input{
+.roundBotton .input{
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 }
