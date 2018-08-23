@@ -12,6 +12,7 @@ static const char * ssi_tags[] = {
     "wifiPassword"
 };
 
+#define INPUT "value=\"%s\""
 /* Server-Side Include (SSI) handler .......................................*/
 int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
 
@@ -19,11 +20,11 @@ int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
 	printf("ssi_handler\n");
 	switch (iIndex){
 		case 0:
-			strcpy(pcInsert, configFlash.wifiSSID);
+			sprintf(pcInsert, INPUT_VALUE, configFlash.wifiSSID);
 		break;
 
 		case 1:
-			strcpy(pcInsert, configFlash.wifiPassword);
+			sprintf(pcInsert, INPUT_VALUE, configFlash.wifiPassword);
 		break;
 	}
 

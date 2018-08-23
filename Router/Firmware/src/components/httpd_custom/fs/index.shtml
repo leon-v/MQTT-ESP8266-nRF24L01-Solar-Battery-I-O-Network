@@ -16,21 +16,14 @@
 		    		<tr class="roundTop">
 		    			<th>SSID</th>
 		    			<td>
-		    				<input type="text" id="wifiSSID" name="wifiSSID" value="<!--#wifiSSID-->" />
-		    				<script type="text/javascript">
-		    					cleanSSI("wifiSSID");
-		    				</script>
+		    				<input type="text" id="wifiSSID" name="wifiSSID" <!--#wifiPassword--> />
 		    			</td>
 		    		</tr>
 		    		<tr class="roundBotton">
 		    			<th>Key / password</th>
 		    			<td>
-		    				<input type="password" id="wifiPassword" name="wifiPassword" value="<!--#wifiPassword-->" />
-		    				<script type="text/javascript">
-		    					cleanSSI("wifiPassword");
-		    				</script>
+		    				<input type="password" id="wifiPassword" name="wifiPassword" <!--#wifiPassword--> />
 		    			</td>
-		    			
 		    		</tr>
 		    	</tbody>
 		    </table>
