@@ -8,25 +8,26 @@
 
 /* Server-Side Include (SSI) demo ..........................................*/
 static const char * ssi_tags[] = {
-    "wssid",
-    "wpass"
+    "wifiSSID",
+    "wifiPassword"
 };
-
 
 /* Server-Side Include (SSI) handler .......................................*/
 int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
 
+	strcpy(pcInsert, "");
+	printf("ssi_handler\n");
 	switch (iIndex){
 		case 0:
-			return snprintf(pcInsert, LWIP_HTTPD_MAX_TAG_INSERT_LEN, "%s", configFlash.wifiSSID);
+			strcpy(pcInsert, configFlash.wifiSSID);
 		break;
 
 		case 1:
-			return snprintf(pcInsert, LWIP_HTTPD_MAX_TAG_INSERT_LEN, "%s", configFlash.wifiPassword);
+			strcpy(pcInsert, configFlash.wifiPassword);
 		break;
 	}
 
-	return snprintf(pcInsert, LWIP_HTTPD_MAX_TAG_INSERT_LEN, "%s", "");
+	return strlen(pcInsert);
 }
 
 void ssi_init(void){

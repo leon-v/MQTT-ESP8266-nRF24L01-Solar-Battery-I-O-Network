@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>MQTT Labyrinth Router Configuration</title>
+		<link href="/style.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="/javascript.js"></script>
+	</head>
+	<body >
+		<h1>MQTT Labyrinth Router Configuration</h1>
+		<form action="?a=save" method="post">
+		    <table class="table">
+		    	<tbody>
+		    		<tr>
+		    			<th colspan="2"><h4>WiFi Configuration</h4></th>
+		    		</tr>
+		    		<tr class="roundTop">
+		    			<th>SSID</th>
+		    			<td>
+		    				<input type="text" id="wifiSSID" name="wifiSSID" value="<!--#wifiSSID-->" />
+		    				<script type="text/javascript">
+		    					cleanSSI("wifiSSID");
+		    				</script>
+		    			</td>
+		    		</tr>
+		    		<tr class="roundBotton">
+		    			<th>Key / password</th>
+		    			<td>
+		    				<input type="password" id="wifiPassword" name="wifiPassword" value="<!--#wifiPassword-->" />
+		    				<script type="text/javascript">
+		    					cleanSSI("wifiPassword");
+		    				</script>
+		    			</td>
+		    			
+		    		</tr>
+		    	</tbody>
+		    </table>
+	    </form>
+	</body>
+</html>
+

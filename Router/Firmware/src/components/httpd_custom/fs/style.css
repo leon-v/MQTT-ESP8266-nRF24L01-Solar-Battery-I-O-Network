@@ -28,11 +28,11 @@ button{
 	margin-top:5px;
 	
 }
-.roundTop{
+.roundTop input{
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
 }
-.roundBotton{
+.roundBotton input{
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 }
