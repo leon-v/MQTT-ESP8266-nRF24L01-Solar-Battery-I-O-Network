@@ -22,11 +22,7 @@
 #include "radioToMQTT.h"
 
 #include "httpd.h"
-#include "ssi_handeler.h"
-
-// LWIP_HTTPD_SUPPORT_POST
-
-// LWIP_HTTPD_SSI
+#include "httpd_custom.h"
 
 #define CONFIG_BUTTON_PIN 2
 
