@@ -8,25 +8,26 @@
 #include "lwip/stats.h"
 #include "httpd_opts.h"
 
-#include "../../main/configFlash.h"
-#include "../../main/radioToMQTT.h"
-#include "../../main/radio.h"
+#include "configFlash.h"
+#include "radio.h"
+#include "mqtt_connection.h"
 
 /* Server-Side Include (SSI) demo ..........................................*/
 static const char * ssi_tags[] = {
-    "wifiSSID",
-    "wifiPassword",
-    "mqttHost",
-    "mqttPort",
-    "mqttKeepalive",
-    "mqttUsername",
-    "mqttPassword",
-    "mqttMessagesOutCount",
-    "mqttMessagesOutTotal",
-    "mqttMessagesDumpCount",
-    "mqttMessagesDumpTotal",
-    "radioMessagesInCount",
-    "radioMessagesInTotal",
+    "wifiSSID",					//0
+    "wifiPassword",				//1
+    "mqttHost",					//2
+    "mqttPort",					//3
+    "mqttKeepalive",			//4
+    "mqttUsername",				//5
+    "mqttPassword",				//6
+
+    "mqttConnectionSuccess",	//7
+    "mqttConnectionFail",		//8
+    "mqttPublish",				//9
+    "mqttDump",					//10
+
+    "radioNrf24l01In",			//11
 };
 
 typedef struct{
@@ -101,7 +102,7 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
 
 	radioStatus_t radioStatus = radioGetStatus();
-	radioToMQTTStatus_t radioToMQTTStatus = radioToMQTTGetStatus();
+	mqttStatus_t mqttStatus = mqtt_connection_get_status();
 
 	strcpy(pcInsert, "");
 	switch (iIndex){
@@ -134,34 +135,34 @@ int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
 			break;
 
 		case 7:
-			sprintf(pcInsert, HTML_UINT, radioToMQTTStatus.messagesOutCount);
+			sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionSuccess);
 			break;
 
 		case 8:
-			sprintf(pcInsert, HTML_ULONG, radioToMQTTStatus.messagesOutTotal);
+			sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionFail);
 			break;
 
 		case 9:
-			sprintf(pcInsert, HTML_UINT, radioToMQTTStatus.messagesDumpCount);
+			sprintf(pcInsert, HTML_ULONG, mqttStatus.Publish);
 			break;
 
 		case 10:
-			sprintf(pcInsert, HTML_ULONG, radioToMQTTStatus.messagesDumpTotal);
+			sprintf(pcInsert, HTML_ULONG, mqttStatus.Dump);
 			break;
 
 		case 11:
-			sprintf(pcInsert, HTML_UINT, radioStatus.messagesInCount);
+			sprintf(pcInsert, HTML_ULONG, radioStatus.nrf24l01In);
 			break;
 
-		case 12:
-			sprintf(pcInsert, HTML_ULONG, radioStatus.messagesInTotal);
+		default:
+			sprintf(pcInsert, "NULL");
 			break;
 	}
 
 	return strlen(pcInsert);
 }
 
-void ssi_init(void){
+void httpd_custom_init(void){
 	http_set_ssi_handler( (tSSIHandler) &ssi_handler, ssi_tags, sizeof(ssi_tags));
 }
 
@@ -181,7 +182,12 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 
 	tokens_t post;
 
-	httpServerParseValues(&post, (char *) p->payload, "&", "=", "");
+	char * payload = (char *) p->payload;
+	payload[p->len] = '\0';
+	
+	printf("post: %s\n", (char *) payload);
+	printf("post Len: %d\n", p->len);
+	httpServerParseValues(&post, (char *) payload, "&", "=", "");
 
 	char * value;
 
@@ -218,6 +224,7 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 		}
 
 		value = httpServerGetTokenValue(&post, "mqttPassword");
+		printf("mqttPassword: '%s'\n", value);
 		if (value){
 			strcpy(configFlash.mqttPassword, value);
 		}

@@ -18,34 +18,32 @@
 		    		<tr>
 		    			<th colspan="3"><h4>MQTT Status</h4></th>
 		    		</tr>
-		    		<tr>
-		    			<td>&nbsp;</td>
-		    			<td>Last Minute</td>
-		    			<td>Total</td>
-		    		</tr>
 		    		<tr class="roundTop">
-		    			<th>Out</th>
-		    			<td><div class="input"><!--#mqttMessagesOutCount--></div></td>
-		    			<td><div class="input"><!--#mqttMessagesOutTotal--></div></td>
+		    			<th>Successful Connections</th>
+		    			<td><div class="value"><!--#mqttConnectionSuccess--></div></td>
 		    		</tr>
+
+		    		<tr class="roundTop">
+		    			<th>Failed Connections</th>
+		    			<td><div class="value"><!--#mqttConnectionFail--></div></td>
+		    		</tr>
+
 		    		<tr class="">
-		    			<th>Dumped</th>
-		    			<td><div class="input"><!--#mqttMessagesDumpCount--></div></td>
-		    			<td><div class="input"><!--#mqttMessagesDumpTotal--></div></td>
+		    			<th>Published</th>
+		    			<td><div class="value"><!--#mqttPublish--></div></td>
+		    		</tr>
+
+		    		<tr class="">
+		    			<th>Dump</th>
+		    			<td><div class="value"><!--#mqttDump--></div></td>
 		    		</tr>
 
 		    		<tr>
 		    			<th colspan="3"><h4>Radio Status</h4></th>
 		    		</tr>
-		    		<tr>
-		    			<td>&nbsp;</td>
-		    			<td>Last Minute</td>
-		    			<td>Total</td>
-		    		</tr>
 		    		<tr class="roundTop">
-		    			<th>Messages In</th>
-		    			<td><div class="input"><!--#radioMessagesInCount--></div></td>
-		    			<td><div class="input"><!--#radioMessagesInTotal--></div></td>
+		    			<th>NRF24L01+ Messages In</th>
+		    			<td><div class="value"><!--#radioNrf24l01In--></div></td>
 		    		</tr>
 		    		
 		    	</tbody>

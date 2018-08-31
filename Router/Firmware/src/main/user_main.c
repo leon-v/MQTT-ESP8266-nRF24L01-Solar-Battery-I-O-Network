@@ -14,19 +14,19 @@
 
 #include "wifi.h"
 #include "wifiAccessPoint.h"
-// #include "httpServer.h"
 #include "wifiClient.h"
 #include "configFlash.h"
-#include "mqtt.h"
 #include "radio.h"
-#include "radioToMQTT.h"
 
+#include "mqtt_connection.h"
 #include "httpd.h"
 #include "httpd_custom.h"
+
 
 #define CONFIG_BUTTON_PIN 2
 
 void app_main() {
+	
     //Initialize NVS
 	esp_err_t ret = nvs_flash_init();
 
@@ -38,7 +38,7 @@ void app_main() {
 
     configFlashInit();
 
-    configFlashSave();
+    // configFlashSave();
 
     wifiInit();
 
@@ -72,30 +72,10 @@ void app_main() {
 	    
     }
 
+    httpd_custom_init();
     httpd_init();
-    ssi_init();
+    
 
     radioInit();
-    mqttInt();
-    
-    radioToMQTTInit();
-    // httpServerInit();
-    
+    mqtt_connection_init();
 }
-
-// static char body[] = "this is leons test body";
-// int fs_open_custom(struct fs_file *file, const char *name){
-
-	
-// 	if (strcmp(name, "index.html")){
-// 		file = &body;
-// 		return 1;
-// 	}
-
-// 	return 0;
-// }
-
-// void fs_close_custom(struct fs_file *file){
-
-
-// }

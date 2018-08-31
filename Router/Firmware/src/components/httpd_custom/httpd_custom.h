@@ -1,6 +1,6 @@
 #ifndef SSI_HANDLER_H_
 #define SSI_HANDLER_H_
 
-void ssi_init(void);
+void httpd_custom_init(void);
 
 #endif

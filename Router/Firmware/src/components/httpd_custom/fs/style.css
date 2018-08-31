@@ -5,9 +5,13 @@ body{
 	font-family: Arial;
 	color: #ede5ff;
 	background-color:#262626;
+	width:720px;
+}
+table{
+	width:100%;
 }
 td{
-	width:200px;
+	width:70%;
 }
 th{
 	text-align: left;
@@ -29,10 +33,14 @@ button{
 }
 
 .input{
-	border:1px solid #ffffff;
 	padding: 3px;
     margin-bottom: -5px;
 }
+
+.input{
+	border:1px solid #ffffff;
+}
+
 .roundTop .input{
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
