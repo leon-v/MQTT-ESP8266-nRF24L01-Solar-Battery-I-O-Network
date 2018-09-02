@@ -4,13 +4,14 @@
 #define MQTT_CONNECTED_BIT BIT0
 
 typedef struct{
+	unsigned char connected;
 	unsigned long connectionSuccess;
 	unsigned long connectionFail;
 	unsigned long Publish;
 	unsigned long Dump;
 } mqttStatus_t;
 
-#define mqttStatus_r {0, 0, 0, 0}
+#define mqttStatus_r {0, 0, 0, 0, 0}
 
 
 void mqtt_connection_init(void);

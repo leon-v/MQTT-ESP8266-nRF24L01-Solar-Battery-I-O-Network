@@ -18,6 +18,12 @@
 		    		<tr>
 		    			<th colspan="3"><h4>MQTT Status</h4></th>
 		    		</tr>
+
+		    		<tr class="roundTop">
+		    			<th>Connected</th>
+		    			<td><div class="value"><!--#mqttConnected--></div></td>
+		    		</tr>
+
 		    		<tr class="roundTop">
 		    			<th>Successful Connections</th>
 		    			<td><div class="value"><!--#mqttConnectionSuccess--></div></td>

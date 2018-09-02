@@ -22,12 +22,13 @@ static const char * ssi_tags[] = {
     "mqttUsername",				//5
     "mqttPassword",				//6
 
-    "mqttConnectionSuccess",	//7
-    "mqttConnectionFail",		//8
-    "mqttPublish",				//9
-    "mqttDump",					//10
+    "mqttConnected",			//7
+    "mqttConnectionSuccess",	//8
+    "mqttConnectionFail",		//9
+    "mqttPublish",				//10
+    "mqttDump",					//11
 
-    "radioNrf24l01In",			//11
+    "radioNrf24l01In",			//12
 };
 
 typedef struct{
@@ -135,22 +136,31 @@ int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
 			break;
 
 		case 7:
-			sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionSuccess);
+			if (mqttStatus.connected){
+				sprintf(pcInsert, "Yes");
+			} else{
+				sprintf(pcInsert, "No");
+			}
+			
 			break;
 
 		case 8:
-			sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionFail);
+			sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionSuccess);
 			break;
 
 		case 9:
-			sprintf(pcInsert, HTML_ULONG, mqttStatus.Publish);
+			sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionFail);
 			break;
 
 		case 10:
-			sprintf(pcInsert, HTML_ULONG, mqttStatus.Dump);
+			sprintf(pcInsert, HTML_ULONG, mqttStatus.Publish);
 			break;
 
 		case 11:
+			sprintf(pcInsert, HTML_ULONG, mqttStatus.Dump);
+			break;
+
+		case 12:
 			sprintf(pcInsert, HTML_ULONG, radioStatus.nrf24l01In);
 			break;
 

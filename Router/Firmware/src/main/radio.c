@@ -23,7 +23,11 @@ static void radioInterruptTask(void *arg){
     uint32_t gp_io;
 
     radioMessage_t radioRxMessage;
+	nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
 
+	char * name;
+	char * sensor;
+	char * value;
 
 	nrf24l01Init();
 	nrf24l01SetRXMode(1);
@@ -39,25 +43,23 @@ static void radioInterruptTask(void *arg){
 
     		if (status.RX == RXReady){
 
-    			nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
-
     			printf("Radio - Task - Message: %s\n", RXPacket->Message);
 
-    			char * name = strtok(RXPacket->Message, "/");
+    			name = strtok(RXPacket->Message, "/");
 
     			if (name == NULL){
     				printf("Radio - Task - Invalid Name\n");
     				continue;
     			}
 
-		    	char * sensor = strtok(NULL, "/");
+		    	sensor = strtok(NULL, "/");
 
 		    	if (sensor == NULL){
     				printf("Radio - Task - Invalid Sensor\n");
     				continue;
     			}
 
-		    	char * value = strtok(NULL, "/");
+		    	value = strtok(NULL, "/");
 
 		    	if (value == NULL){
     				printf("Radio - Task - Invalid Value\n");
