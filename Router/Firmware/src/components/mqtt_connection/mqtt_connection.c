@@ -13,6 +13,8 @@
 #include "radio.h"
 #include "esp_system.h"
 
+#define TAG "mqtt_connection"
+
 TaskHandle_t serviceTask = NULL;
 TaskHandle_t connectionTask = NULL;
 TaskHandle_t publishTask = NULL;
@@ -45,6 +47,112 @@ MQTTClient * mqttGetClient(void){
 
 void mqtt_connection(){
 
+	MQTTClient client;
+    Network network;
+    unsigned char sendbuf[80] = {0};
+    unsigned char readbuf[80] = {0};
+    int rc = 0;
+    int count = 0;
+    MQTTPacket_connectData connectData = MQTTPacket_connectData_initializer;
+
+
+
+
+    printf("mqtt client thread starts\n");
+
+    /* Wait for the callback to set the WIFI_CONNECTED_BIT in the
+       event group.
+    */
+
+    printf("xEventGroupWaitBits ...\n");
+    xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
+    ESP_LOGI(TAG, "Connected to AP");
+
+    printf("NetworkInit ...\n");
+    NetworkInit(&network);
+
+    printf("MQTTClientInit ...\n");
+    MQTTClientInit(&client, &network, 30000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
+
+    char* address = (char *) &configFlash.mqttHost;
+
+reconnect:
+
+    printf("NetworkConnect ...\n");
+    if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
+        printf("Return code from network connect %s:%d is %d\n", address, configFlash.mqttPort, rc);
+    }
+
+#if defined(MQTT_TASK)
+
+    if ((rc = MQTTStartTask(&client)) != pdPASS) {
+        printf("Return code from start tasks is %d\n", rc);
+        goto fail;
+    } else {
+        printf("Use MQTTStartTask\n");
+    }
+
+#endif
+
+    connectData.username.cstring = configFlash.mqttUsername;
+    connectData.password.cstring = configFlash.mqttPassword;
+    connectData.MQTTVersion = 4;
+    connectData.clientID.cstring = "ESP8266_sample";
+
+    if ((rc = MQTTConnect(&client, &connectData)) != 0) {
+        printf("Return code from MQTT connect is %d\n", rc);
+        goto fail;
+    } else {
+        printf("MQTT Connected\n");
+    }
+
+    while (++count) {
+        MQTTMessage message;
+        char payload[30];
+
+        message.qos = QOS2;
+        message.retained = 0;
+        message.payload = payload;
+        sprintf(payload, "message number %d", count);
+        message.payloadlen = strlen(payload);
+
+        if ((rc = MQTTPublish(&client, "ESP8266/sample/pub", &message)) != 0) {
+            printf("Return code from MQTT publish is %d\n", rc);
+            goto fail;
+        } else {
+            printf("MQTT publish topic \"ESP8266/sample/pub\", message number is %d\n", count);
+        }
+
+        vTaskDelay(1000 / portTICK_RATE_MS);  //send every 1 seconds
+    }
+fail:
+	
+	goto reconnect;
+    printf("mqtt_client_thread going to be deleted\n");
+    vTaskDelete(NULL);
+    return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     Network network;
     unsigned char sendbuf[80], readbuf[80] = {0};
     int rc = 0, count = 0;
@@ -138,6 +246,7 @@ void mqtt_connection(){
 		    return;
 		}
 	}
+	*/
 }
 
 void mqtt_connection_send_task(){
@@ -194,25 +303,23 @@ void mqtt_connection_service(){
 	int status;
 	for (;;){
 
-		vTaskDelay(1000 / portTICK_RATE_MS);
+		vTaskDelay(3000 / portTICK_RATE_MS);
 
-		if ( (connectionTask == NULL) || (eTaskGetState(connectionTask) == eDeleted) ) {
+		status = (connectionTask == NULL) ? eInvalid : eTaskGetState(connectionTask);
+
+		printf("connectionTask Status: %d\n", status);
+		if ( (status == eDeleted) || (status == eReady) || (status == eInvalid) )  {
+			printf("connectionTask: Restart.\n");
 			xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 9, &connectionTask);
 		}
 
-		if ( (publishTask == NULL) || (eTaskGetState(publishTask) == eDeleted)  ) {
+
+		status = (publishTask == NULL) ? eInvalid : eTaskGetState(publishTask);
+
+		printf("publishTask Status: %d\n", status);
+		if ( (status == eDeleted) || (status == eReady) || (status == eInvalid) )  {
 			xTaskCreate(&mqtt_connection_send_task, "mqtt_connection_send_task", 8192, NULL, 9, &publishTask);
 		}
-
-		status = eTaskGetState(connectionTask);
-		printf("connectionTask Status: %d\n", status);
-
-		status = eTaskGetState(publishTask);
-		printf("publishTask Status: %d\n", status);
-		
-
-		
-		
 		
 	}
 }
