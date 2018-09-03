@@ -12,10 +12,10 @@ typedef struct{
 } radioMessage_t;
 
 typedef struct{
-	unsigned int messagesInCount;
-	unsigned int messagesInAccum;
-	unsigned long messagesInTotal;
+	unsigned long nrf24l01In;
 } radioStatus_t;
+
+#define radioStatus_r {0}
 
 void radioInit(void);
 xQueueHandle radioGetInterruptQueue(void);

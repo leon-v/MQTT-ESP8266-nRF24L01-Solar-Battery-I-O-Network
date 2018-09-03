@@ -14,16 +14,19 @@
 
 #include "wifi.h"
 #include "wifiAccessPoint.h"
-#include "httpServer.h"
 #include "wifiClient.h"
 #include "configFlash.h"
-#include "mqtt.h"
 #include "radio.h"
-#include "radioToMQTT.h"
+
+#include "mqtt_connection.h"
+#include "httpd.h"
+#include "httpd_custom.h"
+
 
 #define CONFIG_BUTTON_PIN 2
 
 void app_main() {
+	
     //Initialize NVS
 	esp_err_t ret = nvs_flash_init();
 
@@ -35,7 +38,7 @@ void app_main() {
 
     configFlashInit();
 
-    configFlashSave();
+    // configFlashSave();
 
     wifiInit();
 
@@ -62,23 +65,17 @@ void app_main() {
 	}
     
     if (apMode){
-		wifiAccessPointInit();
-
-		httpServerInit();
+		wifiAccessPointInit();		
     }
     else{
 		wifiClientInit();
-
-		httpServerInit();
-
-	    radioInit();
-	    mqttInt();
-	    
-	    radioToMQTTInit();
 	    
     }
 
+    httpd_custom_init();
+    httpd_init();
     
-    
-    
+
+    radioInit();
+    mqtt_connection_init();
 }

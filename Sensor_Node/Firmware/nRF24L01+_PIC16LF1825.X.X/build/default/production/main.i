@@ -11054,11 +11054,7 @@ unsigned int rcount = 0;
 # 13 "main.c"
 void interrupt ISR(void){
 
-if (IOCAFbits.IOCAF3){
-hcsr04ISR();
-IOCAFbits.IOCAF3 = 0;
-}
-
+# 20
 if (PIR0bits.INTF){
 nrf24l01ISR();
 PIR0bits.INTF = 0;
@@ -11142,7 +11138,7 @@ packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
-sleepMs(500);
+sleepListren(3);
 }
 
 
@@ -11269,7 +11265,7 @@ INTCONbits.INTEDG = 0;
 TRISAbits.TRISA5 = 0;
 PORTAbits.RA5 = 0;
 
-hcsr04Init();
+
 
 
 INTCONbits.PEIE = 1;
@@ -11278,7 +11274,7 @@ INTCONbits.GIE = 1;
 nrf24l01Packet_t packet;
 
 sendMessage(&packet, "BOOT", EEPROMRead(0));
-EEPROMWrite(0, 0);
+
 
 
 while(1){
