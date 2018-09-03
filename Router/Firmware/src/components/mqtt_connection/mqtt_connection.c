@@ -68,43 +68,46 @@ void mqtt_connection(){
     xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
     ESP_LOGI(TAG, "Connected to AP");
 
+reconnect:
+
     printf("NetworkInit ...\n");
     NetworkInit(&network);
 
     printf("MQTTClientInit ...\n");
-    MQTTClientInit(&client, &network, 30000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
+    MQTTClientInit(&client, &network, 1000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
 
     char* address = (char *) &configFlash.mqttHost;
 
-reconnect:
 
     printf("NetworkConnect ...\n");
     if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
         printf("Return code from network connect %s:%d is %d\n", address, configFlash.mqttPort, rc);
-    }
-
-#if defined(MQTT_TASK)
-
-    if ((rc = MQTTStartTask(&client)) != pdPASS) {
-        printf("Return code from start tasks is %d\n", rc);
         goto fail;
-    } else {
-        printf("Use MQTTStartTask\n");
     }
-
-#endif
 
     connectData.username.cstring = configFlash.mqttUsername;
     connectData.password.cstring = configFlash.mqttPassword;
     connectData.MQTTVersion = 4;
     connectData.clientID.cstring = "ESP8266_sample";
+    connectData.cleansession = 1;
 
     if ((rc = MQTTConnect(&client, &connectData)) != 0) {
         printf("Return code from MQTT connect is %d\n", rc);
-        goto fail;
+        goto fail_has_network;
     } else {
         printf("MQTT Connected\n");
     }
+
+    #if defined(MQTT_TASK)
+
+    if ((rc = MQTTStartTask(&client)) != pdPASS) {
+        printf("Return code from start tasks is %d\n", rc);
+        goto fail_has_network;
+    } else {
+        printf("Use MQTTStartTask\n");
+    }
+
+	#endif
 
     while (++count) {
         MQTTMessage message;
@@ -118,136 +121,66 @@ reconnect:
 
         if ((rc = MQTTPublish(&client, "ESP8266/sample/pub", &message)) != 0) {
             printf("Return code from MQTT publish is %d\n", rc);
-            goto fail;
         } else {
             printf("MQTT publish topic \"ESP8266/sample/pub\", message number is %d\n", count);
         }
 
-        vTaskDelay(1000 / portTICK_RATE_MS);  //send every 1 seconds
+        if (!MQTTIsConnected(&client)){
+        	printf("MQTT Not Connected\n");
+        	goto fail;
+        }
+
+        vTaskDelay(10000 / portTICK_RATE_MS);  //send every 1 seconds
     }
+
+fail_has_network:
+	
+	printf("disconnecting network\n");
+
+	network.disconnect(&network);
+
 fail:
 	
+	vTaskDelay(2000 / portTICK_RATE_MS);  //send every 1 seconds
+
+	printf("Restaring loop\n");
+
 	goto reconnect;
     printf("mqtt_client_thread going to be deleted\n");
     vTaskDelete(NULL);
     return;
+}
 
 
+/*
+void MQTTRun(void* parm)
+{
+    Timer timer;
+    MQTTClient* c = (MQTTClient*)parm;
+    int rc = 0;
 
+    TimerInit(&timer);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-    Network network;
-    unsigned char sendbuf[80], readbuf[80] = {0};
-    int rc = 0, count = 0;
-    MQTTPacket_connectData connectData = MQTTPacket_connectData_initializer;
-
-    if ( (strlen(configFlash.mqttHost) == 0) || (configFlash.mqttPort == 0) ) {
-
-    	mqttStatus.connectionFail++;
-		printf("MQTT Client - Connection - No configuration set.\n");
-
-		vTaskDelete(NULL);
-	    return;
-	}
-
-    printf("MQTT Client - Connection - Waiting for WiFi.\n");
-
-    xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
-
-    printf("MQTT Client - Connection - WiFi ready.\n");
-
-    NetworkInit(&network);
-    MQTTClientInit(&client, &network, 10000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
-
-    char clientID[48];
-
-    char * address;
-
-    sprintf(clientID, "Beeline %s", mqttGetUniqueID());
-
-    printf("MQTT Client - Connection - Client ID set to %s.\n", clientID);
-
-    printf("MQTT Client - Connection - Thread start.\n");
-
-
-	address = (char *) &configFlash.mqttHost;
-
-	if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
-
-		mqttStatus.connectionFail++;
-        printf("MQTT Client - Connection - Failed to connect to %s:%d with error %d.\n", address, configFlash.mqttPort, rc);
-        
-	    vTaskDelete(NULL);
-
-	    printf("MQTT Client - Connection - vTaskDelete");
-
-	    return;
-    }
+    while (1) {
+        TimerCountdownMS(&timer, 500); // Don't wait too long if no traffic is incoming
 
 #if defined(MQTT_TASK)
-
-    if ((rc = MQTTStartTask(&client)) != pdPASS) {
-
-    	printf("MQTT Client - Connection - Failed to start task with error code: %d.\n", rc);
-    }
-
+        MutexLock(&c->mutex);
 #endif
+        rc = cycle(c, &timer);
+#if defined(MQTT_TASK)
+        MutexUnlock(&c->mutex);
+#endif
+        if (rc < 0){
+        	break;
+        }
 
-	connectData.username.cstring = configFlash.mqttUsername;
-    connectData.password.cstring = configFlash.mqttPassword;
-    connectData.keepAliveInterval = configFlash.mqttKeepalive;
-    connectData.MQTTVersion = 4;
-    connectData.clientID.cstring = (char *) &clientID;
-    connectData.cleansession = 1;
-
-    if ((rc = MQTTConnect(&client, &connectData)) != 0) {
-
-    	mqttStatus.connectionFail++;
-        printf("MQTT Client - Connection - Failed to authenticate with MQTT server with error code %d.\n", rc);
-
-	    vTaskDelete(NULL);
-	    return;
     }
-	
 
-	printf("MQTT Client - Connection - Connected.\n");
-
-	mqttStatus.connected = 1;
-	mqttStatus.connectionSuccess++;
-
-	int isConnected = 0;
-	for (;;){
-
-		vTaskDelay(1000 / portTICK_RATE_MS);  //send every 1 seconds
-
-		if (!MQTTIsConnected(&client)) {
-
-			mqttStatus.connected = 0;
-			printf("MQTT Client - Connection - Connected check failed.\n");
-
-		    vTaskDelete(NULL);
-		    return;
-		}
-	}
-	*/
+    vTaskDelete(NULL);
+    return;
 }
+*/
 
 void mqtt_connection_send_task(){
 
@@ -297,34 +230,6 @@ void mqtt_connection_send_task(){
 }
 
 
-void mqtt_connection_service(){
-
-
-	int status;
-	for (;;){
-
-		vTaskDelay(3000 / portTICK_RATE_MS);
-
-		status = (connectionTask == NULL) ? eInvalid : eTaskGetState(connectionTask);
-
-		printf("connectionTask Status: %d\n", status);
-		if ( (status == eDeleted) || (status == eReady) || (status == eInvalid) )  {
-			printf("connectionTask: Restart.\n");
-			xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 9, &connectionTask);
-		}
-
-
-		status = (publishTask == NULL) ? eInvalid : eTaskGetState(publishTask);
-
-		printf("publishTask Status: %d\n", status);
-		if ( (status == eDeleted) || (status == eReady) || (status == eInvalid) )  {
-			xTaskCreate(&mqtt_connection_send_task, "mqtt_connection_send_task", 8192, NULL, 9, &publishTask);
-		}
-		
-	}
-}
-
-
 void mqtt_connection_init(){
 
 	uint8_t mac[6];
@@ -334,5 +239,7 @@ void mqtt_connection_init(){
 
 	MQTTMessageQueue = xQueueCreate(16, sizeof(radioMessage_t));
 
-	xTaskCreate(&mqtt_connection_service, "mqtt_connection_service", 2048, NULL, 9, &serviceTask);
+	xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 9, &connectionTask);
+
+	xTaskCreate(&mqtt_connection_send_task, "mqtt_connection_send_task", 8192, NULL, 9, &publishTask);
 }
