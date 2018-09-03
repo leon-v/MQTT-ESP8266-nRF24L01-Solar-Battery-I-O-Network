@@ -46,8 +46,6 @@ MQTTClient * mqttGetClient(void){
 }
 
 void mqtt_connection(){
-
-	MQTTClient client;
     Network network;
     unsigned char sendbuf[80] = {0};
     unsigned char readbuf[80] = {0};
@@ -55,6 +53,7 @@ void mqtt_connection(){
     int count = 0;
     MQTTPacket_connectData connectData = MQTTPacket_connectData_initializer;
     char mqttTopic[64];
+    char mqttClientID[64];
 
 
 
@@ -89,7 +88,9 @@ reconnect:
     connectData.username.cstring = configFlash.mqttUsername;
     connectData.password.cstring = configFlash.mqttPassword;
     connectData.MQTTVersion = 4;
-    connectData.clientID.cstring = "ESP8266_sample";
+
+    sprintf(mqttClientID, "Beeline %s", uniqueID);
+    connectData.clientID.cstring = mqttClientID;
     connectData.cleansession = 1;
 
     if ((rc = MQTTConnect(&client, &connectData)) != 0) {
@@ -122,7 +123,7 @@ reconnect:
         message.payloadlen = strlen(payload);
 
         strcpy(mqttTopic, "radio/out/");
-		strcat(mqttTopic, mqttGetUniqueID());
+		strcat(mqttTopic, uniqueID);
 		strcat(mqttTopic, "/Router/Count");
 
         if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
@@ -210,7 +211,7 @@ void mqtt_connection_send_task(){
 		}
 
 		strcpy(mqttTopic, "radio/out/");
-		strcat(mqttTopic, mqttGetUniqueID());
+		strcat(mqttTopic, uniqueID);
 		strcat(mqttTopic, "/");
 		strcat(mqttTopic, radioMessage.name);
 		strcat(mqttTopic, "/");
@@ -247,5 +248,5 @@ void mqtt_connection_init(){
 
 	xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 9, &connectionTask);
 
-	xTaskCreate(&mqtt_connection_send_task, "mqtt_connection_send_task", 8192, NULL, 9, &publishTask);
+	xTaskCreate(&mqtt_connection_send_task, "mqtt_connection_send_task", 8192, NULL, 10, &publishTask);
 }

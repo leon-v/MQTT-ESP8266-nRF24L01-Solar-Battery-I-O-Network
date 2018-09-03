@@ -37,7 +37,7 @@ static void radioInterruptTask(void *arg){
 
     for (;;) {
 
-        if (xQueueReceive(radioInterruptQueue, &gp_io, portMAX_DELAY)) {
+        if (xQueueReceive(radioInterruptQueue, &gp_io, 100)) {
 
 			nrf24l01ISR();
 
@@ -76,6 +76,9 @@ static void radioInterruptTask(void *arg){
 
 				status.RX = RXIdle;
 			}
+    	}else{
+    		nrf24l01ISR();
+    		// nrf24l01SetRXMode(1);
     	}
     }
 }
