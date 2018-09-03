@@ -54,6 +54,7 @@ void mqtt_connection(){
     int rc = 0;
     int count = 0;
     MQTTPacket_connectData connectData = MQTTPacket_connectData_initializer;
+    char mqttTopic[64];
 
 
 
@@ -113,16 +114,21 @@ reconnect:
         MQTTMessage message;
         char payload[30];
 
+
         message.qos = QOS2;
         message.retained = 0;
+        sprintf(payload, "%d", count);
         message.payload = payload;
-        sprintf(payload, "message number %d", count);
         message.payloadlen = strlen(payload);
 
-        if ((rc = MQTTPublish(&client, "ESP8266/sample/pub", &message)) != 0) {
+        strcpy(mqttTopic, "radio/out/");
+		strcat(mqttTopic, mqttGetUniqueID());
+		strcat(mqttTopic, "/Router/Count");
+
+        if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
             printf("Return code from MQTT publish is %d\n", rc);
         } else {
-            printf("MQTT publish topic \"ESP8266/sample/pub\", message number is %d\n", count);
+            printf("MQTT publish topic \"%s\", message number is %d\n", mqttTopic, count);
         }
 
         if (!MQTTIsConnected(&client)){

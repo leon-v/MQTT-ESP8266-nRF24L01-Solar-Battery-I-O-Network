@@ -12,10 +12,10 @@
 
 void interrupt ISR(void){
     
-    if (IOCAFbits.IOCAF3){
-        hcsr04ISR();
-        IOCAFbits.IOCAF3 = 0;
-    }
+//    if (IOCAFbits.IOCAF3){
+//        hcsr04ISR();
+//        IOCAFbits.IOCAF3 = 0;
+//    }
 	
     if (PIR0bits.INTF){
         nrf24l01ISR();
@@ -100,7 +100,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepMs(500);
+	sleepListren(3);
 }
 
 
@@ -260,7 +260,7 @@ void main(void) {
     TRISAbits.TRISA5 = 0;
     PORTAbits.RA5 = 0;
     
-    hcsr04Init();
+//    hcsr04Init();
     
     /* Start Interrupts */
     INTCONbits.PEIE = 1;
@@ -269,7 +269,7 @@ void main(void) {
     nrf24l01Packet_t packet;
 	
 	sendMessage(&packet, "BOOT", EEPROMRead(0));
-	EEPROMWrite(0, 0);
+//	EEPROMWrite(0, 0);
 //	EEPROMWrite(1, 123);//0
     
     while(1){

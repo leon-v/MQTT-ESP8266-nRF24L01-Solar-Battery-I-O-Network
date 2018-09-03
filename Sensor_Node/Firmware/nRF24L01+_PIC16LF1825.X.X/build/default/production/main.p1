@@ -32,16 +32,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 "13 nrf24l01.h
 [s S961 `uc 1 `uc 1 `S946 1 `S925 1 `uc 1 ]
 [n S961 . TX RX statusRegister configRegister retryCount ]
-"7041 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
-[s S333 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S333 . IOCAF0 IOCAF1 IOCAF2 IOCAF3 IOCAF4 IOCAF5 ]
-"7040
-[u S332 `S333 1 ]
-[n S332 . . ]
-"7050
-[v _IOCAFbits `VS332 ~T0 @X0 0 e@915 ]
-"5 HC-SR04.h
-[v _hcsr04ISR `(v ~T0 @X0 0 ef ]
 "490 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
 [s S32 :1 `uc 1 :3 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S32 . INTF . IOCIF TMR0IF ]
@@ -252,12 +242,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S82 . . ]
 "1607
 [v _PIE0bits `VS82 ~T0 @X0 0 e@144 ]
-"4 HC-SR04.h
-[v _hcsr04Init `(v ~T0 @X0 0 ef ]
 "7 eeprom.h
 [v _EEPROMRead `(uc ~T0 @X0 0 ef1`ui ]
-"6
-[v _EEPROMWrite `(v ~T0 @X0 0 ef2`ui`uc ]
 [; ;xc.h: 18: extern const char __xc8_OPTIM_SPEED;
 [; ;xc.h: 20: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -7736,23 +7722,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 13: void interrupt ISR(void){
 [e :U _ISR ]
 [f ]
-[; ;main.c: 15: if (IOCAFbits.IOCAF3){
-"15
-[e $ ! != -> . . _IOCAFbits 0 3 `i -> -> -> 0 `i `Vuc `i 967  ]
-{
-[; ;main.c: 16: hcsr04ISR();
-"16
-[e ( _hcsr04ISR ..  ]
-[; ;main.c: 17: IOCAFbits.IOCAF3 = 0;
-"17
-[e = . . _IOCAFbits 0 3 -> -> 0 `i `uc ]
-"18
-}
-[e :U 967 ]
-[; ;main.c: 18: }
 [; ;main.c: 20: if (PIR0bits.INTF){
 "20
-[e $ ! != -> . . _PIR0bits 0 0 `i -> -> -> 0 `i `Vuc `i 968  ]
+[e $ ! != -> . . _PIR0bits 0 0 `i -> -> -> 0 `i `Vuc `i 967  ]
 {
 [; ;main.c: 21: nrf24l01ISR();
 "21
@@ -7762,18 +7734,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = . . _PIR0bits 0 0 -> -> 0 `i `uc ]
 "23
 }
-[e :U 968 ]
+[e :U 967 ]
 [; ;main.c: 23: }
 [; ;main.c: 25: if (PIR1bits.ADIF){
 "25
-[e $ ! != -> . . _PIR1bits 0 6 `i -> -> -> 0 `i `Vuc `i 969  ]
+[e $ ! != -> . . _PIR1bits 0 6 `i -> -> -> 0 `i `Vuc `i 968  ]
 {
 [; ;main.c: 26: PIR1bits.ADIF = 0;
 "26
 [e = . . _PIR1bits 0 6 -> -> 0 `i `uc ]
 "27
 }
-[e :U 969 ]
+[e :U 968 ]
 [; ;main.c: 27: }
 [; ;main.c: 29: }
 "29
@@ -7808,36 +7780,36 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _sleepMs (1 -> -> 1 `i `ui ]
 [; ;main.c: 43: while (adcLoop--){
 "43
-[e $U 971  ]
-[e :U 972 ]
+[e $U 970  ]
+[e :U 971 ]
 {
 [; ;main.c: 45: ADCON0bits.ADGO = 1;
 "45
 [e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
 [; ;main.c: 47: while (ADCON0bits.ADGO){
 "47
-[e $U 974  ]
-[e :U 975 ]
+[e $U 973  ]
+[e :U 974 ]
 {
 [; ;main.c: 48: sleepMs(1);
 "48
 [e ( _sleepMs (1 -> -> 1 `i `ui ]
 "49
 }
-[e :U 974 ]
+[e :U 973 ]
 "47
-[e $ != -> . . _ADCON0bits 1 1 `i -> -> -> 0 `i `Vuc `i 975  ]
-[e :U 976 ]
+[e $ != -> . . _ADCON0bits 1 1 `i -> -> -> 0 `i `Vuc `i 974  ]
+[e :U 975 ]
 [; ;main.c: 49: }
 [; ;main.c: 51: adcSum+= (ADRESL | (ADRESH << 8));
 "51
 [e =+ _adcSum -> | -> _ADRESL `i << -> _ADRESH `i -> 8 `i `f ]
 "53
 }
-[e :U 971 ]
+[e :U 970 ]
 "43
-[e $ != -> -- _adcLoop -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 972  ]
-[e :U 973 ]
+[e $ != -> -- _adcLoop -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 971  ]
+[e :U 972 ]
 [; ;main.c: 53: }
 [; ;main.c: 55: FVRCONbits.FVREN = 0;
 "55
@@ -7850,42 +7822,42 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e =/ _adcSum -> -> 111 `uc `f ]
 [; ;main.c: 62: if (ADCON1bits.ADPREF == 0b11){
 "62
-[e $ ! == -> . . _ADCON1bits 0 0 `i -> 3 `i 977  ]
+[e $ ! == -> . . _ADCON1bits 0 0 `i -> 3 `i 976  ]
 {
 [; ;main.c: 63: switch (FVRCONbits.ADFVR){
 "63
-[e $U 979  ]
+[e $U 978  ]
 {
 [; ;main.c: 64: case 0b10:
 "64
-[e :U 980 ]
+[e :U 979 ]
 [; ;main.c: 65: adcSum/= 500;
 "65
 [e =/ _adcSum -> -> 500 `us `f ]
 [; ;main.c: 66: break;
 "66
-[e $U 978  ]
+[e $U 977  ]
 "67
 }
 [; ;main.c: 67: }
-[e $U 978  ]
+[e $U 977  ]
 "63
-[e :U 979 ]
-[e [\ . . _FVRCONbits 0 0 , $ -> -> 2 `i `uc 980
- 978 ]
-"67
 [e :U 978 ]
+[e [\ . . _FVRCONbits 0 0 , $ -> -> 2 `i `uc 979
+ 977 ]
+"67
+[e :U 977 ]
 "68
 }
-[e :U 977 ]
+[e :U 976 ]
 [; ;main.c: 68: }
 [; ;main.c: 71: return adcSum;
 "71
 [e ) _adcSum ]
-[e $UE 970  ]
+[e $UE 969  ]
 [; ;main.c: 72: }
 "72
-[e :UE 970 ]
+[e :UE 969 ]
 }
 "74
 [v _sleepListren `(v ~T0 @X0 1 ef1`ui ]
@@ -7896,8 +7868,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [f ]
 [; ;main.c: 77: while(seconds--){
 "77
-[e $U 982  ]
-[e :U 983 ]
+[e $U 981  ]
+[e :U 982 ]
 {
 [; ;main.c: 80: sleepMs(100);
 "80
@@ -7907,14 +7879,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _sleepMs (1 -> -> 900 `i `ui ]
 "85
 }
-[e :U 982 ]
+[e :U 981 ]
 "77
-[e $ != -- _seconds -> -> 1 `i `ui -> -> 0 `i `ui 983  ]
-[e :U 984 ]
+[e $ != -- _seconds -> -> 1 `i `ui -> -> 0 `i `ui 982  ]
+[e :U 983 ]
 [; ;main.c: 85: }
 [; ;main.c: 86: }
 "86
-[e :UE 981 ]
+[e :UE 980 ]
 }
 "87
 [v _sendMessage `(v ~T0 @X0 1 ef3`*S965`*Cuc`f ]
@@ -7955,12 +7927,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 101: nrf24l01SendPacket(packet);
 "101
 [e ( _nrf24l01SendPacket (1 _packet ]
-[; ;main.c: 103: sleepMs(500);
+[; ;main.c: 103: sleepListren(3);
 "103
-[e ( _sleepMs (1 -> -> 500 `i `ui ]
+[e ( _sleepListren (1 -> -> 3 `i `ui ]
 [; ;main.c: 104: }
 "104
-[e :UE 985 ]
+[e :UE 984 ]
 }
 "107
 [v _loop `(v ~T0 @X0 1 ef ]
@@ -7996,7 +7968,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _sendMessage (3 , , &U _packet :s 5C _ta ]
 [; ;main.c: 159: }
 "159
-[e :UE 986 ]
+[e :UE 985 ]
 }
 "161
 [v _nrf24l01GetPipe `(uc ~T0 @X0 1 ef1`*uc ]
@@ -8017,8 +7989,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 "166
 {
 [e = _i -> -> 0 `i `uc ]
-[e $U 991  ]
-[e :U 988 ]
+[e $U 990  ]
+[e :U 987 ]
 {
 [; ;main.c: 167: pipe+= name[i];
 "167
@@ -8027,19 +7999,19 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 "166
 [e ++ _i -> -> 1 `i `uc ]
-[e :U 991 ]
-[e $ < -> _i `ui ( _strlen (1 -> _name `*Cuc 988  ]
-[e :U 989 ]
+[e :U 990 ]
+[e $ < -> _i `ui ( _strlen (1 -> _name `*Cuc 987  ]
+[e :U 988 ]
 "168
 }
 [; ;main.c: 168: }
 [; ;main.c: 170: return (unsigned) pipe % 6;
 "170
 [e ) -> % -> _pipe `ui -> -> 6 `i `ui `uc ]
-[e $UE 987  ]
+[e $UE 986  ]
 [; ;main.c: 171: }
 "171
-[e :UE 987 ]
+[e :UE 986 ]
 }
 [v $root$_main `(v ~T0 @X0 0 e ]
 "173
@@ -8181,9 +8153,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 261: PORTAbits.RA5 = 0;
 "261
 [e = . . _PORTAbits 0 5 -> -> 0 `i `uc ]
-[; ;main.c: 263: hcsr04Init();
-"263
-[e ( _hcsr04Init ..  ]
 [; ;main.c: 266: INTCONbits.PEIE = 1;
 "266
 [e = . . _INTCONbits 0 2 -> -> 1 `i `uc ]
@@ -8196,29 +8165,26 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 271: sendMessage(&packet, "BOOT", EEPROMRead(0));
 "271
 [e ( _sendMessage (3 , , &U _packet :s 7C -> ( _EEPROMRead (1 -> -> 0 `i `ui `f ]
-[; ;main.c: 272: EEPROMWrite(0, 0);
-"272
-[e ( _EEPROMWrite (2 , -> -> 0 `i `ui -> -> 0 `i `uc ]
 [; ;main.c: 275: while(1){
 "275
-[e :U 994 ]
+[e :U 993 ]
 {
 [; ;main.c: 276: loop();
 "276
 [e ( _loop ..  ]
 "277
 }
-[e :U 993 ]
+[e :U 992 ]
 "275
-[e $U 994  ]
-[e :U 995 ]
+[e $U 993  ]
+[e :U 994 ]
 [; ;main.c: 277: }
 [; ;main.c: 279: return;
 "279
-[e $UE 992  ]
+[e $UE 991  ]
 [; ;main.c: 280: }
 "280
-[e :UE 992 ]
+[e :UE 991 ]
 }
 [a 6C 85 87 84 0 ]
 [a 7C 66 79 79 84 0 ]
