@@ -4,8 +4,11 @@ const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
 nrf24l01Packet_t TXPacket;
-nrf24l01Packet_t RXPacket;
 nrf24l01Packet_t * lastTXPacket;
+
+nrf24l01Packet_t RXPacket;
+nrf24l01Packet_t RXPacketReturn;
+
 
 
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
@@ -88,53 +91,9 @@ void nrf24l01SetRXMode(unsigned char rxMode){
     }
 }
 
-//void nrf24l01SendACK(nrf24l01Packet_t * packet){
-//	nrf24l01SetTXPipe(packet->packetData.Pipe);
-//	packet->packetData.ACKRequest = 0;
-//	packet->packetData.IsACK = 1;
-//	packet->packetData.ACKRPD = packet->packetData.RPD;
-//	
-//
-//	nrf24l01SendPacket(packet);
-//}
-
-
-
-//void nrf24l01CheckACK(void){
-//    /* Check if the RX packet is an ACK */
-//    
-//    // If the current RX packet is not an ACK, skip
-//    if (!RXPacket.packetData.IsACK){
-//        return;
-//    }
-//    
-//    // Clear RX Pending flag so we don't try process this packet as a real one
-////	nrf24l01.RXPending = 0;
-//    
-//    // If the current TX packet doesn't require an ACK, skip
-//    if (!TXPacket->packetData.ACKRequest){
-//        return;
-//    }
-//    
-//    // If the TX and RX do not match, skip.
-//    if (strcmp(TXPacket->Message, RXPacket.Message) != 0){
-//        return;
-//    }
-//    
-//    // We have a valid ACK packet
-//    
-//    
-//    
-//    // Clear the ACKRequest to signal that we no longer need to wait
-//	TXPacket->packetData.ACKRequest = 0;
-//
-//    // Switch the radio back to TX mode so we don't sit there receiving.
-//	nrf24l01SetRXMode(0);
-//}
-
-
 nrf24l01Packet_t *nrf24l01GetRXPacket(void){
-	return &RXPacket;
+
+	return &RXPacketReturn;
 }
  
  void nrf24l01SetTXPipe(unsigned char pipe){
@@ -176,7 +135,8 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
 	
     strcpy(TXPacket.Message, txPacket->Message);
-    TXPacket.packetData = txPacket->packetData;
+    TXPacket.packetData.byte = txPacket->packetData.byte;
+    TXPacket.packetData.IsACK = 0;
     
     status.TX = TXReady;
 	
@@ -190,6 +150,13 @@ unsigned int testCount = 0;
 void nrf24l01ISR(void){
     
     status.statusRegister.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
+
+    // printf("nrf24l01 Status: %d\n", status.statusRegister.byte);
+
+    // 00101110 46
+    // 00001110 
+
+
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
@@ -206,6 +173,8 @@ void nrf24l01ISR(void){
     }
 	
 	if (status.statusRegister.TX_DS){
+
+		printf("nrf24l01 Sent: %s\n", lastTXPacket->Message);
         
 		status.TX = TXSent;
 		
@@ -322,6 +291,9 @@ void nrf24l01Service(void){
         
         // Get the Recieved Power Detector bit
 		RXPacket.packetData.RPD = nrf24l01Send(n_R_REGISTER | n_RPD, 0);
+
+		strcpy(RXPacketReturn.Message, RXPacket.Message);
+    	RXPacketReturn.packetData.byte = RXPacket.packetData.byte;
         
         status.RX = RXReady;
     }
@@ -350,6 +322,8 @@ void nrf24l01Service(void){
 			
 			RXPacket.packetData.ACKRequest = 0;
 			RXPacket.packetData.IsACK = 1;
+
+			nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
 			
 			nrf24l01SendTXBuffer(&RXPacket);
 		}

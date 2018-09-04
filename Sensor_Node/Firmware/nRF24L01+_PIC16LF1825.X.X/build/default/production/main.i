@@ -11274,7 +11274,7 @@ INTCONbits.GIE = 1;
 nrf24l01Packet_t packet;
 
 sendMessage(&packet, "BOOT", EEPROMRead(0));
-
+EEPROMWrite(0, 0);
 
 
 while(1){

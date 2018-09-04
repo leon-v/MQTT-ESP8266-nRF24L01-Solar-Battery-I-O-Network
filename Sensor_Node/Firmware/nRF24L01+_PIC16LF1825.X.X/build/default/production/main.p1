@@ -244,6 +244,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _PIE0bits `VS82 ~T0 @X0 0 e@144 ]
 "7 eeprom.h
 [v _EEPROMRead `(uc ~T0 @X0 0 ef1`ui ]
+"6
+[v _EEPROMWrite `(v ~T0 @X0 0 ef2`ui`uc ]
 [; ;xc.h: 18: extern const char __xc8_OPTIM_SPEED;
 [; ;xc.h: 20: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -8165,6 +8167,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 271: sendMessage(&packet, "BOOT", EEPROMRead(0));
 "271
 [e ( _sendMessage (3 , , &U _packet :s 7C -> ( _EEPROMRead (1 -> -> 0 `i `ui `f ]
+[; ;main.c: 272: EEPROMWrite(0, 0);
+"272
+[e ( _EEPROMWrite (2 , -> -> 0 `i `ui -> -> 0 `i `uc ]
 [; ;main.c: 275: while(1){
 "275
 [e :U 993 ]

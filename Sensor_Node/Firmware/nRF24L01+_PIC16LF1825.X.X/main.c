@@ -251,7 +251,7 @@ void main(void) {
     
     
     /* Setup Interrupt Pin */
-//	RA2PPSbits.RA2PPS = 0b00010;// A2
+//    RA2PPSbits.RA2PPS = 0b00010;// A2
     TRISAbits.TRISA2 = 1;
     PIE0bits.INTE = 1;
     INTCONbits.INTEDG = 0;
@@ -269,7 +269,7 @@ void main(void) {
     nrf24l01Packet_t packet;
 	
 	sendMessage(&packet, "BOOT", EEPROMRead(0));
-//	EEPROMWrite(0, 0);
+	EEPROMWrite(0, 0);
 //	EEPROMWrite(1, 123);//0
     
     while(1){

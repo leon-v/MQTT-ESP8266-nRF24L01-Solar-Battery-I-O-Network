@@ -10956,6 +10956,7 @@ void nrf24l01SetRXMode(unsigned char rxMode){
 
 
 if (rxMode){
+
 if (status.TX == 2){
 return;
 }
@@ -10968,7 +10969,7 @@ return;
 }
 }
 
-# 70
+# 71
 if (status.configRegister.PRIM_RX != rxMode){
 
 
@@ -11033,7 +11034,7 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x02, enRXAddr.byte);
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
 
-unsigned int loopCount = 1000;
+unsigned int loopCount = 10000;
 while (status.TX != 0){
 sleepMs(1);
 nrf24l01Service();
@@ -11047,16 +11048,17 @@ strcpy(TXPacket.Message, txPacket->Message);
 TXPacket.packetData = txPacket->packetData;
 
 status.TX = 1;
+
+nrf24l01Service();
 }
 
-unsigned int testCount = 0;
+unsigned int isr = 0;
 void nrf24l01ISR(void){
 
 status.statusRegister.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x07, 0);
 
 
 if (status.statusRegister.RX_DR){
-
 
 if (status.RX == 0){
 status.RX = 1;
@@ -11149,7 +11151,6 @@ nrf24l01SendTXBuffer(&TXPacket);
 
 if (status.TX == 3){
 if (!status.retryCount--){
-counter++;
 status.TX = 1;
 }
 }
@@ -11204,6 +11205,7 @@ if (RXPacket.packetData.IsACK){
 if (status.TX == 3){
 
 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
+
 status.TX = 0;
 status.RX = 0;
 
@@ -11220,6 +11222,8 @@ if (RXPacket.packetData.ACKRequest){
 
 RXPacket.packetData.ACKRequest = 0;
 RXPacket.packetData.IsACK = 1;
+
+nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
 
 nrf24l01SendTXBuffer(&RXPacket);
 }
