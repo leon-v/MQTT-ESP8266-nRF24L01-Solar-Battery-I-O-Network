@@ -10862,8 +10862,6 @@ extern char * strrichr(const char *, int);
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
-unsigned int counter = 0;
-
 typedef struct{
 unsigned char TX;
 unsigned char RX;
@@ -10874,7 +10872,7 @@ unsigned char retryCount;
 
 volatile nrf24l01State_t status;
 
-# 35
+# 33
 typedef union{
 struct{
 unsigned int byte :8;
@@ -10893,7 +10891,7 @@ packetData_t packetData;
 char Message[32];
 } nrf24l01Packet_t;
 
-# 57
+# 55
 unsigned char nrf24l01Send(unsigned char command,unsigned char data);
 void nrf24l01SetRXPipe(unsigned char pipe);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -10903,13 +10901,13 @@ void nrf24l01Init(void);
 void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
+nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 
 # 3 "nrf24l01.c"
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-nrf24l01Packet_t TXPacket;
-nrf24l01Packet_t RXPacket;
+nrf24l01Packet_t TXPacket, RXPacket, userRXPacket;
 nrf24l01Packet_t * lastTXPacket;
 
 
@@ -10969,7 +10967,7 @@ return;
 }
 }
 
-# 71
+# 70
 if (status.configRegister.PRIM_RX != rxMode){
 
 
@@ -10993,7 +10991,7 @@ _delay((unsigned long)((120)*(32000000/4000000.0)));
 
 
 nrf24l01Packet_t *nrf24l01GetRXPacket(void){
-return &RXPacket;
+return &userRXPacket;
 }
 
 void nrf24l01SetTXPipe(unsigned char pipe){
@@ -11031,12 +11029,13 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x02, enRXAddr.byte);
 }
 
 
-
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
 
-unsigned int loopCount = 10000;
+
+unsigned int loopCount = 1000;
 while (status.TX != 0){
-sleepMs(1);
+
+_delay((unsigned long)((1000)*(32000000/4000000.0)));
 nrf24l01Service();
 
 if (!loopCount--){
@@ -11044,35 +11043,42 @@ exception(21);
 }
 }
 
+
 strcpy(TXPacket.Message, txPacket->Message);
-TXPacket.packetData = txPacket->packetData;
+TXPacket.packetData.byte = txPacket->packetData.byte;
+
 
 status.TX = 1;
+
 
 nrf24l01Service();
 }
 
-unsigned int isr = 0;
 void nrf24l01ISR(void){
+
 
 status.statusRegister.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x07, 0);
 
 
 if (status.statusRegister.RX_DR){
 
+
 if (status.RX == 0){
 status.RX = 1;
 }
+
 
 else{
 status.statusRegister.RX_DR = 0;
 }
 
+
 nrf24l01Service();
 }
 
-if (status.statusRegister.TX_DS){
 
+
+if (status.statusRegister.TX_DS){
 
 
 
@@ -11092,8 +11098,6 @@ nrf24l01SetRXMode(1);
 else{
 status.TX = 0;
 }
-
-nrf24l01Service();
 }
 
 
@@ -11103,6 +11107,7 @@ nrf24l01Send((unsigned) 0b00100000 | (unsigned) 0x07, status.statusRegister.byte
 }
 
 void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
+
 
 lastTXPacket = packet;
 
@@ -11117,8 +11122,8 @@ nrf24l01SPIStart();
 
 nrf24l01SPISend((unsigned) 0b10110000);
 
-nrf24l01SPISend(lastTXPacket->packetData.byte);
 
+nrf24l01SPISend(lastTXPacket->packetData.byte);
 
 
 unsigned char width = strlen(lastTXPacket->Message);
@@ -11149,11 +11154,15 @@ status.TX = 2;
 nrf24l01SendTXBuffer(&TXPacket);
 }
 
+
 if (status.TX == 3){
+
+
 if (!status.retryCount--){
 status.TX = 1;
 }
 }
+
 
 if (status.RX == 1){
 
@@ -11194,8 +11203,13 @@ RXPacket.packetData.Pipe = status.statusRegister.RX_P_NO;
 
 RXPacket.packetData.RPD = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x09, 0);
 
+
+strcpy(userRXPacket.Message, RXPacket.Message);
+userRXPacket.packetData.byte = RXPacket.packetData.byte;
+
 status.RX = 2;
 }
+
 
 if (status.RX == 2){
 
@@ -11216,14 +11230,17 @@ nrf24l01SetRXMode(0);
 }
 }
 
-if (status.RX == 2){
 
+if (status.RX == 2){
 if (RXPacket.packetData.ACKRequest){
+
 
 RXPacket.packetData.ACKRequest = 0;
 RXPacket.packetData.IsACK = 1;
 
+
 nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
+
 
 nrf24l01SendTXBuffer(&RXPacket);
 }
@@ -11232,6 +11249,7 @@ nrf24l01SendTXBuffer(&RXPacket);
 }
 
 void nrf24l01InitRegisters(){
+
 
 status.configRegister.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x00, 0);
 

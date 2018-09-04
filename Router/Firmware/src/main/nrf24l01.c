@@ -3,12 +3,8 @@
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-nrf24l01Packet_t TXPacket;
+nrf24l01Packet_t TXPacket, RXPacket, userRXPacket;
 nrf24l01Packet_t * lastTXPacket;
-
-nrf24l01Packet_t RXPacket;
-nrf24l01Packet_t RXPacketReturn;
-
 
 
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
@@ -54,6 +50,7 @@ void nrf24l01SetRXMode(unsigned char rxMode){
     
     // If we want to change to RX mode
     if (rxMode){
+        
         if (status.TX == TXSending){
             return;
         }
@@ -91,9 +88,9 @@ void nrf24l01SetRXMode(unsigned char rxMode){
     }
 }
 
-nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 
-	return &RXPacketReturn;
+nrf24l01Packet_t *nrf24l01GetRXPacket(void){
+	return &userRXPacket;
 }
  
  void nrf24l01SetTXPipe(unsigned char pipe){
@@ -133,65 +130,74 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void){
 
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
+    
+    // Wait for the module to become available to send
+    unsigned int loopCount = 1000;
+    while (status.TX != TXIdle){
+        
+        delayUs(1000);
+        nrf24l01Service();
+        
+        if (!loopCount--){
+            exception(21);
+        }
+    }
 	
+    // Copy the packet from user space
     strcpy(TXPacket.Message, txPacket->Message);
     TXPacket.packetData.byte = txPacket->packetData.byte;
-    TXPacket.packetData.IsACK = 0;
     
+    // Set the transmit flag to send the new packet
     status.TX = TXReady;
-	
-	while (status.TX != TXIdle){
-        delayUs(10000);
-        nrf24l01Service();
-    }
+    
+    // Run the service task to send the packet
+    nrf24l01Service();
 }
 
-unsigned int testCount = 0;
 void nrf24l01ISR(void){
     
+    // Get the current status of the radio
     status.statusRegister.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
-
-    // printf("nrf24l01 Status: %d\n", status.statusRegister.byte);
-
-    // 00101110 46
-    // 00001110 
-
-
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
         
+        // If we have processed the last packet, set this one to be accepted
         if (status.RX == RXIdle){
             status.RX = RXPending;
         }
         
+        // If we are not ready for the packet,don't clear the interrupt
         else{
             status.statusRegister.RX_DR = 0;
         }
 		
+        // Run the service task to get the new packet
 		nrf24l01Service();
     }
 	
+    
+    // Check if the module has sent the current packet
 	if (status.statusRegister.TX_DS){
-
-		printf("nrf24l01 Sent: %s\n", lastTXPacket->Message);
-        
-		status.TX = TXSent;
 		
+        // If the last TX packet requested an ACK
+        // Setup the radio and status to wait for one
 		if (lastTXPacket->packetData.ACKRequest){
-			
 			status.TX = TXPendingACK;
 			status.retryCount = 0xFF;
-			nrf24l01SetRXMode(1);
-		}else{
+            nrf24l01SetRXMode(1);
+		}
+        
+        // If the TX packet was an ACK, swap back in to RX mode since we would
+        // only send one if we were in RX mode
+        else if(lastTXPacket->packetData.IsACK){
+            nrf24l01SetRXMode(1);
+        }
+        
+        // If no special requirement was requested, the packet was sent
+        else{
 			status.TX = TXIdle;
 		}
-		
-		if (lastTXPacket->packetData.IsACK){
-			nrf24l01SetRXMode(1);
-		}
-		
-		nrf24l01Service();
     }
 
 
@@ -202,6 +208,7 @@ void nrf24l01ISR(void){
 
 void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
 	
+    // Store the packet in a local pointer so other methods can use it
 	lastTXPacket = packet;
 	
 	unsigned char i;
@@ -214,11 +221,11 @@ void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
 
 	// Send the command to tell the radio we want to send data with no auto ACK.
 	nrf24l01SPISend(W_TX_PAYLOAD_NOACK);
-
+    
+    // First byte is the packet data byte so send that to the radio
 	nrf24l01SPISend(lastTXPacket->packetData.byte);
 
 	// Loop through each character of the name buffer and send it to the radio
-	
 	unsigned char width = strlen(lastTXPacket->Message);
 	
 	for (i = 0; i  < width; i++) {
@@ -247,12 +254,16 @@ void nrf24l01Service(void){
 		nrf24l01SendTXBuffer(&TXPacket);
     }
 	
+    // If we were run in a loop and still waiting for an ACK
 	if (status.TX == TXPendingACK){
+        
+        // Decrement the retry count and if its 0, setup to resend
         if (!status.retryCount--){
             status.TX = TXReady;
         }
     }
     
+    // If the radio has a packet pending
     if (status.RX == RXPending){
         
         // Clear all the current RX buffers
@@ -291,21 +302,24 @@ void nrf24l01Service(void){
         
         // Get the Recieved Power Detector bit
 		RXPacket.packetData.RPD = nrf24l01Send(n_R_REGISTER | n_RPD, 0);
-
-		strcpy(RXPacketReturn.Message, RXPacket.Message);
-    	RXPacketReturn.packetData.byte = RXPacket.packetData.byte;
         
+        // Copy the packet for the user space to use in case they modify it
+        strcpy(userRXPacket.Message, RXPacket.Message);
+        userRXPacket.packetData.byte = RXPacket.packetData.byte;
+    
         status.RX = RXReady;
     }
     
+    // If the receive data is ready to be processed, check if its an ACK
     if (status.RX == RXReady){
-        // If this RX packet required an ACK, send one
         
+        // If this RX packet required an ACK, send one
         if (RXPacket.packetData.IsACK){
             
             if (status.TX == TXPendingACK){
             
                 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
+                            
                     status.TX = TXIdle;
                     status.RX = RXIdle;
                     // Set the radio into transmitter mode to sleep
@@ -316,15 +330,18 @@ void nrf24l01Service(void){
         }
     }
     
+    // If the receive packet is ready, and the remote radio request an ACK
     if (status.RX == RXReady){
-		
 		if (RXPacket.packetData.ACKRequest){
 			
+            // modify the packet to look like an ACK
 			RXPacket.packetData.ACKRequest = 0;
 			RXPacket.packetData.IsACK = 1;
-
-			nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
+            
+            // Set the transmitter pipe to match the remote
+            nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
 			
+            // Send the packet
 			nrf24l01SendTXBuffer(&RXPacket);
 		}
     }
@@ -332,7 +349,8 @@ void nrf24l01Service(void){
 }
 
 void nrf24l01InitRegisters(){
-
+    
+    
     status.configRegister.byte = nrf24l01Send(n_R_REGISTER | n_CONFIG, 0);
     
 	status.configRegister.PWR_UP = 0;

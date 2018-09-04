@@ -114,7 +114,7 @@ void loop(){
 //    sendMessage(&packet, "rlimit", rlimit);
 //    sendMessage(&packet, "rcount", rcount);
     
-    sendMessage(&packet, "COUNT", counter);
+//    sendMessage(&packet, "COUNT", counter);
     
     
     // 19.086

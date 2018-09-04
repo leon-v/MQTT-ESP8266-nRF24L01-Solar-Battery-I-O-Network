@@ -24,5 +24,6 @@ unsigned char nrf24l01SPISend(unsigned char data);
 void nrf24l01SPIStart(void);
 void nrf24l01SPIEnd(void);
 void enableInterrupts(unsigned char enable);
+void exception(unsigned char number);
 
 #endif	/* NRF24L01_INTERFACE_H_ */

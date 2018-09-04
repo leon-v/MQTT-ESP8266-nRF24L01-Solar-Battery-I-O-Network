@@ -106,11 +106,13 @@ unsigned char nrf24l01SPISend(unsigned char data){
 
 
 void nrf24l01SPIStart(void){
+	enableInterrupts(0);
     nrf24l01CSLow();
     delayUs(5);
 }
 
 void nrf24l01SPIEnd(void){
+	enableInterrupts(1);
     delayUs(5);
     nrf24l01CSHigh();
 }

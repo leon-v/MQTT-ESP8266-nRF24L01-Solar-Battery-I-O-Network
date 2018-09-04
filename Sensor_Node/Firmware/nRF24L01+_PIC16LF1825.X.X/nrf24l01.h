@@ -8,8 +8,6 @@
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
-unsigned int counter = 0;
-
 typedef struct{
     unsigned char TX;
     unsigned char RX;
@@ -63,6 +61,7 @@ void nrf24l01Init(void);
 void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
+nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 
 #endif	/* NRF24L01_H_ */
 
