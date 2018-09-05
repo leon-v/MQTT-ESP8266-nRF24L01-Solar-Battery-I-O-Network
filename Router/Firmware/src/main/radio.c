@@ -78,7 +78,8 @@ static void radioInterruptTask(void *arg){
 			}
     	}else{
     		nrf24l01ISR();
-    		// nrf24l01SetRXMode(1);
+    		nrf24l01SetRXMode(1);
+    		printf("No Int \n");
     	}
     }
 }

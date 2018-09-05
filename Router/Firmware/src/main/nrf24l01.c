@@ -133,16 +133,11 @@ nrf24l01Packet_t * nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
-    // Wait for the module to become available to send
-    unsigned int loopCount = 1000;
     while (status.TX != TXIdle){
         
         delayUs(1000);
+        nrf24l01ISR();
         nrf24l01Service();
-        
-        if (!loopCount--){
-            exception(21);
-        }
     }
 	
     // Copy the packet from user space
@@ -163,6 +158,8 @@ void nrf24l01ISR(void){
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
+
+    	printf("RX_DR.\n");
         
         // If we have processed the last packet, set this one to be accepted
         if (status.RX == RXIdle){
@@ -182,7 +179,7 @@ void nrf24l01ISR(void){
     // Check if the module has sent the current packet
 	if (status.statusRegister.TX_DS){
 
-
+		printf("TX_DS.\n");
 		
         // If the last TX packet requested an ACK
         // Setup the radio and status to wait for one
@@ -214,6 +211,9 @@ void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
 	
     // Store the packet in a local pointer so other methods can use it
 	lastTXPacket = packet;
+
+	// Set the transmitter pipe
+	nrf24l01SetTXPipe(lastTXPacket->packetData.Pipe);
 	
 	unsigned char i;
 	
@@ -342,14 +342,13 @@ void nrf24l01Service(void){
             // modify the packet to look like an ACK
 			RXPacket.packetData.ACKRequest = 0;
 			RXPacket.packetData.IsACK = 1;
-            
-            // Set the transmitter pipe to match the remote
-            nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
 
-            delayMs(10);
+            delayUs(10000);
 			
             // Send the packet
 			nrf24l01SendTXBuffer(&RXPacket);
+
+			printf("Send ACK %s\n", RXPacket.Message);
 		}
     }
 	

@@ -133,16 +133,11 @@ nrf24l01Packet_t * nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
-    // Wait for the module to become available to send
-    unsigned int loopCount = 1000;
     while (status.TX != TXIdle){
         
         delayUs(1000);
+        nrf24l01ISR();
         nrf24l01Service();
-        
-        if (!loopCount--){
-            exception(21);
-        }
     }
 	
     // Copy the packet from user space
@@ -214,6 +209,9 @@ void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
 	
     // Store the packet in a local pointer so other methods can use it
 	lastTXPacket = packet;
+    
+    // Set the transmitter pipe
+	nrf24l01SetTXPipe(lastTXPacket->packetData.Pipe);
 	
 	unsigned char i;
 	
@@ -323,8 +321,6 @@ void nrf24l01Service(void){
             if (status.TX == TXPendingACK){
             
                 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
-                    
-                    counter++;
                             
                     status.TX = TXIdle;
                     status.RX = RXIdle;
@@ -348,7 +344,7 @@ void nrf24l01Service(void){
             // Set the transmitter pipe to match the remote
             nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
             
-            delayMs(10);
+            delayUs(10000);
 			
             // Send the packet
 			nrf24l01SendTXBuffer(&RXPacket);

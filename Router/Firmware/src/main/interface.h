@@ -5,7 +5,6 @@
 #include "driver/gpio.h"
 
 #define delayUs(x) os_delay_us(x)
-#define delayMs(x) os_delay_us(x * 1000)
 
 #define CEPIN	4
 #define INTPIN	5
