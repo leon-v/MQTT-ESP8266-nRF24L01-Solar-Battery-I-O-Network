@@ -3,7 +3,9 @@
 const unsigned char n_ADDRESS_P0[] = {0xAD, 0x87, 0x66, 0xBC, 0xBB};
 const unsigned char n_ADDRESS_MUL = 33;
 
-nrf24l01Packet_t TXPacket, RXPacket, userRXPacket;
+nrf24l01Packet_t TXPacket;
+nrf24l01Packet_t RXPacket;
+nrf24l01Packet_t userRXPacket;
 nrf24l01Packet_t * lastTXPacket;
 
 
@@ -89,7 +91,7 @@ void nrf24l01SetRXMode(unsigned char rxMode){
 }
 
 
-nrf24l01Packet_t *nrf24l01GetRXPacket(void){
+nrf24l01Packet_t * nrf24l01GetRXPacket(void){
 	return &userRXPacket;
 }
  
@@ -128,6 +130,7 @@ nrf24l01Packet_t *nrf24l01GetRXPacket(void){
  }
 
 
+
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
     // Wait for the module to become available to send
@@ -138,8 +141,7 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
         nrf24l01Service();
         
         if (!loopCount--){
-//            exception(21);
-            break;
+            exception(21);
         }
     }
 	
@@ -158,8 +160,6 @@ void nrf24l01ISR(void){
     
     // Get the current status of the radio
     status.statusRegister.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
-    
-    counter++;
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
@@ -181,6 +181,8 @@ void nrf24l01ISR(void){
     
     // Check if the module has sent the current packet
 	if (status.statusRegister.TX_DS){
+
+
 		
         // If the last TX packet requested an ACK
         // Setup the radio and status to wait for one
@@ -200,8 +202,6 @@ void nrf24l01ISR(void){
         else{
 			status.TX = TXIdle;
 		}
-        
-        nrf24l01Service();
     }
 
 
@@ -323,12 +323,15 @@ void nrf24l01Service(void){
             if (status.TX == TXPendingACK){
             
                 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
+                    
+                    counter++;
                             
                     status.TX = TXIdle;
                     status.RX = RXIdle;
                     // Set the radio into transmitter mode to sleep
 					nrf24l01SetRXMode(0);
                     
+
                 }
             }
         }
@@ -344,6 +347,8 @@ void nrf24l01Service(void){
             
             // Set the transmitter pipe to match the remote
             nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
+            
+            delayMs(10);
 			
             // Send the packet
 			nrf24l01SendTXBuffer(&RXPacket);
