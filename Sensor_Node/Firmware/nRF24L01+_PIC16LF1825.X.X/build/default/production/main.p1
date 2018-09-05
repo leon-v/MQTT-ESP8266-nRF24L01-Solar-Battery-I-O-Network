@@ -29,7 +29,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "42
 [u S925 `S926 1 `S927 1 ]
 [n S925 . . . ]
-"11 nrf24l01.h
+"13 nrf24l01.h
 [s S961 `uc 1 `uc 1 `S946 1 `S925 1 `uc 1 ]
 [n S961 . TX RX statusRegister configRegister retryCount ]
 "490 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
@@ -40,7 +40,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S31 . . ]
 "497
 [v _PIR0bits `VS31 ~T0 @X0 0 e@16 ]
-"59 nrf24l01.h
+"61 nrf24l01.h
 [v _nrf24l01ISR `(v ~T0 @X0 0 ef ]
 "523 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
 [s S34 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -92,16 +92,16 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S103 . . . ]
 "2089
 [v _ADCON1bits `VS103 ~T0 @X0 0 e@158 ]
-"34 nrf24l01.h
+"36 nrf24l01.h
 [s S963 :8 `uc 1 ]
 [n S963 . byte ]
-"37
+"39
 [s S964 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :3 `uc 1 ]
 [n S964 . RPD ACKRPD ACKRequest IsACK Pipe ]
-"33
+"35
 [u S962 `S963 1 `S964 1 ]
 [n S962 . . . ]
-"46
+"48
 [s S965 `S962 1 `uc -> 32 `i ]
 [n S965 . packetData Message ]
 "16 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h
@@ -112,7 +112,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _strcat `(*uc ~T0 @X0 0 ef2`*uc`*Cuc ]
 "122 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\stdlib.h
 [v _ftoa `(*uc ~T0 @X0 0 ef2`f`*i ]
-"63 nrf24l01.h
+"65 nrf24l01.h
 [v _nrf24l01SendPacket `(v ~T0 @X0 0 ef1`*S965 ]
 "56 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\c90\string.h
 [v _strlen `(ui ~T0 @X0 0 ef1`*Cuc ]
@@ -172,11 +172,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 "92 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic.h
 [v __delay `JF6129 ~T0 @X0 0 e ]
 [p i __delay ]
-"60 nrf24l01.h
+"62 nrf24l01.h
 [v _nrf24l01Init `(v ~T0 @X0 0 ef ]
-"62
+"64
 [v _nrf24l01SetTXPipe `(v ~T0 @X0 0 ef1`uc ]
-"56
+"58
 [v _nrf24l01SetRXPipe `(v ~T0 @X0 0 ef1`uc ]
 "390 C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic16lf18325.h
 [s S28 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -7654,41 +7654,47 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;nRF24L01_Types.h: 235: } n_FEATURE_t;
 [; ;nrf24l01.h: 8: extern const unsigned char n_ADDRESS_P0[];
 [; ;nrf24l01.h: 9: extern const unsigned char n_ADDRESS_MUL;
-[; ;nrf24l01.h: 11: typedef struct{
-[; ;nrf24l01.h: 12: unsigned char TX;
-[; ;nrf24l01.h: 13: unsigned char RX;
-[; ;nrf24l01.h: 14: n_STATUS_t statusRegister;
-[; ;nrf24l01.h: 15: n_CONFIG_t configRegister;
-[; ;nrf24l01.h: 16: unsigned char retryCount;
-[; ;nrf24l01.h: 17: } nrf24l01State_t;
-"19 nrf24l01.h
+"11 nrf24l01.h
+[v _counter `ui ~T0 @X0 1 e ]
+[i _counter
+-> -> 0 `i `ui
+]
+[; ;nrf24l01.h: 11: unsigned int counter = 0;
+[; ;nrf24l01.h: 13: typedef struct{
+[; ;nrf24l01.h: 14: unsigned char TX;
+[; ;nrf24l01.h: 15: unsigned char RX;
+[; ;nrf24l01.h: 16: n_STATUS_t statusRegister;
+[; ;nrf24l01.h: 17: n_CONFIG_t configRegister;
+[; ;nrf24l01.h: 18: unsigned char retryCount;
+[; ;nrf24l01.h: 19: } nrf24l01State_t;
+"21
 [v _status `VS961 ~T0 @X0 1 e ]
-[; ;nrf24l01.h: 19: volatile nrf24l01State_t status;
-[; ;nrf24l01.h: 33: typedef union{
-[; ;nrf24l01.h: 34: struct{
-[; ;nrf24l01.h: 35: unsigned int byte :8;
-[; ;nrf24l01.h: 36: };
-[; ;nrf24l01.h: 37: struct{
-[; ;nrf24l01.h: 38: unsigned RPD : 1;
-[; ;nrf24l01.h: 39: unsigned ACKRPD : 1;
-[; ;nrf24l01.h: 40: unsigned ACKRequest : 1;
-[; ;nrf24l01.h: 41: unsigned IsACK : 1;
-[; ;nrf24l01.h: 42: unsigned Pipe : 3;
-[; ;nrf24l01.h: 43: };
-[; ;nrf24l01.h: 44: } packetData_t;
-[; ;nrf24l01.h: 46: typedef struct{
-[; ;nrf24l01.h: 47: packetData_t packetData;
-[; ;nrf24l01.h: 48: char Message[32];
-[; ;nrf24l01.h: 49: } nrf24l01Packet_t;
-[; ;nrf24l01.h: 55: unsigned char nrf24l01Send(unsigned char command,unsigned char data);
-[; ;nrf24l01.h: 56: void nrf24l01SetRXPipe(unsigned char pipe);
-[; ;nrf24l01.h: 57: void nrf24l01SetRXMode(unsigned char rxMode);
-[; ;nrf24l01.h: 59: void nrf24l01ISR(void);
-[; ;nrf24l01.h: 60: void nrf24l01Init(void);
-[; ;nrf24l01.h: 61: void nrf24l01Service(void);
-[; ;nrf24l01.h: 62: void nrf24l01SetTXPipe(unsigned char pipe);
-[; ;nrf24l01.h: 63: void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
-[; ;nrf24l01.h: 64: nrf24l01Packet_t *nrf24l01GetRXPacket(void);
+[; ;nrf24l01.h: 21: volatile nrf24l01State_t status;
+[; ;nrf24l01.h: 35: typedef union{
+[; ;nrf24l01.h: 36: struct{
+[; ;nrf24l01.h: 37: unsigned int byte :8;
+[; ;nrf24l01.h: 38: };
+[; ;nrf24l01.h: 39: struct{
+[; ;nrf24l01.h: 40: unsigned RPD : 1;
+[; ;nrf24l01.h: 41: unsigned ACKRPD : 1;
+[; ;nrf24l01.h: 42: unsigned ACKRequest : 1;
+[; ;nrf24l01.h: 43: unsigned IsACK : 1;
+[; ;nrf24l01.h: 44: unsigned Pipe : 3;
+[; ;nrf24l01.h: 45: };
+[; ;nrf24l01.h: 46: } packetData_t;
+[; ;nrf24l01.h: 48: typedef struct{
+[; ;nrf24l01.h: 49: packetData_t packetData;
+[; ;nrf24l01.h: 50: char Message[32];
+[; ;nrf24l01.h: 51: } nrf24l01Packet_t;
+[; ;nrf24l01.h: 57: unsigned char nrf24l01Send(unsigned char command,unsigned char data);
+[; ;nrf24l01.h: 58: void nrf24l01SetRXPipe(unsigned char pipe);
+[; ;nrf24l01.h: 59: void nrf24l01SetRXMode(unsigned char rxMode);
+[; ;nrf24l01.h: 61: void nrf24l01ISR(void);
+[; ;nrf24l01.h: 62: void nrf24l01Init(void);
+[; ;nrf24l01.h: 63: void nrf24l01Service(void);
+[; ;nrf24l01.h: 64: void nrf24l01SetTXPipe(unsigned char pipe);
+[; ;nrf24l01.h: 65: void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
+[; ;nrf24l01.h: 66: nrf24l01Packet_t *nrf24l01GetRXPacket(void);
 [; ;HC-SR04.h: 4: void hcsr04Init(void);
 [; ;HC-SR04.h: 5: void hcsr04ISR(void);
 [; ;HC-SR04.h: 6: void hcsr04Trigger(void);
@@ -7712,9 +7718,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;HC-SR04.h: 11: unsigned int rcount = 0;
 [v $root$_ISR `(v ~T0 @X0 0 e ]
-[v F6639 `(v ~T0 @X0 1 tf ]
+[v F6640 `(v ~T0 @X0 1 tf ]
 "13 main.c
-[v _ISR `IF6639 ~T0 @X0 1 e ]
+[v _ISR `IF6640 ~T0 @X0 1 e ]
 {
 [; ;main.c: 13: void interrupt ISR(void){
 [e :U _ISR ]
@@ -7924,9 +7930,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 101: nrf24l01SendPacket(packet);
 "101
 [e ( _nrf24l01SendPacket (1 _packet ]
-[; ;main.c: 103: sleepListren(3);
+[; ;main.c: 103: sleepMs(2000);
 "103
-[e ( _sleepListren (1 -> -> 3 `i `ui ]
+[e ( _sleepMs (1 -> -> 2000 `i `ui ]
 [; ;main.c: 104: }
 "104
 [e :UE 984 ]
@@ -7940,9 +7946,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 "109
 [v _packet `S965 ~T0 @X0 1 a ]
 [; ;main.c: 109: nrf24l01Packet_t packet;
+[; ;main.c: 117: sendMessage(&packet, "COUNT", counter);
+"117
+[e ( _sendMessage (3 , , &U _packet :s 3C -> _counter `f ]
 [; ;main.c: 124: sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
 "124
-[e ( _sendMessage (3 , , &U _packet :s 3C -> * -> ( _getADCValue (1 -> -> 4 `i `uc `d .3.106382978723404 `f ]
+[e ( _sendMessage (3 , , &U _packet :s 4C -> * -> ( _getADCValue (1 -> -> 4 `i `uc `d .3.106382978723404 `f ]
 [; ;main.c: 136: FVRCONbits.TSEN = 1;
 "136
 [e = . . _FVRCONbits 0 3 -> -> 1 `i `uc ]
@@ -7959,7 +7968,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _ta -> - - / -> _vt `d -U .0.00132 / .0.6063 -U .0.00132 -> -> 40 `i `d `f ]
 [; ;main.c: 145: sendMessage(&packet, "TEMP", ta);
 "145
-[e ( _sendMessage (3 , , &U _packet :s 4C _ta ]
+[e ( _sendMessage (3 , , &U _packet :s 5C _ta ]
 [; ;main.c: 159: }
 "159
 [e :UE 985 ]
@@ -8064,7 +8073,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( __delay (1 -> * -> -> 1000 `i `d / -> -> 32000000 `l `d .4000000.0 `ul ]
 [; ;main.c: 212: strcpy(romData->name, "UWT");
 "212
-[e ( _strcpy (2 , &U . *U _romData 1 :s 5C ]
+[e ( _strcpy (2 , &U . *U _romData 1 :s 6C ]
 [; ;main.c: 214: nrf24l01Init();
 "214
 [e ( _nrf24l01Init ..  ]
@@ -8158,7 +8167,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 269: nrf24l01Packet_t packet;
 [; ;main.c: 271: sendMessage(&packet, "BOOT", EEPROMRead(0));
 "271
-[e ( _sendMessage (3 , , &U _packet :s 6C -> ( _EEPROMRead (1 -> -> 0 `i `ui `f ]
+[e ( _sendMessage (3 , , &U _packet :s 7C -> ( _EEPROMRead (1 -> -> 0 `i `ui `f ]
 [; ;main.c: 272: EEPROMWrite(0, 0);
 "272
 [e ( _EEPROMWrite (2 , -> -> 0 `i `ui -> -> 0 `i `uc ]
@@ -8183,9 +8192,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 "280
 [e :UE 991 ]
 }
-[a 5C 85 87 84 0 ]
-[a 6C 66 79 79 84 0 ]
-[a 3C 86 66 65 84 0 ]
-[a 4C 84 69 77 80 0 ]
+[a 6C 85 87 84 0 ]
+[a 7C 66 79 79 84 0 ]
+[a 3C 67 79 85 78 84 0 ]
+[a 4C 86 66 65 84 0 ]
+[a 5C 84 69 77 80 0 ]
 [a 1C 47 0 ]
 [a 2C 47 0 ]

@@ -138,7 +138,8 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
         nrf24l01Service();
         
         if (!loopCount--){
-            exception(21);
+//            exception(21);
+            break;
         }
     }
 	
@@ -157,6 +158,8 @@ void nrf24l01ISR(void){
     
     // Get the current status of the radio
     status.statusRegister.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
+    
+    counter++;
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
@@ -197,6 +200,8 @@ void nrf24l01ISR(void){
         else{
 			status.TX = TXIdle;
 		}
+        
+        nrf24l01Service();
     }
 
 

@@ -10862,6 +10862,8 @@ extern char * strrichr(const char *, int);
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+unsigned int counter = 0;
+
 typedef struct{
 unsigned char TX;
 unsigned char RX;
@@ -10872,7 +10874,7 @@ unsigned char retryCount;
 
 volatile nrf24l01State_t status;
 
-# 33
+# 35
 typedef union{
 struct{
 unsigned int byte :8;
@@ -10891,7 +10893,7 @@ packetData_t packetData;
 char Message[32];
 } nrf24l01Packet_t;
 
-# 55
+# 57
 unsigned char nrf24l01Send(unsigned char command,unsigned char data);
 void nrf24l01SetRXPipe(unsigned char pipe);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -11039,7 +11041,8 @@ _delay((unsigned long)((1000)*(32000000/4000000.0)));
 nrf24l01Service();
 
 if (!loopCount--){
-exception(21);
+
+break;
 }
 }
 
@@ -11058,6 +11061,8 @@ void nrf24l01ISR(void){
 
 
 status.statusRegister.byte = nrf24l01Send((unsigned) 0b00000000 | (unsigned) 0x07, 0);
+
+counter++;
 
 
 if (status.statusRegister.RX_DR){
@@ -11098,6 +11103,8 @@ nrf24l01SetRXMode(1);
 else{
 status.TX = 0;
 }
+
+nrf24l01Service();
 }
 
 

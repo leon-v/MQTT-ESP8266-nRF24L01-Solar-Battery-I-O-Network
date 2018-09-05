@@ -10999,6 +10999,8 @@ unsigned Reserved : 5;
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+unsigned int counter = 0;
+
 typedef struct{
 unsigned char TX;
 unsigned char RX;
@@ -11009,7 +11011,7 @@ unsigned char retryCount;
 
 volatile nrf24l01State_t status;
 
-# 33
+# 35
 typedef union{
 struct{
 unsigned int byte :8;
@@ -11028,7 +11030,7 @@ packetData_t packetData;
 char Message[32];
 } nrf24l01Packet_t;
 
-# 55
+# 57
 unsigned char nrf24l01Send(unsigned char command,unsigned char data);
 void nrf24l01SetRXPipe(unsigned char pipe);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -11137,13 +11139,16 @@ packet->packetData.ACKRequest = 1;
 
 nrf24l01SendPacket(packet);
 
-sleepListren(3);
+sleepMs(2000);
 }
 
 
 void loop(){
 
 nrf24l01Packet_t packet;
+
+# 117
+sendMessage(&packet, "COUNT", counter);
 
 # 124
 sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);

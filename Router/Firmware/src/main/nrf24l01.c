@@ -325,6 +325,7 @@ void nrf24l01Service(void){
                     // Set the radio into transmitter mode to sleep
 					nrf24l01SetRXMode(0);
                     
+
                 }
             }
         }
@@ -343,6 +344,8 @@ void nrf24l01Service(void){
 			
             // Send the packet
 			nrf24l01SendTXBuffer(&RXPacket);
+
+			printf("Sent ACK %s\n", RXPacket.Message);
 		}
     }
 	

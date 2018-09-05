@@ -1,3 +1,7 @@
 /Router/Firmware/toolchain/xtensa-lx106-elf-linux64-1.22.0-88-gde0bdc1-4.8.5
-Router/Firmware/ESP8266_RTOS_SDK
+/Router/Firmware/ESP8266_RTOS_SDK
 /Router/Firmware/src/build
+/Sensor_Node/Firmware/nRF24L01+_PIC16LF1825.X.X/build/
+/Sensor_Node/Firmware/nRF24L01+_PIC16LF1825.X.X/debug/
+/Sensor_Node/Firmware/nRF24L01+_PIC16LF1825.X.X/dist/
+/Sensor_Node/Firmware/nRF24L01+_PIC16LF1825.X.X/html/

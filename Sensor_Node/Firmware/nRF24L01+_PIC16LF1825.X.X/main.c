@@ -100,7 +100,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepListren(3);
+	sleepMs(2000);
 }
 
 
@@ -114,7 +114,7 @@ void loop(){
 //    sendMessage(&packet, "rlimit", rlimit);
 //    sendMessage(&packet, "rcount", rcount);
     
-//    sendMessage(&packet, "COUNT", counter);
+    sendMessage(&packet, "COUNT", counter);
     
     
     // 19.086

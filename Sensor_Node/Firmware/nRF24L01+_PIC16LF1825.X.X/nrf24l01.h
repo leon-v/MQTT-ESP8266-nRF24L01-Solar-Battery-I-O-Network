@@ -8,6 +8,8 @@
 extern const unsigned char n_ADDRESS_P0[];
 extern const unsigned char n_ADDRESS_MUL;
 
+unsigned int counter = 0;
+
 typedef struct{
     unsigned char TX;
     unsigned char RX;
