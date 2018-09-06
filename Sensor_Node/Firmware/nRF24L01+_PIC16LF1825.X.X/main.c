@@ -10,6 +10,8 @@
 
 #include "HC-SR04.h"
 
+unsigned char pipe = 0;
+
 void interrupt ISR(void){
     
 //    if (IOCAFbits.IOCAF3){
@@ -96,11 +98,12 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     strcat(packet->Message, ftoa(value, &ftoaStatus));
     
     packet->packetData.byte = 0;
+    packet->packetData.Pipe = pipe;
     packet->packetData.ACKRequest = 1;
     
 	nrf24l01SendPacket(packet);
     
-	sleepMs(2000);
+	sleepListren(2);
 }
 
 
@@ -159,15 +162,15 @@ void loop(){
 }
 
  unsigned char nrf24l01GetPipe(char * name){
-     unsigned char pipe = 0;
+     unsigned char result = 0;
      unsigned char i = 0;
     
      // Calculate a pipe from the name passed
      for (i = 0; i < strlen(name); i++){
-         pipe+= name[i];
+         result+= name[i];
      }
      
-     return (unsigned) pipe % 6;
+     return (unsigned) result % 6;
  }
 
 void main(void) {
@@ -213,10 +216,8 @@ void main(void) {
 	
     nrf24l01Init();
     
-    unsigned char pipe = nrf24l01GetPipe(romData->name);
-    nrf24l01SetTXPipe(pipe);
+    pipe = nrf24l01GetPipe(romData->name);
     nrf24l01SetRXPipe(pipe);
-    
 
     /* Setup ADC */
     ADCON0bits.ADON = 0;
@@ -251,7 +252,7 @@ void main(void) {
     
     
     /* Setup Interrupt Pin */
-//    RA2PPSbits.RA2PPS = 0b00010;// A2
+//	RA2PPSbits.RA2PPS = 0b00010;// A2
     TRISAbits.TRISA2 = 1;
     PIE0bits.INTE = 1;
     INTCONbits.INTEDG = 0;

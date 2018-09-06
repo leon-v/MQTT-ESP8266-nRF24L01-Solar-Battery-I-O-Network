@@ -176,8 +176,6 @@ void nrf24l01ISR(void){
     
     // Check if the module has sent the current packet
 	if (status.statusRegister.TX_DS){
-
-
 		
         // If the last TX packet requested an ACK
         // Setup the radio and status to wait for one
@@ -209,8 +207,8 @@ void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
 	
     // Store the packet in a local pointer so other methods can use it
 	lastTXPacket = packet;
-    
-    // Set the transmitter pipe
+
+	// Set the transmitter pipe
 	nrf24l01SetTXPipe(lastTXPacket->packetData.Pipe);
 	
 	unsigned char i;
@@ -340,10 +338,7 @@ void nrf24l01Service(void){
             // modify the packet to look like an ACK
 			RXPacket.packetData.ACKRequest = 0;
 			RXPacket.packetData.IsACK = 1;
-            
-            // Set the transmitter pipe to match the remote
-            nrf24l01SetTXPipe(RXPacket.packetData.Pipe);
-            
+
             delayUs(10000);
 			
             // Send the packet
