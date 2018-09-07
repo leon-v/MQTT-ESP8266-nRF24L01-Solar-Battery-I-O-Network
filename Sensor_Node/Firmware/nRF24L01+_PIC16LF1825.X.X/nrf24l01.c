@@ -50,7 +50,7 @@ void nrf24l01ChangeTXPower(int addPower){
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
-    // If we want to change to RX mode
+//     If we want to change to RX mode
     if (rxMode){
         
         if (status.TX == TXSending){
@@ -133,11 +133,16 @@ nrf24l01Packet_t * nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
+    int timeout = 200;
     while (status.TX != TXIdle){
         
-        delayUs(1000);
+        delayUs(100);
         nrf24l01ISR();
         nrf24l01Service();
+        
+        if (!timeout--){
+            break;
+        }
     }
 	
     // Copy the packet from user space
@@ -159,6 +164,8 @@ void nrf24l01ISR(void){
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
         
+        status.rxCount++;
+                
         // If we have processed the last packet, set this one to be accepted
         if (status.RX == RXIdle){
             status.RX = RXPending;
@@ -183,6 +190,7 @@ void nrf24l01ISR(void){
 			status.TX = TXPendingACK;
 			status.retryCount = 0xFF;
             nrf24l01SetRXMode(1);
+            status.ackPrepCount++;
 		}
         
         // If the TX packet was an ACK, swap back in to RX mode since we would
@@ -325,7 +333,7 @@ void nrf24l01Service(void){
                     // Set the radio into transmitter mode to sleep
 					nrf24l01SetRXMode(0);
                     
-
+                    status.ackCount++;
                 }
             }
         }
@@ -338,8 +346,6 @@ void nrf24l01Service(void){
             // modify the packet to look like an ACK
 			RXPacket.packetData.ACKRequest = 0;
 			RXPacket.packetData.IsACK = 1;
-
-            delayUs(10000);
 			
             // Send the packet
 			nrf24l01SendTXBuffer(&RXPacket);
@@ -470,5 +476,8 @@ void nrf24l01Init(void){
     
     status.TX = TXIdle;
     status.RX = RXIdle;
+    status.rxCount = 0;
+    status.ackCount = 0;
+    status.ackPrepCount = 0;
 }
 

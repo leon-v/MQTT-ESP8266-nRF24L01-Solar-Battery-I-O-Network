@@ -10,6 +10,8 @@
 
 static void gpio_isr_handler(void *arg){
 
+	nrf24l01ISR();
+
 	uint32_t gp_io = (uint32_t) arg;
     xQueueSendFromISR(radioGetInterruptQueue(), &gp_io, NULL);
 }
@@ -71,6 +73,8 @@ void nrf24l01InterfaceInit(void){
 	os_delay_us(65535);
 }
 
+#define nrf24l01SPIClockDelay() os_delay_us(1)
+
 unsigned char nrf24l01SPISend(unsigned char data){
 
 	// CS is low
@@ -83,19 +87,17 @@ unsigned char nrf24l01SPISend(unsigned char data){
 
 		// Set MOSI
 		if ( (data >> (bit - 1)) & 1) {
-			// High
-			gpio_set_level(MOSIPIN, 1);
+			gpio_set_level(MOSIPIN, 1);// High
 		}else{
-			// Low
-			gpio_set_level(MOSIPIN, 0);
+			gpio_set_level(MOSIPIN, 0);// Low
 		}
 
 		// Clock Up
-		os_delay_us(2);
+		nrf24l01SPIClockDelay();
 		gpio_set_level(CLKPIN, 1);
 
 		// Clock Down
-		os_delay_us(2);
+		nrf24l01SPIClockDelay();
 		gpio_set_level(CLKPIN, 0);
 
 		bit--;

@@ -158,8 +158,6 @@ void nrf24l01ISR(void){
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
-
-    	printf("RX_DR.\n");
         
         // If we have processed the last packet, set this one to be accepted
         if (status.RX == RXIdle){
@@ -179,13 +177,13 @@ void nrf24l01ISR(void){
     // Check if the module has sent the current packet
 	if (status.statusRegister.TX_DS){
 
-		printf("TX_DS.\n");
+		status.txCount++;
 		
         // If the last TX packet requested an ACK
         // Setup the radio and status to wait for one
 		if (lastTXPacket->packetData.ACKRequest){
 			status.TX = TXPendingACK;
-			status.retryCount = 0xFF;
+			status.retryCount = 0x10;
             nrf24l01SetRXMode(1);
 		}
         
@@ -199,6 +197,9 @@ void nrf24l01ISR(void){
         else{
 			status.TX = TXIdle;
 		}
+
+		// Run the service task to get the new packet
+		nrf24l01Service();
     }
 
 
@@ -328,8 +329,6 @@ void nrf24l01Service(void){
                     status.RX = RXIdle;
                     // Set the radio into transmitter mode to sleep
 					nrf24l01SetRXMode(0);
-                    
-
                 }
             }
         }
@@ -343,12 +342,10 @@ void nrf24l01Service(void){
 			RXPacket.packetData.ACKRequest = 0;
 			RXPacket.packetData.IsACK = 1;
 
-            delayUs(10000);
+			delayUs(1000);
 			
             // Send the packet
 			nrf24l01SendTXBuffer(&RXPacket);
-
-			printf("Send ACK %s\n", RXPacket.Message);
 		}
     }
 	
@@ -476,5 +473,6 @@ void nrf24l01Init(void){
     
     status.TX = TXIdle;
     status.RX = RXIdle;
+    status.txCount = 0;
 }
 

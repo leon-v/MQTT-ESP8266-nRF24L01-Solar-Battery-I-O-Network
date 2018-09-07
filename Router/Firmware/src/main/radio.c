@@ -37,13 +37,15 @@ static void radioInterruptTask(void *arg){
 
     for (;;) {
 
-        if (xQueueReceive(radioInterruptQueue, &gp_io, 100)) {
+        if (xQueueReceive(radioInterruptQueue, &gp_io, 100 / portTICK_RATE_MS)) {
 
-			nrf24l01ISR();
+        	printf("Int Start\n");
 
     		if (status.RX == RXReady){
 
     			printf("Radio - Task - Message: %s\n", RXPacket->Message);
+    			printf("Radio - Task - ACK Request: %d\n", RXPacket->packetData.ACKRequest);
+    			printf("Radio - Task - TX Count: %d\n", status.txCount);
 
     			name = strtok(RXPacket->Message, "/");
 
@@ -79,7 +81,6 @@ static void radioInterruptTask(void *arg){
     	}else{
     		nrf24l01ISR();
     		nrf24l01SetRXMode(1);
-    		printf("No Int \n");
     	}
     }
 }

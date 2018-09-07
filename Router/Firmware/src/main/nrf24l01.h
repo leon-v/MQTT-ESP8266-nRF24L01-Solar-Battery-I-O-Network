@@ -14,6 +14,7 @@ typedef struct{
     n_STATUS_t statusRegister;
     n_CONFIG_t configRegister;
     unsigned char retryCount;
+    unsigned int txCount;
 } nrf24l01State_t;
 
 volatile nrf24l01State_t status;

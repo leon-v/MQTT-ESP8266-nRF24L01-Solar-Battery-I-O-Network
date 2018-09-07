@@ -103,7 +103,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepListren(2);
+	sleepMs(1000);
 }
 
 
@@ -113,11 +113,9 @@ void loop(){
     
 //    sendMessage(&packet, "DIST", hcsr04GetAerage());
     
-//    sendMessage(&packet, "rloop", rloop);
-//    sendMessage(&packet, "rlimit", rlimit);
-//    sendMessage(&packet, "rcount", rcount);
-    
-    sendMessage(&packet, "COUNT", counter);
+    sendMessage(&packet, "rxCount", (float) status.rxCount);
+    sendMessage(&packet, "ackCount", (float) status.ackCount);
+    sendMessage(&packet, "ackPrepCount", (float) status.ackPrepCount);
     
     
     // 19.086
@@ -126,14 +124,7 @@ void loop(){
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
     sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     
-//	EEPROMWrite(0, (unsigned char) 22);
-    
 //    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
-    
-//	EEPROMWrite(0, status.TX);//0
-//	EEPROMWrite(1, status.RX);//0
-    
-//    sendMessage(&packet, "DBG3", counter);
 //    
     
     FVRCONbits.TSEN = 1;
@@ -147,18 +138,10 @@ void loop(){
     
 	sendMessage(&packet, "TEMP", ta);
     
-//    sendMessage(&packet, "DBG4", counter);
-    
 //    n_RF_SETUP_t rfSetup;
 //    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
 //    
 //    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-    
-//    sendMessage(&packet, "DBG1", 1);
-//    sendMessage(&packet, "DBG2", 2);
-//    sendMessage(&packet, "DBG3", 3);
-//    sendMessage(&packet, "DBG4", 4);
-//    sendMessage(&packet, "DBG5", 5);
 }
 
  unsigned char nrf24l01GetPipe(char * name){
@@ -255,7 +238,7 @@ void main(void) {
 //	RA2PPSbits.RA2PPS = 0b00010;// A2
     TRISAbits.TRISA2 = 1;
     PIE0bits.INTE = 1;
-    INTCONbits.INTEDG = 0;
+    INTCONbits.INTEDG = 1;
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;
