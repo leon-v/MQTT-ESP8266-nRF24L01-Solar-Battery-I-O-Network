@@ -66,6 +66,6 @@ void nrf24l01Init(void);
 void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
-
+nrf24l01Packet_t nrf24l01GetRXPacket(void);
 #endif	/* NRF24L01_H_ */
 

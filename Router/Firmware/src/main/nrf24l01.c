@@ -341,8 +341,6 @@ void nrf24l01Service(void){
             // modify the packet to look like an ACK
 			RXPacket.packetData.ACKRequest = 0;
 			RXPacket.packetData.IsACK = 1;
-
-			delayUs(1000);
 			
             // Send the packet
 			nrf24l01SendTXBuffer(&RXPacket);

@@ -73,17 +73,26 @@ float getADCValue(unsigned char channel){
 	return adcSum;
 }
 
+void checkRX(void){
+	if (status.RX == RXReady){
+		
+		nrf24l01Packet_t RXPacket = nrf24l01GetRXPacket();
+		
+//		RXPacket.packetData.IsACK = 0;
+//		RXPacket.packetData.ACKRequest = 0;
+//		RXPacket.packetData.
+	}
+}
 void sleepListren(unsigned int seconds){
 	
     
 	while(seconds--){
 		
-//		nrf24l01SetRXMode(0);
 		sleepMs(100);
+		checkRX();
 
-//		nrf24l01SetRXMode(0);
 		sleepMs(900);
-		
+		checkRX();
 	}
 }
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
@@ -179,6 +188,7 @@ void main(void) {
     TRISCbits.TRISC4 = 0;
     
     PORTCbits.RC4 = 0;
+	PORTCbits.RC5 = 0;
    
     
     // Pin 11 is int
@@ -238,7 +248,7 @@ void main(void) {
 //	RA2PPSbits.RA2PPS = 0b00010;// A2
     TRISAbits.TRISA2 = 1;
     PIE0bits.INTE = 1;
-    INTCONbits.INTEDG = 1;
+    INTCONbits.INTEDG = 0;
     
     /* Setup Charge Control */
     TRISAbits.TRISA5 = 0;
