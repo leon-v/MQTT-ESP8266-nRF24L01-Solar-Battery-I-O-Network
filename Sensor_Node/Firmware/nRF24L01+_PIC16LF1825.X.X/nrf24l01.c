@@ -360,6 +360,7 @@ void nrf24l01Service(void){
     }
 	
 	// DEBUG
+	// Do not remove this until you have made the callback function to handle the RX
 	if (status.RX == RXReady){
 		status.RX = RXIdle;
 	}

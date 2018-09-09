@@ -92,5 +92,5 @@ void radioInit(void){
 
     radioRXQueue = xQueueCreate(32, sizeof(radioMessage_t));
 	
-    xTaskCreate(&radioInterruptTask, "radioInterruptTask", 2048, NULL, 10, NULL);
+    xTaskCreate(&radioInterruptTask, "radioInterruptTask", 2048, NULL, 14, NULL);
 }

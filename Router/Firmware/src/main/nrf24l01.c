@@ -321,12 +321,12 @@ void nrf24l01Service(void){
         // If this RX packet required an ACK, send one
         if (RXPacket.packetData.IsACK){
             
+            status.RX = RXIdle;
             if (status.TX == TXPendingACK){
-            
+
                 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
                             
                     status.TX = TXIdle;
-                    status.RX = RXIdle;
                     // Set the radio into transmitter mode to sleep
 					nrf24l01SetRXMode(0);
                 }

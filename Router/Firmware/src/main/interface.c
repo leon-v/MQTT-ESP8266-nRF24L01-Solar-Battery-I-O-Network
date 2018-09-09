@@ -73,7 +73,6 @@ void nrf24l01InterfaceInit(void){
 	os_delay_us(65535);
 }
 
-#define nrf24l01SPIClockDelay() os_delay_us(1)
 
 unsigned char nrf24l01SPISend(unsigned char data){
 
@@ -93,11 +92,11 @@ unsigned char nrf24l01SPISend(unsigned char data){
 		}
 
 		// Clock Up
-		nrf24l01SPIClockDelay();
+		os_delay_us(1);
 		gpio_set_level(CLKPIN, 1);
 
 		// Clock Down
-		nrf24l01SPIClockDelay();
+		os_delay_us(1);
 		gpio_set_level(CLKPIN, 0);
 
 		bit--;
