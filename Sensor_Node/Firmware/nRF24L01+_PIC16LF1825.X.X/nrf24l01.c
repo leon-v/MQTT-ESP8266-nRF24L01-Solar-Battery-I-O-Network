@@ -136,7 +136,7 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     int timeout = 200;
     while (status.TX != TXIdle){
         
-        delayUs(100);
+        delayUs(10000);
         nrf24l01ISR();
         nrf24l01Service();
         
@@ -205,6 +205,9 @@ void nrf24l01ISR(void){
         else{
 			status.TX = TXIdle;
 		}
+		
+		// Run the service task to get the new packet
+		nrf24l01Service();
     }
 
 
@@ -256,14 +259,6 @@ void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
 void nrf24l01Service(void){
     
     unsigned char i;
-            
-    if (status.TX == TXReady){
-		
-		// Setup the status as sending
-        status.TX = TXSending;	
-		
-		nrf24l01SendTXBuffer(&TXPacket);
-    }
 	
     // If we were run in a loop and still waiting for an ACK
 	if (status.TX == TXPendingACK){
@@ -272,6 +267,14 @@ void nrf24l01Service(void){
         if (!status.retryCount--){
             status.TX = TXReady;
         }
+    }
+	
+	 if (status.TX == TXReady){
+		
+		// Setup the status as sending
+        status.TX = TXSending;	
+		
+		nrf24l01SendTXBuffer(&TXPacket);
     }
     
     // If the radio has a packet pending

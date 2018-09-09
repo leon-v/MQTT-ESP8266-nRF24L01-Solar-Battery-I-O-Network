@@ -20,8 +20,9 @@ void interrupt ISR(void){
 //    }
 	
     if (PIR0bits.INTF){
+		PIR0bits.INTF = 0;
         nrf24l01ISR();
-        PIR0bits.INTF = 0;
+        
     }
     
     if (PIR1bits.ADIF){

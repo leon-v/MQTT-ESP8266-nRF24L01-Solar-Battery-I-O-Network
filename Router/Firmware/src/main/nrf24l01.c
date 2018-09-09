@@ -169,8 +169,6 @@ void nrf24l01ISR(void){
             status.statusRegister.RX_DR = 0;
         }
 		
-        // Run the service task to get the new packet
-		nrf24l01Service();
     }
 	
     
@@ -197,14 +195,12 @@ void nrf24l01ISR(void){
         else{
 			status.TX = TXIdle;
 		}
-
-		// Run the service task to get the new packet
-		nrf24l01Service();
     }
 
+    // Run the service task to get the new packet
+	nrf24l01Service();
 
-    
-	// Clear the interrupt on the nrf24l01
+    // Clear the interrupt on the nrf24l01
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.statusRegister.byte);
 }
 
