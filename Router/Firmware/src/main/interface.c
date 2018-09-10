@@ -45,7 +45,7 @@ void nrf24l01InterfaceInit(void){
 	gpio_config_t interrupt;
 	interrupt.pin_bit_mask	= (1ULL << INTPIN);
 	interrupt.mode			= GPIO_MODE_INPUT;
-	interrupt.pull_up_en	= GPIO_PULLUP_ENABLE;
+	interrupt.pull_up_en	= GPIO_PULLUP_DISABLE;
 	interrupt.pull_down_en	= GPIO_PULLDOWN_DISABLE;
 	interrupt.intr_type		= GPIO_INTR_NEGEDGE;
 	gpio_config(&interrupt);

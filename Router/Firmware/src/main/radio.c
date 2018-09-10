@@ -72,12 +72,14 @@ static void radioInterruptTask(void *arg){
 
     for (;;) {
 
-        if (xQueueReceive(radioInterruptQueue, &gp_io, 100 / portTICK_RATE_MS)) {
+        if (xQueueReceive(radioInterruptQueue, &gp_io, 10000 / portTICK_RATE_MS)) {
         	printf("Int Start\n");
         	nrf24l01ISR();
+        	nrf24l01ISR();
     	}else{
+    		printf("Int Skip\n");
     		nrf24l01ISR();
-    		nrf24l01SetRXMode(1);
+    		// nrf24l01SetRXMode(1);
     	}
     }
 }
