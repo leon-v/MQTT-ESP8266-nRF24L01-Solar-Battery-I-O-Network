@@ -8,6 +8,12 @@ nrf24l01Packet_t RXPacket;
 nrf24l01Packet_t userRXPacket;
 nrf24l01Packet_t * lastTXPacket;
 
+RXCallback_t rxCallbackFunction = 0;
+
+
+void nrf24l01SetRXCallback(RXCallback_t passedRXCallback){
+    rxCallbackFunction = passedRXCallback;
+}
 
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
@@ -50,7 +56,7 @@ void nrf24l01ChangeTXPower(int addPower){
 
 void nrf24l01SetRXMode(unsigned char rxMode){
     
-    // If we want to change to RX mode
+//     If we want to change to RX mode
     if (rxMode){
         
         if (status.TX == TXSending){
@@ -91,8 +97,8 @@ void nrf24l01SetRXMode(unsigned char rxMode){
 }
 
 
-nrf24l01Packet_t * nrf24l01GetRXPacket(void){
-	return &userRXPacket;
+nrf24l01Packet_t nrf24l01GetRXPacket(void){
+	return userRXPacket;
 }
  
  void nrf24l01SetTXPipe(unsigned char pipe){
@@ -133,11 +139,16 @@ nrf24l01Packet_t * nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
+    int timeout = 2000;
     while (status.TX != TXIdle){
         
-        delayUs(1000);
-        nrf24l01ISR();
+        delayUs(10000);
+//        nrf24l01ISR();
         nrf24l01Service();
+        
+        if (!timeout--){
+            break;
+        }
     }
 	
     // Copy the packet from user space
@@ -153,12 +164,15 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
 
 void nrf24l01ISR(void){
     
+	
     // Get the current status of the radio
     status.statusRegister.byte = nrf24l01Send(n_R_REGISTER | n_STATUS, 0);
 	
     // Check id there is a received packet waiting
     if (status.statusRegister.RX_DR){
         
+        status.rxCount++;
+                
         // If we have processed the last packet, set this one to be accepted
         if (status.RX == RXIdle){
             status.RX = RXPending;
@@ -169,20 +183,21 @@ void nrf24l01ISR(void){
             status.statusRegister.RX_DR = 0;
         }
 		
+        // Run the service task to get the new packet
+		nrf24l01Service();
     }
 	
     
     // Check if the module has sent the current packet
 	if (status.statusRegister.TX_DS){
-
-		status.txCount++;
 		
         // If the last TX packet requested an ACK
         // Setup the radio and status to wait for one
 		if (lastTXPacket->packetData.ACKRequest){
 			status.TX = TXPendingACK;
-			status.retryCount = 0x10;
+			status.retryCount = 0xFF;
             nrf24l01SetRXMode(1);
+            status.ackPrepCount++;
 		}
         
         // If the TX packet was an ACK, swap back in to RX mode since we would
@@ -195,12 +210,14 @@ void nrf24l01ISR(void){
         else{
 			status.TX = TXIdle;
 		}
+		
+		// Run the service task to get the new packet
+		nrf24l01Service();
     }
 
-    // Run the service task to get the new packet
-	nrf24l01Service();
 
-    // Clear the interrupt on the nrf24l01
+    
+	// Clear the interrupt on the nrf24l01
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.statusRegister.byte);
 }
 
@@ -238,7 +255,7 @@ void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
 	
 	// Pull the CE pin high on the radio for at least 10us
 	nrf24l01CEHigh();
-	delayUs(12);
+	delayUs(120);
 	nrf24l01CELow();
 }
 
@@ -247,13 +264,6 @@ void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
 void nrf24l01Service(void){
     
     unsigned char i;
-            
-    if (status.TX == TXReady){
-		
-		// Setup the status as sending
-        status.TX = TXSending;	
-		nrf24l01SendTXBuffer(&TXPacket);
-    }
 	
     // If we were run in a loop and still waiting for an ACK
 	if (status.TX == TXPendingACK){
@@ -262,6 +272,14 @@ void nrf24l01Service(void){
         if (!status.retryCount--){
             status.TX = TXReady;
         }
+    }
+	
+	 if (status.TX == TXReady){
+		
+		// Setup the status as sending
+        status.TX = TXSending;	
+		
+		nrf24l01SendTXBuffer(&TXPacket);
     }
     
     // If the radio has a packet pending
@@ -317,14 +335,20 @@ void nrf24l01Service(void){
         // If this RX packet required an ACK, send one
         if (RXPacket.packetData.IsACK){
             
-            status.RX = RXIdle;
+			// All ACK packets should be ignored by the MPU
+			status.RX = RXIdle;
+			
             if (status.TX == TXPendingACK){
-
+				
                 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
-                            
+					
+                    rxCallbackFunction(&userRXPacket);
+					
                     status.TX = TXIdle;
                     // Set the radio into transmitter mode to sleep
 					nrf24l01SetRXMode(0);
+                    
+                    status.ackCount++;
                 }
             }
         }
@@ -343,6 +367,14 @@ void nrf24l01Service(void){
 		}
     }
 	
+	if (status.RX == RXReady){
+        
+        if (rxCallbackFunction){
+            rxCallbackFunction(&userRXPacket);
+        }
+        status.RX = RXIdle;
+        
+	}
 }
 
 void nrf24l01InitRegisters(){
@@ -467,6 +499,8 @@ void nrf24l01Init(void){
     
     status.TX = TXIdle;
     status.RX = RXIdle;
+    status.rxCount = 0;
+    status.ackCount = 0;
+    status.ackPrepCount = 0;
     status.txCount = 0;
 }
-

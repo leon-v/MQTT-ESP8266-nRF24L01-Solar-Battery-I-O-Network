@@ -74,26 +74,14 @@ float getADCValue(unsigned char channel){
 	return adcSum;
 }
 
-void checkRX(void){
-	if (status.RX == RXReady){
-		
-		nrf24l01Packet_t RXPacket = nrf24l01GetRXPacket();
-		
-//		RXPacket.packetData.IsACK = 0;
-//		RXPacket.packetData.ACKRequest = 0;
-//		RXPacket.packetData.
-	}
-}
 void sleepListren(unsigned int seconds){
 	
     
 	while(seconds--){
 		
 		sleepMs(100);
-		checkRX();
 
 		sleepMs(900);
-		checkRX();
 	}
 }
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
@@ -116,6 +104,31 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
 	sleepMs(1000);
 }
 
+float lastRX = 0;
+void rxCallback(nrf24l01Packet_t * rxPacket){
+    
+    
+    char * name = strtok(rxPacket->Message, "/");
+
+    if (name == NULL){
+        return;
+    }
+
+    char * sensor = strtok(NULL, "/");
+
+    if (sensor == NULL){
+        return;
+    }
+
+    char * value = strtok(NULL, "/");
+
+    if (value == NULL){
+        return;
+    }
+    
+    lastRX = atof(value);
+    
+}
 
 void loop(){
     
@@ -126,6 +139,7 @@ void loop(){
     sendMessage(&packet, "rxCount", (float) status.rxCount);
     sendMessage(&packet, "ackCount", (float) status.ackCount);
     sendMessage(&packet, "ackPrepCount", (float) status.ackPrepCount);
+    sendMessage(&packet, "lastRX", lastRX);
     
     
     // 19.086
@@ -165,7 +179,7 @@ void loop(){
      
      return (unsigned) result % 6;
  }
-
+ 
 void main(void) {
     
             
@@ -212,6 +226,8 @@ void main(void) {
     
     pipe = nrf24l01GetPipe(romData->name);
     nrf24l01SetRXPipe(pipe);
+    
+    nrf24l01SetRXCallback(rxCallback);
 
     /* Setup ADC */
     ADCON0bits.ADON = 0;

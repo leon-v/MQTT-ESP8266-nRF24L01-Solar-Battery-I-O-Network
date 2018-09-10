@@ -8,6 +8,12 @@ nrf24l01Packet_t RXPacket;
 nrf24l01Packet_t userRXPacket;
 nrf24l01Packet_t * lastTXPacket;
 
+RXCallback_t rxCallbackFunction = 0;
+
+
+void nrf24l01SetRXCallback(RXCallback_t passedRXCallback){
+    rxCallbackFunction = passedRXCallback;
+}
 
 unsigned char nrf24l01Send(unsigned char command,unsigned char data) {
     
@@ -133,11 +139,11 @@ nrf24l01Packet_t nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
-    int timeout = 200;
+    int timeout = 2000;
     while (status.TX != TXIdle){
         
         delayUs(10000);
-        nrf24l01ISR();
+//        nrf24l01ISR();
         nrf24l01Service();
         
         if (!timeout--){
@@ -169,7 +175,6 @@ void nrf24l01ISR(void){
                 
         // If we have processed the last packet, set this one to be accepted
         if (status.RX == RXIdle){
-			PORTCbits.RC5 = 1;
             status.RX = RXPending;
         }
         
@@ -337,7 +342,7 @@ void nrf24l01Service(void){
 				
                 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
 					
-					PORTCbits.RC5 = 0;
+                    rxCallbackFunction(&userRXPacket);
 					
                     status.TX = TXIdle;
                     // Set the radio into transmitter mode to sleep
@@ -362,10 +367,13 @@ void nrf24l01Service(void){
 		}
     }
 	
-	// DEBUG
-	// Do not remove this until you have made the callback function to handle the RX
 	if (status.RX == RXReady){
-		status.RX = RXIdle;
+        
+        if (rxCallbackFunction){
+            rxCallbackFunction(&userRXPacket);
+        }
+        status.RX = RXIdle;
+        
 	}
 }
 

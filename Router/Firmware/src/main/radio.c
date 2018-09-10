@@ -19,17 +19,52 @@ radioStatus_t radioGetStatus(void){
 
 int forwardCount = 0;
 
-static void radioInterruptTask(void *arg){
-    uint32_t gp_io;
+void rxCallback(nrf24l01Packet_t * rxPacket){
 
-    radioMessage_t radioRxMessage;
-	nrf24l01Packet_t * RXPacket = nrf24l01GetRXPacket();
+	radioMessage_t radioRxMessage;
 
 	char * name;
 	char * sensor;
 	char * value;
 
+	printf("Radio - Task - Message: %s\n", rxPacket->Message);
+	printf("Radio - Task - ACK Request: %d\n", rxPacket->packetData.ACKRequest);
+	printf("Radio - Task - TX Count: %d\n", status.txCount);
+
+	name = strtok(rxPacket->Message, "/");
+
+	if (name == NULL){
+		printf("Radio - Task - Invalid Name\n");
+		return;
+	}
+
+	sensor = strtok(NULL, "/");
+
+	if (sensor == NULL){
+		printf("Radio - Task - Invalid Sensor\n");
+		return;
+	}
+
+	value = strtok(NULL, "/");
+
+	if (value == NULL){
+		printf("Radio - Task - Invalid Value\n");
+		return;
+	}
+
+	strcpy(radioRxMessage.name, name);
+	strcpy(radioRxMessage.sensor, sensor);
+	strcpy(radioRxMessage.value, value);
+
+	xQueueSend(radioRXQueue, &radioRxMessage, 0);
+
+	radioStatus.nrf24l01In++;
+}
+static void radioInterruptTask(void *arg){
+    uint32_t gp_io;
+
 	nrf24l01Init();
+	nrf24l01SetRXCallback(rxCallback);
 	nrf24l01SetRXMode(1);
 
 
@@ -38,46 +73,8 @@ static void radioInterruptTask(void *arg){
     for (;;) {
 
         if (xQueueReceive(radioInterruptQueue, &gp_io, 100 / portTICK_RATE_MS)) {
-
         	printf("Int Start\n");
-
-    		if (status.RX == RXReady){
-
-    			printf("Radio - Task - Message: %s\n", RXPacket->Message);
-    			printf("Radio - Task - ACK Request: %d\n", RXPacket->packetData.ACKRequest);
-    			printf("Radio - Task - TX Count: %d\n", status.txCount);
-
-    			name = strtok(RXPacket->Message, "/");
-
-    			if (name == NULL){
-    				printf("Radio - Task - Invalid Name\n");
-    				continue;
-    			}
-
-		    	sensor = strtok(NULL, "/");
-
-		    	if (sensor == NULL){
-    				printf("Radio - Task - Invalid Sensor\n");
-    				continue;
-    			}
-
-		    	value = strtok(NULL, "/");
-
-		    	if (value == NULL){
-    				printf("Radio - Task - Invalid Value\n");
-    				continue;
-    			}
-
-		    	strcpy(radioRxMessage.name, name);
-		    	strcpy(radioRxMessage.sensor, sensor);
-		    	strcpy(radioRxMessage.value, value);
-
-		    	xQueueSend(radioRXQueue, &radioRxMessage, 0);
-
-    			radioStatus.nrf24l01In++;
-
-				status.RX = RXIdle;
-			}
+        	nrf24l01ISR();
     	}else{
     		nrf24l01ISR();
     		nrf24l01SetRXMode(1);
