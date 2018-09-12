@@ -63,12 +63,14 @@ void mqtt_connection(){
     /* Wait for the callback to set the WIFI_CONNECTED_BIT in the
        event group.
     */
+reconnect:
 
     printf("xEventGroupWaitBits ...\n");
     xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
     ESP_LOGI(TAG, "Connected to AP");
 
-reconnect:
+
+	vTaskDelay(500 / portTICK_RATE_MS);  //send every 1 seconds
 
     printf("NetworkInit ...\n");
     NetworkInit(&network);
@@ -93,6 +95,7 @@ reconnect:
     connectData.clientID.cstring = mqttClientID;
     connectData.cleansession = 1;
 
+    printf("MQTTConnect ...\n");
     if ((rc = MQTTConnect(&client, &connectData)) != 0) {
         printf("Return code from MQTT connect is %d\n", rc);
         goto fail_has_network;
@@ -100,16 +103,12 @@ reconnect:
         printf("MQTT Connected\n");
     }
 
-    #if defined(MQTT_TASK)
-
     if ((rc = MQTTStartTask(&client)) != pdPASS) {
         printf("Return code from start tasks is %d\n", rc);
         goto fail_has_network;
-    } else {
-        printf("Use MQTTStartTask\n");
     }
-
-	#endif
+       
+	printf("Use MQTTStartTask\n");
 
     while (++count) {
         MQTTMessage message;
@@ -144,11 +143,9 @@ fail_has_network:
 	
 	printf("disconnecting network\n");
 
-	network.disconnect(&network);
-
 fail:
 	
-	vTaskDelay(2000 / portTICK_RATE_MS);  //send every 1 seconds
+	vTaskDelay(500 / portTICK_RATE_MS);  //send every 1 seconds
 
 	printf("Restaring loop\n");
 

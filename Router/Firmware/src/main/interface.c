@@ -45,7 +45,7 @@ void nrf24l01InterfaceInit(void){
 	gpio_config_t interrupt;
 	interrupt.pin_bit_mask	= (1ULL << INTPIN);
 	interrupt.mode			= GPIO_MODE_INPUT;
-	interrupt.pull_up_en	= GPIO_PULLUP_ENABLE;
+	interrupt.pull_up_en	= GPIO_PULLUP_DISABLE;
 	interrupt.pull_down_en	= GPIO_PULLDOWN_DISABLE;
 	interrupt.intr_type		= GPIO_INTR_NEGEDGE;
 	gpio_config(&interrupt);
@@ -71,6 +71,7 @@ void nrf24l01InterfaceInit(void){
 	os_delay_us(65535);
 }
 
+
 unsigned char nrf24l01SPISend(unsigned char data){
 
 	// CS is low
@@ -83,19 +84,17 @@ unsigned char nrf24l01SPISend(unsigned char data){
 
 		// Set MOSI
 		if ( (data >> (bit - 1)) & 1) {
-			// High
-			gpio_set_level(MOSIPIN, 1);
+			gpio_set_level(MOSIPIN, 1);// High
 		}else{
-			// Low
-			gpio_set_level(MOSIPIN, 0);
+			gpio_set_level(MOSIPIN, 0);// Low
 		}
 
 		// Clock Up
-		os_delay_us(2);
+		os_delay_us(1);
 		gpio_set_level(CLKPIN, 1);
 
 		// Clock Down
-		os_delay_us(2);
+		os_delay_us(1);
 		gpio_set_level(CLKPIN, 0);
 
 		bit--;

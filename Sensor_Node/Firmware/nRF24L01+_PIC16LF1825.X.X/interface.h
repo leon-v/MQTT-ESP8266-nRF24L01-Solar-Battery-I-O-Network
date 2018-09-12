@@ -45,7 +45,7 @@ romData_t * romData = &romDataMap.RomData;
 #define delayUs(x) __delay_us(x)
 #define delayMs(x) __delay_ms(x)
 
-#define enableInterrupts(x) INTCONbits.GIE = x
+#define enableInterrupts(x) PIE0bits.INTE = x
 
 #define nrf24l01CELow() PORTAbits.RA0 = 0
 #define nrf24l01CEHigh() PORTAbits.RA0 = 1

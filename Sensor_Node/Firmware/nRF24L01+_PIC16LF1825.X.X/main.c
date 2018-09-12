@@ -10,6 +10,8 @@
 
 #include "HC-SR04.h"
 
+unsigned char pipe = 0;
+
 void interrupt ISR(void){
     
 //    if (IOCAFbits.IOCAF3){
@@ -18,8 +20,9 @@ void interrupt ISR(void){
 //    }
 	
     if (PIR0bits.INTF){
+		PIR0bits.INTF = 0;
         nrf24l01ISR();
-        PIR0bits.INTF = 0;
+        
     }
     
     if (PIR1bits.ADIF){
@@ -76,12 +79,9 @@ void sleepListren(unsigned int seconds){
     
 	while(seconds--){
 		
-//		nrf24l01SetRXMode(0);
 		sleepMs(100);
 
-//		nrf24l01SetRXMode(0);
 		sleepMs(900);
-		
 	}
 }
 void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
@@ -96,13 +96,39 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     strcat(packet->Message, ftoa(value, &ftoaStatus));
     
     packet->packetData.byte = 0;
+    packet->packetData.Pipe = pipe;
     packet->packetData.ACKRequest = 1;
     
 	nrf24l01SendPacket(packet);
     
-	sleepMs(2000);
+	sleepMs(1000);
 }
 
+float lastRX = 0;
+void rxCallback(nrf24l01Packet_t * rxPacket){
+    
+    
+    char * name = strtok(rxPacket->Message, "/");
+
+    if (name == NULL){
+        return;
+    }
+
+    char * sensor = strtok(NULL, "/");
+
+    if (sensor == NULL){
+        return;
+    }
+
+    char * value = strtok(NULL, "/");
+
+    if (value == NULL){
+        return;
+    }
+    
+    lastRX = atof(value);
+    
+}
 
 void loop(){
     
@@ -110,11 +136,10 @@ void loop(){
     
 //    sendMessage(&packet, "DIST", hcsr04GetAerage());
     
-//    sendMessage(&packet, "rloop", rloop);
-//    sendMessage(&packet, "rlimit", rlimit);
-//    sendMessage(&packet, "rcount", rcount);
-    
-    sendMessage(&packet, "COUNT", counter);
+    sendMessage(&packet, "rxCount", (float) status.rxCount);
+    sendMessage(&packet, "ackCount", (float) status.ackCount);
+    sendMessage(&packet, "ackPrepCount", (float) status.ackPrepCount);
+    sendMessage(&packet, "lastRX", lastRX);
     
     
     // 19.086
@@ -123,14 +148,7 @@ void loop(){
     // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
     sendMessage(&packet, "VBAT", getADCValue(0b000100) * 3.106382978723404);
     
-//	EEPROMWrite(0, (unsigned char) 22);
-    
 //    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
-    
-//	EEPROMWrite(0, status.TX);//0
-//	EEPROMWrite(1, status.RX);//0
-    
-//    sendMessage(&packet, "DBG3", counter);
 //    
     
     FVRCONbits.TSEN = 1;
@@ -144,32 +162,24 @@ void loop(){
     
 	sendMessage(&packet, "TEMP", ta);
     
-//    sendMessage(&packet, "DBG4", counter);
-    
 //    n_RF_SETUP_t rfSetup;
 //    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
 //    
 //    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-    
-//    sendMessage(&packet, "DBG1", 1);
-//    sendMessage(&packet, "DBG2", 2);
-//    sendMessage(&packet, "DBG3", 3);
-//    sendMessage(&packet, "DBG4", 4);
-//    sendMessage(&packet, "DBG5", 5);
 }
 
  unsigned char nrf24l01GetPipe(char * name){
-     unsigned char pipe = 0;
+     unsigned char result = 0;
      unsigned char i = 0;
     
      // Calculate a pipe from the name passed
      for (i = 0; i < strlen(name); i++){
-         pipe+= name[i];
+         result+= name[i];
      }
      
-     return (unsigned) pipe % 6;
+     return (unsigned) result % 6;
  }
-
+ 
 void main(void) {
     
             
@@ -193,6 +203,7 @@ void main(void) {
     TRISCbits.TRISC4 = 0;
     
     PORTCbits.RC4 = 0;
+	PORTCbits.RC5 = 0;
    
     
     // Pin 11 is int
@@ -213,10 +224,10 @@ void main(void) {
 	
     nrf24l01Init();
     
-    unsigned char pipe = nrf24l01GetPipe(romData->name);
-    nrf24l01SetTXPipe(pipe);
+    pipe = nrf24l01GetPipe(romData->name);
     nrf24l01SetRXPipe(pipe);
     
+    nrf24l01SetRXCallback(rxCallback);
 
     /* Setup ADC */
     ADCON0bits.ADON = 0;
@@ -251,7 +262,7 @@ void main(void) {
     
     
     /* Setup Interrupt Pin */
-//    RA2PPSbits.RA2PPS = 0b00010;// A2
+//	RA2PPSbits.RA2PPS = 0b00010;// A2
     TRISAbits.TRISA2 = 1;
     PIE0bits.INTE = 1;
     INTCONbits.INTEDG = 0;

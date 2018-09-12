@@ -14,6 +14,10 @@ typedef struct{
     n_STATUS_t statusRegister;
     n_CONFIG_t configRegister;
     unsigned char retryCount;
+    unsigned int ackPrepCount;
+    unsigned int rxCount;
+    unsigned int ackCount;
+    unsigned int txCount;
 } nrf24l01State_t;
 
 volatile nrf24l01State_t status;
@@ -52,6 +56,8 @@ typedef struct{
 //must employ frequency hopping or digital modulation techniques.
 #define RADIO_FREQUENCY 0
 
+typedef void (* RXCallback_t)(nrf24l01Packet_t *);
+
 unsigned char nrf24l01Send(unsigned char command,unsigned char data);
 void nrf24l01SetRXPipe(unsigned char pipe);
 void nrf24l01SetRXMode(unsigned char rxMode);
@@ -61,7 +67,7 @@ void nrf24l01Init(void);
 void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
-nrf24l01Packet_t *nrf24l01GetRXPacket(void);
+void nrf24l01SetRXCallback(RXCallback_t passedRXCallback);
 
 #endif	/* NRF24L01_H_ */
 
