@@ -54,7 +54,8 @@ void mqtt_connection(){
     MQTTPacket_connectData connectData = MQTTPacket_connectData_initializer;
     char mqttTopic[64];
     char mqttClientID[64];
-
+    Timer timer;
+    TimerInit(&timer);
 
 
 
@@ -103,41 +104,54 @@ reconnect:
         printf("MQTT Connected\n");
     }
 
-    if ((rc = MQTTStartTask(&client)) != pdPASS) {
-        printf("Return code from start tasks is %d\n", rc);
-        goto fail_has_network;
-    }
+    // if ((rc = MQTTStartTask(&client)) != pdPASS) {
+    //     printf("Return code from start tasks is %d\n", rc);
+    //     goto fail_has_network;
+    // }
        
-	printf("Use MQTTStartTask\n");
-
-    while (++count) {
-        MQTTMessage message;
-        char payload[30];
+	// printf("Use MQTTStartTask\n");
 
 
-        message.qos = QOS2;
-        message.retained = 0;
-        sprintf(payload, "%d", count);
-        message.payload = payload;
-        message.payloadlen = strlen(payload);
+	while (MQTTIsConnected(&client)) {
 
-        strcpy(mqttTopic, "radio/out/");
-		strcat(mqttTopic, uniqueID);
-		strcat(mqttTopic, "/Router/Count");
+		TimerCountdownMS(&timer, 500); /* Don't wait too long if no traffic is incoming */
 
-        if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
-            printf("Return code from MQTT publish is %d\n", rc);
-        } else {
-            printf("MQTT publish topic \"%s\", message number is %d\n", mqttTopic, count);
-        }
+		MutexLock(&client.mutex);
 
-        if (!MQTTIsConnected(&client)){
-        	printf("MQTT Not Connected\n");
-        	goto fail;
-        }
+		cycle(&client, &timer);
 
-        vTaskDelay(10000 / portTICK_RATE_MS);  //send every 1 seconds
-    }
+		MutexUnlock(&client.mutex);
+	}
+	
+
+  //   while (++count) {
+  //       MQTTMessage message;
+  //       char payload[30];
+
+
+  //       message.qos = QOS2;
+  //       message.retained = 0;
+  //       sprintf(payload, "%d", count);
+  //       message.payload = payload;
+  //       message.payloadlen = strlen(payload);
+
+  //       strcpy(mqttTopic, "radio/out/");
+		// strcat(mqttTopic, uniqueID);
+		// strcat(mqttTopic, "/Router/Count");
+
+  //       if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
+  //           printf("Return code from MQTT publish is %d\n", rc);
+  //       } else {
+  //           printf("MQTT publish topic \"%s\", message number is %d\n", mqttTopic, count);
+  //       }
+
+  //       if (!MQTTIsConnected(&client)){
+  //       	printf("MQTT Not Connected\n");
+  //       	goto fail;
+  //       }
+
+  //       vTaskDelay(10000 / portTICK_RATE_MS);  //send every 1 seconds
+  //   }
 
 fail_has_network:
 	
