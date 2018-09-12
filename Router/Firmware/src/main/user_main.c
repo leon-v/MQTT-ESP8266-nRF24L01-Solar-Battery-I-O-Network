@@ -19,7 +19,6 @@
 #include "radio.h"
 
 #include "mqtt_connection.h"
-#include "httpd.h"
 #include "httpd_custom.h"
 
 
@@ -73,9 +72,7 @@ void app_main() {
     }
 
     httpd_custom_init();
-    httpd_init();
     
-
-    radioInit();
     mqtt_connection_init();
+    radioInit();
 }

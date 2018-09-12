@@ -27,9 +27,9 @@ void rxCallback(nrf24l01Packet_t * rxPacket){
 	char * sensor;
 	char * value;
 
-	printf("Radio - Task - Message: %s\n", rxPacket->Message);
-	printf("Radio - Task - ACK Request: %d\n", rxPacket->packetData.ACKRequest);
-	printf("Radio - Task - TX Count: %d\n", status.txCount);
+	// printf("Radio - Task - Message: %s\n", rxPacket->Message);
+	// printf("Radio - Task - ACK Request: %d\n", rxPacket->packetData.ACKRequest);
+	// printf("Radio - Task - TX Count: %d\n", status.txCount);
 
 	name = strtok(rxPacket->Message, "/");
 
@@ -73,11 +73,11 @@ static void radioInterruptTask(void *arg){
     for (;;) {
 
         if (xQueueReceive(radioInterruptQueue, &gp_io, 10000 / portTICK_RATE_MS)) {
-        	printf("Int Start\n");
+        	// printf("Int Start\n");
         	nrf24l01ISR();
         	nrf24l01ISR();
     	}else{
-    		printf("Int Skip\n");
+    		// printf("Int Skip\n");
     		nrf24l01ISR();
     		// nrf24l01SetRXMode(1);
     	}

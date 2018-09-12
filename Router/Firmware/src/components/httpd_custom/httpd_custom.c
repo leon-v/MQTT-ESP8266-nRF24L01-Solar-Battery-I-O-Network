@@ -173,6 +173,7 @@ int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
 }
 
 void httpd_custom_init(void){
+	httpd_init();
 	http_set_ssi_handler( (tSSIHandler) &ssi_handler, ssi_tags, sizeof(ssi_tags));
 }
 

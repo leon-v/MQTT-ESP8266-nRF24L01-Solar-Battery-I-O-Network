@@ -190,6 +190,8 @@ void nrf24l01ISR(void){
     
     // Check if the module has sent the current packet
 	if (status.statusRegister.TX_DS){
+
+		status.txCount++;
 		
         // If the last TX packet requested an ACK
         // Setup the radio and status to wait for one
