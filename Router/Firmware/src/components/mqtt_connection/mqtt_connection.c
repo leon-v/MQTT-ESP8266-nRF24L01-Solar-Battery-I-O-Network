@@ -57,6 +57,9 @@ void mqtt_connection(){
     Timer timer;
     TimerInit(&timer);
 
+	radioMessage_t radioMessage;
+	EventBits_t mqttEventBits;
+	MQTTMessage message;
 
 
     printf("mqtt client thread starts\n");
@@ -114,7 +117,35 @@ reconnect:
 
 	while (MQTTIsConnected(&client)) {
 
-		TimerCountdownMS(&timer, 500); /* Don't wait too long if no traffic is incoming */
+		rc = xQueueReceive(radioGetRXQueue(), &radioMessage, 10 / portTICK_RATE_MS);
+
+		if (rc){
+
+			strcpy(mqttTopic, "radio/out/");
+			strcat(mqttTopic, uniqueID);
+			strcat(mqttTopic, "/");
+			strcat(mqttTopic, radioMessage.name);
+			strcat(mqttTopic, "/");
+			strcat(mqttTopic, radioMessage.sensor);
+
+			message.qos = QOS1;
+	    	message.retained = 0;
+			message.payload = &radioMessage.value;
+			message.payloadlen = strlen(message.payload);
+
+	    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
+		        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
+		        continue;
+		    }
+
+	    	mqttStatus.Publish++;
+
+	    	printf("mqtt radio: Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+		}
+
+
+		// Add sender queue here !
+		TimerCountdownMS(&timer, 10); /* Don't wait too long if no traffic is incoming */
 
 		MutexLock(&client.mutex);
 
@@ -139,52 +170,6 @@ fail:
     return;
 }
 
-void mqtt_connection_send_task(){
-
-	int rc = 0;
-	radioMessage_t radioMessage;
-	char mqttTopic[64];
-	EventBits_t mqttEventBits;
-	MQTTMessage message;
-
-	for (;;) {
-
-		if (!xQueueReceive(radioGetRXQueue(), &radioMessage, portMAX_DELAY)) {
-			printf("mqtt radio: Queue wait time out, restart listen.\n");
-			continue;
-		}
-
-		if (!MQTTIsConnected(&client)){
-			printf("mqtt radio: Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
-			mqttStatus.Dump++;
-			continue;
-		}
-
-		strcpy(mqttTopic, "radio/out/");
-		strcat(mqttTopic, uniqueID);
-		strcat(mqttTopic, "/");
-		strcat(mqttTopic, radioMessage.name);
-		strcat(mqttTopic, "/");
-		strcat(mqttTopic, radioMessage.sensor);
-
-		message.qos = QOS1;
-    	message.retained = 0;
-		message.payload = &radioMessage.value;
-		message.payloadlen = strlen(message.payload);
-
-    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
-	        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
-	        continue;
-	    }
-
-    	mqttStatus.Publish++;
-
-    	printf("mqtt radio: Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
-	}
-
-    vTaskDelete(NULL);
-    return;
-}
 
 
 void mqtt_connection_init(){
@@ -196,7 +181,5 @@ void mqtt_connection_init(){
 
 	MQTTMessageQueue = xQueueCreate(16, sizeof(radioMessage_t));
 
-	xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 9, &connectionTask);
-
-	xTaskCreate(&mqtt_connection_send_task, "mqtt_connection_send_task", 8192, NULL, 10, &publishTask);
+	xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 14, &connectionTask);
 }
