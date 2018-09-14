@@ -67,7 +67,9 @@ void mqtt_connection(){
 reconnect:
 
     printf("xEventGroupWaitBits ...\n");
+
     xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
+    
     ESP_LOGI(TAG, "Connected to AP");
 
 
@@ -85,6 +87,7 @@ reconnect:
     printf("NetworkConnect ...\n");
     if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
         printf("Return code from network connect %s:%d is %d\n", address, configFlash.mqttPort, rc);
+        mqttStatus.connectionFail++;
         goto fail;
     }
 
@@ -99,17 +102,14 @@ reconnect:
     printf("MQTTConnect ...\n");
     if ((rc = MQTTConnect(&client, &connectData)) != 0) {
         printf("Return code from MQTT connect is %d\n", rc);
-        goto fail_has_network;
-    } else {
-        printf("MQTT Connected\n");
+        mqttStatus.connectionFail++;
+        goto fail;
     }
+	
+	printf("MQTT Connected\n");
 
-    // if ((rc = MQTTStartTask(&client)) != pdPASS) {
-    //     printf("Return code from start tasks is %d\n", rc);
-    //     goto fail_has_network;
-    // }
-       
-	// printf("Use MQTTStartTask\n");
+    mqttStatus.connected = 1;
+    mqttStatus.connectionSuccess++;
 
 
 	while (MQTTIsConnected(&client)) {
@@ -123,37 +123,7 @@ reconnect:
 		MutexUnlock(&client.mutex);
 	}
 	
-
-  //   while (++count) {
-  //       MQTTMessage message;
-  //       char payload[30];
-
-
-  //       message.qos = QOS2;
-  //       message.retained = 0;
-  //       sprintf(payload, "%d", count);
-  //       message.payload = payload;
-  //       message.payloadlen = strlen(payload);
-
-  //       strcpy(mqttTopic, "radio/out/");
-		// strcat(mqttTopic, uniqueID);
-		// strcat(mqttTopic, "/Router/Count");
-
-  //       if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
-  //           printf("Return code from MQTT publish is %d\n", rc);
-  //       } else {
-  //           printf("MQTT publish topic \"%s\", message number is %d\n", mqttTopic, count);
-  //       }
-
-  //       if (!MQTTIsConnected(&client)){
-  //       	printf("MQTT Not Connected\n");
-  //       	goto fail;
-  //       }
-
-  //       vTaskDelay(10000 / portTICK_RATE_MS);  //send every 1 seconds
-  //   }
-
-fail_has_network:
+	mqttStatus.connected = 0;
 	
 	printf("disconnecting network\n");
 
@@ -168,37 +138,6 @@ fail:
     vTaskDelete(NULL);
     return;
 }
-
-
-/*
-void MQTTRun(void* parm)
-{
-    Timer timer;
-    MQTTClient* c = (MQTTClient*)parm;
-    int rc = 0;
-
-    TimerInit(&timer);
-
-    while (1) {
-        TimerCountdownMS(&timer, 500); // Don't wait too long if no traffic is incoming
-
-#if defined(MQTT_TASK)
-        MutexLock(&c->mutex);
-#endif
-        rc = cycle(c, &timer);
-#if defined(MQTT_TASK)
-        MutexUnlock(&c->mutex);
-#endif
-        if (rc < 0){
-        	break;
-        }
-
-    }
-
-    vTaskDelete(NULL);
-    return;
-}
-*/
 
 void mqtt_connection_send_task(){
 
