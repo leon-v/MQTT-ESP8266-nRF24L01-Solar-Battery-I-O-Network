@@ -44,6 +44,7 @@ typedef union{
         unsigned ACKRequest : 1;
         unsigned IsACK      : 1;
         unsigned Pipe		: 3;
+        unsigned Index      : 1;
     };
 } packetData_t;
 
