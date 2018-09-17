@@ -101,7 +101,7 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     
 	nrf24l01SendPacket(packet);
     
-	sleepMs(1000);
+	sleepMs(5000);
 }
 
 float lastRX = 0;
