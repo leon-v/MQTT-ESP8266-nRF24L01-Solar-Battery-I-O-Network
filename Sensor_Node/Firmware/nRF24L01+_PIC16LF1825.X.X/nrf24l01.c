@@ -139,16 +139,16 @@ nrf24l01Packet_t nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
-//    int timeout = 2000;
+    unsigned char timeout = 0xFF;
     while (status.TX != TXIdle){
         
-        delayUs(1000);
+        sleepMs(10);
         nrf24l01ISR();
         nrf24l01Service();
         
-//        if (!timeout--){
-//            break;
-//        }
+        if (!timeout--){
+            break;
+        }
     }
 	
     // Copy the packet from user space
