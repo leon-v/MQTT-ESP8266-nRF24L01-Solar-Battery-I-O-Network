@@ -147,7 +147,7 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
         nrf24l01Service();
         
         if (!timeout--){
-            break;
+            exception(1);
         }
     }
 	
