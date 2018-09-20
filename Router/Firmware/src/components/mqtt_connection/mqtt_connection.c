@@ -50,12 +50,17 @@ void mqtt_connection(){
     unsigned char sendbuf[80] = {0};
     unsigned char readbuf[80] = {0};
     int rc = 0;
-    int count = 0;
+    unsigned int count = 0;
+    char failLimit = 0;
     MQTTPacket_connectData connectData = MQTTPacket_connectData_initializer;
     char mqttTopic[64];
     char mqttClientID[64];
+    Timer timer;
+    TimerInit(&timer);
 
-
+	radioMessage_t radioMessage;
+	EventBits_t mqttEventBits;
+	MQTTMessage message;
 
 
     printf("mqtt client thread starts\n");
@@ -65,12 +70,18 @@ void mqtt_connection(){
     */
 reconnect:
 
+	if (failLimit > 20){
+		esp_restart();
+	}
+
     printf("xEventGroupWaitBits ...\n");
+
     xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
+    
     ESP_LOGI(TAG, "Connected to AP");
 
 
-	vTaskDelay(500 / portTICK_RATE_MS);  //send every 1 seconds
+	vTaskDelay(500 / portTICK_RATE_MS);  //send every 0.5 seconds
 
     printf("NetworkInit ...\n");
     NetworkInit(&network);
@@ -84,6 +95,8 @@ reconnect:
     printf("NetworkConnect ...\n");
     if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
         printf("Return code from network connect %s:%d is %d\n", address, configFlash.mqttPort, rc);
+        mqttStatus.connectionFail++;
+        failLimit++;
         goto fail;
     }
 
@@ -98,48 +111,80 @@ reconnect:
     printf("MQTTConnect ...\n");
     if ((rc = MQTTConnect(&client, &connectData)) != 0) {
         printf("Return code from MQTT connect is %d\n", rc);
-        goto fail_has_network;
-    } else {
-        printf("MQTT Connected\n");
+        mqttStatus.connectionFail++;
+        failLimit++;
+        goto fail;
     }
+	
+	printf("MQTT Connected\n");
 
-    if ((rc = MQTTStartTask(&client)) != pdPASS) {
-        printf("Return code from start tasks is %d\n", rc);
-        goto fail_has_network;
-    }
-       
-	printf("Use MQTTStartTask\n");
-
-    while (++count) {
-        MQTTMessage message;
-        char payload[30];
+    mqttStatus.connected = 1;
+    mqttStatus.connectionSuccess++;
+    failLimit = 0;
 
 
-        message.qos = QOS2;
-        message.retained = 0;
-        sprintf(payload, "%d", count);
-        message.payload = payload;
-        message.payloadlen = strlen(payload);
+	while (MQTTIsConnected(&client)) {
 
-        strcpy(mqttTopic, "radio/out/");
-		strcat(mqttTopic, uniqueID);
-		strcat(mqttTopic, "/Router/Count");
+		rc = xQueueReceive(radioGetRXQueue(), &radioMessage, 50 / portTICK_RATE_MS);
 
-        if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
-            printf("Return code from MQTT publish is %d\n", rc);
-        } else {
-            printf("MQTT publish topic \"%s\", message number is %d\n", mqttTopic, count);
-        }
+		if (rc){
 
-        if (!MQTTIsConnected(&client)){
-        	printf("MQTT Not Connected\n");
-        	goto fail;
-        }
+			strcpy(mqttTopic, "radio/out/");
+			strcat(mqttTopic, uniqueID);
+			strcat(mqttTopic, "/");
+			strcat(mqttTopic, radioMessage.name);
+			strcat(mqttTopic, "/");
+			strcat(mqttTopic, radioMessage.sensor);
 
-        vTaskDelay(10000 / portTICK_RATE_MS);  //send every 1 seconds
-    }
+			message.qos = QOS1;
+	    	message.retained = 0;
+			message.payload = &radioMessage.value;
+			message.payloadlen = strlen(message.payload);
 
-fail_has_network:
+	    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
+		        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
+		        continue;
+		    }
+
+	    	mqttStatus.Publish++;
+
+	    	printf("mqtt radio: Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
+		}
+
+		count++;
+
+		if ( (count % 1000) == 0) {
+
+			strcpy(mqttTopic, "radio/status/");
+			strcat(mqttTopic, uniqueID);
+			strcat(mqttTopic, "/Status/loopCount");
+
+			message.qos = QOS0;
+	    	message.retained = 0;
+	    	sprintf(message.payload, "%d\n", count);
+			message.payloadlen = strlen(message.payload);
+
+	    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
+		        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
+		        continue;
+		    }
+
+	    	mqttStatus.Publish++;
+		}
+
+
+
+		// Add sender queue here !
+		TimerCountdownMS(&timer, 50); /* Don't wait too long if no traffic is incoming */
+
+		MutexLock(&client.mutex);
+
+		cycle(&client, &timer);
+
+		MutexUnlock(&client.mutex);
+	}
+	
+	mqttStatus.connected = 0;
 	
 	printf("disconnecting network\n");
 
@@ -156,83 +201,6 @@ fail:
 }
 
 
-/*
-void MQTTRun(void* parm)
-{
-    Timer timer;
-    MQTTClient* c = (MQTTClient*)parm;
-    int rc = 0;
-
-    TimerInit(&timer);
-
-    while (1) {
-        TimerCountdownMS(&timer, 500); // Don't wait too long if no traffic is incoming
-
-#if defined(MQTT_TASK)
-        MutexLock(&c->mutex);
-#endif
-        rc = cycle(c, &timer);
-#if defined(MQTT_TASK)
-        MutexUnlock(&c->mutex);
-#endif
-        if (rc < 0){
-        	break;
-        }
-
-    }
-
-    vTaskDelete(NULL);
-    return;
-}
-*/
-
-void mqtt_connection_send_task(){
-
-	int rc = 0;
-	radioMessage_t radioMessage;
-	char mqttTopic[64];
-	EventBits_t mqttEventBits;
-	MQTTMessage message;
-
-	for (;;) {
-
-		if (!xQueueReceive(radioGetRXQueue(), &radioMessage, portMAX_DELAY)) {
-			printf("mqtt radio: Queue wait time out, restart listen.\n");
-			continue;
-		}
-
-		if (!MQTTIsConnected(&client)){
-			printf("mqtt radio: Dump: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
-			mqttStatus.Dump++;
-			continue;
-		}
-
-		strcpy(mqttTopic, "radio/out/");
-		strcat(mqttTopic, uniqueID);
-		strcat(mqttTopic, "/");
-		strcat(mqttTopic, radioMessage.name);
-		strcat(mqttTopic, "/");
-		strcat(mqttTopic, radioMessage.sensor);
-
-		message.qos = QOS1;
-    	message.retained = 0;
-		message.payload = &radioMessage.value;
-		message.payloadlen = strlen(message.payload);
-
-    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
-	        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
-	        continue;
-	    }
-
-    	mqttStatus.Publish++;
-
-    	printf("mqtt radio: Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
-	}
-
-    vTaskDelete(NULL);
-    return;
-}
-
 
 void mqtt_connection_init(){
 
@@ -241,9 +209,7 @@ void mqtt_connection_init(){
 
 	sprintf(uniqueID, "%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
-	MQTTMessageQueue = xQueueCreate(16, sizeof(radioMessage_t));
+	MQTTMessageQueue = xQueueCreate(256, sizeof(radioMessage_t));
 
-	xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 9, &connectionTask);
-
-	xTaskCreate(&mqtt_connection_send_task, "mqtt_connection_send_task", 8192, NULL, 10, &publishTask);
+	xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 14, &connectionTask);
 }

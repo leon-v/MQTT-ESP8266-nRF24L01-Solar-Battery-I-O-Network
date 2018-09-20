@@ -139,15 +139,15 @@ nrf24l01Packet_t nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
-    int timeout = 2000;
+    unsigned char timeout = 0xFF;
     while (status.TX != TXIdle){
         
-        delayUs(10000);
-//        nrf24l01ISR();
+        sleepMs(10);
+        nrf24l01ISR();
         nrf24l01Service();
         
         if (!timeout--){
-            break;
+            exception(1);
         }
     }
 	
@@ -221,7 +221,11 @@ void nrf24l01ISR(void){
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.statusRegister.byte);
 }
 
+unsigned char nrf24l01Index = 0;
 void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
+    
+    nrf24l01Index++;
+    packet->packetData.Index = nrf24l01Index;
 	
     // Store the packet in a local pointer so other methods can use it
 	lastTXPacket = packet;
@@ -502,5 +506,6 @@ void nrf24l01Init(void){
     status.rxCount = 0;
     status.ackCount = 0;
     status.ackPrepCount = 0;
+    status.txCount = 0;
 }
 

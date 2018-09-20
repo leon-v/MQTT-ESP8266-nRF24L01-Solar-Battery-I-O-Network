@@ -37,8 +37,6 @@ void app_main() {
 
     configFlashInit();
 
-    // configFlashSave();
-
     wifiInit();
 
     unsigned char apMode = 0;
