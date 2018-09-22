@@ -36,33 +36,8 @@ Install Ubuntu 18 from the Misrosoft store.
 In a command prompt:
 ```
 >bash
->$sudo apt install dos2unix make python
+>$sudo apt install dos2unix make python libncurses5-dev libncursesw5-dev
 
-```
-eading package lists... Done
-Building dependency tree
-Reading state information... Done
-Suggested packages:
-  make-doc
-The following NEW packages will be installed:
-  dos2unix make
-0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
-Need to get 220 kB of archives.
-After this operation, 671 kB of additional disk space will be used.
-Get:1 http://archive.ubuntu.com/ubuntu xenial/main amd64 make amd64 4.1-6 [151 kB]
-Get:2 http://archive.ubuntu.com/ubuntu xenial/universe amd64 dos2unix amd64 6.0.4-1 [68.7 kB]
-Fetched 220 kB in 2s (85.0 kB/s)
-Selecting previously unselected package make.
-(Reading database ... 25474 files and directories currently installed.)
-Preparing to unpack .../archives/make_4.1-6_amd64.deb ...
-Unpacking make (4.1-6) ...
-Selecting previously unselected package dos2unix.
-Preparing to unpack .../dos2unix_6.0.4-1_amd64.deb ...
-Unpacking dos2unix (6.0.4-1) ...
-Processing triggers for man-db (2.7.5-1) ...
-Setting up make (4.1-6) ...
-Setting up dos2unix (6.0.4-1) ...
-```
 >$sudo ln -sv /usr/bin/python3 /usr/bin/python
 
 
