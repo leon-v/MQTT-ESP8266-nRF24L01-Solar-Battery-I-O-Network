@@ -153,24 +153,24 @@ reconnect:
 
 		count++;
 
-		if ( (count % 1000) == 0) {
+		// if ( (count % 1000) == 0) {
 
-			strcpy(mqttTopic, "radio/status/");
-			strcat(mqttTopic, uniqueID);
-			strcat(mqttTopic, "/Status/loopCount");
+		// 	strcpy(mqttTopic, "radio/status/");
+		// 	strcat(mqttTopic, uniqueID);
+		// 	strcat(mqttTopic, "/Status/loopCount");
 
-			message.qos = QOS0;
-	    	message.retained = 0;
-	    	sprintf(message.payload, "%d\n", count);
-			message.payloadlen = strlen(message.payload);
+		// 	message.qos = QOS0;
+	 //    	message.retained = 0;
+	 //    	sprintf(message.payload, "%d\n", count);
+		// 	message.payloadlen = strlen(message.payload);
 
-	    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
-		        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
-		        continue;
-		    }
+	 //    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
+		//         printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
+		//         continue;
+		//     }
 
-	    	mqttStatus.Publish++;
-		}
+	 //    	mqttStatus.Publish++;
+		// }
 
 
 
