@@ -21,8 +21,9 @@ void interrupt ISR(void){
 	
     if (PIR0bits.INTF){
 		PIR0bits.INTF = 0;
-        nrf24l01ISR();
-        
+		while (!PORTAbits.RA2){
+			nrf24l01ISR();
+		}
     }
     
     if (PIR1bits.ADIF){
@@ -134,6 +135,11 @@ float vbatt;
 void loop(){
     
     nrf24l01Packet_t packet;
+	
+	
+	n_RF_SETUP_t rfSetup;
+    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+	sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
     
 //    sendMessage(&packet, "DIST", hcsr04GetAerage());
     
@@ -153,7 +159,7 @@ checkvbatt:
     sendMessage(&packet, "VBAT", vbatt);
     
     if (vbatt < 3.0){
-        sleepMs(256000);
+        sleepMs(65535);
         goto checkvbatt;
     }
     
@@ -170,11 +176,6 @@ checkvbatt:
     float ta = (vt / tc) - (vf / tc) - tempOffset;
     
 	sendMessage(&packet, "TEMP", ta);
-    
-//    n_RF_SETUP_t rfSetup;
-//    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
-//    
-//    sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
 }
 
  unsigned char nrf24l01GetPipe(char * name){
