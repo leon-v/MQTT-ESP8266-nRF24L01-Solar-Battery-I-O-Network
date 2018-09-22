@@ -40,7 +40,6 @@ typedef union{
     };
     struct{
     	unsigned RPD    	: 1;
-		unsigned ACKRPD    	: 1;
         unsigned ACKRequest : 1;
         unsigned IsACK      : 1;
         unsigned Pipe		: 3;

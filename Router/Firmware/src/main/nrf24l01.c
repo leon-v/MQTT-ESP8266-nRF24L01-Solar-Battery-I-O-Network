@@ -95,11 +95,6 @@ void nrf24l01SetRXMode(unsigned char rxMode){
         }
     }
 }
-
-
-nrf24l01Packet_t nrf24l01GetRXPacket(void){
-	return userRXPacket;
-}
  
  void nrf24l01SetTXPipe(unsigned char pipe){
     
@@ -139,11 +134,16 @@ nrf24l01Packet_t nrf24l01GetRXPacket(void){
 
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     
+    unsigned char timeout = 0xFF;
     while (status.TX != TXIdle){
         
-        delayUs(1000);
+        sleepMs(10);
         nrf24l01ISR();
         nrf24l01Service();
+        
+        if (!timeout--){
+            exception(1);
+        }
     }
 	
     // Copy the packet from user space
@@ -177,16 +177,11 @@ void nrf24l01ISR(void){
         else{
             status.statusRegister.RX_DR = 0;
         }
-		
-        // Run the service task to get the new packet
-		nrf24l01Service();
     }
 	
     
     // Check if the module has sent the current packet
 	if (status.statusRegister.TX_DS){
-
-		status.txCount++;
 		
         // If the last TX packet requested an ACK
         // Setup the radio and status to wait for one
@@ -207,12 +202,10 @@ void nrf24l01ISR(void){
         else{
 			status.TX = TXIdle;
 		}
-		
-		// Run the service task to get the new packet
-		nrf24l01Service();
     }
-
-
+	
+	// Run the service task to get the new packet
+	nrf24l01Service();
     
 	// Clear the interrupt on the nrf24l01
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.statusRegister.byte);
@@ -271,6 +264,7 @@ void nrf24l01Service(void){
         
         // Decrement the retry count and if its 0, setup to resend
         if (!status.retryCount--){
+			nrf24l01ChangeTXPower(1);
             status.TX = TXReady;
         }
     }
@@ -343,7 +337,9 @@ void nrf24l01Service(void){
 				
                 if (strcmp(RXPacket.Message, TXPacket.Message) == 0){
 					
-                    rxCallbackFunction(&userRXPacket);
+					if (RXPacket.packetData.RPD){
+						nrf24l01ChangeTXPower(-1);
+					}
 					
                     status.TX = TXIdle;
                     // Set the radio into transmitter mode to sleep
