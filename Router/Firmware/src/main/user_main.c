@@ -62,6 +62,8 @@ void app_main() {
 		apMode = 1;
 	}
     
+    apMode = 0;
+
     if (apMode){
 		wifiAccessPointInit();		
     }
