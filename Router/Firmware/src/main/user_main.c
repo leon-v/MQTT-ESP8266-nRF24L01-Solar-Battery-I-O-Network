@@ -19,6 +19,7 @@
 #include "radio.h"
 
 #include "mqtt_connection.h"
+#include "elastic.h"
 #include "httpd_custom.h"
 
 
@@ -73,4 +74,5 @@ void app_main() {
     
     mqtt_connection_init();
     radioInit();
+    elasticInit();
 }
