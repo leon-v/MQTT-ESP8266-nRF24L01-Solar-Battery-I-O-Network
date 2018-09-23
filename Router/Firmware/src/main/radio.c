@@ -56,7 +56,7 @@ void rxCallback(nrf24l01Packet_t * rxPacket){
 
 
 	xQueueSend(mqttGetPublishQueue(), &radioRxMessage, 0);
-	xQueueSend(elasticGetPublishQueue(), &radioRxMessage, 0);
+	// xQueueSend(elasticGetPublishQueue(), &radioRxMessage, 0);
 
 	radioStatus.nrf24l01In++;
 }

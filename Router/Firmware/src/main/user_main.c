@@ -62,19 +62,17 @@ void app_main() {
 		apMode = 1;
 	}
     
-    apMode = 0;
 
     if (apMode){
 		wifiAccessPointInit();		
     }
     else{
 		wifiClientInit();
-	    
+    
+	    mqtt_connection_init();
+	    radioInit();
+	    // elasticInit();   
     }
 
     httpd_custom_init();
-    
-    mqtt_connection_init();
-    radioInit();
-    elasticInit();
 }
