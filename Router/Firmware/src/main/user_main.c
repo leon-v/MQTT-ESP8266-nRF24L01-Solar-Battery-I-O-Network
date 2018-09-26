@@ -68,11 +68,12 @@ void app_main() {
     }
     else{
 		wifiClientInit();
-    
-	    mqtt_connection_init();
-	    radioInit();
-	    // elasticInit();   
     }
 
     httpd_custom_init();
+
+    
+    mqtt_connection_init();
+    radioInit();
+    // elasticInit();
 }

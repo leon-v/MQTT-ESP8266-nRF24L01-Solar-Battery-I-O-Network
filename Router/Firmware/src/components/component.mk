@@ -7,5 +7,3 @@ COMPONENT_ADD_INCLUDEDIRS += httpd_custom mqtt_connection elastic\
 
 COMPONENT_SRCDIRS += httpd_custom mqtt_connection elastic\
 	../../ESP8266_RTOS_SDK/components/lwip/lwip/src/apps/httpd
-
-# COMPONENT_EMBED_TXTFILES := elastic/server_root_cert.pem

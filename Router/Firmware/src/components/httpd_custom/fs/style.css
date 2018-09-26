@@ -18,15 +18,16 @@ th{
 	width:125px;
 	font-size: 14px;
 }
-input, select, button{
+input, select, button, textarea{
 	background-color:#262626;
 	color: #ede5ff;
 	padding:0px;
 	margin:0px;
 	border: 0;
 	font-size: 14px;
-	width:100%%;
+	width:100%;
 }
+
 button{
 	margin-top:5px;
 	

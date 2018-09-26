@@ -29,6 +29,8 @@ static const char * ssi_tags[] = {
     "mqttDump",					//11
 
     "radioNrf24l01In",			//12
+
+    "elasticCert"				//13
 };
 
 typedef struct{
@@ -97,6 +99,7 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 
 #define HTML_INPUT_STRING "<input type=\"%s\" name=\"%s\" value=\"%s\" />"
 #define HTML_INPUT_INT "<input type=\"%s\" name=\"%s\" value=\"%u\" />"
+#define HTML_TEXTAREA "<textarea rows=\"%d\" name=\"%s\" >%s</textarea>"
 #define HTML_ULONG "%lu"
 #define HTML_UINT "%u"
 /* Server-Side Include (SSI) handler .......................................*/
@@ -162,6 +165,10 @@ int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
 
 		case 12:
 			sprintf(pcInsert, HTML_ULONG, radioStatus.nrf24l01In);
+			break;
+
+		case 13:
+			sprintf(pcInsert, HTML_TEXTAREA, 30, "elasticCert", configFlash.elasticCert);
 			break;
 
 		default:
@@ -248,6 +255,11 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 		value = httpServerGetTokenValue(&post, "debugLevel");
 		if (value){
 			configFlash.debugLevel = atoi(value);
+		}
+
+		value = httpServerGetTokenValue(&post, "elasticCert");
+		if (value){
+			strcpy(configFlash.elasticCert, value);
 		}
 
 		configFlashSave();
