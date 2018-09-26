@@ -1,5 +1,5 @@
 
-
+#include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -195,6 +195,31 @@ err_t httpd_post_begin(void *connection, const char *uri, const char *http_reque
 	return ERR_OK;
 }
 
+int urlDecode(char *str) {
+    unsigned int i;
+    char tmp[2048];
+    char *ptr = tmp;
+    memset(tmp, 0, sizeof(tmp));
+
+    for (i=0; i < strlen(str); i++) {
+        if (str[i] != '%') {
+            *ptr++ = str[i];
+            continue;
+        }
+
+        if (!isdigit(str[i+1]) || !isdigit(str[i+2])) {
+            *ptr++ = str[i];
+            continue;
+        }
+
+        *ptr++ = ((str[i+1] - '0') << 4) | (str[i+2] - '0');
+		i += 2;
+    }
+    *ptr = '\0';
+    strcpy(str, tmp);
+    return 0;
+}
+
 err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 	printf("httpd_post_receive_data\n");
 
@@ -213,17 +238,17 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 
 		value = httpServerGetTokenValue(&post, "wifiSSID");
 		if (value){
-			strcpy(configFlash.wifiSSID, value);
+			strncpy(configFlash.wifiSSID, value, sizeof(configFlash.wifiSSID));
 		}
 
 		value = httpServerGetTokenValue(&post, "wifiPassword");
 		if (value){
-			strcpy(configFlash.wifiPassword, value);
+			strncpy(configFlash.wifiPassword, value, sizeof(configFlash.wifiPassword));
 		}
 
 		value = httpServerGetTokenValue(&post, "mqttHost");
 		if (value){
-			strcpy(configFlash.mqttHost, value);
+			strncpy(configFlash.mqttHost, value, sizeof(configFlash.mqttHost));
 		}
 
 		value = httpServerGetTokenValue(&post, "mqttPort");
@@ -238,13 +263,13 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 
 		value = httpServerGetTokenValue(&post, "mqttUsername");
 		if (value){
-			strcpy(configFlash.mqttUsername, value);
+			strncpy(configFlash.mqttUsername, value, sizeof(configFlash.mqttUsername));
 		}
 
 		value = httpServerGetTokenValue(&post, "mqttPassword");
 		printf("mqttPassword: '%s'\n", value);
 		if (value){
-			strcpy(configFlash.mqttPassword, value);
+			strncpy(configFlash.mqttPassword, value, sizeof(configFlash.mqttPassword));
 		}
 
 		value = httpServerGetTokenValue(&post, "mqttVersion");
@@ -258,8 +283,9 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 		}
 
 		value = httpServerGetTokenValue(&post, "elasticCert");
+		urlDecode(value);
 		if (value){
-			strcpy(configFlash.elasticCert, value);
+			strncpy(configFlash.elasticCert, value, sizeof(configFlash.elasticCert));
 		}
 
 		configFlashSave();
