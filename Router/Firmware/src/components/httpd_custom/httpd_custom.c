@@ -195,29 +195,33 @@ err_t httpd_post_begin(void *connection, const char *uri, const char *http_reque
 	return ERR_OK;
 }
 
-int urlDecode(char *str) {
-    unsigned int i;
-    char tmp[2048];
-    char *ptr = tmp;
-    memset(tmp, 0, sizeof(tmp));
+void urlDecode(char * input, int length) {
+    
+    char * output = input;
+    char hex[3] = "\0\0\0";
 
-    for (i=0; i < strlen(str); i++) {
-        if (str[i] != '%') {
-            *ptr++ = str[i];
-            continue;
-        }
+    while (input[0] != '\0') {
 
-        if (!isdigit(str[i+1]) || !isdigit(str[i+2])) {
-            *ptr++ = str[i];
-            continue;
-        }
+    	if (!length--){
+    		break;
+    	}
 
-        *ptr++ = ((str[i+1] - '0') << 4) | (str[i+2] - '0');
-		i += 2;
+    	if (input[0] != '%') {
+    		output[0] = input[0];
+    		input+= 1;
+    	}
+
+    	else {
+    		hex[0] = input[1];
+    		hex[1] = input[2];
+    		input[0] = strtol(hex, NULL, 16);
+    		input+= 3;
+    	}
+
+    	output+= 1;
     }
-    *ptr = '\0';
-    strcpy(str, tmp);
-    return 0;
+
+    output[0] = '\0';
 }
 
 err_t httpd_post_receive_data(void *connection, struct pbuf *p){
@@ -283,8 +287,12 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 		}
 
 		value = httpServerGetTokenValue(&post, "elasticCert");
-		urlDecode(value);
+		
 		if (value){
+
+			urlDecode(value, sizeof(configFlash.elasticCert));
+			printf("VALUE: %s\n", value);
+
 			strncpy(configFlash.elasticCert, value, sizeof(configFlash.elasticCert));
 		}
 
