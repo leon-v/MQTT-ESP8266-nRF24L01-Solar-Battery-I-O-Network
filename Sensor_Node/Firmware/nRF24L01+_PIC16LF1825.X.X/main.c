@@ -159,9 +159,12 @@ checkvbatt:
     sendMessage(&packet, "VBAT", vbatt);
     
     if (vbatt < 3.0){
+        
+        nrf24l01PowerOn(0);
         sleepMs(65535);
         goto checkvbatt;
     }
+    nrf24l01PowerOn(1);
     
 //    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 //    

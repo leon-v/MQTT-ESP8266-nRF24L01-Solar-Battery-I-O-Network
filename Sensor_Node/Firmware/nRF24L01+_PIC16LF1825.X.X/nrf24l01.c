@@ -137,7 +137,7 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     unsigned char timeout = 0xFF;
     while (status.TX != TXIdle){
         
-        sleepMs(10);
+        sleepMs(100);
         nrf24l01ISR();
         nrf24l01Service();
         
@@ -187,7 +187,7 @@ void nrf24l01ISR(void){
         // Setup the radio and status to wait for one
 		if (lastTXPacket->packetData.ACKRequest){
 			status.TX = TXPendingACK;
-			status.retryCount = 0xFF;
+			status.retryCount = 5;
             nrf24l01SetRXMode(1);
             status.ackPrepCount++;
 		}
@@ -474,6 +474,11 @@ void nrf24l01InitRegisters(){
 	status.configRegister.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
 
+}
+
+void nrf24l01PowerOn(unsigned char on){
+    status.configRegister.PWR_UP = on;
+    nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
 }
 
 void nrf24l01Init(void){

@@ -125,7 +125,7 @@ reconnect:
 
 	while (MQTTIsConnected(&client)) {
 
-		rc = xQueueReceive(radioGetRXQueue(), &radioMessage, 50 / portTICK_RATE_MS);
+		rc = xQueueReceive(radioGetRXQueue(), &radioMessage, 100 / portTICK_RATE_MS);
 
 		if (rc){
 
@@ -151,7 +151,7 @@ reconnect:
 	    	printf("mqtt radio: Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
 		}
 
-		count++;
+		// count++;
 
 		// if ( (count % 1000) == 0) {
 
@@ -171,7 +171,6 @@ reconnect:
 
 	 //    	mqttStatus.Publish++;
 		// }
-
 
 
 		// Add sender queue here !
