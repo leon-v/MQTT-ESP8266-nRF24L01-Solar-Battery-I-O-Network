@@ -161,7 +161,13 @@ checkvbatt:
     if (vbatt < 3.0){
         
         nrf24l01PowerOn(0);
-        sleepMs(65535);
+        
+        WDTCONbits.WDTPS = 0b10010;
+        
+        SLEEP();
+        NOP();
+        NOP();
+        
         goto checkvbatt;
     }
     nrf24l01PowerOn(1);
