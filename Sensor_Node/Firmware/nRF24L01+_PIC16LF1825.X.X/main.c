@@ -99,7 +99,8 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     packet->packetData.byte = 0;
     packet->packetData.Pipe = pipe;
     packet->packetData.ACKRequest = 1;
-    
+        
+    nrf24l01PowerOn(1);
 	nrf24l01SendPacket(packet);
     
 	sleepMs(3000);
@@ -136,19 +137,6 @@ void loop(){
     
     nrf24l01Packet_t packet;
 	
-	
-	n_RF_SETUP_t rfSetup;
-    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
-	sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
-    
-//    sendMessage(&packet, "DIST", hcsr04GetAerage());
-    
-    sendMessage(&packet, "rxCount", (float) status.rxCount);
-    sendMessage(&packet, "ackCount", (float) status.ackCount);
-    sendMessage(&packet, "ackPrepCount", (float) status.ackPrepCount);
-    sendMessage(&packet, "lastRX", lastRX);
-    
-    
     // 19.086
     //Resistor divider on Vbatt
     // 10K / 4.7K  = 2.127659574468085
@@ -170,7 +158,19 @@ checkvbatt:
         
         goto checkvbatt;
     }
-    nrf24l01PowerOn(1);
+    
+    
+	
+	n_RF_SETUP_t rfSetup;
+    rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
+	sendMessage(&packet, "RFPWR", rfSetup.RF_PWR);
+    
+//    sendMessage(&packet, "DIST", hcsr04GetAerage());
+    
+    sendMessage(&packet, "rxCount", (float) status.rxCount);
+    sendMessage(&packet, "ackCount", (float) status.ackCount);
+    sendMessage(&packet, "ackPrepCount", (float) status.ackPrepCount);
+    sendMessage(&packet, "lastRX", lastRX);
     
 //    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 //    
