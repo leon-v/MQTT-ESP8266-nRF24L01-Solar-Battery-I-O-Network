@@ -99,7 +99,8 @@ void sendMessage(nrf24l01Packet_t * packet, const char * topic, float value){
     packet->packetData.byte = 0;
     packet->packetData.Pipe = pipe;
     packet->packetData.ACKRequest = 1;
-    
+        
+    nrf24l01PowerOn(1);
 	nrf24l01SendPacket(packet);
     
 	sleepMs(3000);
@@ -136,6 +137,29 @@ void loop(){
     
     nrf24l01Packet_t packet;
 	
+    // 19.086
+    //Resistor divider on Vbatt
+    // 10K / 4.7K  = 2.127659574468085
+    // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
+checkvbatt:
+
+    vbatt = getADCValue(0b000100) * 3.106382978723404;
+    sendMessage(&packet, "VBAT", vbatt);
+    
+    if (vbatt < 3.0){
+        
+        nrf24l01PowerOn(0);
+        
+        WDTCONbits.WDTPS = 0b10010;
+        
+        SLEEP();
+        NOP();
+        NOP();
+        
+        goto checkvbatt;
+    }
+    
+    
 	
 	n_RF_SETUP_t rfSetup;
     rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
@@ -147,21 +171,6 @@ void loop(){
     sendMessage(&packet, "ackCount", (float) status.ackCount);
     sendMessage(&packet, "ackPrepCount", (float) status.ackPrepCount);
     sendMessage(&packet, "lastRX", lastRX);
-    
-    
-    // 19.086
-    //Resistor divider on Vbatt
-    // 10K / 4.7K  = 2.127659574468085
-    // * 1.46 for unknown reasons. Maybe ADC pin sinkign current
-checkvbatt:
-
-    vbatt = getADCValue(0b000100) * 3.106382978723404;
-    sendMessage(&packet, "VBAT", vbatt);
-    
-    if (vbatt < 3.0){
-        sleepMs(65535);
-        goto checkvbatt;
-    }
     
 //    sendMessage(&packet, "ANC3mV", getADCValue(0b010011));
 //    

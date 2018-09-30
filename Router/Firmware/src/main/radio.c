@@ -73,11 +73,14 @@ static void radioInterruptTask(void *arg){
     for (;;) {
 
         if (xQueueReceive(radioInterruptQueue, &gp_io, 10000 / portTICK_RATE_MS)) {
+
         	while (!gpio_get_level(gp_io)){
         		nrf24l01ISR();
         		delayUs(10);
         	}
     	}
+
+    	nrf24l01ISR();
     }
 }
 
@@ -86,5 +89,5 @@ void radioInit(void){
 	//create a queue to handle gpio event from isr
     radioInterruptQueue = xQueueCreate(8, sizeof(uint32_t));
 	
-    xTaskCreate(&radioInterruptTask, "radioInterruptTask", 2048, NULL, 14, NULL);
+    xTaskCreate(&radioInterruptTask, "radioInterruptTask", 8192, NULL, 14, NULL);
 }

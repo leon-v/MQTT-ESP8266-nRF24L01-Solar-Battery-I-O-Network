@@ -165,7 +165,7 @@ reconnect:
 	    	printf("mqtt radio: Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
 		}
 
-		count++;
+		// count++;
 
 		// if ( (count % 1000) == 0) {
 
@@ -185,7 +185,6 @@ reconnect:
 
 	 //    	mqttStatus.Publish++;
 		// }
-
 
 
 		// Add sender queue here !
