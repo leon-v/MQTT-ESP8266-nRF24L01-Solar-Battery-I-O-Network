@@ -12,6 +12,7 @@
 #include "radio.h"
 #include "mqtt_connection.h"
 
+
 /* Server-Side Include (SSI) demo ..........................................*/
 static const char * ssi_tags[] = {
     "wifiSSID",					//0
@@ -185,16 +186,6 @@ void httpd_custom_init(void){
 }
 
 
-const char * request_uri = NULL;
-err_t httpd_post_begin(void *connection, const char *uri, const char *http_request, u16_t http_request_len, int content_len, char *response_uri, u16_t response_uri_len, u8_t *post_auto_wnd){
-
-	request_uri = uri;
-	
-	printf("%s\n", uri);
-	// printf("%s\n", http_request);
-	return ERR_OK;
-}
-
 void urlDecode(char * input, int length) {
     
     char * output = input;
@@ -224,17 +215,50 @@ void urlDecode(char * input, int length) {
     output[0] = '\0';
 }
 
-err_t httpd_post_receive_data(void *connection, struct pbuf *p){
+
+const char * request_uri = NULL;
+
+char postBuffer[2048];
+
+err_t httpd_post_begin(void *connection, const char *uri, const char *http_request, u16_t http_request_len, int content_len, char *response_uri, u16_t response_uri_len, u8_t *post_auto_wnd){
+
+	request_uri = uri;
+
+	postBuffer[0] = '\0';
+	
+	return ERR_OK;
+}
+
+err_t httpd_post_receive_data(void * hs, struct pbuf *p){
+
 	printf("httpd_post_receive_data\n");
 
-	tokens_t post;
+	unsigned int total = strlen(postBuffer) + p->len;
+	
+	if (total > sizeof(postBuffer)) {
+		printf("httpd_post_receive_data postBuffer too small %d\n", total);
+	}
 
 	char * payload = (char *) p->payload;
-	payload[p->len] = '\0';
+
+	strncat(postBuffer, payload, p->len);
+
+	return ERR_OK;
+
+}
+
+void httpd_post_finished(void *connection, char *response_uri, u16_t response_uri_len){
+
+	printf("httpd_post_finished\n");
+
+	tokens_t post;
 	
-	printf("post: %s\n", (char *) payload);
-	printf("post Len: %d\n", p->len);
-	httpServerParseValues(&post, (char *) payload, "&", "=", "");
+	// printf("post: %s\n", (char *) postBuffer);
+	printf("post postBuffer length: %d\n", strlen(postBuffer));
+	printf("postrequest_uri  %s\n", request_uri);
+
+	// return ERR_OK;
+	httpServerParseValues(&post, (char *) postBuffer, "&", "=", "");
 
 	char * value;
 
@@ -300,17 +324,9 @@ err_t httpd_post_receive_data(void *connection, struct pbuf *p){
 
 	}
 
-	return ERR_OK;
-}
-
-void httpd_post_finished(void *connection, char *response_uri, u16_t response_uri_len){
-
-	printf("httpd_post_finished\n");
-
 	strcpy(response_uri, request_uri);
-	response_uri_len = strlen(response_uri);
 
-	printf("%s", response_uri);
+	response_uri_len = strlen(response_uri);
 
 	request_uri = NULL;
 }
