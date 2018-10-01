@@ -197,16 +197,27 @@ void urlDecode(char * input, int length) {
     		break;
     	}
 
-    	if (input[0] != '%') {
-    		output[0] = input[0];
+
+    	if (input[0] == '+') {
+    		input[0] = ' ';
     		input+= 1;
     	}
 
-    	else {
+    	else if (input[0] == '%') {
+
+    		// printf("1: %d\n", input[1]);
+    		// printf("2: %d\n", input[2]);
+
     		hex[0] = input[1];
     		hex[1] = input[2];
-    		input[0] = strtol(hex, NULL, 16);
+    		output[0] = strtol(hex, NULL, 16);
+    		// printf("O: %d\n", input[2]);
     		input+= 3;
+    	}
+
+    	else{
+    		output[0] = input[0];
+    		input+= 1;
     	}
 
     	output+= 1;
@@ -315,7 +326,7 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 		if (value){
 
 			urlDecode(value, sizeof(configFlash.elasticCert));
-			printf("VALUE: %s\n", value);
+			// printf("VALUE: %s\n", value);
 
 			strncpy(configFlash.elasticCert, value, sizeof(configFlash.elasticCert));
 		}

@@ -51,7 +51,18 @@ MQTTClient * mqttGetClient(void){
 }
 
 static void mqttMessageIn(MessageData* data){
-    printf("Message arrived: %s\n", (char*)data->message->payload);
+
+	char payload[17];
+	char topic[17];
+	//data->topicName->cstring
+	//data->topicName->lenstring
+	strncpy(payload, (char*) data->message->payload, data->message->payloadlen);
+	payload[data->message->payloadlen] = '\0';
+
+	// strncpy(topic, data->topicName->lenstring.data, data->topicName->lenstring.len);
+	// topic[data->topicName->lenstring.len] = '\0';
+	
+    printf("Message arrived: %s\n", payload);
 }
 
 void mqtt_connection(){
