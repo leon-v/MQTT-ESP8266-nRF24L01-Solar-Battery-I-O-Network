@@ -5,3 +5,4 @@
 /Sensor_Node/Firmware/nRF24L01+_PIC16LF1825.X.X/debug
 /Sensor_Node/Firmware/nRF24L01+_PIC16LF1825.X.X/dist
 /Sensor_Node/Firmware/nRF24L01+_PIC16LF1825.X.X/html
+/Router/Firmware/src/components/httpd_custom/fsdata_custom.c
