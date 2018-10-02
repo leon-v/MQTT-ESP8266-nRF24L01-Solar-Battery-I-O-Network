@@ -81,7 +81,7 @@ reconnect:
     ESP_LOGI(TAG, "Connected to AP");
 
 
-	vTaskDelay(500 / portTICK_RATE_MS);  //send every 0.5 seconds
+	vTaskDelay(5000 / portTICK_RATE_MS);  //send every 0.5 seconds
 
     printf("NetworkInit ...\n");
     NetworkInit(&network);

@@ -179,7 +179,7 @@ checkvbatt:
     float vt = (2.048 - getADCValue(0b111101)) / 2;
     FVRCONbits.TSEN = 0;
     
-	#define tempOffset 40
+	#define tempOffset (40 + 10.2)
     #define vf 0.6063
     #define tc -0.00132
     float ta = (vt / tc) - (vf / tc) - tempOffset;
