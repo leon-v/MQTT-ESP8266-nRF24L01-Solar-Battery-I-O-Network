@@ -70,7 +70,7 @@ void app_main() {
 		wifiClientInit();
     }
 
-    httpd_custom_init();
+    // httpd_custom_init();
 
     
     mqtt_connection_init();

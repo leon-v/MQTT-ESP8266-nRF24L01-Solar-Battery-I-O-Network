@@ -12,28 +12,6 @@
 #include "radio.h"
 #include "mqtt_connection.h"
 
-
-/* Server-Side Include (SSI) demo ..........................................*/
-static const char * ssi_tags[] = {
-    "wifiSSID",					//0
-    "wifiPassword",				//1
-    "mqttHost",					//2
-    "mqttPort",					//3
-    "mqttKeepalive",			//4
-    "mqttUsername",				//5
-    "mqttPassword",				//6
-
-    "mqttConnected",			//7
-    "mqttConnectionSuccess",	//8
-    "mqttConnectionFail",		//9
-    "mqttPublish",				//10
-    "mqttDump",					//11
-
-    "radioNrf24l01In",			//12
-
-    "elasticCert"				//13
-};
-
 typedef struct{
 	char * key;
 	char * value;
@@ -104,85 +82,76 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 #define HTML_ULONG "%lu"
 #define HTML_UINT "%u"
 /* Server-Side Include (SSI) handler .......................................*/
-int ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
+
+int ssi_handler(const char* ssi_tag_name, char *pcInsert, int iInsertLen) {
 
 	radioStatus_t radioStatus = radioGetStatus();
 	mqttStatus_t mqttStatus = mqtt_connection_get_status();
 
-	strcpy(pcInsert, "");
-	switch (iIndex){
-		case 0:
-			sprintf(pcInsert, HTML_INPUT_STRING, "text", "wifiSSID", configFlash.wifiSSID);
-			break;
-
-		case 1:
-			sprintf(pcInsert, HTML_INPUT_STRING, "password", "wifiPassword", configFlash.wifiPassword);
-			break;
-
-		case 2:
-			sprintf(pcInsert, HTML_INPUT_STRING, "text", "mqttHost", configFlash.mqttHost);
-			break;
-
-		case 3:
-			sprintf(pcInsert, HTML_INPUT_INT, "number", "mqttPort", configFlash.mqttPort);
-			break;
-
-		case 4:
-			sprintf(pcInsert, HTML_INPUT_INT, "number", "mqttKeepalive", configFlash.mqttKeepalive);
-			break;
-
-		case 5:
-			sprintf(pcInsert, HTML_INPUT_STRING, "text", "mqttUsername", configFlash.mqttUsername);
-			break;
-
-		case 6:
-			sprintf(pcInsert, HTML_INPUT_STRING, "password", "mqttPassword", configFlash.mqttPassword);
-			break;
-
-		case 7:
-			if (mqttStatus.connected){
-				sprintf(pcInsert, "Yes");
-			} else{
-				sprintf(pcInsert, "No");
-			}
-			
-			break;
-
-		case 8:
-			sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionSuccess);
-			break;
-
-		case 9:
-			sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionFail);
-			break;
-
-		case 10:
-			sprintf(pcInsert, HTML_ULONG, mqttStatus.Publish);
-			break;
-
-		case 11:
-			sprintf(pcInsert, HTML_ULONG, mqttStatus.Dump);
-			break;
-
-		case 12:
-			sprintf(pcInsert, HTML_ULONG, radioStatus.nrf24l01In);
-			break;
-
-		case 13:
-			sprintf(pcInsert, HTML_TEXTAREA, 30, "elasticCert", configFlash.elasticCert);
-			break;
-
-		default:
-			sprintf(pcInsert, "NULL");
-			break;
+	if (strcmp(ssi_tag_name, "wifiSSID") == 0) {
+		sprintf(pcInsert, HTML_INPUT_STRING, "text", "wifiSSID", configFlash.wifiSSID);
+	}
+	else if (strcmp(ssi_tag_name, "wifiPassword") == 0) {
+		sprintf(pcInsert, HTML_INPUT_STRING, "password", "wifiPassword", configFlash.wifiPassword);
+	}
+	else if (strcmp(ssi_tag_name, "mqttHost") == 0) {
+		sprintf(pcInsert, HTML_INPUT_STRING, "text", "mqttHost", configFlash.mqttHost);
+	}
+	else if (strcmp(ssi_tag_name, "mqttPort") == 0) {
+		sprintf(pcInsert, HTML_INPUT_INT, "number", "mqttPort", configFlash.mqttPort);
+	}
+	else if (strcmp(ssi_tag_name, "mqttKeepalive") == 0) {
+		sprintf(pcInsert, HTML_INPUT_INT, "number", "mqttKeepalive", configFlash.mqttKeepalive);
+	}
+	else if (strcmp(ssi_tag_name, "mqttUsername") == 0) {
+		sprintf(pcInsert, HTML_INPUT_STRING, "text", "mqttUsername", configFlash.mqttUsername);
+	}
+	else if (strcmp(ssi_tag_name, "mqttPassword") == 0) {
+		sprintf(pcInsert, HTML_INPUT_STRING, "password", "mqttPassword", configFlash.mqttPassword);
+	}
+	else if (strcmp(ssi_tag_name, "mqttConnected") == 0) {
+		if (mqttStatus.connected){
+			sprintf(pcInsert, "Yes");
+		} else{
+			sprintf(pcInsert, "No");
+		}
+	}
+	else if (strcmp(ssi_tag_name, "mqttConnectionSuccess") == 0) {
+		sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionSuccess);
+	}
+	else if (strcmp(ssi_tag_name, "mqttConnectionFail") == 0) {
+		sprintf(pcInsert, HTML_ULONG, mqttStatus.connectionFail);
+	}
+	else if (strcmp(ssi_tag_name, "mqttPublish") == 0) {
+		sprintf(pcInsert, HTML_ULONG, mqttStatus.Publish);
+	}
+	else if (strcmp(ssi_tag_name, "mqttDump") == 0) {
+		sprintf(pcInsert, HTML_ULONG, mqttStatus.Dump);
+	}
+	else if (strcmp(ssi_tag_name, "radioNrf24l01In") == 0) {
+		sprintf(pcInsert, HTML_ULONG, radioStatus.nrf24l01In);
+	}
+	else if (strcmp(ssi_tag_name, "elasticHost") == 0) {
+		sprintf(pcInsert, HTML_INPUT_STRING, "text", "elasticHost", configFlash.elasticHost);
+	}
+	else if (strcmp(ssi_tag_name, "elasticUser") == 0) {
+		sprintf(pcInsert, HTML_INPUT_STRING, "text", "elasticUser", configFlash.elasticUser);
+	}
+	else if (strcmp(ssi_tag_name, "elasticPassword") == 0) {
+		sprintf(pcInsert, HTML_INPUT_STRING, "password", "elasticPassword", configFlash.elasticPassword);
+	}
+	else{
+		sprintf(pcInsert, "NULL");
 	}
 
-	return strlen(pcInsert);
+	iInsertLen = strlen(pcInsert);
+
+	return iInsertLen;
 }
 
 void httpd_custom_init(void){
 	httpd_init();
-	http_set_ssi_handler( (tSSIHandler) &ssi_handler, ssi_tags, sizeof(ssi_tags));
+	http_set_ssi_handler( (tSSIHandler) &ssi_handler, NULL, NULL);
 }
 
 
@@ -277,16 +246,19 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 
 		value = httpServerGetTokenValue(&post, "wifiSSID");
 		if (value){
+			urlDecode(value, sizeof(configFlash.wifiSSID));
 			strncpy(configFlash.wifiSSID, value, sizeof(configFlash.wifiSSID));
 		}
 
 		value = httpServerGetTokenValue(&post, "wifiPassword");
 		if (value){
+			urlDecode(value, sizeof(configFlash.wifiPassword));
 			strncpy(configFlash.wifiPassword, value, sizeof(configFlash.wifiPassword));
 		}
 
 		value = httpServerGetTokenValue(&post, "mqttHost");
 		if (value){
+			urlDecode(value, sizeof(configFlash.mqttHost));
 			strncpy(configFlash.mqttHost, value, sizeof(configFlash.mqttHost));
 		}
 
@@ -302,12 +274,14 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 
 		value = httpServerGetTokenValue(&post, "mqttUsername");
 		if (value){
+			urlDecode(value, sizeof(configFlash.mqttUsername));
 			strncpy(configFlash.mqttUsername, value, sizeof(configFlash.mqttUsername));
 		}
 
 		value = httpServerGetTokenValue(&post, "mqttPassword");
 		printf("mqttPassword: '%s'\n", value);
 		if (value){
+			urlDecode(value, sizeof(configFlash.mqttPassword));
 			strncpy(configFlash.mqttPassword, value, sizeof(configFlash.mqttPassword));
 		}
 
@@ -321,14 +295,23 @@ void httpd_post_finished(void *connection, char *response_uri, u16_t response_ur
 			configFlash.debugLevel = atoi(value);
 		}
 
-		value = httpServerGetTokenValue(&post, "elasticCert");
-		
+		value = httpServerGetTokenValue(&post, "elasticHost");
+		urlDecode(value, sizeof(configFlash.elasticHost));
 		if (value){
+			urlDecode(value, sizeof(configFlash.elasticHost));
+			strncpy(configFlash.elasticHost, value, sizeof(configFlash.elasticHost));
+		}
 
-			urlDecode(value, sizeof(configFlash.elasticCert));
-			// printf("VALUE: %s\n", value);
+		value = httpServerGetTokenValue(&post, "elasticUser");
+		if (value){
+			urlDecode(value, sizeof(configFlash.elasticUser));
+			strncpy(configFlash.elasticUser, value, sizeof(configFlash.elasticUser));
+		}
 
-			strncpy(configFlash.elasticCert, value, sizeof(configFlash.elasticCert));
+		value = httpServerGetTokenValue(&post, "elasticPassword");
+		if (value){
+			urlDecode(value, sizeof(configFlash.elasticPassword));
+			strncpy(configFlash.elasticPassword, value, sizeof(configFlash.elasticPassword));
 		}
 
 		configFlashSave();

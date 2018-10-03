@@ -52,8 +52,18 @@
 		    		</tr>
 
 		    		<tr class="roundTop">
-		    			<th>SSL Certificate</th>
-		    			<td><div class="input"><!--#elasticCert--></div></td>
+		    			<th>Host</th>
+		    			<td><div class="input"><!--#elasticHost--></div></td>
+		    		</tr>
+
+		    		<tr>
+		    			<th>Auth Basic User</th>
+		    			<td><div class="input"><!--#elasticUser--></div></td>
+		    		</tr>
+
+		    		<tr class="roundBotton">
+		    			<th>Auth Basic Password</th>
+		    			<td><div class="input"><!--#elasticPassword--></div></td>
 		    		</tr>
 
 		    		<tr>
