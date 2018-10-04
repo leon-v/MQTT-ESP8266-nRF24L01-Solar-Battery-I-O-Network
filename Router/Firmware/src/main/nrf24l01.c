@@ -38,16 +38,14 @@ void nrf24l01ChangeTXPower(int addPower){
     n_RF_SETUP_t rfSetup;
     rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
     
-    if (addPower > 0){
-        if (rfSetup.RF_PWR < 3){
-            rfSetup.RF_PWR++;
-        }
+    rfSetup.RF_PWR+= addPower;
+
+    if (rfSetup.RF_PWR < 0){
+    	rfSetup.RF_PWR = 0;
     }
-    
-    if (addPower < 0){
-        if (rfSetup.RF_PWR > 0){
-            rfSetup.RF_PWR--;
-        }
+
+    if (rfSetup.RF_PWR > 3){
+    	rfSetup.RF_PWR = 3;
     }
     
     nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);

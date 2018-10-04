@@ -68,6 +68,7 @@ void nrf24l01Service(void);
 void nrf24l01SetTXPipe(unsigned char pipe);
 void nrf24l01SendPacket(nrf24l01Packet_t * txPacket);
 void nrf24l01SetRXCallback(RXCallback_t passedRXCallback);
+void nrf24l01ChangeTXPower(int addPower);
 
 #endif	/* NRF24L01_H_ */
 
