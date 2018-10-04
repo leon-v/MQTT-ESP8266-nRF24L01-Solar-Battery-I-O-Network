@@ -38,16 +38,14 @@ void nrf24l01ChangeTXPower(int addPower){
     n_RF_SETUP_t rfSetup;
     rfSetup.byte = nrf24l01Send(n_R_REGISTER | n_RF_SETUP, 0);
     
-    if (addPower > 0){
-        if (rfSetup.RF_PWR < 3){
-            rfSetup.RF_PWR++;
-        }
+    rfSetup.RF_PWR+= addPower;
+
+    if (rfSetup.RF_PWR < 0){
+    	rfSetup.RF_PWR = 0;
     }
-    
-    if (addPower < 0){
-        if (rfSetup.RF_PWR > 0){
-            rfSetup.RF_PWR--;
-        }
+
+    if (rfSetup.RF_PWR > 3){
+    	rfSetup.RF_PWR = 3;
     }
     
     nrf24l01Send(n_W_REGISTER | n_RF_SETUP, rfSetup.byte);
@@ -137,7 +135,7 @@ void nrf24l01SendPacket(nrf24l01Packet_t * txPacket){
     unsigned char timeout = 0xFF;
     while (status.TX != TXIdle){
         
-        sleepMs(100);
+        sleepMs(10);
         nrf24l01ISR();
         nrf24l01Service();
         
@@ -187,7 +185,7 @@ void nrf24l01ISR(void){
         // Setup the radio and status to wait for one
 		if (lastTXPacket->packetData.ACKRequest){
 			status.TX = TXPendingACK;
-			status.retryCount = 5;
+			status.retryCount = 0xFF;
             nrf24l01SetRXMode(1);
             status.ackPrepCount++;
 		}
@@ -211,12 +209,14 @@ void nrf24l01ISR(void){
 	nrf24l01Send(n_W_REGISTER | n_STATUS, status.statusRegister.byte);
 }
 
+unsigned char nrf24l01Index = 0;
 void nrf24l01SendTXBuffer(nrf24l01Packet_t * packet){
+    
+    nrf24l01Index++;
+    packet->packetData.Index = nrf24l01Index;
 	
     // Store the packet in a local pointer so other methods can use it
 	lastTXPacket = packet;
-    
-    lastTXPacket->packetData.Index = lastTXPacket->packetData.Index++;
 
 	// Set the transmitter pipe
 	nrf24l01SetTXPipe(lastTXPacket->packetData.Pipe);
@@ -472,11 +472,6 @@ void nrf24l01InitRegisters(){
 	status.configRegister.PWR_UP = 1;
 	nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
 
-}
-
-void nrf24l01PowerOn(unsigned char on){
-    status.configRegister.PWR_UP = on;
-    nrf24l01Send(n_W_REGISTER | n_CONFIG, status.configRegister.byte);
 }
 
 void nrf24l01Init(void){
