@@ -25,6 +25,9 @@
 #define CONFIG_BUTTON_PIN 2
 
 void app_main() {
+
+	rtc_clk_cpu_freq_set(RTC_CPU_FREQ_160M);
+
 	
     //Initialize NVS
 	esp_err_t ret = nvs_flash_init();
