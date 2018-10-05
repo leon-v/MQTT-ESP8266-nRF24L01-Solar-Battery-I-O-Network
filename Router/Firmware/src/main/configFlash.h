@@ -13,9 +13,6 @@ typedef struct{
 	char mqttPassword[64];
 	int mqttVersion;
 	int debugLevel;
-	char elasticHost[64];
-	char elasticUser[64];
-	char elasticPassword[64];
 } configFlash_t;
 
 

@@ -2,12 +2,14 @@
 #include "configFlash.h"
 #include "radio.h"
 
-#include "mqtt_connection.h"
-#include "elastic.h"
-
 static xQueueHandle radioInterruptQueue = NULL;
 xQueueHandle radioGetInterruptQueue(void){
 	return radioInterruptQueue;
+}
+
+static xQueueHandle radioRXQueue = NULL;
+xQueueHandle radioGetRXQueue(void){
+	return radioRXQueue;
 }
 
 static radioStatus_t radioStatus = radioStatus_r;
@@ -54,9 +56,7 @@ void rxCallback(nrf24l01Packet_t * rxPacket){
 	strcpy(radioRxMessage.sensor, sensor);
 	strcpy(radioRxMessage.value, value);
 
-
-	xQueueSend(mqttGetPublishQueue(), &radioRxMessage, 0);
-	// xQueueSend(elasticGetPublishQueue(), &radioRxMessage, 0);
+	xQueueSend(radioRXQueue, &radioRxMessage, 0);
 
 	radioStatus.nrf24l01In++;
 }
@@ -78,6 +78,7 @@ static void radioInterruptTask(void *arg){
         		nrf24l01ISR();
         		delayUs(10);
         	}
+        	
     	}
 
     	nrf24l01ISR();
@@ -88,6 +89,8 @@ void radioInit(void){
 
 	//create a queue to handle gpio event from isr
     radioInterruptQueue = xQueueCreate(8, sizeof(uint32_t));
+
+    radioRXQueue = xQueueCreate(32, sizeof(radioMessage_t));
 	
     xTaskCreate(&radioInterruptTask, "radioInterruptTask", 8192, NULL, 14, NULL);
 }

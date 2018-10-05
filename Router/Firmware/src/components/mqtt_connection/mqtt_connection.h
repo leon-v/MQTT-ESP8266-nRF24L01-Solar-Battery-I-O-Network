@@ -16,6 +16,5 @@ typedef struct{
 
 void mqtt_connection_init(void);
 mqttStatus_t mqtt_connection_get_status(void);
-xQueueHandle mqttGetPublishQueue(void);
 
 #endif

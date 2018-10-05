@@ -27,7 +27,7 @@
 		    			<th colspan="2"><h4>MQTT Configuration</h4></th>
 		    		</tr>
 		    		<tr class="roundTop">
-		    			<th>Host Name</th>
+		    			<th>User Name</th>
 		    			<td><div class="input"><!--#mqttHost--></div></td>
 		    		</tr>
 		    		<tr>
@@ -43,29 +43,9 @@
 		    			<td><div class="input"><!--#mqttUsername--></div></td>
 		    		</tr>
 		    		<tr class="roundBotton">
-		    			<th>Password</th>
+		    			<th>password</th>
 		    			<td><div class="input"><!--#mqttPassword--></div></td>
 		    		</tr>
-
-		    		<tr>
-		    			<th colspan="2"><h4>ElasticSearch Configuration</h4></th>
-		    		</tr>
-
-		    		<tr class="roundTop">
-		    			<th>Host</th>
-		    			<td><div class="input"><!--#elasticHost--></div></td>
-		    		</tr>
-
-		    		<tr>
-		    			<th>Auth Basic User</th>
-		    			<td><div class="input"><!--#elasticUser--></div></td>
-		    		</tr>
-
-		    		<tr class="roundBotton">
-		    			<th>Auth Basic Password</th>
-		    			<td><div class="input"><!--#elasticPassword--></div></td>
-		    		</tr>
-
 		    		<tr>
 		    			<th colspan="2"><button>Save</button></th>
 		    		</tr>

@@ -19,15 +19,10 @@ TaskHandle_t serviceTask = NULL;
 TaskHandle_t connectionTask = NULL;
 TaskHandle_t publishTask = NULL;
 
-static xQueueHandle mqttPublishQueue = NULL;
-
-xQueueHandle mqttGetPublishQueue(void){
-	return mqttPublishQueue;
-}
-
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t mqttEventGroup;
 
+static xQueueHandle MQTTMessageQueue = NULL;
 MQTTClient client;
 
 char uniqueID[16];
@@ -48,21 +43,6 @@ char * mqttGetUniqueID(void){
 
 MQTTClient * mqttGetClient(void){
 	return &client;
-}
-
-static void mqttMessageIn(MessageData* data){
-
-	char payload[17];
-	char topic[17];
-	//data->topicName->cstring
-	//data->topicName->lenstring
-	strncpy(payload, (char*) data->message->payload, data->message->payloadlen);
-	payload[data->message->payloadlen] = '\0';
-
-	// strncpy(topic, data->topicName->lenstring.data, data->topicName->lenstring.len);
-	// topic[data->topicName->lenstring.len] = '\0';
-	
-    printf("Message arrived: %s\n", payload);
 }
 
 void mqtt_connection(){
@@ -142,19 +122,14 @@ reconnect:
     mqttStatus.connectionSuccess++;
     failLimit = 0;
 
-    if ((rc = MQTTSubscribe(&client, "BeeLine/#", 2, mqttMessageIn)) != 0) {
-        mqttStatus.connectionFail++;
-        failLimit++;
-        goto fail;
-    }
 
 	while (MQTTIsConnected(&client)) {
 
-		rc = xQueueReceive(mqttPublishQueue, &radioMessage, 50 / portTICK_RATE_MS);
+		rc = xQueueReceive(radioGetRXQueue(), &radioMessage, 100 / portTICK_RATE_MS);
 
 		if (rc){
 
-			strcpy(mqttTopic, "BeeLine/Hive_");
+			strcpy(mqttTopic, "radio/out/");
 			strcat(mqttTopic, uniqueID);
 			strcat(mqttTopic, "/");
 			strcat(mqttTopic, radioMessage.name);
@@ -233,7 +208,7 @@ void mqtt_connection_init(){
 
 	sprintf(uniqueID, "%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
-	mqttPublishQueue = xQueueCreate(256, sizeof(radioMessage_t));
+	MQTTMessageQueue = xQueueCreate(256, sizeof(radioMessage_t));
 
 	xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 14, &connectionTask);
 }

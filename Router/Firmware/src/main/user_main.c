@@ -19,7 +19,6 @@
 #include "radio.h"
 
 #include "mqtt_connection.h"
-#include "elastic.h"
 #include "httpd_custom.h"
 
 
@@ -62,18 +61,16 @@ void app_main() {
 		apMode = 1;
 	}
     
-
     if (apMode){
 		wifiAccessPointInit();		
     }
     else{
 		wifiClientInit();
+	    
     }
 
-    // httpd_custom_init();
-
+    httpd_custom_init();
     
     mqtt_connection_init();
     radioInit();
-    // elasticInit();
 }
