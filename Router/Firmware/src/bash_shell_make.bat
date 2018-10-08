@@ -21,7 +21,7 @@ title=ESP8266_Build-Upload
 
 echo Build Success, Uploading....
 
-set comport=COM3
+set comport=COM5
 
 esptool.py --chip esp8266 --port %comport% --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode qio --flash_freq 40m --flash_size 2MB 0x0000 ../build/bootloader/bootloader.bin 0x10000 ../build/MQTTRouter.bin 0x8000 ../build/partitions_singleapp.bin
 
@@ -31,4 +31,4 @@ IF NOT "%errorlevel%" == "0" (
 )
 
 
-miniterm.py %comport% 74880
+miniterm.py %comport% 115200

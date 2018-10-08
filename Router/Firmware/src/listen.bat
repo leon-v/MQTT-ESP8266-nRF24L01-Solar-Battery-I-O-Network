@@ -1,4 +1,4 @@
 @ECHO OFF &SETLOCAL
 
-set comport=COM3
+set comport=COM5
 miniterm.py %comport% 74880
