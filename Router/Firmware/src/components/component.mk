@@ -1,10 +1,8 @@
 #
 # Component Makefile
 #
-COMPONENT_ADD_INCLUDEDIRS += httpd_custom mqtt_connection\
-	../main\
-	../../ESP8266_RTOS_SDK/components/lwip/lwip/src/include/lwip/apps
+COMPONENT_ADD_INCLUDEDIRS += wifi wifi_access_point http
 
-COMPONENT_SRCDIRS += httpd_custom mqtt_connection\
-	../../ESP8266_RTOS_SDK/components/lwip/lwip/src/apps/httpd
+COMPONENT_SRCDIRS += wifi wifi_access_point http
 
+COMPONENT_EMBED_TXTFILES := http/www/index.html
