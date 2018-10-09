@@ -8,4 +8,4 @@ if [ "$1" = 2 ];
 	make clean
 fi
 
-make -j4 all
+make -j5 all

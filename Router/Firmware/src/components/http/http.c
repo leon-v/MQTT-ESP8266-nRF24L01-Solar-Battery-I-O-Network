@@ -17,8 +17,13 @@ void adder_free_func(void *ctx) {
 // 	unsigned char fileEnd[];
 // } http_file_t;
 
-extern const uint8_t indexHTMLStart[] asm("_binary_index_html_start");
-extern const uint8_t indexHTMLEnd[]   asm("_binary_index_html_end");
+
+
+extern const char  okHTHStart[]		asm("_binary_200_hth_start");
+extern const char  okHTHEnd[]		asm("_binary_200_hth_end");
+
+extern const char  indexHTMLStart[]	asm("_binary_index_html_start");
+extern const char  indexHTMLEnd[]	asm("_binary_index_html_end");
 
 /* This handler gets the present value of the accumulator */
 esp_err_t adder_get_handler(httpd_req_t *req) {
@@ -27,20 +32,27 @@ esp_err_t adder_get_handler(httpd_req_t *req) {
     unsigned *visitors = (unsigned *)req->user_ctx;
     printf("http: / visitor count = %d", ++(*visitors));
 
-    char outbuf[50];
-
     /* Create session's context if not already available */
-    if (! req->sess_ctx) {
+    if (!req->sess_ctx) {
         printf("http: /r GET allocating new session");
         req->sess_ctx = malloc(sizeof(int));
         req->free_ctx = adder_free_func;
         *(int *)req->sess_ctx = 0;
     }
+
+    unsigned int okHTHLength = okHTHEnd - okHTHStart;
+    unsigned int indexHTMLLength = indexHTMLEnd - indexHTMLStart;
+
+    char outBuffer[1024];
+    outBuffer[0] = '\0';
+
     printf("http: / GET handler send %d", *(int *)req->sess_ctx);
 
-    /* Respond with the accumulated value */
-    snprintf(outbuf, sizeof(outbuf),"%s", indexHTMLStart);
-    httpd_resp_send(req, outbuf, strlen(outbuf));
+    strncat(outBuffer, okHTHStart, okHTHLength);
+    strncat(outBuffer, indexHTMLStart, indexHTMLLength);
+
+    httpd_resp_send(req, outBuffer, strlen(outBuffer));
+
     return ESP_OK;
 }
 
