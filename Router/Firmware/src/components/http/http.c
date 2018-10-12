@@ -4,17 +4,89 @@
 
 #include "wifi.h"
 
+
+typedef struct{
+	char * key;
+	char * value;
+} token_t;
+
+typedef struct{
+	token_t tokens[32];
+	unsigned int length;
+} tokens_t;
+
 /* Function to free context */
 void adder_free_func(void *ctx) {
     printf("http: / Free Context function called");
     free(ctx);
 }
 
+char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowDelimiter, const char * valueDelimiter, const char * endMatch){
+
+	tokens->length = 0;
+
+	// Start parsing the values by creating a new string from the payload 
+	char * token = strtok(buffer, rowDelimiter);
+
+	char * end = buffer + strlen(buffer);
+
+	// break apart the string getting all the parts delimited by &
+	while (token != NULL) {
+
+		if (strlen(endMatch) > 0){
+			end = token + strlen(token) + 1;
+
+			if (strncmp(end, endMatch, strlen(endMatch)) == 0) {
+				end+= strlen(endMatch);
+				break;
+			}
+		}
+
+		tokens->tokens[tokens->length++].key = token;
+
+		token = strtok(NULL, rowDelimiter);
+	}
+
+	// Re-parse the strigns and break them apart into key / value pairs
+	for (unsigned int index = 0; index < tokens->length; index++){
+
+		tokens->tokens[index].key = strtok(tokens->tokens[index].key, valueDelimiter);
+
+		tokens->tokens[index].value = strtok(NULL, valueDelimiter);
+
+		// If the value is NULL, make it point to an empty string.
+		if (tokens->tokens[index].value == NULL){
+			tokens->tokens[index].value = tokens->tokens[index].key + strlen(tokens->tokens[index].key);
+		}
+	}
+
+	return end;
+}
+
+char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
+
+	for (unsigned int index = 0; index < tokens->length; index++){
+
+		if (strcmp(tokens->tokens[index].key, key) == 0){
+			return tokens->tokens[index].value;
+		}
+	}
+
+	return NULL;
+}
+
+#define HTML_INPUT_STRING "<input type=\"%s\" name=\"%s\" value=\"%s\" />"
+#define HTML_INPUT_INT "<input type=\"%s\" name=\"%s\" value=\"%u\" />"
+#define HTML_ULONG "%lu"
+#define HTML_UINT "%u"
 
 void httpGetSSIValue(char * name, char * reaplceValue){
 
 	if (strcmp(name, "test") == 0){
 		strcpy(reaplceValue, "Test Value");
+	}
+	else if(strcmp(name, "wifiSSID") == 0) {
+		sprintf(reaplceValue, HTML_INPUT_STRING, "text", "wifiSSID", "Yay");
 	}
 }
 
@@ -55,6 +127,7 @@ void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileE
 		file+= strlen(START_SSI);
 
 		ssiTag[0] = '\0';
+		ssiValue[0] = '\0';
 
 		while ( ((fileEnd - file) < sizeof(END_SSI)) || (strncmp(file, END_SSI, strlen(END_SSI)) != 0) ) {
 
@@ -92,26 +165,30 @@ void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileE
 void httpPost(httpd_req_t *req){
 
 	/* An HTTP POST handler */
-    char buf[100];
+    char postString[1024];
     int ret, remaining = req->content_len;
 
     while (remaining > 0) {
         /* Read the data for the request */
-        if ((ret = httpd_req_recv(req, buf, MIN(remaining, sizeof(buf)))) < 0) {
-            return ESP_FAIL;
+        if ((ret = httpd_req_recv(req, postString, MIN(remaining, sizeof(postString)))) < 0) {
+            return;
         }
 
-        /* Send back the same data */
-        httpd_resp_send_chunk(req, buf, ret);
         remaining -= ret;
-
-        /* Log data received */
-        printf("%.*s\n\n", ret, buf);
     }
 
-    // End response
-    httpd_resp_send_chunk(req, NULL, 0);
-    return ESP_OK;
+    tokens_t post;
+    httpServerParseValues(&post, postString, "&", "=", "");
+
+    char * value;
+    
+    value = httpServerGetTokenValue(&post, "wifiSSID");
+	if (value){
+		printf("wifiSSID = %s\n", value);
+	}
+
+    /* Log data received */
+    printf("%s\n\n", postString);
 }
 
 esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, const char * contentType) {
