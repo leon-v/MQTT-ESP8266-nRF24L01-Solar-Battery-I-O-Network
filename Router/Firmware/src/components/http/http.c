@@ -1,6 +1,6 @@
 #include <sys/param.h>
-
 #include <http_server.h>
+#include <nvs.h>
 
 #include "wifi.h"
 
@@ -167,6 +167,7 @@ void httpPost(httpd_req_t *req){
 	/* An HTTP POST handler */
     char postString[1024];
     int ret, remaining = req->content_len;
+    esp_err_t espError;
 
     while (remaining > 0) {
         /* Read the data for the request */
@@ -180,12 +181,33 @@ void httpPost(httpd_req_t *req){
     tokens_t post;
     httpServerParseValues(&post, postString, "&", "=", "");
 
+    nvs_handle nvsHandle;
+   	espError = nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle);
+
+   	if (espError != ESP_OK){
+   		printf("nvs_open return %d\n", espError);
+   		return;
+   	}
+
     char * value;
     
     value = httpServerGetTokenValue(&post, "wifiSSID");
 	if (value){
+
+		espError = nvs_set_str(nvsHandle, "wifiSSID", value);
+
+		if (espError != ESP_OK){
+   			printf("nvs_set_str wifiSSID %d\n", espError);
+   			return;
+   		}
 		printf("wifiSSID = %s\n", value);
 	}
+
+	espError = nvs_commit(nvsHandle);
+	if (espError != ESP_OK){
+   		printf("nvs_commit return %d\n", espError);
+   		return;
+   	}
 
     /* Log data received */
     printf("%s\n\n", postString);
