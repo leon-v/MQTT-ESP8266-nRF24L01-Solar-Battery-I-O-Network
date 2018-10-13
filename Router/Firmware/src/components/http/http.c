@@ -3,17 +3,11 @@
 #include <nvs.h>
 
 #include "wifi.h"
+#include "http.h"
 
+#include "index.h"
 
-typedef struct{
-	char * key;
-	char * value;
-} token_t;
-
-typedef struct{
-	token_t tokens[32];
-	unsigned int length;
-} tokens_t;
+typedef void (*httpSSIParser_t)(char * name, char * value);
 
 /* Function to free context */
 void adder_free_func(void *ctx) {
@@ -75,27 +69,12 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 	return NULL;
 }
 
-#define HTML_INPUT_STRING "<input type=\"%s\" name=\"%s\" value=\"%s\" />"
-#define HTML_INPUT_INT "<input type=\"%s\" name=\"%s\" value=\"%u\" />"
-#define HTML_ULONG "%lu"
-#define HTML_UINT "%u"
-
-void httpGetSSIValue(char * name, char * reaplceValue){
-
-	if (strcmp(name, "test") == 0){
-		strcpy(reaplceValue, "Test Value");
-	}
-	else if(strcmp(name, "wifiSSID") == 0) {
-		sprintf(reaplceValue, HTML_INPUT_STRING, "text", "wifiSSID", "Yay");
-	}
-}
-
 #define START_SSI "<!--#"
 #define END_SSI "-->"
 #define SSI_TAG_MAX_LENGTH 64
 
 
-void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd){
+void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, httpSSIParser_t httpSSIParser){
 
 	const char * file = fileStart;
 	char * out = outBuffer;
@@ -149,7 +128,10 @@ void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileE
 
 		file+= sizeof(END_SSI) - 1;
 
-		httpGetSSIValue(ssiTag, ssiValue);
+		if (httpSSIParser) {
+			httpSSIParser(ssiTag, ssiValue);
+		}
+		
 
 		if (ssiValue == NULL) {
 			continue;
@@ -162,12 +144,9 @@ void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileE
 	}
 }
 
-void httpPost(httpd_req_t *req){
-
-	/* An HTTP POST handler */
-    char postString[1024];
+void httpGetPost(httpd_req_t *req, char * postString, tokens_t post){
+	    
     int ret, remaining = req->content_len;
-    esp_err_t espError;
 
     while (remaining > 0) {
         /* Read the data for the request */
@@ -177,50 +156,21 @@ void httpPost(httpd_req_t *req){
 
         remaining -= ret;
     }
-
-    tokens_t post;
-    httpServerParseValues(&post, postString, "&", "=", "");
-
-    nvs_handle nvsHandle;
-   	espError = nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle);
-
-   	if (espError != ESP_OK){
-   		printf("nvs_open return %d\n", espError);
-   		return;
-   	}
-
-    char * value;
     
-    value = httpServerGetTokenValue(&post, "wifiSSID");
-	if (value){
-
-		espError = nvs_set_str(nvsHandle, "wifiSSID", value);
-
-		if (espError != ESP_OK){
-   			printf("nvs_set_str wifiSSID %d\n", espError);
-   			return;
-   		}
-		printf("wifiSSID = %s\n", value);
-	}
-
-	espError = nvs_commit(nvsHandle);
-	if (espError != ESP_OK){
-   		printf("nvs_commit return %d\n", espError);
-   		return;
-   	}
-
-    /* Log data received */
-    printf("%s\n\n", postString);
+    httpServerParseValues(&post, postString, "&", "=", "");
 }
 
-esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, const char * contentType) {
+esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, const char * contentType, httpSSIParser_t httpSSIParser) {
 
 	httpd_resp_set_type(req, contentType);
 
 	char outBuffer[2048] = "\0";
 
 	if (strcmp(contentType, HTTPD_TYPE_TEXT) == 0){
-		httpReaplceSSI(outBuffer, fileStart, fileEnd);
+		if (httpSSIParser) {
+			httpReaplceSSI(outBuffer, fileStart, fileEnd, httpSSIParser);
+		}
+		
 	}
 
 	else{
@@ -233,38 +183,6 @@ esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fil
 	return ESP_OK;
 }
 
-extern const char  configHTMLStart[]	asm("_binary_config_html_start");
-extern const char  configHTMLEnd[]		asm("_binary_config_html_end");
-esp_err_t httpGetConfigHTML(httpd_req_t *req) {
-
-	if (req->method == HTTP_POST){
-		httpPost(req);
-	}
-
-	return httpRespond(req, configHTMLStart, configHTMLEnd, HTTPD_TYPE_TEXT);
-}
-httpd_uri_t httpdGetConfigHTML = {
-    .uri      = "/config.html",
-    .method   = HTTP_GET,
-    .handler  = httpGetConfigHTML
-};
-httpd_uri_t httpdPostConfigHTML = {
-    .uri      = "/config.html",
-    .method   = HTTP_POST,
-    .handler  = httpGetConfigHTML
-};
-
-
-extern const char  indexHTMLStart[]	asm("_binary_index_html_start");
-extern const char  indexHTMLEnd[]	asm("_binary_index_html_end");
-esp_err_t httpGetIndexHTML(httpd_req_t *req) {
-	return httpRespond(req, indexHTMLStart, indexHTMLEnd, HTTPD_TYPE_TEXT);
-}
-httpd_uri_t httpIndexHTML = {
-    .uri      = "/",
-    .method   = HTTP_GET,
-    .handler  = httpGetIndexHTML
-};
 
 
 extern const char  styleCSSStart[]	asm("_binary_style_css_start");
@@ -343,7 +261,9 @@ httpd_handle_t start_webserver(void) {
         // Set URI handlers
         printf("http: Registering URI handlers");
 
-        httpd_register_uri_handler(server, &httpIndexHTML);
+        httpPageIndexHTMLInit(server);
+
+        // httpd_register_uri_handler(server, &httpIndexHTML);
         httpd_register_uri_handler(server, &httpStyleCSS);
         httpd_register_uri_handler(server, &httpJavascriptJS);
         
