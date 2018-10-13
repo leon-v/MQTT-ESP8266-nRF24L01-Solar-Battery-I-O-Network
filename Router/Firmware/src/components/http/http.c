@@ -1,13 +1,13 @@
 #include <sys/param.h>
 #include <http_server.h>
-#include <nvs.h>
 
 #include "wifi.h"
 #include "http.h"
 
 #include "index.h"
+#include "config.h"
 
-typedef void (*httpSSIParser_t)(char * name, char * value);
+
 
 /* Function to free context */
 void adder_free_func(void *ctx) {
@@ -74,7 +74,7 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 #define SSI_TAG_MAX_LENGTH 64
 
 
-void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, httpSSIParser_t httpSSIParser){
+void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, httpSSIParser_t httpSSIParser) {
 
 	const char * file = fileStart;
 	char * out = outBuffer;
@@ -166,11 +166,8 @@ esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fil
 
 	char outBuffer[2048] = "\0";
 
-	if (strcmp(contentType, HTTPD_TYPE_TEXT) == 0){
-		if (httpSSIParser) {
-			httpReaplceSSI(outBuffer, fileStart, fileEnd, httpSSIParser);
-		}
-		
+	if ( (strcmp(contentType, HTTPD_TYPE_TEXT) == 0) && (httpSSIParser) ) {
+		httpReaplceSSI(outBuffer, fileStart, fileEnd, httpSSIParser);
 	}
 
 	else{
@@ -188,7 +185,7 @@ esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fil
 extern const char  styleCSSStart[]	asm("_binary_style_css_start");
 extern const char  styleCSSLEnd[]	asm("_binary_style_css_end");
 esp_err_t httpGetStyleCSS(httpd_req_t *req) {
-	return httpRespond(req, styleCSSStart, styleCSSLEnd, "text/css");
+	return httpRespond(req, styleCSSStart, styleCSSLEnd, "text/css", NULL);
 }
 httpd_uri_t httpStyleCSS = {
     .uri      = "/style.css",
@@ -200,7 +197,7 @@ httpd_uri_t httpStyleCSS = {
 extern const char  javaScriptStart[]	asm("_binary_javascript_js_start");
 extern const char  javaScriptEnd[]		asm("_binary_javascript_js_end");
 esp_err_t httpGetJavascriptJS(httpd_req_t *req) {
-	return httpRespond(req, javaScriptStart, javaScriptEnd, "application/javascript");
+	return httpRespond(req, javaScriptStart, javaScriptEnd, "application/javascript", NULL);
 }
 httpd_uri_t httpJavascriptJS = {
     .uri      = "/javascript.js",
@@ -262,13 +259,10 @@ httpd_handle_t start_webserver(void) {
         printf("http: Registering URI handlers");
 
         httpPageIndexHTMLInit(server);
+        httpPageConfigHTMLInit(server);
 
-        // httpd_register_uri_handler(server, &httpIndexHTML);
         httpd_register_uri_handler(server, &httpStyleCSS);
         httpd_register_uri_handler(server, &httpJavascriptJS);
-        
-        httpd_register_uri_handler(server, &httpdGetConfigHTML);
-        httpd_register_uri_handler(server, &httpdPostConfigHTML);
         
         
 

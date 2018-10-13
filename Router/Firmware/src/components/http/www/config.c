@@ -1,4 +1,5 @@
 #include <http_server.h>
+#include <nvs.h>
 #include "http.h"
 
 
@@ -16,7 +17,7 @@ void httpPageConfigGetSSIValue(char * name, char * value) {
 }
 
 esp_err_t httpPageConfigGet(httpd_req_t *req) {
-	return httpRespond(req, configHTMLStart, configHTMLEnd, HTTPD_TYPE_TEXT, httpPageConfigGetSSIValue);
+	return httpRespond(req, configHTMLStart, configHTMLEnd, HTTPD_TYPE_TEXT, &httpPageConfigGetSSIValue);
 }
 
 
@@ -25,6 +26,7 @@ esp_err_t httpPageConfigPost(httpd_req_t *req) {
 
 	char postString[1024];
 	tokens_t post;
+	esp_err_t espError;
 
 	httpGetPost(req, postString, post);
 
@@ -33,7 +35,7 @@ esp_err_t httpPageConfigPost(httpd_req_t *req) {
 
    	if (espError != ESP_OK){
    		printf("nvs_open return %d\n", espError);
-   		return;
+   		return ESP_OK;
    	}
 
     char * value;
@@ -45,7 +47,7 @@ esp_err_t httpPageConfigPost(httpd_req_t *req) {
 
 		if (espError != ESP_OK){
    			printf("nvs_set_str wifiSSID %d\n", espError);
-   			return;
+   			return ESP_OK;
    		}
 		printf("wifiSSID = %s\n", value);
 	}
@@ -53,7 +55,7 @@ esp_err_t httpPageConfigPost(httpd_req_t *req) {
 	espError = nvs_commit(nvsHandle);
 	if (espError != ESP_OK){
    		printf("nvs_commit return %d\n", espError);
-   		return;
+   		return ESP_OK;
    	}
 
     /* Log data received */
@@ -63,13 +65,13 @@ esp_err_t httpPageConfigPost(httpd_req_t *req) {
 }
 
 httpd_uri_t httpPageConfigGetURI = {
-    .uri      = "/",
+    .uri      = "/config.html",
     .method   = HTTP_GET,
     .handler  = httpPageConfigGet
 };
 
 httpd_uri_t httpPageConfigPostURI = {
-    .uri      = "/",
+    .uri      = "/config.html",
     .method   = HTTP_POST,
     .handler  = httpPageConfigPost
 };
