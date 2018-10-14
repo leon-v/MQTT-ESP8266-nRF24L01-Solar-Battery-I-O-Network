@@ -38,6 +38,7 @@ char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowD
 
 		tokens->tokens[tokens->length++].key = token;
 
+
 		token = strtok(NULL, rowDelimiter);
 	}
 
@@ -57,7 +58,10 @@ char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowD
 	return end;
 }
 
+
 char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
+
+	printf("tokens->length %d\n", tokens->length);
 
 	for (unsigned int index = 0; index < tokens->length; index++){
 
@@ -144,20 +148,22 @@ void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileE
 	}
 }
 
-void httpGetPost(httpd_req_t *req, char * postString, tokens_t post){
+void httpGetPost(httpd_req_t *req, char * postString, unsigned int postStringLength){
 	    
     int ret, remaining = req->content_len;
+    int length = 0;
 
     while (remaining > 0) {
         /* Read the data for the request */
-        if ((ret = httpd_req_recv(req, postString, MIN(remaining, sizeof(postString)))) < 0) {
-            return;
+        if ((ret = httpd_req_recv(req, postString, MIN(remaining, postStringLength))) < 0) {
+        	break;
         }
 
+        length+= ret;
         remaining -= ret;
     }
-    
-    httpServerParseValues(&post, postString, "&", "=", "");
+
+    postString[length] = '\0';
 }
 
 esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, const char * contentType, httpSSIParser_t httpSSIParser) {

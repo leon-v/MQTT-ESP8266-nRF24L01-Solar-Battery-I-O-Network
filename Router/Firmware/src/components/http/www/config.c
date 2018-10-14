@@ -8,11 +8,11 @@ extern const char  configHTMLEnd[]		asm("_binary_config_html_end");
 
 void httpPageConfigGetSSIValue(char * name, char * value) {
 	
-	if (strcmp(name, "test") == 0){
-		strcpy(value, "Test Value");
+	if(strcmp(name, "wifiSSID") == 0) {
+		sprintf(value, HTML_INPUT_STRING, "text", "wifiSSID", "ssid1");
 	}
-	else if(strcmp(name, "wifiSSID") == 0) {
-		sprintf(value, HTML_INPUT_STRING, "text", "wifiSSID", "Yay");
+	else if(strcmp(name, "wifiPassword") == 0) {
+		sprintf(value, HTML_INPUT_STRING, "password", "wifiPassword", "password1");
 	}
 }
 
@@ -26,42 +26,54 @@ esp_err_t httpPageConfigPost(httpd_req_t *req) {
 
 	char postString[1024];
 	tokens_t post;
-	esp_err_t espError;
 
-	httpGetPost(req, postString, post);
+	unsigned int postStringLength = sizeof(postString) - 1;
+	// httpGetPost(req, postString, postStringLength);
+	int ret, remaining = req->content_len;
+    int length = 0;
+    int min = 0;
 
-    nvs_handle nvsHandle;
-   	espError = nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle);
+    while (remaining > 0) {
+        /* Read the data for the request */
 
-   	if (espError != ESP_OK){
-   		printf("nvs_open return %d\n", espError);
-   		return ESP_OK;
-   	}
+        min = (remaining > postStringLength) ? postStringLength : remaining;
 
-    char * value;
+        if ((ret = httpd_req_recv(req, &postString, min)) < 0) {
+        	return ret;
+        }
+
+        length+= ret;
+        remaining -= ret;
+    }
+
+    postString[length] = '\0';
+
+	printf("Got post data :%s\n", postString);
+
+	// httpServerParseValues(&post, postString, "&", "=", "");
+
+	// printf("Still Got Post %s\n", postString);
+
+    // nvs_handle nvsHandle;
+   	// ESP_ERROR_CHECK(nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle));
+
+    // char * value;
     
-    value = httpServerGetTokenValue(&post, "wifiSSID");
-	if (value){
+    // value = httpServerGetTokenValue(&post, "wifiSSID");
+	// if (value){
+		// ESP_ERROR_CHECK(nvs_set_str(nvsHandle, "wifiSSID", value));
+	// }
 
-		espError = nvs_set_str(nvsHandle, "wifiSSID", value);
+	// printf("Committing \n");
 
-		if (espError != ESP_OK){
-   			printf("nvs_set_str wifiSSID %d\n", espError);
-   			return ESP_OK;
-   		}
-		printf("wifiSSID = %s\n", value);
-	}
+	// ESP_ERROR_CHECK(nvs_commit(nvsHandle));
 
-	espError = nvs_commit(nvsHandle);
-	if (espError != ESP_OK){
-   		printf("nvs_commit return %d\n", espError);
-   		return ESP_OK;
-   	}
+   	// nvs_close(nvsHandle);
 
     /* Log data received */
-    printf("%s\n\n", postString);
+    // printf("Still sill Got Post %s\n", postString);
 
-	return httpRespond(req, configHTMLStart, configHTMLEnd, HTTPD_TYPE_TEXT, httpPageConfigGetSSIValue);
+	return httpRespond(req, configHTMLStart, configHTMLEnd, HTTPD_TYPE_TEXT, &httpPageConfigGetSSIValue);
 }
 
 httpd_uri_t httpPageConfigGetURI = {

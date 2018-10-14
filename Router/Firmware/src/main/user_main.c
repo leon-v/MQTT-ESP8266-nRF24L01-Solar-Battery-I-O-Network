@@ -44,4 +44,6 @@ void app_main() {
 
    	printf("Length %d\n", length);
    	printf("wifiSSID From NVS : %s\n", value);
+
+   	nvs_close(nvsHandle);
 }
