@@ -38,9 +38,12 @@ esp_err_t httpPageConfigPost(httpd_req_t *req) {
 
         min = (remaining > postStringLength) ? postStringLength : remaining;
 
-        if ((ret = httpd_req_recv(req, &postString, min)) < 0) {
+        if ((ret = httpd_req_recv(req, postString, min)) < 0) {
+        	printf("httpd_req_recv ret1 :%d\n", ret);
         	return ret;
         }
+
+        printf("httpd_req_recv ret2 :%d\n", ret);
 
         length+= ret;
         remaining -= ret;
