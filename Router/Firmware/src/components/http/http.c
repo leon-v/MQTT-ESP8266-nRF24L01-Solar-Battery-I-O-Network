@@ -53,6 +53,8 @@ char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowD
 		if (tokens->tokens[index].value == NULL){
 			tokens->tokens[index].value = tokens->tokens[index].key + strlen(tokens->tokens[index].key);
 		}
+
+		printf("I=%d, K=%s, V=%s\n", index, tokens->tokens[index].key, tokens->tokens[index].value);
 	}
 
 	return end;
@@ -80,78 +82,69 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 
 void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, httpSSIParser_t * httpSSIParser) {
 
-	strncpy(outBuffer, fileStart, fileEnd - fileStart);
-	return;
+	char * file = (char * ) fileStart;
+	char * out = outBuffer;
 
-	// if (!httpSSIParser){
-	// 	return;
-	// }
+	char ssiTag[SSI_TAG_MAX_LENGTH] = {"\0"};
+	char ssiValue[SSI_TAG_MAX_LENGTH] = {"\0"};
 
-	// char * file = (char * ) fileStart;
-	// char * out = outBuffer;
+	unsigned int appendLength = 0;
 
-	// char ssiTag[SSI_TAG_MAX_LENGTH] = {"\0"};
-	// char ssiValue[SSI_TAG_MAX_LENGTH] = {"\0"};
+	while (true)  {
 
-	// unsigned int appendLength = 0;
-
-	// strncpy(outBuffer, fileStart, fileEnd - fileStart);
-
-	// while (true)  {
-
-		// if ( ((fileEnd - file) < sizeof(START_SSI)) || (strncmp(file, START_SSI, strlen(START_SSI)) != 0) ) {
+		if ( ((fileEnd - file) < sizeof(START_SSI)) || (strncmp(file, START_SSI, strlen(START_SSI)) != 0) ) {
 
 
-			// appendLength = 1;
+			appendLength = 1;
 
-			// if ((file + appendLength) > fileEnd) {
-			// 	return;
-			// }
+			if ((file + appendLength) > fileEnd) {
+				return;
+			}
 
-			// strncpy(out, file, appendLength);
+			strncpy(out, file, appendLength);
 
-			// file+= appendLength;
-			// out+= appendLength;
+			file+= appendLength;
+			out+= appendLength;
 
-			// continue;
-		// }
+			continue;
+		}
 
-		// file+= strlen(START_SSI);
+		file+= strlen(START_SSI);
 
-		// ssiTag[0] = '\0';
-		// ssiValue[0] = '\0';
+		ssiTag[0] = '\0';
+		ssiValue[0] = '\0';
 
-		// while ( ((fileEnd - file) < sizeof(END_SSI)) || (strncmp(file, END_SSI, strlen(END_SSI)) != 0) ) {
+		while ( ((fileEnd - file) < sizeof(END_SSI)) || (strncmp(file, END_SSI, strlen(END_SSI)) != 0) ) {
 
-		// 	appendLength = 1;
+			appendLength = 1;
 
-		// 	if ((file + appendLength) > fileEnd) {
-		// 		return;
-		// 	}
+			if ((file + appendLength) > fileEnd) {
+				return;
+			}
 
-		// 	if (strlen(ssiTag) >= (sizeof(ssiTag) - 1)){
-		// 		file+= appendLength;
-		// 		continue;
-		// 	}
+			if (strlen(ssiTag) >= (sizeof(ssiTag) - 1)){
+				file+= appendLength;
+				continue;
+			}
 
-		// 	strncat(ssiTag, file, appendLength);
+			strncat(ssiTag, file, appendLength);
 
-		// 	file+= appendLength;
-		// }
+			file+= appendLength;
+		}
 
-		// file+= sizeof(END_SSI) - 1;
+		file+= sizeof(END_SSI) - 1;
 
-		// httpSSIParser(ssiTag, ssiValue);
+		httpSSIParser(ssiTag, ssiValue);
 
-		// if (ssiValue == NULL) {
-		// 	continue;
-		// }
+		if (ssiValue == NULL) {
+			continue;
+		}
 
-		// appendLength = strlen(ssiValue);
+		appendLength = strlen(ssiValue);
 
-		// strncpy(out, ssiValue, appendLength);
-		// out+= appendLength;
-	// }
+		strncpy(out, ssiValue, appendLength);
+		out+= appendLength;
+	}
 }
 
 esp_err_t httpGetPost(httpd_req_t *req, char * postString, unsigned int postStringLength){
@@ -176,14 +169,13 @@ esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fil
 
 	char outBuffer[2048];
 
-	// if (httpSSIParser) {
-		// httpReaplceSSI(outBuffer, fileStart, fileEnd, httpSSIParser);
-		// strncpy(outBuffer, fileStart, fileEnd - fileStart);
-	// }
+	if (httpSSIParser) {
+		httpReaplceSSI(outBuffer, fileStart, fileEnd, httpSSIParser);
+	}
 
-	// else{
+	else{
 		strncpy(outBuffer, fileStart, fileEnd - fileStart);
-	// }
+	}
 	
 
 	return httpd_resp_send(req, outBuffer, strlen(outBuffer));
@@ -264,6 +256,9 @@ void stop_webserver(httpd_handle_t server) {
 httpd_handle_t start_webserver(void) {
 
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+    config.recv_wait_timeout = 5;
+    config.send_wait_timeout = 5;
+    config.stack_size = 8192;
 
     // Start the httpd server
     printf("http: Starting server on port: '%d'", config.server_port);
@@ -325,5 +320,5 @@ static void httpServerTask(void *arg){
 void httpServerInit(){
 
 
-	xTaskCreate(&httpServerTask, "http", 2048, NULL, 12, NULL);
+	xTaskCreate(&httpServerTask, "http", 8192, NULL, 12, NULL);
 }
