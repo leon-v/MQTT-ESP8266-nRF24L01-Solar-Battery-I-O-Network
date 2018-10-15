@@ -5,6 +5,8 @@
 
 #include "wifi.h"
 #include "wifi_access_point.h"
+#include "wifi_client.h"
+
 #include "http.h"
 
 void app_main() {
@@ -21,7 +23,8 @@ void app_main() {
     ESP_ERROR_CHECK(espError);
 
     wifiInit();
-    wifiAccessPointInit();
+    // wifiAccessPointInit();
+    wifiClientInit();
 
     httpServerInit();
 

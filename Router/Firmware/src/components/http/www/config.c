@@ -1,5 +1,6 @@
 #include <http_server.h>
 #include <nvs.h>
+
 #include "http.h"
 
 
@@ -17,48 +18,41 @@ void httpPageConfigGetSSIValue(char * name, char * value) {
 }
 
 esp_err_t httpPageConfigGet(httpd_req_t *req) {
-	return httpRespond(req, configHTMLStart, configHTMLEnd, HTTPD_TYPE_TEXT, &httpPageConfigGetSSIValue);
+
+	httpd_resp_set_type(req, HTTPD_TYPE_TEXT);
+
+	return httpRespond(req, configHTMLStart, configHTMLEnd, &httpPageConfigGetSSIValue);
 }
 
 
 
 esp_err_t httpPageConfigPost(httpd_req_t *req) {
 
-	char postString[1024];
+	httpd_resp_set_type(req, HTTPD_TYPE_TEXT);
+
+	
+
+	char postString[512];
 	tokens_t post;
+	esp_err_t espError;
 
-	unsigned int postStringLength = sizeof(postString) - 1;
-	// httpGetPost(req, postString, postStringLength);
-	int ret, remaining = req->content_len;
-    int length = 0;
-    int min = 0;
+	espError = httpGetPost(req, postString, sizeof(postString));
 
-    while (remaining > 0) {
-        /* Read the data for the request */
-
-        min = (remaining > postStringLength) ? postStringLength : remaining;
-
-        if ((ret = httpd_req_recv(req, postString, min)) < 0) {
-        	printf("httpd_req_recv ret1 :%d\n", ret);
-        	return ret;
-        }
-
-        printf("httpd_req_recv ret2 :%d\n", ret);
-
-        length+= ret;
-        remaining -= ret;
-    }
-
-    postString[length] = '\0';
+	if (espError != ESP_OK) {
+		return espError;
+	}
 
 	printf("Got post data :%s\n", postString);
+	
+	return httpRespond(req, configHTMLStart, configHTMLEnd, &httpPageConfigGetSSIValue);
+
+	
 
 	// httpServerParseValues(&post, postString, "&", "=", "");
 
 	// printf("Still Got Post %s\n", postString);
 
-    // nvs_handle nvsHandle;
-   	// ESP_ERROR_CHECK(nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle));
+    // nvs_handlepythonCHECK(nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle));
 
     // char * value;
     
@@ -76,7 +70,9 @@ esp_err_t httpPageConfigPost(httpd_req_t *req) {
     /* Log data received */
     // printf("Still sill Got Post %s\n", postString);
 
-	return httpRespond(req, configHTMLStart, configHTMLEnd, HTTPD_TYPE_TEXT, &httpPageConfigGetSSIValue);
+    // xSemaphoreGive(http_semaphore);
+
+	return httpRespond(req, configHTMLStart, configHTMLEnd, &httpPageConfigGetSSIValue);
 }
 
 httpd_uri_t httpPageConfigGetURI = {

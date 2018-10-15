@@ -78,112 +78,115 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 #define SSI_TAG_MAX_LENGTH 64
 
 
-void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, httpSSIParser_t httpSSIParser) {
+void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, httpSSIParser_t * httpSSIParser) {
 
-	const char * file = fileStart;
-	char * out = outBuffer;
+	strncpy(outBuffer, fileStart, fileEnd - fileStart);
+	return;
 
-	char ssiTag[SSI_TAG_MAX_LENGTH] = {"\0"};
-	char ssiValue[SSI_TAG_MAX_LENGTH] = {"\0"};
+	// if (!httpSSIParser){
+	// 	return;
+	// }
 
-	unsigned int appendLength = 0;
+	// char * file = (char * ) fileStart;
+	// char * out = outBuffer;
 
-	while (true)  {
+	// char ssiTag[SSI_TAG_MAX_LENGTH] = {"\0"};
+	// char ssiValue[SSI_TAG_MAX_LENGTH] = {"\0"};
 
-		if ( ((fileEnd - file) < sizeof(START_SSI)) || (strncmp(file, START_SSI, strlen(START_SSI)) != 0) ) {
+	// unsigned int appendLength = 0;
+
+	// strncpy(outBuffer, fileStart, fileEnd - fileStart);
+
+	// while (true)  {
+
+		// if ( ((fileEnd - file) < sizeof(START_SSI)) || (strncmp(file, START_SSI, strlen(START_SSI)) != 0) ) {
 
 
-			appendLength = 1;
+			// appendLength = 1;
 
-			if ((file + appendLength) > fileEnd) {
-				return;
-			}
+			// if ((file + appendLength) > fileEnd) {
+			// 	return;
+			// }
 
-			strncpy(out, file, appendLength);
+			// strncpy(out, file, appendLength);
 
-			file+= appendLength;
-			out+= appendLength;
+			// file+= appendLength;
+			// out+= appendLength;
 
-			continue;
-		}
+			// continue;
+		// }
 
-		file+= strlen(START_SSI);
+		// file+= strlen(START_SSI);
 
-		ssiTag[0] = '\0';
-		ssiValue[0] = '\0';
+		// ssiTag[0] = '\0';
+		// ssiValue[0] = '\0';
 
-		while ( ((fileEnd - file) < sizeof(END_SSI)) || (strncmp(file, END_SSI, strlen(END_SSI)) != 0) ) {
+		// while ( ((fileEnd - file) < sizeof(END_SSI)) || (strncmp(file, END_SSI, strlen(END_SSI)) != 0) ) {
 
-			appendLength = 1;
+		// 	appendLength = 1;
 
-			if ((file + appendLength) > fileEnd) {
-				return;
-			}
+		// 	if ((file + appendLength) > fileEnd) {
+		// 		return;
+		// 	}
 
-			if (strlen(ssiTag) >= (sizeof(ssiTag) - 1)){
-				file+= appendLength;
-				continue;
-			}
+		// 	if (strlen(ssiTag) >= (sizeof(ssiTag) - 1)){
+		// 		file+= appendLength;
+		// 		continue;
+		// 	}
 
-			strncat(ssiTag, file, appendLength);
+		// 	strncat(ssiTag, file, appendLength);
 
-			file+= appendLength;
-		}
+		// 	file+= appendLength;
+		// }
 
-		file+= sizeof(END_SSI) - 1;
+		// file+= sizeof(END_SSI) - 1;
 
-		if (httpSSIParser) {
-			httpSSIParser(ssiTag, ssiValue);
-		}
-		
+		// httpSSIParser(ssiTag, ssiValue);
 
-		if (ssiValue == NULL) {
-			continue;
-		}
+		// if (ssiValue == NULL) {
+		// 	continue;
+		// }
 
-		appendLength = strlen(ssiValue);
+		// appendLength = strlen(ssiValue);
 
-		strncpy(out, ssiValue, appendLength);
-		out+= appendLength;
-	}
+		// strncpy(out, ssiValue, appendLength);
+		// out+= appendLength;
+	// }
 }
 
-void httpGetPost(httpd_req_t *req, char * postString, unsigned int postStringLength){
+esp_err_t httpGetPost(httpd_req_t *req, char * postString, unsigned int postStringLength){
 	    
-    int ret, remaining = req->content_len;
-    int length = 0;
+	int ret, remaining = req->content_len;
 
     while (remaining > 0) {
         /* Read the data for the request */
         if ((ret = httpd_req_recv(req, postString, MIN(remaining, postStringLength))) < 0) {
-        	break;
+            return ESP_FAIL;
         }
 
-        length+= ret;
         remaining -= ret;
     }
 
-    postString[length] = '\0';
+    postString[req->content_len] = '\0';
+
+    return ESP_OK;
 }
 
-esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, const char * contentType, httpSSIParser_t httpSSIParser) {
+esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, httpSSIParser_t * httpSSIParser) {
 
-	httpd_resp_set_type(req, contentType);
+	char outBuffer[2048];
 
-	char outBuffer[2048] = "\0";
+	// if (httpSSIParser) {
+		// httpReaplceSSI(outBuffer, fileStart, fileEnd, httpSSIParser);
+		// strncpy(outBuffer, fileStart, fileEnd - fileStart);
+	// }
 
-	if ( (strcmp(contentType, HTTPD_TYPE_TEXT) == 0) && (httpSSIParser) ) {
-		httpReaplceSSI(outBuffer, fileStart, fileEnd, httpSSIParser);
-	}
-
-	else{
+	// else{
 		strncpy(outBuffer, fileStart, fileEnd - fileStart);
-	}
+	// }
 	
 
-	httpd_resp_send(req, outBuffer, strlen(outBuffer));
-
-	return ESP_OK;
+	return httpd_resp_send(req, outBuffer, strlen(outBuffer));
 }
 
 
@@ -191,7 +194,10 @@ esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fil
 extern const char  styleCSSStart[]	asm("_binary_style_css_start");
 extern const char  styleCSSLEnd[]	asm("_binary_style_css_end");
 esp_err_t httpGetStyleCSS(httpd_req_t *req) {
-	return httpRespond(req, styleCSSStart, styleCSSLEnd, "text/css", NULL);
+
+	httpd_resp_set_type(req, "text/css");
+	
+	return httpRespond(req, styleCSSStart, styleCSSLEnd, NULL);
 }
 httpd_uri_t httpStyleCSS = {
     .uri      = "/style.css",
@@ -203,7 +209,10 @@ httpd_uri_t httpStyleCSS = {
 extern const char  javaScriptStart[]	asm("_binary_javascript_js_start");
 extern const char  javaScriptEnd[]		asm("_binary_javascript_js_end");
 esp_err_t httpGetJavascriptJS(httpd_req_t *req) {
-	return httpRespond(req, javaScriptStart, javaScriptEnd, "application/javascript", NULL);
+
+	httpd_resp_set_type(req, "application/javascript");
+
+	return httpRespond(req, javaScriptStart, javaScriptEnd, NULL);
 }
 httpd_uri_t httpJavascriptJS = {
     .uri      = "/javascript.js",
@@ -285,6 +294,8 @@ static void httpServerTask(void *arg){
 
 	EventBits_t EventBits;
 	httpd_handle_t server = NULL;
+
+	// http_semaphore = xSemaphoreCreateMutex();
 
 	while (true){
 

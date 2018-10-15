@@ -8,4 +8,6 @@ if [ "$1" = 2 ];
 	make clean
 fi
 
-make -j5 all
+make -j7 all
+
+# make monitor

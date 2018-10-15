@@ -1,6 +1,7 @@
 #ifndef HTTP_SERVER_H
 
 #include <http_server.h>
+#include <freertos/semphr.h>
 
 #define HTML_INPUT_STRING "<input type=\"%s\" name=\"%s\" value=\"%s\" />"
 #define HTML_INPUT_INT "<input type=\"%s\" name=\"%s\" value=\"%u\" />"
@@ -17,14 +18,16 @@ typedef struct{
 	unsigned int length;
 } tokens_t;
 
-typedef void (*httpSSIParser_t)(char * name, char * value);
+typedef void (httpSSIParser_t)(char * name, char * value);
 
 void httpServerInit(void);
 
-esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, const char * contentType, httpSSIParser_t httpSSIParser);
+esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, httpSSIParser_t * httpSSIParser);
 
 char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowDelimiter, const char * valueDelimiter, const char * endMatch);
-void httpGetPost(httpd_req_t *req, char * postString, unsigned int postStringLength);
+esp_err_t httpGetPost(httpd_req_t *req, char * postString, unsigned int postStringLength);
+
+void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, httpSSIParser_t * httpSSIParser);
 
 char * httpServerGetTokenValue(tokens_t * tokens, const char * key);
 
