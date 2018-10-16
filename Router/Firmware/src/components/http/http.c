@@ -6,9 +6,46 @@
 #include "http.h"
 #include "config.h"
 
-#include "index.h"
+#include "index_html.h"
 #include "config_html.h"
+#include "javascript_js.h"
+#include "style_css.h"
 
+void httpServerURLDecode(char * input, int length) {
+    
+    char * output = input;
+    char hex[3] = "\0\0\0";
+
+    while (input[0] != '\0') {
+
+    	if (!length--){
+    		break;
+    	}
+
+
+    	if (input[0] == '+') {
+    		input[0] = ' ';
+    		input+= 1;
+    	}
+
+    	else if (input[0] == '%') {
+
+    		hex[0] = input[1];
+    		hex[1] = input[2];
+    		output[0] = strtol(hex, NULL, 16);
+    		input+= 3;
+    	}
+
+    	else{
+    		output[0] = input[0];
+    		input+= 1;
+    	}
+
+    	output+= 1;
+    }
+
+    output[0] = '\0';
+}
 
 char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowDelimiter, const char * valueDelimiter, const char * endMatch){
 
@@ -141,24 +178,28 @@ void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileE
 			}
 
 
-			char nvsValue[MAX_CONFIG_STRING_LENGTH];
-			size_t nvsLength = sizeof(nvsValue);
+			char nvsStringValue[MAX_CONFIG_STRING_LENGTH];
+			size_t nvsLength = sizeof(nvsStringValue);
+			unsigned long int nvsIntValue;
 
 			switch (ssiTag.type) {
 
 				case SSI_TYPE_TEXT:
-					nvs_get_str(nvsHandle, ssiTag.key, nvsValue, &nvsLength);
-					nvsValue[nvsLength] = '\0';
-					sprintf(replaceSSIValue, "<input type=\"text\" name=\"%s\" value=\"%s\" />", ssiTag.key, nvsValue);
+					nvs_get_str(nvsHandle, ssiTag.key, nvsStringValue, &nvsLength);
+					nvsStringValue[nvsLength] = '\0';
+					sprintf(replaceSSIValue, "<input type=\"text\" name=\"%s\" value=\"%s\" />", ssiTag.key, nvsStringValue);
 				break;
 
 				case SSI_TYPE_PASSWORD:
-					nvs_get_str(nvsHandle, ssiTag.key, nvsValue, &nvsLength);
-					nvsValue[nvsLength] = '\0';
-					sprintf(replaceSSIValue, "<input type=\"password\" name=\"%s\" value=\"%s\" />", ssiTag.key, nvsValue);
+					nvs_get_str(nvsHandle, ssiTag.key, nvsStringValue, &nvsLength);
+					nvsStringValue[nvsLength] = '\0';
+					sprintf(replaceSSIValue, "<input type=\"password\" name=\"%s\" value=\"%s\" />", ssiTag.key, nvsStringValue);
 				break;
 
 				case SSI_TYPE_INTEGER:
+					nvs_get_u32(nvsHandle, ssiTag.key, (uint32_t *) &nvsIntValue);
+					itoa(nvsIntValue, nvsStringValue, 10);
+					sprintf(replaceSSIValue, "<input type=\"number\" name=\"%s\" value=\"%s\" />", ssiTag.key, nvsStringValue);
 				break;
 			}
 
@@ -214,9 +255,20 @@ void httpServerSavePost(httpd_req_t * req, char * buffer, unsigned int bufferLen
 			continue;
 		}
 
-		printf("I=%d, K=%s, V=%s\n", ssiTagsIndex, ssiTag.key, value);
+		httpServerURLDecode(value, MAX_HTTP_SSI_VALUE_LENGTH);
 
-		ESP_ERROR_CHECK(nvs_set_str(nvsHandle, ssiTag.key, value));
+		switch (ssiTag.type) {
+
+			case SSI_TYPE_TEXT:
+			case SSI_TYPE_PASSWORD:
+				ESP_ERROR_CHECK(nvs_set_str(nvsHandle, ssiTag.key, value));
+			break;
+
+			case SSI_TYPE_INTEGER:
+				ESP_ERROR_CHECK(nvs_set_u32(nvsHandle, ssiTag.key, atoi(value)));
+			break;
+		}
+		
 
 		ESP_ERROR_CHECK(nvs_commit(nvsHandle));
 	}
@@ -245,37 +297,6 @@ esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fil
 	return httpd_resp_send(req, outBuffer, strlen(outBuffer));
 }
 
-
-
-extern const char  styleCSSStart[]	asm("_binary_style_css_start");
-extern const char  styleCSSLEnd[]	asm("_binary_style_css_end");
-esp_err_t httpGetStyleCSS(httpd_req_t *req) {
-
-	httpd_resp_set_type(req, "text/css");
-	
-	return httpRespond(req, styleCSSStart, styleCSSLEnd, NULL, 0);
-}
-httpd_uri_t httpStyleCSS = {
-    .uri      = "/style.css",
-    .method   = HTTP_GET,
-    .handler  = httpGetStyleCSS
-};
-
-
-extern const char  javaScriptStart[]	asm("_binary_javascript_js_start");
-extern const char  javaScriptEnd[]		asm("_binary_javascript_js_end");
-esp_err_t httpGetJavascriptJS(httpd_req_t *req) {
-
-	httpd_resp_set_type(req, "application/javascript");
-
-	return httpRespond(req, javaScriptStart, javaScriptEnd, NULL, 0);
-}
-httpd_uri_t httpJavascriptJS = {
-    .uri      = "/javascript.js",
-    .method   = HTTP_GET,
-    .handler  = httpGetJavascriptJS
-};
-
 void stop_webserver(httpd_handle_t server) {
     // Stop the httpd server
     httpd_stop(server);
@@ -285,8 +306,6 @@ void stop_webserver(httpd_handle_t server) {
 httpd_handle_t start_webserver(void) {
 
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-    config.recv_wait_timeout = 5;
-    config.send_wait_timeout = 5;
     config.stack_size = 8192;
 
     // Start the httpd server
@@ -300,13 +319,10 @@ httpd_handle_t start_webserver(void) {
         httpPageIndexHTMLInit(server);
         httpPageConfigHTMLInit(server);
 
-        httpd_register_uri_handler(server, &httpStyleCSS);
-        httpd_register_uri_handler(server, &httpJavascriptJS);
-        
+        httpPageJavascriptJSInit(server);
+        httpPageStyleCSSInit(server);
         
 
-        // httpd_register_uri_handler(server, &adder_put);
-        // httpd_register_uri_handler(server, &adder_post);
         return server;
     }
 
@@ -318,8 +334,6 @@ static void httpServerTask(void *arg){
 
 	EventBits_t EventBits;
 	httpd_handle_t server = NULL;
-
-	// http_semaphore = xSemaphoreCreateMutex();
 
 	while (true){
 

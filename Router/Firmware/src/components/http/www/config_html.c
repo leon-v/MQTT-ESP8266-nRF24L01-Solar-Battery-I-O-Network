@@ -6,8 +6,13 @@ extern const char  configHTMLStart[]	asm("_binary_config_html_start");
 extern const char  configHTMLEnd[]		asm("_binary_config_html_end");
 
 const ssiTag_t ssiTags[] = {
-	{"wifiSSID", SSI_TYPE_TEXT},
-	{"wifiPassword",SSI_TYPE_PASSWORD}
+	{"wifiSSID", 		SSI_TYPE_TEXT},
+	{"wifiPassword",	SSI_TYPE_PASSWORD},
+	{"mqttHost", 		SSI_TYPE_TEXT},
+	{"mqttPort", 		SSI_TYPE_INTEGER},
+	{"mqttKeepalive",	SSI_TYPE_INTEGER},
+	{"mqttUsername", 	SSI_TYPE_TEXT},
+	{"mqttPassword", 	SSI_TYPE_PASSWORD}
 };
 
 esp_err_t httpPageConfigGet(httpd_req_t *req) {
