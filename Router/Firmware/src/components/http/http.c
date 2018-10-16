@@ -1,19 +1,14 @@
 #include <sys/param.h>
 #include <http_server.h>
+#include <nvs.h>
 
 #include "wifi.h"
 #include "http.h"
-
-#include "index.h"
 #include "config.h"
 
+#include "index.h"
+#include "config_html.h"
 
-
-/* Function to free context */
-void adder_free_func(void *ctx) {
-    printf("http: / Free Context function called");
-    free(ctx);
-}
 
 char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowDelimiter, const char * valueDelimiter, const char * endMatch){
 
@@ -53,8 +48,6 @@ char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowD
 		if (tokens->tokens[index].value == NULL){
 			tokens->tokens[index].value = tokens->tokens[index].key + strlen(tokens->tokens[index].key);
 		}
-
-		printf("I=%d, K=%s, V=%s\n", index, tokens->tokens[index].key, tokens->tokens[index].value);
 	}
 
 	return end;
@@ -62,8 +55,6 @@ char * httpServerParseValues(tokens_t * tokens, char * buffer, const char * rowD
 
 
 char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
-
-	printf("tokens->length %d\n", tokens->length);
 
 	for (unsigned int index = 0; index < tokens->length; index++){
 
@@ -77,16 +68,19 @@ char * httpServerGetTokenValue(tokens_t * tokens, const char * key){
 
 #define START_SSI "<!--#"
 #define END_SSI "-->"
-#define SSI_TAG_MAX_LENGTH 64
 
 
-void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, httpSSIParser_t * httpSSIParser) {
+void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileEnd, const ssiTag_t * ssiTags, int ssiTagsLength) {
 
 	char * file = (char * ) fileStart;
 	char * out = outBuffer;
 
-	char ssiTag[SSI_TAG_MAX_LENGTH] = {"\0"};
-	char ssiValue[SSI_TAG_MAX_LENGTH] = {"\0"};
+	int ssiTagsIndex = 0;
+	char ssiKey[MAX_HTTP_SSI_KEY_LENGTH] = {"\0"};
+	
+
+	nvs_handle nvsHandle;
+	ESP_ERROR_CHECK(nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle));
 
 	unsigned int appendLength = 0;
 
@@ -98,6 +92,7 @@ void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileE
 			appendLength = 1;
 
 			if ((file + appendLength) > fileEnd) {
+				nvs_close(nvsHandle);
 				return;
 			}
 
@@ -111,40 +106,72 @@ void httpReaplceSSI(char * outBuffer, const char * fileStart, const char * fileE
 
 		file+= strlen(START_SSI);
 
-		ssiTag[0] = '\0';
-		ssiValue[0] = '\0';
+		ssiKey[0] = '\0';
 
 		while ( ((fileEnd - file) < sizeof(END_SSI)) || (strncmp(file, END_SSI, strlen(END_SSI)) != 0) ) {
 
 			appendLength = 1;
 
 			if ((file + appendLength) > fileEnd) {
+				nvs_close(nvsHandle);
 				return;
 			}
 
-			if (strlen(ssiTag) >= (sizeof(ssiTag) - 1)){
+			if (strlen(ssiKey) >= (sizeof(ssiKey) - 1)){
 				file+= appendLength;
 				continue;
 			}
 
-			strncat(ssiTag, file, appendLength);
+			strncat(ssiKey, file, appendLength);
 
 			file+= appendLength;
 		}
 
 		file+= sizeof(END_SSI) - 1;
 
-		httpSSIParser(ssiTag, ssiValue);
+		char replaceSSIValue[MAX_HTTP_SSI_VALUE_LENGTH];
+		strcpy(replaceSSIValue, "SSI Value Unhandled");
 
-		if (ssiValue == NULL) {
-			continue;
+		for (ssiTagsIndex = 0; ssiTagsIndex < ssiTagsLength; ssiTagsIndex++) {
+
+			const ssiTag_t ssiTag = ssiTags[ssiTagsIndex];
+
+			if (strcmp(ssiKey, ssiTag.key) != 0) {
+				continue;
+			}
+
+
+			char nvsValue[MAX_CONFIG_STRING_LENGTH];
+			size_t nvsLength = sizeof(nvsValue);
+
+			switch (ssiTag.type) {
+
+				case SSI_TYPE_TEXT:
+					nvs_get_str(nvsHandle, ssiTag.key, nvsValue, &nvsLength);
+					nvsValue[nvsLength] = '\0';
+					sprintf(replaceSSIValue, "<input type=\"text\" name=\"%s\" value=\"%s\" />", ssiTag.key, nvsValue);
+				break;
+
+				case SSI_TYPE_PASSWORD:
+					nvs_get_str(nvsHandle, ssiTag.key, nvsValue, &nvsLength);
+					nvsValue[nvsLength] = '\0';
+					sprintf(replaceSSIValue, "<input type=\"password\" name=\"%s\" value=\"%s\" />", ssiTag.key, nvsValue);
+				break;
+
+				case SSI_TYPE_INTEGER:
+				break;
+			}
+
+			break;
 		}
+		// strcpy(replaceSSIValue, "TEST");
 
-		appendLength = strlen(ssiValue);
-
-		strncpy(out, ssiValue, appendLength);
+		appendLength = strlen(replaceSSIValue);
+		strncpy(out, replaceSSIValue, appendLength);
 		out+= appendLength;
 	}
+
+	nvs_close(nvsHandle);
 }
 
 esp_err_t httpGetPost(httpd_req_t *req, char * postString, unsigned int postStringLength){
@@ -165,12 +192,49 @@ esp_err_t httpGetPost(httpd_req_t *req, char * postString, unsigned int postStri
     return ESP_OK;
 }
 
-esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, httpSSIParser_t * httpSSIParser) {
+void httpServerSavePost(httpd_req_t * req, char * buffer, unsigned int bufferLength, const ssiTag_t * ssiTags, int ssiTagsLength){
+
+	ESP_ERROR_CHECK(httpGetPost(req, buffer, bufferLength));
+
+	printf("Got post data :%s\n", buffer);	
+
+	tokens_t post;
+	httpServerParseValues(&post, buffer, "&", "=", "\0");
+
+	nvs_handle nvsHandle;
+	ESP_ERROR_CHECK(nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle));
+    
+    for (int ssiTagsIndex = 0; ssiTagsIndex < ssiTagsLength; ssiTagsIndex++) {
+
+		const ssiTag_t ssiTag = ssiTags[ssiTagsIndex];
+
+		char * value = httpServerGetTokenValue(&post, ssiTag.key);
+
+		if (!value){
+			continue;
+		}
+
+		printf("I=%d, K=%s, V=%s\n", ssiTagsIndex, ssiTag.key, value);
+
+		ESP_ERROR_CHECK(nvs_set_str(nvsHandle, ssiTag.key, value));
+
+		ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+	}
+
+   	nvs_close(nvsHandle);
+}
+
+esp_err_t httpRespond(httpd_req_t *req, const char * fileStart, const char * fileEnd, const ssiTag_t * ssiTags, int ssiTagsLength) {
 
 	char outBuffer[2048];
 
-	if (httpSSIParser) {
-		httpReaplceSSI(outBuffer, fileStart, fileEnd, httpSSIParser);
+	if (req->method == HTTP_POST){
+		httpServerSavePost(req, outBuffer, sizeof(outBuffer), ssiTags, ssiTagsLength);
+	}
+
+
+	if (ssiTags) {
+		httpReaplceSSI(outBuffer, fileStart, fileEnd, ssiTags, ssiTagsLength);
 	}
 
 	else{
@@ -189,7 +253,7 @@ esp_err_t httpGetStyleCSS(httpd_req_t *req) {
 
 	httpd_resp_set_type(req, "text/css");
 	
-	return httpRespond(req, styleCSSStart, styleCSSLEnd, NULL);
+	return httpRespond(req, styleCSSStart, styleCSSLEnd, NULL, 0);
 }
 httpd_uri_t httpStyleCSS = {
     .uri      = "/style.css",
@@ -204,48 +268,13 @@ esp_err_t httpGetJavascriptJS(httpd_req_t *req) {
 
 	httpd_resp_set_type(req, "application/javascript");
 
-	return httpRespond(req, javaScriptStart, javaScriptEnd, NULL);
+	return httpRespond(req, javaScriptStart, javaScriptEnd, NULL, 0);
 }
 httpd_uri_t httpJavascriptJS = {
     .uri      = "/javascript.js",
     .method   = HTTP_GET,
     .handler  = httpGetJavascriptJS
 };
-
-
-
-/* This handler gets the present value of the accumulator */
-// esp_err_t adder_get_handler(httpd_req_t *req) {
-
-//     /* Log total visitors */
-//     unsigned *visitors = (unsigned *)req->user_ctx;
-//     printf("http: / visitor count = %d\n", ++(*visitors));
-
-//     /* Create session's context if not already available */
-//     if (!req->sess_ctx) {
-//         printf("http: /r GET allocating new session\n");
-//         req->sess_ctx = malloc(sizeof(int));
-//         req->free_ctx = adder_free_func;
-//         *(int *)req->sess_ctx = 0;
-//     }
-
-//     httpd_resp_set_type(req, HTTPD_TYPE_TEXT);
-
-//     unsigned int indexHTMLLength = indexHTMLEnd - indexHTMLStart;
-
-//     char outBuffer[1024];
-//     outBuffer[0] = '\0';
-
-//     printf("http: / GET handler send %d\n", *(int *)req->sess_ctx);
-
-//     strcat(outBuffer, "\r\n");
-
-//     strncat(outBuffer, indexHTMLStart, indexHTMLLength);
-
-    
-
-//     return httpRespond()
-// }
 
 void stop_webserver(httpd_handle_t server) {
     // Stop the httpd server

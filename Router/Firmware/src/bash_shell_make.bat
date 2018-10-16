@@ -19,6 +19,7 @@ bash -ilc "cd %LinuxPath%; dos2unix  ./bash_shell_make.sh; ./bash_shell_make.sh 
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo Build Success, Uploading....
+cd 
 
 set comport=COM5
 

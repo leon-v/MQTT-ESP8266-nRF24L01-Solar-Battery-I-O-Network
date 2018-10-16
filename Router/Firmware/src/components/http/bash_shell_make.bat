@@ -1,4 +1,4 @@
 @ECHO OFF &SETLOCAL
 cd ..
-cd ..
+cd
 bash_shell_make.bat
