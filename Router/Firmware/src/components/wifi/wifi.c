@@ -1,18 +1,16 @@
 #include <string.h>
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 #include "freertos/event_groups.h"
 
-#include "rom/ets_sys.h"
+//#include "rom/ets_sys.h"
 #include "esp_wifi.h"
 #include "esp_wifi_types.h"
 #include "esp_event_loop.h"
 
-#include "wifi.h"
+#include "beeline.h"
 
-/* FreeRTOS event group to signal when we are connected*/
-static EventGroupHandle_t wifiEventGroup;
+#include "wifi.h"
 
 static esp_err_t wifiEventHandler(void *ctx, system_event_t *event){
 
@@ -25,18 +23,18 @@ static esp_err_t wifiEventHandler(void *ctx, system_event_t *event){
 
     	case SYSTEM_EVENT_STA_GOT_IP:
     		printf("WiFi - Event - Got IP address: %s.\n", ip4addr_ntoa(&event->event_info.got_ip.ip_info.ip));
-        	xEventGroupSetBits(wifiEventGroup, WIFI_CONNECTED_BIT);
+        	xEventGroupSetBits(beelineGetEventGroup(), WIFI_CONNECTED_BIT);
         	break;
 
         case SYSTEM_EVENT_STA_DISCONNECTED:
         	printf("WiFi - Event - Station disconnected.\n");
         	esp_wifi_connect();
-        	xEventGroupClearBits(wifiEventGroup, WIFI_CONNECTED_BIT);
+        	xEventGroupClearBits(beelineGetEventGroup(), WIFI_CONNECTED_BIT);
         	break;
 
 		case SYSTEM_EVENT_AP_STACONNECTED:
 			printf("WiFi - Event - Client connected to out access point: "MACSTR".\n", MAC2STR(event->event_info.sta_connected.mac));
-			xEventGroupSetBits(wifiEventGroup, WIFI_CONNECTED_BIT);
+			xEventGroupSetBits(beelineGetEventGroup(), WIFI_CONNECTED_BIT);
 			break;
 
 		case SYSTEM_EVENT_AP_STADISCONNECTED:
@@ -54,15 +52,9 @@ void wifiInit(void) {
 
 	printf("WiFi - Initialisation - Start.\n");
 
-	wifiEventGroup = xEventGroupCreate();
-
 	tcpip_adapter_init();
 
     ESP_ERROR_CHECK(esp_event_loop_init(wifiEventHandler, NULL));
-}
-
-EventGroupHandle_t wifiGetEventGroup(void){
-	return wifiEventGroup;
 }
 
 

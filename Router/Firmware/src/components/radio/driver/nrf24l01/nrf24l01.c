@@ -481,19 +481,14 @@ void nrf24l01Init(void){
     
     
     /* SPI INIT */
-    printf("nrf24l01CELow\n");
-
+    
     nrf24l01CELow();
     
     delayUs(1000);
-
-    printf("nrf24l01InitRegisters\n");
     
     nrf24l01InitRegisters();    
     
     delayUs(1000);
-
-    printf("nrf24l01CEHigh\n");
 
     nrf24l01CEHigh();
     
@@ -504,4 +499,3 @@ void nrf24l01Init(void){
     status.ackPrepCount = 0;
     status.txCount = 0;
 }
-

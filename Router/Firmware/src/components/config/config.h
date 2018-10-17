@@ -1,8 +1,0 @@
-#ifndef CONFIG_H_
-#define CONFIG_H_
-
-#define MAX_HTTP_SSI_KEY_LENGTH 32
-#define MAX_HTTP_SSI_VALUE_LENGTH 128
-#define MAX_CONFIG_STRING_LENGTH 64
-
-#endif

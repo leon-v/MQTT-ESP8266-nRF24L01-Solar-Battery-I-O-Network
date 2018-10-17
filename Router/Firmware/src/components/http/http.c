@@ -4,7 +4,7 @@
 
 #include "wifi.h"
 #include "http.h"
-#include "config.h"
+#include "beeline.h"
 
 #include "index_html.h"
 #include "config_html.h"
@@ -337,7 +337,7 @@ static void httpServerTask(void *arg){
 
 	while (true){
 
-		EventBits = xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, 5000 / portTICK_RATE_MS);
+		EventBits = xEventGroupWaitBits(beelineGetEventGroup(), WIFI_CONNECTED_BIT, false, true, 5000 / portTICK_RATE_MS);
 
 		if (WIFI_CONNECTED_BIT & EventBits) {
 

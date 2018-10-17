@@ -1,14 +1,17 @@
-#include "nvs_flash.h"
+#include <nvs_flash.h>
 #include <nvs.h>
 #include <string.h>
-#include "driver/gpio.h"
+#include <driver/gpio.h>
+
+#include "beeline.h"
 
 #include "wifi.h"
 #include "wifi_access_point.h"
 #include "wifi_client.h"
 
 #include "http.h"
-#include "mqtt.h"
+#include "mqtt_connection.h"
+#include "radio.h"
 
 void app_main() {
 
@@ -22,16 +25,18 @@ void app_main() {
       	ESP_ERROR_CHECK(nvs_flash_init());
 	}
 
+	beelineInit();
+
 	// Setup config button
 	gpio_config_t io_conf;
     io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_INPUT;
-    io_conf.pin_bit_mask = 0;
+    io_conf.pin_bit_mask = (0b1 << 0);
     io_conf.pull_down_en = 0;
     io_conf.pull_up_en = 1;
     gpio_config(&io_conf);
 
-    vTaskDelay(1000 / portTICK_RATE_MS);
+    ets_delay_us(1000000);
 
     wifiInit();
 
@@ -45,4 +50,5 @@ void app_main() {
     httpServerInit();
     mqttClientInit();
 
+    radioInit();
 }

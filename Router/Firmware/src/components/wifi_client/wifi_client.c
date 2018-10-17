@@ -2,7 +2,7 @@
 #include <nvs.h>
 
 #include "wifi.h"
-#include "config.h"
+#include "beeline.h"
 
 void wifiClientInit(void) {
 
