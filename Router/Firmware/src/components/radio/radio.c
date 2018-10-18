@@ -73,7 +73,7 @@ static void radioInterruptTask(void *arg){
 
     for (;;) {
 
-        if (xQueueReceive(radioInterruptQueue, &gp_io, 10000 / portTICK_RATE_MS)) {
+        if (xQueueReceive(radioInterruptQueue, &gp_io, 500 / portTICK_RATE_MS)) {
 
         	while (!gpio_get_level(gp_io)){
         		nrf24l01ISR();
