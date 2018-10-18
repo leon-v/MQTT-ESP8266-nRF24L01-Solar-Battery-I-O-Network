@@ -7,9 +7,9 @@
 #define delayUs(x) ets_delay_us(x)
 #define sleepMs(x) for (int i = x; i >= 0; i--) {ets_delay_us(1000);}
 
-#define PIN_NUM_MISO 12
-#define PIN_NUM_MOSI 13
-#define PIN_NUM_CLK  14
+#define PIN_NUM_MISO 12 // Got data OK but crashed when held up
+#define PIN_NUM_MOSI 13 // OK
+#define PIN_NUM_CLK  14 // OK
 #define PIN_NUM_CS   26
 
 #define PIN_NUM_CE	25
