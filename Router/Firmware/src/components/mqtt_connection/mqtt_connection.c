@@ -1,214 +1,200 @@
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
+#include <nvs.h>
+#include <mqtt_client.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+#include <esp_log.h>
 
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/event_groups.h"
-#include "MQTTClient.h"
-
-#include "mqtt_connection.h"
-#include "configFlash.h"
 #include "wifi.h"
-#include "radio.h"
-#include "esp_system.h"
+#include "beeline.h"
 
-#define TAG "mqtt_connection"
+esp_mqtt_client_handle_t client;
 
-TaskHandle_t serviceTask = NULL;
-TaskHandle_t connectionTask = NULL;
-TaskHandle_t publishTask = NULL;
+static xQueueHandle mqttConnectionMessageQueue = NULL;
 
-/* FreeRTOS event group to signal when we are connected*/
-static EventGroupHandle_t mqttEventGroup;
+static const char *TAG = "MQTT";
 
-static xQueueHandle MQTTMessageQueue = NULL;
-MQTTClient client;
-
-char uniqueID[16];
-
-mqttStatus_t mqttStatus = mqttStatus_r;
-
-mqttStatus_t mqtt_connection_get_status(void){
-	return mqttStatus;
+xQueueHandle getMQTTConnectionMessageQueue(void){
+	return mqttConnectionMessageQueue;
 }
 
-EventGroupHandle_t mqttGetEventGroup(void){
-	return mqttEventGroup;
+static esp_err_t mqttConnectionEventHandler(esp_mqtt_event_handle_t event) {
+    esp_mqtt_client_handle_t client = event->client;
+    int msg_id;
+
+    // your_context_t *context = event->context;
+    switch (event->event_id) {
+        case MQTT_EVENT_CONNECTED:
+        	xEventGroupSetBits(beelineGetEventGroup(), MQTT_CONNECTED_BIT);
+
+        	beelineMessage_t beelineMessage;
+        	strcpy(beelineMessage.name, "TestName");
+			strcpy(beelineMessage.sensor, "TestSensor");
+			strcpy(beelineMessage.value, "TestValue");
+
+			xQueueSend(mqttConnectionMessageQueue, &beelineMessage, 0);
+
+            // ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+            // msg_id = esp_mqtt_client_publish(client, "/topic/qos1", "data_3", 0, 1, 0);
+            // ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
+
+            // msg_id = esp_mqtt_client_subscribe(client, "/topic/qos0", 0);
+            // ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+
+            // msg_id = esp_mqtt_client_subscribe(client, "/topic/qos1", 1);
+            // ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+
+            // msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos1");
+            // ESP_LOGI(TAG, "sent unsubscribe successful, msg_id=%d", msg_id);
+
+
+		break;
+
+
+        case MQTT_EVENT_DISCONNECTED:
+        	xEventGroupClearBits(beelineGetEventGroup(), MQTT_CONNECTED_BIT);
+            ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
+		break;
+
+        case MQTT_EVENT_SUBSCRIBED:
+            ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
+            msg_id = esp_mqtt_client_publish(client, "/topic/qos0", "data", 0, 0, 0);
+            ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
+		break;
+
+        case MQTT_EVENT_UNSUBSCRIBED:
+            ESP_LOGI(TAG, "MQTT_EVENT_UNSUBSCRIBED, msg_id=%d", event->msg_id);
+		break;
+
+        case MQTT_EVENT_PUBLISHED:
+            ESP_LOGI(TAG, "MQTT_EVENT_PUBLISHED, msg_id=%d", event->msg_id);
+		break;
+
+        case MQTT_EVENT_DATA:
+            ESP_LOGI(TAG, "MQTT_EVENT_DATA");
+            printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
+            printf("DATA=%.*s\r\n", event->data_len, event->data);
+		break;
+
+        case MQTT_EVENT_ERROR:
+            ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
+		break;
+
+    }
+    return ESP_OK;
 }
 
-char * mqttGetUniqueID(void){
-	return uniqueID;
-}
+void mqttConnectionTask(){
 
-MQTTClient * mqttGetClient(void){
-	return &client;
-}
+	EventBits_t eventBits = xEventGroupWaitBits(beelineGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 
-void mqtt_connection(){
-    Network network;
-    unsigned char sendbuf[80] = {0};
-    unsigned char readbuf[80] = {0};
-    int rc = 0;
-    unsigned int count = 0;
-    char failLimit = 0;
-    MQTTPacket_connectData connectData = MQTTPacket_connectData_initializer;
-    char mqttTopic[64];
-    char mqttClientID[64];
-    Timer timer;
-    TimerInit(&timer);
-
-	radioMessage_t radioMessage;
-	EventBits_t mqttEventBits;
-	MQTTMessage message;
-
-
-    printf("mqtt client thread starts\n");
-
-    /* Wait for the callback to set the WIFI_CONNECTED_BIT in the
-       event group.
-    */
-reconnect:
-
-	if (failLimit > 20){
-		esp_restart();
+	if (!(eventBits & WIFI_CONNECTED_BIT)) {
+		printf("MQTT Timed out waiting for WiFI. Ending MQTT\n");
+		vTaskDelete(NULL);
+		return;
 	}
 
-    printf("xEventGroupWaitBits ...\n");
+	nvs_handle nvsHandle;
+	ESP_ERROR_CHECK(nvs_open("BeelineNVS", NVS_READONLY, &nvsHandle));
 
-    xEventGroupWaitBits(wifiGetEventGroup(), WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
-    
-    ESP_LOGI(TAG, "Connected to AP");
+    size_t nvsLength;
 
+    char host[MAX_CONFIG_STRING_LENGTH];
+    nvsLength = sizeof(host);
+	nvs_get_str(nvsHandle, "mqttHost", host, &nvsLength);
 
-	vTaskDelay(5000 / portTICK_RATE_MS);  //send every 0.5 seconds
+	unsigned int port;
+	nvs_get_u32(nvsHandle, "mqttPort", &port);
 
-    printf("NetworkInit ...\n");
-    NetworkInit(&network);
+	char username[MAX_CONFIG_STRING_LENGTH];
+	nvsLength = sizeof(username);
+	nvs_get_str(nvsHandle, "mqttUsername", username, &nvsLength);
 
-    printf("MQTTClientInit ...\n");
-    MQTTClientInit(&client, &network, 1000, sendbuf, sizeof(sendbuf), readbuf, sizeof(readbuf));
+	char password[MAX_CONFIG_STRING_LENGTH];
+	nvsLength = sizeof(password);
+	nvs_get_str(nvsHandle, "mqttPassword", password, &nvsLength);
 
-    char* address = (char *) &configFlash.mqttHost;
+	unsigned int keepalive;
+	nvs_get_u32(nvsHandle, "mqttKeepalive", &keepalive);
 
-
-    printf("NetworkConnect ...\n");
-    if ((rc = NetworkConnect(&network, address, configFlash.mqttPort)) != 0) {
-        printf("Return code from network connect %s:%d is %d\n", address, configFlash.mqttPort, rc);
-        mqttStatus.connectionFail++;
-        failLimit++;
-        goto fail;
-    }
-
-    connectData.username.cstring = configFlash.mqttUsername;
-    connectData.password.cstring = configFlash.mqttPassword;
-    connectData.MQTTVersion = 4;
-
-    sprintf(mqttClientID, "Beeline %s", uniqueID);
-    connectData.clientID.cstring = mqttClientID;
-    connectData.cleansession = 1;
-
-    printf("MQTTConnect ...\n");
-    if ((rc = MQTTConnect(&client, &connectData)) != 0) {
-        printf("Return code from MQTT connect is %d\n", rc);
-        mqttStatus.connectionFail++;
-        failLimit++;
-        goto fail;
-    }
-	
-	printf("MQTT Connected\n");
-
-    mqttStatus.connected = 1;
-    mqttStatus.connectionSuccess++;
-    failLimit = 0;
-
-
-	while (MQTTIsConnected(&client)) {
-
-		rc = xQueueReceive(radioGetRXQueue(), &radioMessage, 100 / portTICK_RATE_MS);
-
-		if (rc){
-
-			strcpy(mqttTopic, "radio/out/");
-			strcat(mqttTopic, uniqueID);
-			strcat(mqttTopic, "/");
-			strcat(mqttTopic, radioMessage.name);
-			strcat(mqttTopic, "/");
-			strcat(mqttTopic, radioMessage.sensor);
-
-			message.qos = QOS1;
-	    	message.retained = 0;
-			message.payload = &radioMessage.value;
-			message.payloadlen = strlen(message.payload);
-
-	    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
-		        printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
-		        continue;
-		    }
-
-	    	mqttStatus.Publish++;
-
-	    	printf("mqtt radio: Publish: Name=%s, Sensor=%s, Value=%s.\n", radioMessage.name, radioMessage.sensor, radioMessage.value);
-		}
-
-		// count++;
-
-		// if ( (count % 1000) == 0) {
-
-		// 	strcpy(mqttTopic, "radio/status/");
-		// 	strcat(mqttTopic, uniqueID);
-		// 	strcat(mqttTopic, "/Status/loopCount");
-
-		// 	message.qos = QOS0;
-	 //    	message.retained = 0;
-	 //    	sprintf(message.payload, "%d\n", count);
-		// 	message.payloadlen = strlen(message.payload);
-
-	 //    	if ((rc = MQTTPublish(&client, mqttTopic, &message)) != 0) {
-		//         printf("Radio->MQTT - Task - Return code from MQTT publish is %d\n", rc);
-		//         continue;
-		//     }
-
-	 //    	mqttStatus.Publish++;
-		// }
-
-
-		// Add sender queue here !
-		TimerCountdownMS(&timer, 50); /* Don't wait too long if no traffic is incoming */
-
-		MutexLock(&client.mutex);
-
-		cycle(&client, &timer);
-
-		MutexUnlock(&client.mutex);
-	}
-	
-	mqttStatus.connected = 0;
-	
-	printf("disconnecting network\n");
-
-fail:
-	
-	vTaskDelay(500 / portTICK_RATE_MS);  //send every 1 seconds
-
-	printf("Restaring loop\n");
-
-	goto reconnect;
-    printf("mqtt_client_thread going to be deleted\n");
-    vTaskDelete(NULL);
-    return;
-}
-
-
-
-void mqtt_connection_init(){
+	nvs_close(nvsHandle);
 
 	uint8_t mac[6];
-    esp_efuse_mac_get_default(mac);
+    char id_string[16];
+    esp_read_mac(mac, ESP_MAC_WIFI_STA);
+    sprintf(id_string, "%02x%02X%02X", mac[3], mac[4], mac[5]);
 
-	sprintf(uniqueID, "%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+	esp_mqtt_client_config_t mqtt_cfg = {
+        .host = host,
+        .port = port,
+        .client_id = id_string,
+        .username = username,
+        .password = password,
+        .keepalive = keepalive,
+        .event_handle = mqttConnectionEventHandler,
+        // .user_context = (void *)your_context
+    };
 
-	MQTTMessageQueue = xQueueCreate(256, sizeof(radioMessage_t));
+    client = esp_mqtt_client_init(&mqtt_cfg);
+    esp_mqtt_client_start(client);
 
-	xTaskCreate(&mqtt_connection, "mqtt_connection", 8192, NULL, 14, &connectionTask);
+	while (1){
+
+		eventBits = xEventGroupWaitBits(beelineGetEventGroup(), WIFI_CONNECTED_BIT | MQTT_CONNECTED_BIT, false, true, 5000 / portTICK_RATE_MS);
+
+		if (!(eventBits & WIFI_CONNECTED_BIT)) {
+			continue;
+		}
+
+		if (!(eventBits & MQTT_CONNECTED_BIT)) {
+			continue;
+		}
+
+		beelineMessage_t beelineMessage;
+		if (xQueueReceive(mqttConnectionMessageQueue, &beelineMessage, 1000 / portTICK_RATE_MS)){
+
+			char mqttTopic[64];
+			strcpy(mqttTopic, "beeline/out/");
+			strcat(mqttTopic, id_string);
+			strcat(mqttTopic, "/");
+			strcat(mqttTopic, beelineMessage.name);
+			strcat(mqttTopic, "/");
+			strcat(mqttTopic, beelineMessage.sensor);
+
+			int msg_id;
+			msg_id = esp_mqtt_client_publish(client, mqttTopic, beelineMessage.value, 0, 1, 0);
+			ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
+		}
+
+	}
+	
+}
+
+void mqttClientInit(void){
+	
+	mqttConnectionMessageQueue = xQueueCreate(256, sizeof(beelineMessage_t));
+
+	xTaskCreate(&mqttConnectionTask, "mqttConnection", 4096, NULL, 13, NULL);
+}
+
+void mqttConnectionResetNVS(void) {
+	nvs_handle nvsHandle;
+	ESP_ERROR_CHECK(nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle));
+
+	ESP_ERROR_CHECK(nvs_set_str(nvsHandle, "mqttHost", "mqtt.server.example.com"));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+
+	
+	ESP_ERROR_CHECK(nvs_set_u32(nvsHandle, "mqttPort", 1883));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+
+	ESP_ERROR_CHECK(nvs_set_str(nvsHandle, "mqttUsername", "Username"));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+
+	ESP_ERROR_CHECK(nvs_set_str(nvsHandle, "mqttPassword", "Password"));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+
+	ESP_ERROR_CHECK(nvs_set_u32(nvsHandle, "mqttKeepalive", 30));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+	
+	nvs_close(nvsHandle);
 }

@@ -1,10 +1,8 @@
 #
 # Component Makefile
 #
-COMPONENT_ADD_INCLUDEDIRS += httpd_custom mqtt_connection\
-	../main\
-	../../ESP8266_RTOS_SDK/components/lwip/lwip/src/include/lwip/apps
+COMPONENT_ADD_INCLUDEDIRS += beeline wifi wifi_access_point wifi_client http \
+	mqtt_connection radio
 
-COMPONENT_SRCDIRS += httpd_custom mqtt_connection\
-	../../ESP8266_RTOS_SDK/components/lwip/lwip/src/apps/httpd
-
+COMPONENT_SRCDIRS += beeline wifi wifi_access_point wifi_client http\
+	mqtt_connection radio

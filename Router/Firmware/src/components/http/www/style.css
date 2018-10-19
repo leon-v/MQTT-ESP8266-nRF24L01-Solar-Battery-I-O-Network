@@ -1,0 +1,55 @@
+*{
+	box-sizing: border-box;
+}
+body{
+	font-family: Arial;
+	color: #ede5ff;
+	background-color:#262626;
+	width:720px;
+}
+table{
+	width:100%;
+}
+td{
+	width:70%;
+}
+th{
+	text-align: left;
+	width:125px;
+	font-size: 14px;
+}
+input, select, button{
+	background-color:#262626;
+	color: #ede5ff;
+	padding:0px;
+	margin:0px;
+	border: 0;
+	font-size: 14px;
+	width:100%%;
+}
+button{
+	margin-top:5px;
+	
+}
+
+.input{
+	padding: 3px;
+    margin-bottom: -5px;
+}
+
+.input{
+	border:1px solid #ffffff;
+}
+
+.roundTop .input{
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+.roundBotton .input{
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+a{
+	color: #f7f3ff;
+	text-decoration: none;
+}

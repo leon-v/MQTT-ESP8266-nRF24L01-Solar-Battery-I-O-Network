@@ -1,34 +1,34 @@
 @ECHO OFF &SETLOCAL
 
+ECHO Killing previous PIDs......
+tasklist /v /fo csv | findstr /i "Build-Upload" > pid.csv
+FOR /F "tokens=1,2* delims=,? " %%a in (pid.csv) do (
+	Taskkill /PID %%b /F
+)
+del pid.csv
+
+title=Build-Upload
 
 ECHO Building source......
 set LinuxPath=%~dp0
 set LinuxPath=%LinuxPath:C:=/mnt/c%
 set LinuxPath=%LinuxPath:\=/%
 set LinuxPath=%LinuxPath%
-bash -c "cd %LinuxPath%; dos2unix  ./bash_shell_make.sh; ./bash_shell_make.sh %1"
+bash -ilc "cd %LinuxPath%; dos2unix  ./bash_shell_make.sh; ./bash_shell_make.sh %1"
 
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-ECHO Killing previous PIDs......
-tasklist /v /fo csv | findstr /i "ESP8266_Build-Upload" > pid.csv
-FOR /F "tokens=1,2* delims=,? " %%a in (pid.csv) do (
-	Taskkill /PID %%b /F
-)
-del pid.csv
-
-title=ESP8266_Build-Upload
-
 echo Build Success, Uploading....
+cd 
 
-set comport=COM3
+set comport=COM5
 
-esptool.py --chip esp8266 --port %comport% --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode qio --flash_freq 40m --flash_size 2MB 0x0000 ../build/bootloader/bootloader.bin 0x10000 ../build/MQTTRouter.bin 0x8000 ../build/partitions_singleapp.bin
-
+esptool.py --chip esp32 --port %comport% --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000  "build\bootloader\bootloader.bin" 0x10000 "build\BeelineRouter.bin"	0x8000  "build\partitions_singleapp.bin"
 
 IF NOT "%errorlevel%" == "0" (
 	echo Upload Failed & exit /b
 )
 
+miniterm.py %comport% 115200
 
-miniterm.py %comport% 74880
+REM #..\esp-idf\tools\idf_monitor.py --port %comport% --baud 115200 ./build/BeelineRouter.elf

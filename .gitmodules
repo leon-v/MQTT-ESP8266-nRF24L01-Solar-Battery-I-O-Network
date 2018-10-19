@@ -1,4 +1,3 @@
-[submodule "Router/Firmware/ESP8266_RTOS_SDK"]
-	path = Router/Firmware/ESP8266_RTOS_SDK
-	url = https://github.com/espressif/ESP8266_RTOS_SDK.git
-	branch  = release/v3.0
+[submodule "Router/Firmware/esp-idf"]
+	path = Router/Firmware/esp-idf
+	url = https://github.com/espressif/esp-idf.git
