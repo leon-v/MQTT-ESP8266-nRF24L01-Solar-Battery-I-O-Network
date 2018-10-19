@@ -44,6 +44,11 @@ void app_main() {
     	wifiClientInit();
     }
     else{
+
+    	// Reset all NVS data so we always get known values and don't crash
+    	wifiClientResetNVS();
+    	mqttConnectionResetNVS();
+
     	wifiAccessPointInit();
     }
 

@@ -118,9 +118,15 @@ void mqttConnectionTask(){
 
 	nvs_close(nvsHandle);
 
+	uint8_t mac[6];
+    char id_string[16];
+    esp_read_mac(mac, ESP_MAC_WIFI_STA);
+    sprintf(id_string, "%02x%02X%02X", mac[3], mac[4], mac[5]);
+
 	esp_mqtt_client_config_t mqtt_cfg = {
         .host = host,
         .port = port,
+        .client_id = id_string,
         .username = username,
         .password = password,
         .keepalive = keepalive,
@@ -148,8 +154,8 @@ void mqttConnectionTask(){
 
 			char mqttTopic[64];
 			strcpy(mqttTopic, "beeline/out/");
-			// strcat(mqttTopic, );
-			// strcat(mqttTopic, "/");
+			strcat(mqttTopic, id_string);
+			strcat(mqttTopic, "/");
 			strcat(mqttTopic, beelineMessage.name);
 			strcat(mqttTopic, "/");
 			strcat(mqttTopic, beelineMessage.sensor);
@@ -168,4 +174,27 @@ void mqttClientInit(void){
 	mqttConnectionMessageQueue = xQueueCreate(256, sizeof(beelineMessage_t));
 
 	xTaskCreate(&mqttConnectionTask, "mqttConnection", 4096, NULL, 13, NULL);
+}
+
+void mqttConnectionResetNVS(void) {
+	nvs_handle nvsHandle;
+	ESP_ERROR_CHECK(nvs_open("BeelineNVS", NVS_READWRITE, &nvsHandle));
+
+	ESP_ERROR_CHECK(nvs_set_str(nvsHandle, "mqttHost", "mqtt.server.example.com"));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+
+	
+	ESP_ERROR_CHECK(nvs_set_u32(nvsHandle, "mqttPort", 1883));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+
+	ESP_ERROR_CHECK(nvs_set_str(nvsHandle, "mqttUsername", "Username"));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+
+	ESP_ERROR_CHECK(nvs_set_str(nvsHandle, "mqttPassword", "Password"));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+
+	ESP_ERROR_CHECK(nvs_set_u32(nvsHandle, "mqttKeepalive", 30));
+	ESP_ERROR_CHECK(nvs_commit(nvsHandle));
+	
+	nvs_close(nvsHandle);
 }

@@ -3,5 +3,5 @@
 
 void mqttClientInit(void);
 xQueueHandle getMQTTConnectionMessageQueue(void);
-
+void mqttConnectionResetNVS(void);
 #endif
