@@ -1,4 +1,11 @@
-# MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network
+# NOTE: Thos project is no longer under development.
+## My Current product for this uses the TTGO modules, source code here: https://github.com/leon-v/TTGO-ESP32-LoRa
+
+
+
+
+
+### MQTT-ESP8266-nRF24L01-Solar-Battery-I-O-Network
 
 #### The primary intention of the network is to be solar powered and real time so i can sense someone walking down my driveway and get a message on my phone
 #### And secondarily it will be low cost. The parts i select will be cheap.
